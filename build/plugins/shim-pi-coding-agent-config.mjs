@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const piCodingAgentConfigShim = path.join(
   rootDir,
-  'packages/pivi-agent-core/src/engine/pi/shims/piCodingAgentConfig.ts',
+  'packages/yapi-agent-core/src/engine/pi/shims/piCodingAgentConfig.ts',
 );
 const piCodingAgentConfigPath = path.join(
   rootDir,
@@ -16,7 +16,7 @@ const piCodingAgentSessionEntrypoint = path.join(
 );
 
 /**
- * Pivi consumes only the public session exports. The upstream root entrypoint
+ * Yapi consumes only the public session exports. The upstream root entrypoint
  * statically re-exports its CLI/TUI, which is neither needed nor Obsidian-safe.
  */
 export const shimPiCodingAgentSessionEntrypoint = {

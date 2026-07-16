@@ -2,7 +2,7 @@ import type {
   ChatModelReadinessPort,
   ChatModelsPort,
   ChatSettingsSnapshot,
-} from '@pivi/pivi-agent-core/runtime/chatPorts';
+} from '@yapi/yapi-agent-core/runtime/chatPorts';
 
 export interface ToolbarCallbacks {
   onModelChange: (model: string) => Promise<void>;

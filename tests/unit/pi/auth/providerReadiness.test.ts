@@ -1,15 +1,15 @@
 import {
   CODEX_OAUTH_PROVIDER_ID,
   type ProviderCredential,
-} from '@pivi/pivi-agent-core/auth/piProviderCredentials';
-import { deriveProviderReadinessStatus } from '@pivi/pivi-agent-core/auth/providerReadiness';
+} from '@yapi/yapi-agent-core/auth/piProviderCredentials';
+import { deriveProviderReadinessStatus } from '@yapi/yapi-agent-core/auth/providerReadiness';
 
 const basePiSettings = {
   disabledProviders: [] as string[],
   environmentVariables: '',
 };
 
-describe('deriveProviderReadinessStatus (pivi-agent-core/auth)', () => {
+describe('deriveProviderReadinessStatus (yapi-agent-core/auth)', () => {
   it('marks disabled providers before checking credentials', () => {
     const status = deriveProviderReadinessStatus({
       providerId: 'anthropic',

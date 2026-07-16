@@ -1,4 +1,4 @@
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 
 import type { TabBarItem, TabData, TabId } from './types';
 

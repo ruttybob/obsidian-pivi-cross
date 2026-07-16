@@ -1,0 +1,48 @@
+/* Obsidian theme values mapped into the host-neutral Yapi presentation contract. */
+body {
+  --yapi-host-code-background: rgba(0, 0, 0, 0.08);
+  --yapi-host-background-primary: var(--background-primary);
+  --yapi-host-background-secondary: var(--background-secondary);
+  --yapi-host-background-secondary-alt: var(--background-secondary-alt);
+  --yapi-host-background-hover: var(--background-modifier-hover);
+  --yapi-host-background-active-hover: var(--background-modifier-active-hover);
+  --yapi-host-border: var(--background-modifier-border);
+  --yapi-host-border-hover: var(--background-modifier-border-hover);
+  --yapi-host-border-focus: var(--background-modifier-border-focus);
+  --yapi-host-background-error: var(--background-modifier-error);
+  --yapi-host-text-normal: var(--text-normal);
+  --yapi-host-text-muted: var(--text-muted);
+  --yapi-host-text-faint: var(--text-faint);
+  --yapi-host-text-accent: var(--text-accent);
+  --yapi-host-text-accent-hover: var(--text-accent-hover);
+  --yapi-host-text-on-accent: var(--text-on-accent);
+  --yapi-host-text-error: var(--text-error);
+  --yapi-host-text-success: var(--text-success);
+  --yapi-host-text-warning: var(--text-warning);
+  --yapi-host-text-selection: var(--text-selection);
+  --yapi-host-link-color: var(--link-color);
+  --yapi-host-mono-rgb-100: var(--mono-rgb-100);
+  --yapi-host-interactive-accent: var(--interactive-accent);
+  --yapi-host-interactive-accent-hover: var(--interactive-accent-hover);
+  --yapi-host-interactive-accent-rgb: var(--interactive-accent-rgb);
+  --yapi-host-color-green: var(--color-green);
+  --yapi-host-color-green-rgb: var(--color-green-rgb);
+  --yapi-host-color-orange: var(--color-orange);
+  --yapi-host-color-red: var(--color-red);
+  --yapi-host-color-red-rgb: var(--color-red-rgb);
+  --yapi-host-font-text: var(--font-text);
+  --yapi-host-font-interface: var(--font-interface);
+  --yapi-host-font-monospace: var(--font-monospace);
+  --yapi-host-font-bold: var(--font-bold);
+  --yapi-host-font-semibold: var(--font-semibold);
+  --yapi-host-font-medium: var(--font-medium);
+  --yapi-host-font-ui-medium: var(--font-ui-medium);
+  --yapi-host-font-ui-small: var(--font-ui-small);
+  --yapi-host-font-ui-smaller: var(--font-ui-smaller);
+  --yapi-host-modal-background: var(--modal-background);
+  --yapi-host-radius-small: var(--radius-s);
+}
+
+body.theme-dark {
+  --yapi-host-code-background: rgba(0, 0, 0, 0.2);
+}

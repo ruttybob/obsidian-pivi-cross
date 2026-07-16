@@ -25,7 +25,7 @@ function getStyleModules(): string[] {
     [
       '--input-type=module',
       '-e',
-      "import { styleModules } from './packages/pivi-react/styles/manifest.mjs'; process.stdout.write(JSON.stringify(styleModules));",
+      "import { styleModules } from './packages/yapi-react/styles/manifest.mjs'; process.stdout.write(JSON.stringify(styleModules));",
     ],
     { cwd: rootDir, encoding: 'utf8' },
   );
@@ -47,18 +47,18 @@ describe('build CSS minifier', () => {
     const output = runMinify(`
       /* ordinary comment */
       /* @settings
-      name: Pivi
-      id: pivi
+      name: Yapi
+      id: yapi
       settings:
         -
-          id: pivi-chat-font-size
+          id: yapi-chat-font-size
           title: Chat message font size
           type: variable-number-slider
           default: 14
       */
-      .pivi-message-content {
+      .yapi-message-content {
         /* another ordinary comment */
-        font-size: var(--pivi-chat-font-size, 14px);
+        font-size: var(--yapi-chat-font-size, 14px);
       }
       /* @settings
       name: Extra
@@ -70,13 +70,13 @@ describe('build CSS minifier', () => {
           type: variable-number-slider
           default: 1
       */
-      .pivi-extra { color: red; }
+      .yapi-extra { color: red; }
     `);
 
-    expect(output).toContain('/* @settings\n      name: Pivi');
+    expect(output).toContain('/* @settings\n      name: Yapi');
     expect(output).toContain('/* @settings\n      name: Extra');
-    expect(output).toContain('font-size:var(--pivi-chat-font-size,14px)');
-    expect(output).toContain('.pivi-extra{color:red;}');
+    expect(output).toContain('font-size:var(--yapi-chat-font-size,14px)');
+    expect(output).toContain('.yapi-extra{color:red;}');
     expect(output).not.toContain('ordinary comment');
     expect(output).not.toContain('another ordinary comment');
     expect((output.match(/\/\* @settings/g) ?? []).length).toBe(2);
@@ -93,7 +93,7 @@ describe('UI package style manifest', () => {
         `import { findImportantRules } from './scripts/build-css.mjs';
 import { readdirSync } from 'fs';
 import { join } from 'path';
-const styleDir = join(process.cwd(), 'packages/pivi-react/styles');
+const styleDir = join(process.cwd(), 'packages/yapi-react/styles');
 function listCssFiles(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const path = join(dir, entry.name);
@@ -102,7 +102,7 @@ function listCssFiles(dir) {
   });
 }
 const inputs = [
-  join(process.cwd(), 'packages/obsidian-host/styles/pivi-theme.css'),
+  join(process.cwd(), 'packages/obsidian-host/styles/yapi-theme.css'),
   ...listCssFiles(styleDir),
 ];
 process.stdout.write(JSON.stringify(findImportantRules(inputs)));`,
@@ -132,7 +132,7 @@ assertNoImportantRules([fixture]);`,
 
   it('preserves cascade order and lists every CSS module exactly once', () => {
     const styleModules = getStyleModules();
-    const styleDir = join(rootDir, 'packages', 'pivi-react', 'styles');
+    const styleDir = join(rootDir, 'packages', 'yapi-react', 'styles');
 
     expect(styleModules.slice(0, 4)).toEqual([
       'base/variables.css',

@@ -1,15 +1,15 @@
 import type { AgentMessage } from '@earendil-works/pi-agent-core';
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
-import type { Skill } from '@pivi/pivi-agent-core/skills/vault/loadVaultSkills';
-import { TOOL_SKILL } from '@pivi/pivi-agent-core/tools';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
+import type { Skill } from '@yapi/yapi-agent-core/skills/vault/loadVaultSkills';
+import { TOOL_SKILL } from '@yapi/yapi-agent-core/tools';
 
 import {
   applySkillDescriptions,
   collectMessageUiMap,
   entriesToChatMessages,
-} from '@pivi/pivi-agent-core/engine/pi/session/messageMapper';
-import { PIVI_MESSAGE_UI } from '@pivi/pivi-agent-core/session';
+} from '@yapi/yapi-agent-core/engine/pi/session/messageMapper';
+import { YAPI_MESSAGE_UI } from '@yapi/yapi-agent-core/session';
 
 function first<T>(values: readonly T[]): T {
   const value = values[0];
@@ -33,7 +33,7 @@ describe('MessageMapper', () => {
         id: 'c1',
         parentId: 'u1',
         timestamp: '2026-01-01T00:00:01.000Z',
-        customType: PIVI_MESSAGE_UI,
+        customType: YAPI_MESSAGE_UI,
         data: { targetEntryId: 'u1', displayContent: '/hi' },
       },
       {
@@ -335,7 +335,7 @@ describe('MessageMapper', () => {
         firstKeptEntryId: 'a1',
         tokensBefore: 1234,
         details: {
-          piviCheckpoint: {
+          yapiCheckpoint: {
             schemaVersion: 1,
             continuationSummary: 'Continue from here.',
             goal: 'Finish mapping',
@@ -410,7 +410,7 @@ describe('MessageMapper', () => {
         id: 'c1',
         parentId: 'a1',
         timestamp: '2026-01-01T00:00:01.000Z',
-        customType: PIVI_MESSAGE_UI,
+        customType: YAPI_MESSAGE_UI,
         data: { targetEntryId: 'a1', contentBlocks: [{ type: 'text', content: 'from ui' }] },
       },
     ];
@@ -448,7 +448,7 @@ describe('MessageMapper', () => {
         id: 'c1',
         parentId: 'a2',
         timestamp: '2026-01-01T00:00:02.000Z',
-        customType: PIVI_MESSAGE_UI,
+        customType: YAPI_MESSAGE_UI,
         data: {
           targetEntryId: 'a2',
           assistantMessageId: 'a2',
@@ -526,7 +526,7 @@ describe('MessageMapper', () => {
         id: 'c1',
         parentId: 'a1',
         timestamp: '2026-01-01T00:00:01.000Z',
-        customType: PIVI_MESSAGE_UI,
+        customType: YAPI_MESSAGE_UI,
         data: {
           targetEntryId: 'a1',
           assistantMessageId: 'a1',
@@ -680,7 +680,7 @@ describe('MessageMapper', () => {
         id: 'c1',
         parentId: null,
         timestamp: '2026-01-01T00:00:00.000Z',
-        customType: PIVI_MESSAGE_UI,
+        customType: YAPI_MESSAGE_UI,
         data: { targetEntryId: 'a1', contentBlocks: [{ type: 'text', content: 'hello' }] },
       },
       {
@@ -688,7 +688,7 @@ describe('MessageMapper', () => {
         id: 'c2',
         parentId: 'c1',
         timestamp: '2026-01-01T00:00:01.000Z',
-        customType: PIVI_MESSAGE_UI,
+        customType: YAPI_MESSAGE_UI,
         data: { targetEntryId: 'a1', durationSeconds: 2 },
       },
     ];
@@ -702,7 +702,7 @@ describe('MessageMapper', () => {
 });
 
 describe('applySkillDescriptions', () => {
-  const defuddleDir = '/vault/.pivi/skills/defuddle';
+  const defuddleDir = '/vault/.yapi/skills/defuddle';
   const defuddleFilePath = `${defuddleDir}/SKILL.md`;
   const defuddleSkill: Skill = {
     name: 'defuddle',

@@ -1,12 +1,12 @@
-import type { OpenSessionState, PiviSettings } from '@pivi/pivi-agent-core/foundation';
-import type { EnvironmentScope } from '@pivi/pivi-agent-core/foundation/settings';
+import type { OpenSessionState, YapiSettings } from '@yapi/yapi-agent-core/foundation';
+import type { EnvironmentScope } from '@yapi/yapi-agent-core/foundation/settings';
 import {
   getEnvironmentVariablesForScope as getScopedEnvironmentVariables,
   getRuntimeEnvironmentText,
   setEnvironmentVariablesForScope,
-} from '@pivi/pivi-agent-core/foundation/settingsAgentEnvironment';
+} from '@yapi/yapi-agent-core/foundation/settingsAgentEnvironment';
 
-import type { PiviChatCompositionHost } from '@/app/hostContracts';
+import type { YapiChatCompositionHost } from '@/app/hostContracts';
 
 export interface EnvironmentApplyHooks {
   persistSessionSummary(openSession: OpenSessionState): Promise<void>;
@@ -17,10 +17,10 @@ export interface EnvironmentApplyHooks {
 }
 
 type EnvironmentApplyHost = Pick<
-  PiviChatCompositionHost,
+  YapiChatCompositionHost,
   'getAllViews' | 'saveSettings'
 > & {
-  settings: PiviSettings;
+  settings: YapiSettings;
   notify(message: string): void;
 };
 
@@ -28,12 +28,12 @@ function environmentChangesAffectRuntime(scopes: EnvironmentScope[]): boolean {
   return scopes.some((scope) => scope === 'shared' || scope === 'agent');
 }
 
-export function getActiveEnvironmentVariables(settings: PiviSettings): string {
+export function getActiveEnvironmentVariables(settings: YapiSettings): string {
   return getRuntimeEnvironmentText(settings);
 }
 
 export function getEnvironmentVariablesForScope(
-  settings: PiviSettings,
+  settings: YapiSettings,
   scope: EnvironmentScope,
 ): string {
   return getScopedEnvironmentVariables(settings, scope);

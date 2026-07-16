@@ -1,4 +1,4 @@
-import { isObsidianAgentTool } from '@pivi/pivi-agent-core/tools/obsidianToolNames';
+import { isObsidianAgentTool } from '@yapi/yapi-agent-core/tools/obsidianToolNames';
 import {
   isAgentLifecycleTool,
   TOOL_APPLY_PATCH,
@@ -12,7 +12,7 @@ import {
   TOOL_WEB_FETCH,
   TOOL_WEB_SEARCH,
   TOOL_WRITE_STDIN,
-} from '@pivi/pivi-agent-core/tools/toolNames';
+} from '@yapi/yapi-agent-core/tools/toolNames';
 
 import { t } from '@/app/i18n';
 
@@ -85,7 +85,7 @@ export function renderExpandedContent(
   details?: Record<string, unknown>,
 ): void {
   if (!result && toolName !== TOOL_SKILL && !canRenderWithoutResult(toolName)) {
-    container.createDiv({ cls: 'pivi-tool-empty', text: t('chat.stream.noResult') });
+    container.createDiv({ cls: 'yapi-tool-empty', text: t('chat.stream.noResult') });
     return;
   }
 

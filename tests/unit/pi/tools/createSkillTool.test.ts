@@ -1,8 +1,8 @@
-import type { Skill } from '@pivi/pivi-agent-core/skills/vault/loadVaultSkills';
-import { createSkillTool } from '@pivi/pivi-agent-core/engine/pi/createSkillTool';
+import type { Skill } from '@yapi/yapi-agent-core/skills/vault/loadVaultSkills';
+import { createSkillTool } from '@yapi/yapi-agent-core/engine/pi/createSkillTool';
 
 describe('createSkillTool', () => {
-  const skillDir = '/vault/.pivi/skills/demo-skill';
+  const skillDir = '/vault/.yapi/skills/demo-skill';
   const skillFilePath = `${skillDir}/SKILL.md`;
   const skills: Skill[] = [
     {
@@ -21,8 +21,8 @@ Follow these steps.`,
     {
       name: 'other-skill',
       description: 'Other',
-      filePath: '/vault/.pivi/skills/other/SKILL.md',
-      baseDir: '/vault/.pivi/skills/other',
+      filePath: '/vault/.yapi/skills/other/SKILL.md',
+      baseDir: '/vault/.yapi/skills/other',
       content: '# Other skill',
     },
   ];

@@ -1,4 +1,4 @@
-import type { HostTerminology, Locale, PresentationPlatform } from '@pivi/pivi-react';
+import type { HostTerminology, Locale, PresentationPlatform } from '@yapi/yapi-react';
 import { setIcon, setTooltip } from 'obsidian';
 
 const terminology: Record<Locale, HostTerminology> = {

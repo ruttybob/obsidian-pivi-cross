@@ -4,7 +4,7 @@
 
 ## Purpose
 
-`src/ui/inline-edit/` is the app-only adapter for Pivi's in-editor AI edit flow. `InlineEditModal` is not an Obsidian Modal: it maps Obsidian editor state to CM6 decoration positions and mounts the package-owned React UI.
+`src/ui/inline-edit/` is the app-only adapter for YaPi's in-editor AI edit flow. `InlineEditModal` is not an Obsidian Modal: it maps Obsidian editor state to CM6 decoration positions and mounts the package-owned React UI.
 
 ## Architecture
 
@@ -12,7 +12,7 @@
 flowchart LR
   Command["commandRegistration"] --> Adapter["InlineEditModal (app adapter)"]
   Adapter --> CM["CM6 decoration + SelectionHighlight"]
-  Adapter --> React["@pivi/pivi-react inline-edit"]
+  Adapter --> React["@yapi/yapi-react inline-edit"]
   React --> Runner["InlineEditPort.createAuxQueryRunner"]
   React --> Decision["accept / reject"]
   Decision --> Adapter
@@ -21,7 +21,7 @@ flowchart LR
 
 - The command chooses selection mode for nonblank selections; otherwise it builds cursor context.
 - `InlineEditModal` owns replacement of the single active inline-edit adapter, `MarkdownView` teardown, absolute CM offsets, selection highlighting, CM-to-`Editor` coordinate mapping, and the accept/reject result promise.
-- `@pivi/pivi-react` owns the reducer/controller, React input/reply/spinner/diff/actions, IME-safe keyboard handling, and React mount/dispose. It composes the core-owned `QueryBackedInlineEditService` through the injected port.
+- `@yapi/yapi-react` owns the reducer/controller, React input/reply/spinner/diff/actions, IME-safe keyboard handling, and React mount/dispose. It composes the core-owned `QueryBackedInlineEditService` through the injected port.
 - `WidgetType.destroy()` disposes the React mount. Widget options receive an app-owned `createContainer()` that uses the editor owner realm's Obsidian DOM helpers; the React package receives the resulting element only when mounting. No legacy visible input or diff WidgetType may be added here.
 
 ## Key files
@@ -29,8 +29,8 @@ flowchart LR
 | File | Role |
 |---|---|
 | `src/ui/inline-edit/ui/InlineEditModal.ts` | App-only CM/Obsidian adapter |
-| `packages/pivi-react/src/inline-edit/codeMirror.ts` | CM state effects, owner-realm container widget, and deterministic React mount disposal |
-| `packages/pivi-react/src/inline-edit/` | React UI, controller/reducer, and mount/dispose contracts |
+| `packages/yapi-react/src/inline-edit/codeMirror.ts` | CM state effects, owner-realm container widget, and deterministic React mount disposal |
+| `packages/yapi-react/src/inline-edit/` | React UI, controller/reducer, and mount/dispose contracts |
 
 ## Constraints
 
@@ -44,6 +44,6 @@ flowchart LR
 
 ## Verification
 
-- Cover React state transitions (generate, clarification, diff, accept, reject, error, cancel) in `tests/pivi-react/InlineEdit.test.tsx`.
+- Cover React state transitions (generate, clarification, diff, accept, reject, error, cancel) in `tests/yapi-react/InlineEdit.test.tsx`.
 - Cover CM decoration removal so `WidgetType.destroy()` unmounts the owner-realm React root, including a popout owner document.
 - Run the focused Jest test, focused lint, and source typecheck after changing this boundary.

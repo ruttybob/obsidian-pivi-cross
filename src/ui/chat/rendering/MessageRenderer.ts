@@ -1,8 +1,8 @@
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 import type { App, Component } from 'obsidian';
 
-import type { PiviChatHost } from '@/app/hostContracts';
+import type { YapiChatHost } from '@/app/hostContracts';
 
 import { registerFileLinkHandler } from '../../shared/utils/fileLink';
 import {
@@ -16,7 +16,7 @@ export type { RenderContentFn, RenderContentOptions } from './messageRendererTyp
 
 export class MessageRenderer implements MessageRendererMarkdownHost {
   readonly app: App;
-  readonly plugin: PiviChatHost;
+  readonly plugin: YapiChatHost;
   readonly ports: ChatPorts;
   readonly component: Component;
   messagesEl: HTMLElement;
@@ -24,7 +24,7 @@ export class MessageRenderer implements MessageRendererMarkdownHost {
   redoCallback?: (messageId: string) => Promise<void>;
 
   constructor(
-    plugin: PiviChatHost,
+    plugin: YapiChatHost,
     component: Component,
     messagesEl: HTMLElement,
     ports: ChatPorts,

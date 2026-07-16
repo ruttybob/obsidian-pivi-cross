@@ -1,22 +1,22 @@
-import { nodeFetch } from "@pivi/obsidian-host/nodeFetch";
-import type { ObsidianCredentialStore } from "@pivi/pivi-agent-core/engine/pi/piProviderCredentialStore";
-import type { ProviderOAuthService } from "@pivi/pivi-agent-core/engine/pi/piProviderOAuthService";
-import type { AppModelReadinessProvider } from "@pivi/pivi-agent-core/foundation/modelReadiness";
-import type { McpServerManager } from "@pivi/pivi-agent-core/mcp/mcpServerManager";
-import type { McpOAuthService } from "@pivi/pivi-agent-core/mcp/oauth/mcpOAuthService";
-import { PiMcpConnectionPool } from "@pivi/pivi-agent-core/mcp/piMcpConnectionPool";
-import { testPiMcpServer } from "@pivi/pivi-agent-core/mcp/piMcpTester";
+import { nodeFetch } from "@yapi/obsidian-host/nodeFetch";
+import type { ObsidianCredentialStore } from "@yapi/yapi-agent-core/engine/pi/piProviderCredentialStore";
+import type { ProviderOAuthService } from "@yapi/yapi-agent-core/engine/pi/piProviderOAuthService";
+import type { AppModelReadinessProvider } from "@yapi/yapi-agent-core/foundation/modelReadiness";
+import type { McpServerManager } from "@yapi/yapi-agent-core/mcp/mcpServerManager";
+import type { McpOAuthService } from "@yapi/yapi-agent-core/mcp/oauth/mcpOAuthService";
+import { PiMcpConnectionPool } from "@yapi/yapi-agent-core/mcp/piMcpConnectionPool";
+import { testPiMcpServer } from "@yapi/yapi-agent-core/mcp/piMcpTester";
 import type {
   AppMcpDiagnostics,
   AppMcpServerProbeProvider,
   AppMcpServerTester,
   AppMcpToolProvider,
   AppMcpToolSummary,
-} from "@pivi/pivi-agent-core/mcp/ports";
-import { getMcpServerUrl } from "@pivi/pivi-agent-core/mcp/types";
-import type { ProcessRunner } from "@pivi/pivi-agent-core/ports";
-import type { AppSkillProvider } from "@pivi/pivi-agent-core/skills/skillProvider";
-import { VaultSkillsService } from "@pivi/pivi-agent-core/skills/vault/vaultSkillsService";
+} from "@yapi/yapi-agent-core/mcp/ports";
+import { getMcpServerUrl } from "@yapi/yapi-agent-core/mcp/types";
+import type { ProcessRunner } from "@yapi/yapi-agent-core/ports";
+import type { AppSkillProvider } from "@yapi/yapi-agent-core/skills/skillProvider";
+import { VaultSkillsService } from "@yapi/yapi-agent-core/skills/vault/vaultSkillsService";
 
 import {
   derivePiModelReadinessStatus,

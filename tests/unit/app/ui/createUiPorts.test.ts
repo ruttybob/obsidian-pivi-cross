@@ -1,14 +1,14 @@
-import type { PiviSettings } from '@pivi/pivi-agent-core/foundation';
-import { DEFAULT_PIVI_SETTINGS } from '@pivi/pivi-agent-core/foundation/settingsDefaults';
-import * as defaultSkillsRemote from '@pivi/pivi-agent-core/skills/vault/fetchDefaultVaultSkillsRemoteSha';
-import { VaultSkillsService } from '@pivi/pivi-agent-core/skills/vault/vaultSkillsService';
+import type { YapiSettings } from '@yapi/yapi-agent-core/foundation';
+import { DEFAULT_YAPI_SETTINGS } from '@yapi/yapi-agent-core/foundation/settingsDefaults';
+import * as defaultSkillsRemote from '@yapi/yapi-agent-core/skills/vault/fetchDefaultVaultSkillsRemoteSha';
+import { VaultSkillsService } from '@yapi/yapi-agent-core/skills/vault/vaultSkillsService';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
 import type {
-  PiviSettingsHost,
-  PiviUiFacades,
+  YapiSettingsHost,
+  YapiUiFacades,
 } from '@/app/hostContracts';
 import { createInlineEditPort } from '@/app/ui/createInlineEditPort';
 import {
@@ -17,7 +17,7 @@ import {
 } from '@/app/ui/createUiPorts';
 import type { ChatUiCompositionHost } from '@/app/ui/createUiPorts';
 
-function createUiFacades(): PiviUiFacades {
+function createUiFacades(): YapiUiFacades {
   return {
     chatUIConfig: {
       getModelOptions: () => [{ value: 'model-a', label: 'Model A' }],
@@ -41,7 +41,7 @@ function createUiFacades(): PiviUiFacades {
 describe('UI port adapters', () => {
   const tempDirs: string[] = [];
   const createTempVault = () => {
-    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-ui-ports-'));
+    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-ui-ports-'));
     tempDirs.push(vaultPath);
     return vaultPath;
   };
@@ -51,14 +51,14 @@ describe('UI port adapters', () => {
   });
   it('fails explicitly when a chat workspace capability is used before initialization', () => {
     const host = {
-      settings: { ...DEFAULT_PIVI_SETTINGS } as PiviSettings,
+      settings: { ...DEFAULT_YAPI_SETTINGS } as YapiSettings,
       getUiFacades: () => createUiFacades(),
     } as unknown as ChatUiCompositionHost;
 
     const ports = createChatUiPorts(host, null);
 
     expect(() => ports.catalog.listMcpServers()).toThrow(
-      'Pivi workspace services are not initialized.',
+      'Yapi workspace services are not initialized.',
     );
   });
 
@@ -109,11 +109,11 @@ describe('UI port adapters', () => {
     uiFacades.chatUIConfig.getModelOptions = getModelOptions;
     const host = {
       settings: {
-        ...DEFAULT_PIVI_SETTINGS,
+        ...DEFAULT_YAPI_SETTINGS,
         model: 'model-a',
         thinkingBudget: 'medium',
         thinkingLevel: 'medium',
-      } as PiviSettings,
+      } as YapiSettings,
       saveSettings,
       getAgentHostContext: () => ({}),
       getUiFacades: () => uiFacades,
@@ -200,7 +200,7 @@ describe('UI port adapters', () => {
       throw new Error('Settings ports must use the injected workspace.');
     });
     const host = {
-      settings: {} as PiviSettings,
+      settings: {} as YapiSettings,
       saveSettings: async () => {},
       notify: jest.fn(),
       getUiFacades: () => createUiFacades(),
@@ -209,7 +209,7 @@ describe('UI port adapters', () => {
       getEnvironmentVariablesForScope: () => 'SCOPE=1',
       applyEnvironmentVariables,
       applyEnvironmentVariablesBatch: async () => {},
-    } as unknown as PiviSettingsHost;
+    } as unknown as YapiSettingsHost;
     const loadMcp = jest.fn(async () => []);
     const getCachedMcpTools = jest.fn(() => [{ name: 'search' }]);
     const refreshCommands = jest.fn(async () => undefined);
@@ -255,19 +255,19 @@ describe('UI port adapters', () => {
     const refreshSecond = jest.fn(async () => undefined);
     const host = {
       settings: {
-        ...DEFAULT_PIVI_SETTINGS,
+        ...DEFAULT_YAPI_SETTINGS,
         agentSettings: {
-          ...DEFAULT_PIVI_SETTINGS.agentSettings,
+          ...DEFAULT_YAPI_SETTINGS.agentSettings,
           subagents: { allowBackground: true, enabled: true, maxConcurrentSubagents: 3 },
         },
-      } as PiviSettings,
+      } as YapiSettings,
       saveSettings,
       getAllViews: () => [
         { getChatHandle: () => ({ maintenance: { refreshRuntimePrompt: refreshFirst } }) },
         { getChatHandle: () => ({ maintenance: { refreshRuntimePrompt: refreshSecond } }) },
       ],
       getUiFacades: () => createUiFacades(),
-    } as unknown as PiviSettingsHost;
+    } as unknown as YapiSettingsHost;
     const workspace = {
       credentialStore: null,
       webSearchCredentialStore: null,
@@ -290,14 +290,14 @@ describe('UI port adapters', () => {
     const refreshFirst = jest.fn();
     const refreshSecond = jest.fn();
     const host = {
-      settings: { ...DEFAULT_PIVI_SETTINGS, tabBarPosition: 'input' } as PiviSettings,
+      settings: { ...DEFAULT_YAPI_SETTINGS, tabBarPosition: 'input' } as YapiSettings,
       saveSettings,
       getAllViews: () => [
         { getChatHandle: () => ({ maintenance: { refreshTabBarPosition: refreshFirst } }) },
         { getChatHandle: () => ({ maintenance: { refreshTabBarPosition: refreshSecond } }) },
       ],
       getUiFacades: () => createUiFacades(),
-    } as unknown as PiviSettingsHost;
+    } as unknown as YapiSettingsHost;
     const workspace = {
       credentialStore: null,
       webSearchCredentialStore: null,
@@ -320,7 +320,7 @@ describe('UI port adapters', () => {
     const invalidateSlashCatalog = jest.fn();
     const refreshRuntimePrompt = jest.fn(async () => undefined);
     const host = {
-      settings: { ...DEFAULT_PIVI_SETTINGS } as PiviSettings,
+      settings: { ...DEFAULT_YAPI_SETTINGS } as YapiSettings,
       saveSettings,
       getAllViews: () => [{
         getChatHandle: () => ({
@@ -328,7 +328,7 @@ describe('UI port adapters', () => {
         }),
       }],
       getUiFacades: () => createUiFacades(),
-    } as unknown as PiviSettingsHost;
+    } as unknown as YapiSettingsHost;
     const workspace = {
       credentialStore: null,
       webSearchCredentialStore: null,
@@ -355,17 +355,17 @@ describe('UI port adapters', () => {
     const vaultPath = createTempVault();
     const host = {
       settings: {
-        ...DEFAULT_PIVI_SETTINGS,
+        ...DEFAULT_YAPI_SETTINGS,
         defaultVaultSkillsPromptDismissed: true,
         defaultVaultSkillsRemovedFolders: ['obsidian-cli'],
-      } as PiviSettings,
+      } as YapiSettings,
       saveSettings,
       refreshVaultSkills,
       getVaultPath: () => vaultPath,
       getUiFacades: () => createUiFacades(),
       httpClient: {},
       processRunner: {},
-    } as unknown as PiviSettingsHost;
+    } as unknown as YapiSettingsHost;
     const ports = createSettingsUiPorts(host, {
       credentialStore: null,
       webSearchCredentialStore: null,
@@ -391,17 +391,17 @@ describe('UI port adapters', () => {
     const vaultPath = createTempVault();
     const host = {
       settings: {
-        ...DEFAULT_PIVI_SETTINGS,
+        ...DEFAULT_YAPI_SETTINGS,
         defaultVaultSkillsPromptDismissed: true,
         defaultVaultSkillsRemovedFolders: ['obsidian-cli'],
-      } as PiviSettings,
+      } as YapiSettings,
       saveSettings,
       refreshVaultSkills: jest.fn(async () => undefined),
       getVaultPath: () => vaultPath,
       getUiFacades: () => createUiFacades(),
       httpClient: {},
       processRunner: {},
-    } as unknown as PiviSettingsHost;
+    } as unknown as YapiSettingsHost;
     const ports = createSettingsUiPorts(host, {
       credentialStore: null,
       webSearchCredentialStore: null,
@@ -427,16 +427,16 @@ describe('UI port adapters', () => {
     const vaultPath = createTempVault();
     const host = {
       settings: {
-        ...DEFAULT_PIVI_SETTINGS,
+        ...DEFAULT_YAPI_SETTINGS,
         defaultVaultSkillsRemovedFolders: ['defuddle'],
-      } as PiviSettings,
+      } as YapiSettings,
       saveSettings,
       refreshVaultSkills,
       getVaultPath: () => vaultPath,
       getUiFacades: () => createUiFacades(),
       httpClient: {},
       processRunner: {},
-    } as unknown as PiviSettingsHost;
+    } as unknown as YapiSettingsHost;
     const ports = createSettingsUiPorts(host, {
       credentialStore: null,
       webSearchCredentialStore: null,
@@ -459,14 +459,14 @@ describe('UI port adapters', () => {
     const saveSettings = jest.fn(async () => undefined);
     const vaultPath = createTempVault();
     const host = {
-      settings: { ...DEFAULT_PIVI_SETTINGS } as PiviSettings,
+      settings: { ...DEFAULT_YAPI_SETTINGS } as YapiSettings,
       saveSettings,
       refreshVaultSkills: async () => undefined,
       getVaultPath: () => vaultPath,
       getUiFacades: () => createUiFacades(),
       httpClient: {},
       processRunner: {},
-    } as unknown as PiviSettingsHost;
+    } as unknown as YapiSettingsHost;
     const ports = createSettingsUiPorts(host, {
       credentialStore: null,
       webSearchCredentialStore: null,
@@ -485,13 +485,13 @@ describe('UI port adapters', () => {
   it('fails explicitly when settings workspace is unavailable', () => {
     const getPiWorkspace = jest.fn();
     const host = {
-      settings: {} as PiviSettings,
+      settings: {} as YapiSettings,
       getPiWorkspace,
       getUiFacades: () => createUiFacades(),
-    } as unknown as PiviSettingsHost;
+    } as unknown as YapiSettingsHost;
 
     expect(() => createSettingsUiPorts(host, null)).toThrow(
-      'Pivi workspace services are not initialized.',
+      'Yapi workspace services are not initialized.',
     );
     expect(getPiWorkspace).not.toHaveBeenCalled();
   });

@@ -29,7 +29,7 @@ class ConfirmModal extends Modal {
 
   onOpen() {
     this.setTitle(t('common.confirm'));
-    this.modalEl.addClass('pivi-confirm-modal');
+    this.modalEl.addClass('yapi-confirm-modal');
 
     this.contentEl.createEl('p', { text: this.message });
 

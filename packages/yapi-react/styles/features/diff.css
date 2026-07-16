@@ -1,0 +1,118 @@
+/* Write/Edit uses the generic tool shell and owns only its diff body. */
+.yapi-write-edit-stats {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-xs);
+  flex-shrink: 0;
+}
+
+.yapi-write-edit-stats .added {
+  color: var(--yapi-host-color-green);
+}
+
+.yapi-write-edit-stats .removed {
+  color: var(--yapi-host-color-red);
+  margin-left: var(--yapi-spacing-xs);
+}
+
+.yapi-write-edit-content {
+  padding: 2px 8px 6px 14px;
+  margin-inline-start: 14px;
+  margin-inline-end: var(--yapi-spacing-sm);
+  margin-block-end: 6px;
+  border-inline-start: 2px solid var(--yapi-host-border);
+  background: transparent;
+  overflow: hidden;
+}
+
+.yapi-write-edit-diff-row {
+  display: flex;
+}
+
+.yapi-write-edit-diff {
+  flex: 1;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  line-height: 1.5;
+  background: transparent;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.yapi-write-edit-loading,
+.yapi-write-edit-binary,
+.yapi-write-edit-error,
+.yapi-write-edit-done-text {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-write-edit-error {
+  color: var(--yapi-host-color-red);
+}
+
+/* Diff line styling */
+.yapi-diff-hunk {
+  margin-bottom: var(--yapi-spacing-xs);
+}
+
+.yapi-diff-line {
+  display: flex;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.yapi-diff-prefix {
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+  color: var(--yapi-host-text-muted);
+  user-select: none;
+}
+
+.yapi-diff-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Diff colors - NO strikethrough for Write/Edit blocks */
+.yapi-diff-equal {
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-diff-delete {
+  background: rgba(255, 80, 80, 0.25);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-diff-delete .yapi-diff-prefix {
+  color: var(--yapi-host-color-red);
+}
+
+.yapi-diff-insert {
+  background: rgba(80, 200, 80, 0.25);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-diff-insert .yapi-diff-prefix {
+  color: var(--yapi-host-color-green);
+}
+
+/* Hunk separator */
+.yapi-diff-separator {
+  color: var(--yapi-host-text-muted);
+  text-align: center;
+  padding: 4px 0;
+  font-style: italic;
+  border-top: 1px dashed var(--yapi-host-border);
+  border-bottom: 1px dashed var(--yapi-host-border);
+  margin: 8px 0;
+  font-size: var(--yapi-text-xs);
+}
+
+.yapi-diff-no-changes {
+  color: var(--yapi-host-text-muted);
+  font-style: italic;
+  padding: var(--yapi-spacing-sm);
+}

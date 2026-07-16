@@ -1,7 +1,7 @@
-import type { DeviceLocalExternalContextStore } from '@pivi/pivi-agent-core/session';
+import type { DeviceLocalExternalContextStore } from '@yapi/yapi-agent-core/session';
 import type { App } from 'obsidian';
 
-export const DEVICE_LOCAL_EXTERNAL_CONTEXT_STORAGE_KEY = 'pivi.external-contexts.v1';
+export const DEVICE_LOCAL_EXTERNAL_CONTEXT_STORAGE_KEY = 'yapi.external-contexts.v1';
 
 interface StoredSessionExternalContexts {
   selectedPaths?: string[];

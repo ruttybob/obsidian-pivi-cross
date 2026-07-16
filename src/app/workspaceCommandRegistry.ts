@@ -1,13 +1,13 @@
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
 import {
   requiresSelectedText,
   resolveWorkspaceCommandPrompt,
-} from '@pivi/pivi-agent-core/skills/commands/resolveWorkspaceCommandPrompt';
-import type { SlashCatalogEntry } from '@pivi/pivi-agent-core/skills/commands/slashCommandEntry';
+} from '@yapi/yapi-agent-core/skills/commands/resolveWorkspaceCommandPrompt';
+import type { SlashCatalogEntry } from '@yapi/yapi-agent-core/skills/commands/slashCommandEntry';
 import { type App, type Command,getIcon, MarkdownView, Notice } from 'obsidian';
 
 import { t } from '@/app/i18n';
-import { ensurePiviViewOpen } from '@/app/piviViewActivation';
+import { ensureYapiViewOpen } from '@/app/yapiViewActivation';
 
 const logger = new PluginLogger('WorkspaceCommandRegistry');
 
@@ -91,7 +91,7 @@ export class WorkspaceCommandRegistry {
       return;
     }
 
-    const view = await ensurePiviViewOpen(this.host.app, this.host.settings.chatViewPlacement);
+    const view = await ensureYapiViewOpen(this.host.app, this.host.settings.chatViewPlacement);
     const sent = await view?.getChatHandle()?.commands
       .sendWorkspaceCommandInNewSession(content) ?? false;
     if (!sent) {

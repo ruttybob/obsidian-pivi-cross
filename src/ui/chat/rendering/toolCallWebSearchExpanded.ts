@@ -1,4 +1,4 @@
-import { normalizeWebSearchDisplayData } from '@pivi/pivi-agent-core/tools/toolPresentation';
+import { normalizeWebSearchDisplayData } from '@yapi/yapi-agent-core/tools/toolPresentation';
 
 import { t } from '@/app/i18n';
 
@@ -12,7 +12,7 @@ export interface WebSearchLink {
 export function renderFileSearchExpanded(container: HTMLElement, result: string): void {
   const lines = result.split(/\r?\n/).filter(line => line.trim());
   if (lines.length === 0) {
-    container.createDiv({ cls: 'pivi-tool-empty', text: t('chat.stream.noMatches') });
+    container.createDiv({ cls: 'yapi-tool-empty', text: t('chat.stream.noMatches') });
     return;
   }
   renderLinesExpanded(container, result, true);
@@ -51,27 +51,27 @@ export function renderWebSearchActionExpanded(container: HTMLElement, input: Rec
     return false;
   }
 
-  const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
+  const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
 
   switch (data.actionType) {
     case 'open_page':
-      linesEl.createDiv({ cls: 'pivi-tool-line', text: t('chat.stream.openPage') });
+      linesEl.createDiv({ cls: 'yapi-tool-line', text: t('chat.stream.openPage') });
       if (data.url) {
         appendToolLink(linesEl, data.url, data.url);
       } else {
-        linesEl.createDiv({ cls: 'pivi-tool-line', text: t('chat.stream.urlUnavailable') });
+        linesEl.createDiv({ cls: 'yapi-tool-line', text: t('chat.stream.urlUnavailable') });
       }
       return true;
 
     case 'find_in_page':
-      linesEl.createDiv({ cls: 'pivi-tool-line', text: t('chat.stream.findInPage') });
+      linesEl.createDiv({ cls: 'yapi-tool-line', text: t('chat.stream.findInPage') });
       if (data.url) {
         appendToolLink(linesEl, data.url, data.url);
       } else {
-        linesEl.createDiv({ cls: 'pivi-tool-line', text: t('chat.stream.urlUnavailable') });
+        linesEl.createDiv({ cls: 'yapi-tool-line', text: t('chat.stream.urlUnavailable') });
       }
       if (data.pattern) {
-        linesEl.createDiv({ cls: 'pivi-tool-line', text: `Pattern: ${data.pattern}` });
+        linesEl.createDiv({ cls: 'yapi-tool-line', text: `Pattern: ${data.pattern}` });
       }
       return true;
 
@@ -79,13 +79,13 @@ export function renderWebSearchActionExpanded(container: HTMLElement, input: Rec
     default: {
       const primaryQuery = data.query || data.queries[0];
       linesEl.createDiv({
-        cls: 'pivi-tool-line',
+        cls: 'yapi-tool-line',
         text: primaryQuery ? `Query: ${primaryQuery}` : 'Search web',
       });
 
       const alternateQueries = data.queries.filter(query => query !== primaryQuery);
       for (const query of alternateQueries) {
-        linesEl.createDiv({ cls: 'pivi-tool-line', text: `Alt query: ${query}` });
+        linesEl.createDiv({ cls: 'yapi-tool-line', text: `Alt query: ${query}` });
       }
       return true;
     }
@@ -99,13 +99,13 @@ export function renderWebSearchExpanded(
 ): void {
   const parsed = result ? parseWebSearchResult(result) : null;
   if (parsed && parsed.links.length > 0) {
-    const linksEl = container.createDiv({ cls: 'pivi-tool-lines' });
+    const linksEl = container.createDiv({ cls: 'yapi-tool-lines' });
     for (const link of parsed.links) {
       appendToolLink(linksEl, link.title, link.url);
     }
 
     if (parsed.summary) {
-      const summaryEl = container.createDiv({ cls: 'pivi-tool-web-summary' });
+      const summaryEl = container.createDiv({ cls: 'yapi-tool-web-summary' });
       summaryEl.setText(parsed.summary);
     }
     return;
@@ -134,10 +134,10 @@ export function renderWebSearchExpanded(
     return;
   }
 
-  container.createDiv({ cls: 'pivi-tool-empty', text: t('chat.stream.noResult') });
+  container.createDiv({ cls: 'yapi-tool-empty', text: t('chat.stream.noResult') });
 }
 export function renderWebFetchExpanded(container: HTMLElement, result: string): void {
-  const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
-  const lineEl = linesEl.createDiv({ cls: 'pivi-tool-line pivi-tool-line-wrap' });
+  const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
+  const lineEl = linesEl.createDiv({ cls: 'yapi-tool-line yapi-tool-line-wrap' });
   lineEl.setText(result);
 }

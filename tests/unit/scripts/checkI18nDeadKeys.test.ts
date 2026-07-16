@@ -16,8 +16,8 @@ describe('check-i18n-dead-keys script', () => {
   });
 
   it('rejects a key referenced only by tests', () => {
-    const fixtureRoot = mkdtempSync(path.join(tmpdir(), 'pivi-i18n-dead-keys-'));
-    const localesDir = path.join(fixtureRoot, 'packages/pivi-react/src/i18n/locales');
+    const fixtureRoot = mkdtempSync(path.join(tmpdir(), 'yapi-i18n-dead-keys-'));
+    const localesDir = path.join(fixtureRoot, 'packages/yapi-react/src/i18n/locales');
     mkdirSync(localesDir, { recursive: true });
     mkdirSync(path.join(fixtureRoot, 'src'), { recursive: true });
     mkdirSync(path.join(fixtureRoot, 'tests'), { recursive: true });
@@ -34,7 +34,7 @@ describe('check-i18n-dead-keys script', () => {
     try {
       execFileSync('node', ['scripts/check-i18n-dead-keys.mjs'], {
         cwd: rootDir,
-        env: { ...process.env, PIVI_I18N_PROJECT_ROOT: fixtureRoot },
+        env: { ...process.env, YAPI_I18N_PROJECT_ROOT: fixtureRoot },
         stdio: 'pipe',
       });
     } catch (error) {

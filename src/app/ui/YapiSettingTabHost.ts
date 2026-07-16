@@ -1,0 +1,116 @@
+import {
+  getSettingsSearchAliases,
+  type MountedSurface,
+  mountSettings,
+} from "@yapi/yapi-react/mount";
+import type { App, SettingDefinitionItem } from "obsidian";
+import { Notice, PluginSettingTab } from "obsidian";
+
+import type {
+  YapiPluginHost,
+  YapiPluginWorkspace,
+} from "@/app/hostContracts";
+import { appI18n, type Locale, setLocale, t } from "@/app/i18n";
+import { createSettingsUiPorts } from "@/app/ui/createUiPorts";
+import { obsidianPresentationPlatform } from "@/app/ui/obsidianPresentationPlatform";
+import { getActiveWindow } from "@/ui/shared/dom";
+
+function refreshSettingDefinitions(tab: object): void {
+  const update: unknown = (tab as { update?: unknown }).update;
+  if (typeof update === 'function') update.call(tab);
+}
+
+export class YapiSettingTabHost extends PluginSettingTab {
+  plugin: YapiPluginHost;
+  private readonly getWorkspace: () => Promise<YapiPluginWorkspace>;
+  private mountedSurface: MountedSurface | null = null;
+  private mountGeneration = 0;
+
+  constructor(
+    app: App,
+    plugin: YapiPluginHost,
+    getWorkspace: () => Promise<YapiPluginWorkspace>,
+  ) {
+    super(app, plugin);
+    this.plugin = plugin;
+    this.getWorkspace = getWorkspace;
+    setLocale(this.plugin.settings.locale as Locale);
+    plugin.register(appI18n.subscribe(() => {
+      refreshSettingDefinitions(this);
+    }));
+  }
+
+  getSettingDefinitions(): SettingDefinitionItem[] {
+    return [{
+      name: this.plugin.manifest.name,
+      desc: this.plugin.manifest.description,
+      aliases: getSettingsSearchAliases(appI18n),
+      render: (setting) => {
+        setting.settingEl.empty();
+        setting.settingEl.addClass('yapi-settings-definition-host');
+        return this.mountReactSettingsSurface(setting.settingEl);
+      },
+    }];
+  }
+
+  display(): void {
+    this.containerEl.empty();
+    this.mountReactSettingsSurface(this.containerEl);
+  }
+
+  hide(): void {
+    this.mountGeneration++;
+    const mounted = this.mountedSurface;
+    this.mountedSurface = null;
+    if (mounted) void mounted.dispose();
+    this.containerEl.empty();
+  }
+
+  private mountReactSettingsSurface(container: HTMLElement): () => void {
+    const generation = ++this.mountGeneration;
+    void this.mountReactSettings(container, generation);
+    return () => {
+      if (generation !== this.mountGeneration) return;
+      this.mountGeneration++;
+      const mounted = this.mountedSurface;
+      this.mountedSurface = null;
+      if (mounted) void mounted.dispose();
+      container.empty();
+    };
+  }
+
+  private async mountReactSettings(
+    container: HTMLElement,
+    generation: number,
+  ): Promise<void> {
+    const ownerDocument = container.ownerDocument;
+    const ownerWindow = getActiveWindow(container);
+
+    const previous = this.mountedSurface;
+    this.mountedSurface = null;
+    if (previous) await previous.dispose();
+
+    try {
+      const workspace = await this.getWorkspace();
+      if (generation !== this.mountGeneration) return;
+      const mounted = await mountSettings({
+        container,
+        ownerDocument,
+        ownerWindow,
+        portalContainer: ownerDocument.body,
+        i18n: appI18n,
+        platform: obsidianPresentationPlatform,
+        ports: createSettingsUiPorts(this.plugin, workspace),
+      });
+      if (generation !== this.mountGeneration) {
+        await mounted.dispose();
+        return;
+      }
+      this.mountedSurface = mounted;
+    } catch (error) {
+      if (generation !== this.mountGeneration) return;
+      const detail = error instanceof Error ? error.message : String(error);
+      new Notice(`${t("common.error")}: ${detail}`);
+    }
+  }
+}

@@ -1,15 +1,15 @@
 import {
   formatInlineContextBadgeLabel,
   formatInlineContextPreview,
-} from '@pivi/pivi-agent-core/context/mentions';
+} from '@yapi/yapi-agent-core/context/mentions';
 import {
   formatInlineContextTooltip,
   formatRemoveInlineContextAriaLabel,
   formatMcpBadgeLabel,
   formatSkillBadgeLabel,
-} from '@pivi/pivi-react/context-badges';
-import type { InlineContextReference } from '@pivi/pivi-agent-core/context/inlineContext';
-import { createI18n } from '@pivi/pivi-react';
+} from '@yapi/yapi-react/context-badges';
+import type { InlineContextReference } from '@yapi/yapi-agent-core/context/inlineContext';
+import { createI18n } from '@yapi/yapi-react';
 
 describe('mentionBadgeLabels', () => {
   const t = createI18n('en').t;

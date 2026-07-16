@@ -1,14 +1,14 @@
-import type { OpenSessionState, PiviSettings } from '@pivi/pivi-agent-core/foundation';
+import type { OpenSessionState, YapiSettings } from '@yapi/yapi-agent-core/foundation';
 
-import type { PiviChatView, PiviChatViewMaintenance } from '@/app/hostContracts';
+import type { YapiChatView, YapiChatViewMaintenance } from '@/app/hostContracts';
 import { applyEnvironmentVariablesBatch } from '@/app/settings/environmentVariables';
 
-function createView(maintenance: Partial<PiviChatViewMaintenance>): PiviChatView {
+function createView(maintenance: Partial<YapiChatViewMaintenance>): YapiChatView {
   return {
     leaf: {} as never,
     getChatHandle: () => ({
       commands: {} as never,
-      maintenance: maintenance as PiviChatViewMaintenance,
+      maintenance: maintenance as YapiChatViewMaintenance,
     }),
   };
 }
@@ -28,10 +28,10 @@ describe('environment variable runtime propagation', () => {
     const settings = {
       sharedEnvironmentVariables: '',
       agentSettings: { environmentVariables: '' },
-    } as unknown as PiviSettings;
+    } as unknown as YapiSettings;
     const invalidatedSession = {
       id: 'session-1',
-      sessionFile: '.pivi/sessions/one.jsonl',
+      sessionFile: '.yapi/sessions/one.jsonl',
     } as OpenSessionState;
     const persistSessionSummary = jest.fn(async () => undefined);
 
@@ -90,7 +90,7 @@ describe('environment variable runtime propagation', () => {
     const settings = {
       sharedEnvironmentVariables: '',
       agentSettings: { environmentVariables: '' },
-    } as unknown as PiviSettings;
+    } as unknown as YapiSettings;
 
     await applyEnvironmentVariablesBatch(
       {
@@ -133,7 +133,7 @@ describe('environment variable runtime propagation', () => {
     const settings = {
       sharedEnvironmentVariables: 'PATH=/same',
       agentSettings: { environmentVariables: '' },
-    } as unknown as PiviSettings;
+    } as unknown as YapiSettings;
 
     await applyEnvironmentVariablesBatch(
       {

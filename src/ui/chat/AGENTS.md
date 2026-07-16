@@ -4,7 +4,7 @@
 
 ## Purpose
 
-`src/ui/chat/` owns chat **runtime orchestration** and **explicit imperative adapters** under the React shell: session binding, turn composition, chrome projection into `ChatUiStore`, message projection into `ChatProjectionStore`, and Markdown/tool/diff/ask-user/subagent bodies mounted into empty React slots. Obsidian view lifecycle lives in `src/app/ui/PiviViewHost.ts`; the `imperativeChat*.ts` adapter family owns aggregate mount/lifecycle and semantic translation; React shell/tabs/status/composer chrome/messages live in `@pivi/pivi-react`.
+`src/ui/chat/` owns chat **runtime orchestration** and **explicit imperative adapters** under the React shell: session binding, turn composition, chrome projection into `ChatUiStore`, message projection into `ChatProjectionStore`, and Markdown/tool/diff/ask-user/subagent bodies mounted into empty React slots. Obsidian view lifecycle lives in `src/app/ui/YapiViewHost.ts`; the `imperativeChat*.ts` adapter family owns aggregate mount/lifecycle and semantic translation; React shell/tabs/status/composer chrome/messages live in `@yapi/yapi-react`.
 
 This layer consumes injected host and runtime contracts; it does not construct the Pi engine, own durable session storage, implement tools, or own migrated product chrome.
 
@@ -12,7 +12,7 @@ This layer consumes injected host and runtime contracts; it does not construct t
 
 ```mermaid
 flowchart TD
-  View["src/app/ui/PiviViewHost<br/>Obsidian lifecycle + mount/dispose"] --> Shell["@pivi/pivi-react<br/>React shell, tabs, status, composer chrome, MessageList"]
+  View["src/app/ui/YapiViewHost<br/>Obsidian lifecycle + mount/dispose"] --> Shell["@yapi/yapi-react<br/>React shell, tabs, status, composer chrome, MessageList"]
   View --> Adapter["src/app/ui/ImperativeChatAdapter<br/>aggregate lifecycle + semantic translation"]
   Adapter --> Tabs["tabs/<br/>tab lifecycle, session binding, portal scaffolds"]
   Tabs --> Controllers["controllers/<br/>input, session, selection, stream"]
@@ -36,22 +36,22 @@ flowchart TD
   Shell -. "portals into empty slots" .-> Tabs
   Rendering -. "fills React slots" .-> Shell
 
-  Tabs --> Host["PiviChatHost.app<br/>Obsidian UI context only"]
+  Tabs --> Host["YapiChatHost.app<br/>Obsidian UI context only"]
   Tabs --> Ports["ChatPorts<br/>runtime / sessions / catalog / models / settings"]
-  Controllers --> ChatService["PiChatService<br/>@pivi/pivi-agent-core/runtime"]
+  Controllers --> ChatService["PiChatService<br/>@yapi/yapi-agent-core/runtime"]
   Ports -. "creates/injects" .-> ChatService
 ```
 
 ### Lifecycle and data flow
 
-1. `PiviViewHost.onOpen()` creates core-owned `ChatPorts` via `createChatUiPorts`, prepares the React shell through `createImperativeChatAdapter`, and mounts one React shell via `mountChatView`. An app-owned adapter closure captures the ports and passes them directly to `TabManager`; the React mount contract never receives them, and `ChatShell` consumes snapshots/actions only.
+1. `YapiViewHost.onOpen()` creates core-owned `ChatPorts` via `createChatUiPorts`, prepares the React shell through `createImperativeChatAdapter`, and mounts one React shell via `mountChatView`. An app-owned adapter closure captures the ports and passes them directly to `TabManager`; the React mount contract never receives them, and `ChatShell` consumes snapshots/actions only.
 2. `ImperativeChatAdapter.mount` constructs `TabManager` with the same `ChatPorts`, loads persisted tab bindings or creates a blank tab, and primes eligible runtime state. `TabManager` creates each `TabData`, initializes its controller/UI/state graph plus the uncontrolled rich-input and empty portal slots (`tabDom`), and activates only the selected tab; blank and cold tabs still create no chat service. Live chrome and message entities reach React through `ActiveChatUiBridge` plus immutable `ChatUiStore` and `ChatProjectionStore` snapshots; `scheduleTabsSnapshotPublish` keeps the separate tab strip store in sync. Ports supply catalogs/factories/model behavior/projected settings (`catalog` / `models` / `settings` / `runtime` / `sessions`), not live UI state or facade objects. There is no composer `McpServerSelector`, no `navRowEl`, and no DOM-mutating stream path.
 3. A new tab begins as `blank`: it has draft UI settings but no durable open-session binding and no chat service.
 4. Loading history produces a `bound_cold` tab associated with `openSessionId` and `sessionFile`; runtime work remains lazy.
 5. The first send calls `initializeTabService()`. This is the only UI location that calls `ports.runtime.createChatService()`. It passively syncs the session and moves the tab to `bound_active`; `query()` starts actual work.
 6. `InputController` delegates turn capture to composer helpers, streams `PiChatService.query()` chunks through `StreamController`, finalizes the turn, saves session projection, and processes any queued turn.
 7. `SessionController` hydrates the newest bounded JSONL message page through `ChatPorts.sessions` and requests older stable-ID pages when React reaches the top. It rejects late pages after session changes or tab disposal. `StreamController` serially reduces chunks into durable `ChatMessage` state and performs non-DOM service effects; background Agent chunks serialize through a per-tab Promise tail before projection sequencing. `ChatState` owns projection scope/binding metadata and the monotonic sequence, then emits every mutation through `ChatProjectionStore.dispatch()`. Durable state changes immediately; active visible projection coalesces by owner-window animation frame, hidden/inactive projection uses the owner-window 250 ms cadence, and terminal/error/cancel/save/switch/close boundaries flush synchronously. `ChatUiStore` no longer contains messages. Only explicit Markdown/tool/diff/ask-user/subagent slots invoke imperative adapters.
-8. `PiviViewHost.onClose()` first asks the semantic view handle to persist tab state, then disposes the imperative adapter and React root. Adapter disposal calls `TabManager.destroy()` to clean tabs, subscriptions, controllers, services, and DOM listeners; persistence is a host-lifecycle operation, not an implicit side effect of adapter disposal.
+8. `YapiViewHost.onClose()` first asks the semantic view handle to persist tab state, then disposes the imperative adapter and React root. Adapter disposal calls `TabManager.destroy()` to clean tabs, subscriptions, controllers, services, and DOM listeners; persistence is a host-lifecycle operation, not an implicit side effect of adapter disposal.
 
 ## Subdirectory map
 
@@ -72,15 +72,15 @@ flowchart TD
 
 | File | Role |
 |---|---|
-| `src/app/ui/PiviViewHost.ts` | Thin app-owned Obsidian view lifecycle; mounts/disposes React shell, persists tab state, and coordinates vault/workspace events. |
+| `src/app/ui/YapiViewHost.ts` | Thin app-owned Obsidian view lifecycle; mounts/disposes React shell, persists tab state, and coordinates vault/workspace events. |
 | `src/app/ui/imperativeChatAdapter.ts` | Aggregate orchestrator: mounts `TabManager`, delegates semantic handle/message presentation to sibling adapters, and bridges the tabs store. |
-| `src/app/ui/imperativeChatViewHandle.ts` | Constructs the semantic `PiviChatViewHandle` commands and maintenance operations. |
+| `src/app/ui/imperativeChatViewHandle.ts` | Constructs the semantic `YapiChatViewHandle` commands and maintenance operations. |
 | `src/app/ui/createSubagentContentAdapter.ts` | App-owned React `MessageContentAdapter` bridge for stored subagent mount/update; preserves the mounted adapter across incremental stream changes. |
-| `packages/pivi-react/src/mount/ChatShell.tsx` | React-owned header, logo, tabs, welcome/quote adapter slot, queue, composer toolbar (including input usage meter), todo status, navigation, auto-scroll status, and owner-realm interactions. Consumes snapshots/actions, not application runtime ports. |
-| `packages/pivi-react/src/mount/activeChatUiBridge.ts` | Runtime-only active-tab selector connecting immutable stores and React-exclusive portal elements without placing DOM in snapshots. |
+| `packages/yapi-react/src/mount/ChatShell.tsx` | React-owned header, logo, tabs, welcome/quote adapter slot, queue, composer toolbar (including input usage meter), todo status, navigation, auto-scroll status, and owner-realm interactions. Consumes snapshots/actions, not application runtime ports. |
+| `packages/yapi-react/src/mount/activeChatUiBridge.ts` | Runtime-only active-tab selector connecting immutable stores and React-exclusive portal elements without placing DOM in snapshots. |
 | `src/ui/chat/tabs/Tab.ts` | Creates one `TabData` graph and its portal/input scaffolds; activates, deactivates, and destroys per-tab resources. |
 | `src/ui/chat/tabs/types.ts` | Canonical tab aggregate, lifecycle states, UI/controller/service slots, and persisted tab binding shape. |
-| `src/ui/chat/tabs/tabControllerInit.ts` | Composition point for per-tab renderer and controllers; connects callbacks without importing `PiviViewHost`. |
+| `src/ui/chat/tabs/tabControllerInit.ts` | Composition point for per-tab renderer and controllers; connects callbacks without importing `YapiViewHost`. |
 | `src/ui/chat/tabs/tabRuntime.ts` | Sole UI factory call for `PiChatService`; session sync, subscriptions, lazy activation, and failed/closing initialization cleanup. |
 | `src/ui/chat/tabs/tabExternalContext.ts` | Synchronizes runtime sessions with effective external roots; runtime restarts preserve current tab choices while session changes reset them to pinned device-local defaults. |
 | `src/ui/chat/tabs/tabMessageViewport.ts` | Popout-safe message viewport wiring; observes both the scroll viewport and React message portal so asynchronous layout growth preserves opted-in auto-scroll and navigation state. |
@@ -103,15 +103,15 @@ flowchart TD
 
 ### Boundaries
 
-- UI chat code depends on the `app`-only `PiviChatHost` contract from `src/app/hostContracts.ts`, not `PiviChatCompositionHost`, the concrete plugin class, `PiviViewHost`, or app workspace implementations. Do not import `@/app/ui/**` from this directory.
-- Depend on `PiChatService` from `@pivi/pivi-agent-core/runtime`. Never import, instantiate, or type against `PiChatRuntime`.
-- Consume injected `ChatPorts` (`runtime` / `sessions` / `catalog` / `models` / `settings`) via `TabManager` and type-import them from `@pivi/pivi-agent-core/runtime/chatPorts`; all chat settings reads go through the explicit `ChatSettingsSnapshot` projection, never `plugin.settings`, `PiviSettings`, or an `agentSettings` bag. Never import React-owned presentation ports or `@pivi/pivi-react/mount`, never implement application ports here, never call `getPiWorkspace()`, `getUiFacades()`, `saveSettings()`, or `getAllViews()`, and never cast host objects `as ChatPorts`.
+- UI chat code depends on the `app`-only `YapiChatHost` contract from `src/app/hostContracts.ts`, not `YapiChatCompositionHost`, the concrete plugin class, `YapiViewHost`, or app workspace implementations. Do not import `@/app/ui/**` from this directory.
+- Depend on `PiChatService` from `@yapi/yapi-agent-core/runtime`. Never import, instantiate, or type against `PiChatRuntime`.
+- Consume injected `ChatPorts` (`runtime` / `sessions` / `catalog` / `models` / `settings`) via `TabManager` and type-import them from `@yapi/yapi-agent-core/runtime/chatPorts`; all chat settings reads go through the explicit `ChatSettingsSnapshot` projection, never `plugin.settings`, `YapiSettings`, or an `agentSettings` bag. Never import React-owned presentation ports or `@yapi/yapi-react/mount`, never implement application ports here, never call `getPiWorkspace()`, `getUiFacades()`, `saveSettings()`, or `getAllViews()`, and never cast host objects `as ChatPorts`.
 - `TabManager` also receives the presentation-owned `ChatPerfRecorder` contract from app composition and passes it unchanged into each `ChatState` projection store. Chat runtime may emit through that seam but must not start/stop tracing, write trace files, create observers, or inspect the concrete app recorder.
 - Projection sequence ownership stays in `ChatState`, never in React. A first turn may have null session/open-session identity, so `projectionScopeId` owns that pre-binding epoch; changing the durable binding resets the sequence. Capture a background Agent's parent projection run when its state is first registered and reuse it across later turns. Raw `done`/`error` chunks do not seal a run because final footer/service effects follow them. Emit `run.terminal` only after the final main/child mutation; use `projection.flush` for urgent non-sealing publication. On tab teardown, unsubscribe service callbacks before disposing `StreamController`; its disposal guard must prevent queued or await-resumed background work from publishing.
-- Do not import `@pivi/pivi-agent-core/engine/pi`, raw `@earendil-works/*` SDK modules, `src/app/workspace/**`, or `@pivi/obsidian-host/**` from this directory.
-- Obsidian UI context may arrive through `PiviChatHost.app`; runtime/session/model/catalog/settings capabilities must arrive through `ChatPorts`. Other host/platform operations use narrow structural callbacks or approved adapters such as `src/app/hostPlatform.ts`.
+- Do not import `@yapi/yapi-agent-core/engine/pi`, raw `@earendil-works/*` SDK modules, `src/app/workspace/**`, or `@yapi/obsidian-host/**` from this directory.
+- Obsidian UI context may arrive through `YapiChatHost.app`; runtime/session/model/catalog/settings capabilities must arrive through `ChatPorts`. Other host/platform operations use narrow structural callbacks or approved adapters such as `src/app/hostPlatform.ts`.
 - Use core-owned message, turn, tool, session, todo, context, and usage models. Do not duplicate provider/runtime protocols in UI.
-- Keep `src/app/hostContracts.ts` structural and UI-neutral. App callers use `PiviChatViewHandle.commands` / `.maintenance`; they must never receive the internal `TabManager`, `TabData`, controller, UI, or DOM graph. `ImperativeChatAdapter` is the only boundary allowed to translate semantic view operations onto that aggregate. Use interfaces such as `TabManagerViewHost` to prevent app↔UI and view↔tab cycles.
+- Keep `src/app/hostContracts.ts` structural and UI-neutral. App callers use `YapiChatViewHandle.commands` / `.maintenance`; they must never receive the internal `TabManager`, `TabData`, controller, UI, or DOM graph. `ImperativeChatAdapter` is the only boundary allowed to translate semantic view operations onto that aggregate. Use interfaces such as `TabManagerViewHost` to prevent app↔UI and view↔tab cycles.
 - Runtime state is rebuildable. Durable identity belongs to the session file/header; open-session projections and adapter DOM are rebuildable.
 
 ### Tabs and sessions
@@ -164,7 +164,7 @@ flowchart TD
 
 ## Subagent stream boundary
 
-`StreamSubagentCoordinator` (`stream/streamSubagentLifecycle.ts`) deliberately stays in product UI rather than `@pivi/pivi-agent-core`:
+`StreamSubagentCoordinator` (`stream/streamSubagentLifecycle.ts`) deliberately stays in product UI rather than `@yapi/yapi-agent-core`:
 
 - It mutates live `ChatMessage` tool calls, content blocks, and thinking-indicator side effects while chunks arrive.
 - A foreground subagent terminal event clears the bottom thinking indicator and its owner-window timers. Background subagent terminal events update their projection without hiding an unrelated foreground indicator.

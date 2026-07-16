@@ -1,7 +1,7 @@
-import type { SlashCommand } from '@pivi/pivi-agent-core/foundation';
-import type { SlashCommandDropdownConfig } from '@pivi/pivi-agent-core/skills/commands/slashCommandCatalog';
-import type { SlashCatalogEntry } from '@pivi/pivi-agent-core/skills/commands/slashCommandEntry';
-import { normalizeArgumentHint } from '@pivi/pivi-agent-core/skills/slashCommand';
+import type { SlashCommand } from '@yapi/yapi-agent-core/foundation';
+import type { SlashCommandDropdownConfig } from '@yapi/yapi-agent-core/skills/commands/slashCommandCatalog';
+import type { SlashCatalogEntry } from '@yapi/yapi-agent-core/skills/commands/slashCommandEntry';
+import { normalizeArgumentHint } from '@yapi/yapi-agent-core/skills/slashCommand';
 import { setIcon } from 'obsidian';
 
 import { t } from '@/app/i18n';
@@ -34,7 +34,7 @@ export type {
 type SlashInputElement = ComposerInput | HTMLTextAreaElement | HTMLInputElement;
 
 function renderItemIcon(container: HTMLElement, item: DropdownItem): void {
-  container.addClass(`pivi-slash-icon--${item.kind}`);
+  container.addClass(`yapi-slash-icon--${item.kind}`);
   container.setAttribute('aria-hidden', 'true');
   if (item.kind === 'mcp') {
     appendMcpIcon(container);
@@ -205,14 +205,14 @@ export class SlashCommandDropdown {
     if (this.dropdownEl) {
       this.dropdownEl.removeClass('visible');
     }
-    this.containerEl.removeClass('pivi-slash-dropdown-open');
+    this.containerEl.removeClass('yapi-slash-dropdown-open');
     this.triggerStartIndex = -1;
   }
 
   destroy(): void {
     this.requestId += 1;
     this.inputEl.removeEventListener('input', this.onInput);
-    this.containerEl.removeClass('pivi-slash-dropdown-open');
+    this.containerEl.removeClass('yapi-slash-dropdown-open');
     if (this.dropdownEl) {
       this.dropdownEl.remove();
       this.dropdownEl = null;
@@ -324,10 +324,10 @@ export class SlashCommandDropdown {
     this.detailEl = null;
 
     if (this.filteredItems.length === 0) {
-      const emptyEl = this.dropdownEl.createDiv({ cls: 'pivi-slash-empty' });
+      const emptyEl = this.dropdownEl.createDiv({ cls: 'yapi-slash-empty' });
       emptyEl.setText(t('chat.slash.noMatches'));
     } else {
-      const listEl = this.dropdownEl.createDiv({ cls: 'pivi-slash-list' });
+      const listEl = this.dropdownEl.createDiv({ cls: 'yapi-slash-list' });
       listEl.setAttribute('role', 'listbox');
       listEl.setAttribute('aria-label', t('chat.slash.ariaLabel'));
       listEl.addEventListener('scroll', () => this.positionDetailPanel());
@@ -335,7 +335,7 @@ export class SlashCommandDropdown {
       for (let i = 0; i < this.filteredItems.length; i++) {
         const item = this.filteredItems[i];
         if (!item) continue;
-        const itemEl = listEl.createDiv({ cls: 'pivi-slash-item' });
+        const itemEl = listEl.createDiv({ cls: 'yapi-slash-item' });
         itemEl.setAttribute('role', 'option');
         itemEl.setAttribute('aria-selected', i === this.selectedIndex ? 'true' : 'false');
 
@@ -343,20 +343,20 @@ export class SlashCommandDropdown {
           itemEl.addClass('selected');
         }
 
-        const iconEl = itemEl.createSpan({ cls: 'pivi-slash-icon' });
+        const iconEl = itemEl.createSpan({ cls: 'yapi-slash-icon' });
         renderItemIcon(iconEl, item);
-        const contentEl = itemEl.createDiv({ cls: 'pivi-slash-item-content' });
-        const headerEl = contentEl.createDiv({ cls: 'pivi-slash-item-header' });
-        const nameEl = headerEl.createSpan({ cls: 'pivi-slash-name' });
+        const contentEl = itemEl.createDiv({ cls: 'yapi-slash-item-content' });
+        const headerEl = contentEl.createDiv({ cls: 'yapi-slash-item-header' });
+        const nameEl = headerEl.createSpan({ cls: 'yapi-slash-name' });
         appendHighlightedText(nameEl, item.displayName, this.currentSearchText);
 
         if (item.argumentHint) {
-          const hintEl = headerEl.createSpan({ cls: 'pivi-slash-hint' });
+          const hintEl = headerEl.createSpan({ cls: 'yapi-slash-hint' });
           hintEl.setText(normalizeArgumentHint(item.argumentHint));
         }
 
         if (item.description) {
-          const descEl = contentEl.createDiv({ cls: 'pivi-slash-desc' });
+          const descEl = contentEl.createDiv({ cls: 'yapi-slash-desc' });
           appendHighlightedText(descEl, item.description, this.currentSearchText);
         }
 
@@ -371,12 +371,12 @@ export class SlashCommandDropdown {
         });
       }
 
-      this.detailEl = this.dropdownEl.createDiv({ cls: 'pivi-slash-detail' });
+      this.detailEl = this.dropdownEl.createDiv({ cls: 'yapi-slash-detail' });
       this.renderDetailPanel();
     }
 
     this.dropdownEl.addClass('visible');
-    this.containerEl.addClass('pivi-slash-dropdown-open');
+    this.containerEl.addClass('yapi-slash-dropdown-open');
 
     if (this.isFixed) {
       this.positionFixed();
@@ -389,10 +389,10 @@ export class SlashCommandDropdown {
   private createDropdownElement(): HTMLElement {
     if (this.isFixed) {
       return this.containerEl.createDiv({
-        cls: 'pivi-slash-dropdown pivi-slash-dropdown-fixed',
+        cls: 'yapi-slash-dropdown yapi-slash-dropdown-fixed',
       });
     }
-    return this.containerEl.createDiv({ cls: 'pivi-slash-dropdown' });
+    return this.containerEl.createDiv({ cls: 'yapi-slash-dropdown' });
   }
 
   private positionFixed(): void {
@@ -407,9 +407,9 @@ export class SlashCommandDropdown {
     );
 
     this.dropdownEl.setCssProps({
-      '--pivi-fixed-dropdown-bottom': `${getActiveWindow(this.containerEl).innerHeight - anchorRect.top + 4}px`,
-      '--pivi-fixed-dropdown-left': `${left}px`,
-      '--pivi-fixed-dropdown-width': `${dropdownWidth}px`,
+      '--yapi-fixed-dropdown-bottom': `${getActiveWindow(this.containerEl).innerHeight - anchorRect.top + 4}px`,
+      '--yapi-fixed-dropdown-left': `${left}px`,
+      '--yapi-fixed-dropdown-width': `${dropdownWidth}px`,
     });
   }
 
@@ -427,9 +427,9 @@ export class SlashCommandDropdown {
     const bottom = Math.max(0, containerRect.bottom - anchorRect.top + 4);
 
     this.dropdownEl.setCssProps({
-      '--pivi-anchored-dropdown-bottom': `${bottom}px`,
-      '--pivi-anchored-dropdown-left': `${left}px`,
-      '--pivi-anchored-dropdown-width': `${dropdownWidth}px`,
+      '--yapi-anchored-dropdown-bottom': `${bottom}px`,
+      '--yapi-anchored-dropdown-left': `${left}px`,
+      '--yapi-anchored-dropdown-width': `${dropdownWidth}px`,
     });
   }
 
@@ -440,7 +440,7 @@ export class SlashCommandDropdown {
   }
 
   private updateSelection(): void {
-    const items = this.dropdownEl?.querySelectorAll('.pivi-slash-item');
+    const items = this.dropdownEl?.querySelectorAll('.yapi-slash-item');
     items?.forEach((item, index) => {
       if (index === this.selectedIndex) {
         item.addClass('selected');
@@ -468,32 +468,32 @@ export class SlashCommandDropdown {
         : selected.kind === 'skill'
           ? 'chat.slash.kindSkill'
           : 'chat.slash.kindTool');
-    const kindEl = this.detailEl.createDiv({ cls: 'pivi-slash-detail-kind' });
-    const kindIconEl = kindEl.createSpan({ cls: 'pivi-slash-icon' });
+    const kindEl = this.detailEl.createDiv({ cls: 'yapi-slash-detail-kind' });
+    const kindIconEl = kindEl.createSpan({ cls: 'yapi-slash-icon' });
     renderItemIcon(kindIconEl, selected);
     kindEl.createSpan({ text: kindLabel });
 
-    const titleEl = this.detailEl.createDiv({ cls: 'pivi-slash-detail-title' });
-    const nameEl = titleEl.createSpan({ cls: 'pivi-slash-detail-name' });
+    const titleEl = this.detailEl.createDiv({ cls: 'yapi-slash-detail-title' });
+    const nameEl = titleEl.createSpan({ cls: 'yapi-slash-detail-name' });
     appendHighlightedText(nameEl, selected.displayName, this.currentSearchText);
 
     if (selected.argumentHint) {
       this.detailEl.createDiv({
-        cls: 'pivi-slash-detail-hint',
+        cls: 'yapi-slash-detail-hint',
         text: normalizeArgumentHint(selected.argumentHint),
       });
     }
 
     if (selected.kind === 'mcp' && selected.serverName) {
       this.detailEl.createDiv({
-        cls: 'pivi-slash-detail-meta',
+        cls: 'yapi-slash-detail-meta',
         text: selected.toolName
           ? t('chat.slash.mcpToolDetail', { server: selected.serverName, tool: selected.toolName })
           : t('chat.slash.mcpServerDetail', { server: selected.serverName }),
       });
     }
 
-    const descEl = this.detailEl.createDiv({ cls: 'pivi-slash-detail-desc' });
+    const descEl = this.detailEl.createDiv({ cls: 'yapi-slash-detail-desc' });
     appendHighlightedText(
       descEl,
       selected.description?.trim() || t('chat.stream.noDescription'),
@@ -505,7 +505,7 @@ export class SlashCommandDropdown {
   private positionDetailPanel(): void {
     if (!this.dropdownEl || !this.detailEl) return;
 
-    const selectedEl = this.dropdownEl.querySelector<HTMLElement>('.pivi-slash-item.selected');
+    const selectedEl = this.dropdownEl.querySelector<HTMLElement>('.yapi-slash-item.selected');
     if (!selectedEl) return;
 
     const dropdownRect = this.dropdownEl.getBoundingClientRect();
@@ -514,8 +514,8 @@ export class SlashCommandDropdown {
     const top = Math.max(0, selectedRect.top - dropdownRect.top);
     const availableWidth = Math.max(0, containerRect.right - dropdownRect.right - 6);
     this.detailEl.setCssProps({
-      '--pivi-slash-detail-top': `${top}px`,
-      '--pivi-slash-detail-max-width': `${availableWidth}px`,
+      '--yapi-slash-detail-top': `${top}px`,
+      '--yapi-slash-detail-max-width': `${availableWidth}px`,
     });
   }
 

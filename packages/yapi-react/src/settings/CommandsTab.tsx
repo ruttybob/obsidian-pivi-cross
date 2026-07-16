@@ -1,0 +1,412 @@
+import type { SlashCatalogEntry } from '@yapi/yapi-agent-core/skills/commands/slashCommandEntry';
+import { type MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { useT } from '../i18n';
+import { PlatformIcon } from '../icons';
+import { useHostTerminology } from '../platform';
+import type { SettingsFeedbackMessage, SettingsPorts } from '../ports';
+import { SettingsActionFeedback, SettingsListHeader, SettingsPageDescription } from './controls';
+
+function normalizeCommandName(value: string): string {
+  return value.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '');
+}
+
+function commandKey(entry: SlashCatalogEntry): string {
+  return entry.integrationKey ?? entry.persistenceKey ?? entry.id;
+}
+
+function useMountedRef() {
+  const mounted = useRef(true);
+  useEffect(() => () => { mounted.current = false; }, []);
+  return mounted;
+}
+
+interface IconPickerProps {
+  readonly disabled: boolean;
+  readonly icon: string;
+  readonly iconNames: readonly string[];
+  readonly onChange: (icon: string) => void;
+}
+
+function IconPicker({ disabled, icon, iconNames, onChange }: IconPickerProps) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const visibleIcons = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    return iconNames
+      .filter(name => !normalizedQuery || name.toLowerCase().includes(normalizedQuery))
+      .slice(0, 150);
+  }, [iconNames, query]);
+
+  const selectIcon = (name: string) => {
+    onChange(name);
+    setOpen(false);
+    setQuery('');
+  };
+
+  return <div className="yapi-command-icon-picker">
+    <button
+      type="button"
+      className="yapi-command-icon-trigger"
+      aria-expanded={open}
+      aria-haspopup="dialog"
+      aria-label={t('settings.createCommand.icon.choose')}
+      disabled={disabled}
+      onClick={() => setOpen(value => !value)}
+    >
+      <PlatformIcon name={icon} />
+      <span>{icon}</span>
+    </button>
+    {open
+      ? <div className="yapi-command-icon-popover" role="dialog" aria-label={t('settings.createCommand.icon.pickerTitle')} onKeyDown={(event) => {
+        if (event.key === 'Escape') setOpen(false);
+      }}>
+        <input
+          autoFocus
+          className="yapi-settings-control yapi-settings-control--fill"
+          type="search"
+          value={query}
+          aria-label={t('settings.createCommand.icon.search')}
+          placeholder={t('settings.createCommand.icon.searchPlaceholder')}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+        {visibleIcons.length > 0
+          ? <div className="yapi-command-icon-grid" role="listbox" aria-label={t('settings.createCommand.icon.results')}>
+            {visibleIcons.map(name => <button
+              key={name}
+              type="button"
+              role="option"
+              aria-label={name}
+              aria-selected={name === icon}
+              className={name === icon ? 'is-selected' : undefined}
+              title={name}
+              onClick={() => selectIcon(name)}
+            >
+              <PlatformIcon name={name} />
+              <span>{name}</span>
+            </button>)}
+          </div>
+          : <div className="yapi-command-icon-empty">{t('settings.createCommand.icon.noResults')}</div>}
+      </div>
+      : null}
+  </div>;
+}
+
+interface CommandCardProps {
+  readonly entry?: SlashCatalogEntry;
+  readonly expanded: boolean;
+  readonly existingIds: ReadonlySet<string>;
+  readonly iconNames: readonly string[];
+  readonly noteToolbarInstalled: boolean;
+  readonly pending: boolean;
+  readonly feedback?: SettingsFeedbackMessage;
+  readonly onToggle: () => void;
+  readonly onCancelDraft: () => void;
+  readonly onDelete: (entry: SlashCatalogEntry) => void;
+  readonly onSave: (entry: SlashCatalogEntry, previous: SlashCatalogEntry | undefined, addToToolbar: boolean) => Promise<SlashCatalogEntry>;
+}
+
+function CommandCard({
+  entry: initialEntry,
+  expanded,
+  existingIds,
+  iconNames,
+  noteToolbarInstalled,
+  pending,
+  feedback,
+  onToggle,
+  onCancelDraft,
+  onDelete,
+  onSave,
+}: CommandCardProps) {
+  const t = useT();
+  const [savedEntry, setSavedEntry] = useState(initialEntry);
+  const [name, setName] = useState(initialEntry?.name ?? '');
+  const [description, setDescription] = useState(initialEntry?.description ?? '');
+  const [argumentHint, setArgumentHint] = useState(initialEntry?.argumentHint ?? '');
+  const [icon, setIcon] = useState(initialEntry?.icon ?? 'message-square');
+  const [content, setContent] = useState(initialEntry?.content ?? '');
+  const [error, setError] = useState<string | null>(null);
+  const isDraft = !savedEntry;
+
+  const stop = (event: MouseEvent): void => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const submit = async (addToToolbar: boolean): Promise<void> => {
+    const normalizedName = normalizeCommandName(name);
+    if (!normalizedName) { setError(t('settings.createCommand.needName')); return; }
+    if (!content.trim()) { setError(t('settings.createCommand.needTemplate')); return; }
+    if (existingIds.has(normalizedName) && normalizedName !== savedEntry?.id) {
+      setError(t('settings.createCommand.duplicate', { name: normalizedName }));
+      return;
+    }
+    setError(null);
+    let saved: SlashCatalogEntry;
+    try {
+      saved = await onSave({
+      id: normalizedName,
+      kind: 'command',
+      name: normalizedName,
+      description: description.trim() || `Custom command from ${normalizedName}.md`,
+      argumentHint: argumentHint.trim() || normalizedName,
+      icon,
+      integrationKey: savedEntry?.integrationKey,
+      content,
+      scope: 'workspace',
+      source: 'user',
+      isEditable: true,
+      isDeletable: true,
+      displayPrefix: '/',
+      insertPrefix: '/',
+      persistenceKey: savedEntry?.persistenceKey,
+      }, savedEntry, addToToolbar);
+    } catch {
+      return;
+    }
+    setSavedEntry(saved);
+  };
+
+  const displayName = normalizeCommandName(name) || t('settings.createCommand.newCommand');
+  return <details className="yapi-provider-card yapi-command-card" open={expanded} aria-label={isDraft ? t('settings.createCommand.titleCreate') : t('settings.createCommand.titleEdit')}>
+    <summary className="yapi-provider-header yapi-command-card-header" aria-label={!isDraft ? t('settings.slashCommandsUi.editAria', { name: displayName }) : undefined} onClick={(event) => { event.preventDefault(); onToggle(); }}>
+      <div className="yapi-provider-title-row">
+        <PlatformIcon name={icon} />
+        <span className="yapi-provider-title">/{displayName}</span>
+        {argumentHint ? <span className="yapi-slash-item-hint">{argumentHint}</span> : null}
+      </div>
+      {isDraft
+        ? <button className="yapi-provider-remove-btn" type="button" disabled={pending} onClick={(event) => { stop(event); onCancelDraft(); }}>{t('common.cancel')}</button>
+        : <button className="yapi-provider-remove-btn" type="button" aria-label={t('settings.slashCommandsUi.deleteAria', { name: displayName })} disabled={pending} onClick={(event) => { stop(event); onDelete(savedEntry); }}>{t('common.remove')}</button>}
+    </summary>
+    <form className="yapi-provider-body yapi-command-card-body" onSubmit={(event) => { event.preventDefault(); void submit(false); }}>
+      <label className="yapi-setting-row"><div className="yapi-setting-row__info"><div className="yapi-setting-row__name">{t('settings.createCommand.name.name')}</div><div className="yapi-setting-description">{t('settings.createCommand.name.desc')}</div></div><div className="yapi-setting-row__control"><input className="yapi-settings-control" autoFocus={isDraft} value={name} placeholder={t('settings.createCommand.name.placeholder')} onChange={(event) => { setName(normalizeCommandName(event.target.value)); setError(null); }} disabled={pending} /></div></label>
+      <label className="yapi-setting-row"><div className="yapi-setting-row__info"><div className="yapi-setting-row__name">{t('settings.createCommand.description.name')}</div><div className="yapi-setting-description">{t('settings.createCommand.description.desc')}</div></div><div className="yapi-setting-row__control"><input className="yapi-settings-control" value={description} placeholder={t('settings.createCommand.description.placeholder')} onChange={(event) => { setDescription(event.target.value); setError(null); }} disabled={pending} /></div></label>
+      <label className="yapi-setting-row"><div className="yapi-setting-row__info"><div className="yapi-setting-row__name">{t('settings.createCommand.argumentHint.name')}</div><div className="yapi-setting-description">{t('settings.createCommand.argumentHint.desc')}</div></div><div className="yapi-setting-row__control"><input className="yapi-settings-control" value={argumentHint} onChange={(event) => { setArgumentHint(event.target.value); setError(null); }} disabled={pending} /></div></label>
+      <div className="yapi-setting-row"><div className="yapi-setting-row__info"><div className="yapi-setting-row__name">{t('settings.createCommand.icon.name')}</div><div className="yapi-setting-description">{t('settings.createCommand.icon.desc')}</div></div><div className="yapi-setting-row__control yapi-command-icon-control"><IconPicker disabled={pending} icon={icon} iconNames={iconNames} onChange={setIcon} /></div></div>
+      <label className="yapi-command-prompt-field">
+        <span className="yapi-setting-row__name">{t('settings.createCommand.template.name')}</span>
+        <span className="yapi-setting-description">{t('settings.createCommand.template.desc')}</span>
+        <textarea className="yapi-settings-control yapi-settings-control--fill yapi-template-textarea" rows={8} value={content} onChange={(event) => { setContent(event.target.value); setError(null); }} disabled={pending} />
+      </label>
+      <div className="yapi-command-card-actions">
+        <button type="button" disabled={pending || !noteToolbarInstalled} title={!noteToolbarInstalled ? t('settings.noteToolbar.installRequired') : undefined} onClick={() => { void submit(true); }}>{t('settings.createCommand.addToNoteToolbar')}</button>
+        <button className="yapi-button--primary" type="submit" disabled={pending}>{t('common.save')}</button>
+        <SettingsActionFeedback feedback={error
+          ? { kind: 'error', message: error }
+          : !noteToolbarInstalled
+            ? { kind: 'error', message: t('settings.noteToolbar.installRequired') }
+            : feedback} />
+      </div>
+    </form>
+  </details>;
+}
+
+export function CommandsTab({ ports }: { readonly ports: SettingsPorts }) {
+  const t = useT();
+  const { workspaceName } = useHostTerminology();
+  const mounted = useMountedRef();
+  const [entries, setEntries] = useState<readonly SlashCatalogEntry[] | null>(null);
+  const [internalEntries, setInternalEntries] = useState<readonly SlashCatalogEntry[]>([]);
+  const [existingIds, setExistingIds] = useState<ReadonlySet<string>>(new Set());
+  const [expanded, setExpanded] = useState<ReadonlySet<string>>(new Set());
+  const [draftOpen, setDraftOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<SlashCatalogEntry | null>(null);
+  const [noteToolbarInstalled, setNoteToolbarInstalled] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [commandFeedback, setCommandFeedback] = useState<Readonly<Record<string, SettingsFeedbackMessage>>>({});
+  const iconNames = ports.complex.commands.listIconNames();
+
+  const load = useCallback(async () => {
+    setError(null);
+    try {
+      await ports.complex.commands.refresh();
+      const [next, catalogEntries, installed] = await Promise.all([
+        ports.complex.commands.listWorkspaceEntries(),
+        ports.complex.commands.listDropdownEntries(),
+        ports.complex.commands.isNoteToolbarInstalled(),
+      ]);
+      if (mounted.current) {
+        setEntries(next);
+        setExistingIds(new Set(catalogEntries.map(entry => entry.id)));
+        setInternalEntries(catalogEntries.filter(
+          (entry) => entry.kind === 'command' && entry.scope === 'builtin',
+        ));
+        setNoteToolbarInstalled(installed);
+      }
+    } catch (cause) {
+      if (mounted.current) setError(t('settings.slashCommandsUi.loadFailed', {
+        message: cause instanceof Error ? cause.message : String(cause),
+      }));
+    }
+  }, [mounted, ports.complex.commands, t]);
+  useEffect(() => { void load(); }, [load]);
+
+  const refreshNoteToolbarInstalled = async (): Promise<void> => {
+    try {
+      const installed = await ports.complex.commands.isNoteToolbarInstalled();
+      if (mounted.current && installed !== noteToolbarInstalled) setNoteToolbarInstalled(installed);
+    } catch {
+      ports.feedback.notify(t('common.error'));
+    }
+  };
+
+  const toggleExpanded = (key: string): void => {
+    setExpanded(current => {
+      const next = new Set(current);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+    void refreshNoteToolbarInstalled();
+  };
+
+  const save = async (entry: SlashCatalogEntry, previous: SlashCatalogEntry | undefined, addToToolbar: boolean): Promise<SlashCatalogEntry> => {
+    setPending(true);
+    const previousKey = previous ? commandKey(previous) : '__draft__';
+    setCommandFeedback(current => {
+      const next = { ...current };
+      delete next[previousKey];
+      return next;
+    });
+    let saved: SlashCatalogEntry;
+    try {
+      saved = await ports.complex.commands.saveWorkspaceEntry(entry);
+      if (previous && previous.id !== saved.id) await ports.complex.commands.deleteWorkspaceEntry(previous);
+    } catch (cause) {
+      if (mounted.current) {
+        ports.feedback.notify(t('settings.createCommand.saveFailed'));
+        setPending(false);
+      }
+      throw cause;
+    }
+
+    let setupFeedback: SettingsFeedbackMessage | undefined;
+    if (addToToolbar) {
+      try {
+        setupFeedback = await ports.complex.commands.setupNoteToolbar(saved);
+      } catch (cause) {
+        setupFeedback = { kind: 'error', message: t('settings.createCommand.addToNoteToolbarFailed', {
+          message: cause instanceof Error ? cause.message : String(cause),
+        }) };
+      }
+      ports.feedback.notify(setupFeedback.message);
+    }
+    if (mounted.current) {
+      setDraftOpen(false);
+      setExpanded(current => {
+        const next = new Set(current);
+        if (setupFeedback?.kind === 'error') next.add(commandKey(saved));
+        else next.delete(commandKey(saved));
+        if (previous && commandKey(previous) !== commandKey(saved)) next.delete(commandKey(previous));
+        return next;
+      });
+      await load();
+      if (setupFeedback?.kind === 'error') {
+        setCommandFeedback(current => ({ ...current, [commandKey(saved)]: setupFeedback }));
+      }
+      setPending(false);
+    }
+    return saved;
+  };
+
+  const remove = async (entry: SlashCatalogEntry) => {
+    setPending(true);
+    try {
+      await ports.complex.commands.deleteWorkspaceEntry(entry);
+      await ports.complex.commands.refresh();
+      if (mounted.current) await load();
+    } catch (cause) {
+      ports.feedback.notify(t('settings.slashCommandsUi.deleteFailed', { message: cause instanceof Error ? cause.message : String(cause) }));
+    } finally {
+      if (mounted.current) {
+        setPending(false);
+        setConfirmDelete(null);
+      }
+    }
+  };
+
+  return <>
+    <SettingsPageDescription>
+      <p className="yapi-setting-description">{t('settings.slashCommands.desc', { workspaceName })}</p>
+    </SettingsPageDescription>
+    {error ? <div className="yapi-setting-description" role="alert">{error}</div> : null}
+    <div className="yapi-slash-settings-container">
+      {internalEntries.length > 0
+        ? <>
+          <SettingsListHeader title={t('settings.slashCommandsUi.internalHeading')} />
+          <div className="yapi-sp-list yapi-sp-list--internal">
+            {internalEntries.map(entry => <div className="yapi-sp-item" key={`${entry.scope}:${entry.id}`}>
+              <div className="yapi-sp-info">
+                <div className="yapi-sp-item-header">
+                  {entry.icon ? <PlatformIcon name={entry.icon} /> : null}
+                  <span className="yapi-sp-item-name">/{entry.name}</span>
+                  {entry.argumentHint ? <span className="yapi-slash-item-hint">{entry.argumentHint}</span> : null}
+                </div>
+                {entry.description ? <div className="yapi-sp-item-desc">{entry.description}</div> : null}
+              </div>
+            </div>)}
+          </div>
+        </>
+        : null}
+      <SettingsListHeader
+        title={t('settings.slashCommandsUi.heading')}
+      />
+      {entries === null
+        ? <p className="yapi-sp-empty-state">{t('settings.slashCommandsUi.loading')}</p>
+        : entries.length === 0 && !draftOpen
+          ? <p className="yapi-sp-empty-state">{t('settings.slashCommandsUi.empty')}</p>
+          : <div className="yapi-providers-list yapi-command-card-list">
+            {entries.map(entry => {
+              const key = commandKey(entry);
+              return <CommandCard
+                key={key}
+                entry={entry}
+                expanded={expanded.has(key)}
+                existingIds={existingIds}
+                iconNames={iconNames}
+                noteToolbarInstalled={noteToolbarInstalled}
+                pending={pending}
+                feedback={commandFeedback[key]}
+                onToggle={() => toggleExpanded(key)}
+                onCancelDraft={() => undefined}
+                onDelete={setConfirmDelete}
+                onSave={save}
+              />;
+            })}
+            {draftOpen ? <CommandCard
+              expanded
+              existingIds={existingIds}
+              iconNames={iconNames}
+              noteToolbarInstalled={noteToolbarInstalled}
+              pending={pending}
+              feedback={commandFeedback.__draft__}
+              onToggle={() => undefined}
+              onCancelDraft={() => setDraftOpen(false)}
+              onDelete={() => undefined}
+              onSave={save}
+            /> : null}
+          </div>}
+      <div className="yapi-provider-add-controls">
+        <button className="yapi-provider-add-trigger" type="button" aria-label={t('settings.slashCommandsUi.addAria')} disabled={pending || draftOpen} onClick={() => { setDraftOpen(true); void refreshNoteToolbarInstalled(); }}>
+          {t('settings.slashCommandsUi.add')}
+        </button>
+      </div>
+    </div>
+    {confirmDelete
+      ? <div className="yapi-modal-layer" role="dialog" aria-modal="true" aria-label={t('settings.slashCommandsUi.deleteConfirm', { name: confirmDelete.name })}>
+        <div className="yapi-modal-backdrop" onClick={() => setConfirmDelete(null)} />
+        <div className="yapi-modal">
+          <p>{t('settings.slashCommandsUi.deleteConfirm', { name: confirmDelete.name })}</p>
+          <div className="yapi-modal__actions">
+            <button type="button" disabled={pending} onClick={() => setConfirmDelete(null)}>{t('common.cancel')}</button>
+            <button className="yapi-button--danger" type="button" disabled={pending} onClick={() => { void remove(confirmDelete); }}>{t('common.delete')}</button>
+          </div>
+        </div>
+      </div>
+      : null}
+  </>;
+}

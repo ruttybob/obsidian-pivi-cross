@@ -1,4 +1,4 @@
-import type { AskUserQuestionItem, AskUserQuestionOption } from '@pivi/pivi-agent-core/foundation/tools';
+import type { AskUserQuestionItem, AskUserQuestionOption } from '@yapi/yapi-agent-core/foundation/tools';
 
 export interface InlineAskQuestionConfig {
   title?: string;

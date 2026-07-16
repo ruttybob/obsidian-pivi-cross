@@ -5,24 +5,24 @@ import {
   normalizeCustomProviderConfig,
   normalizeCustomProviders,
   parseOpenAiStyleModelsList,
-} from '@pivi/pivi-agent-core/foundation/customProviders';
+} from '@yapi/yapi-agent-core/foundation/customProviders';
 import {
   getPiAgentSettings,
   updatePiAgentSettings,
-} from '@pivi/pivi-agent-core/foundation/agentSettings';
+} from '@yapi/yapi-agent-core/foundation/agentSettings';
 import {
   buildCustomPiProvider,
   buildCustomProviderModels,
   fetchCustomProviderModels,
-} from '@pivi/pivi-agent-core/engine/pi/installPiCustomProviders';
+} from '@yapi/yapi-agent-core/engine/pi/installPiCustomProviders';
 import {
   configurePiAiModels,
   getInstalledCustomProviderIds,
   piAiModels,
   refreshCustomPiProviderModels,
   syncCustomPiProviders,
-} from '@pivi/pivi-agent-core/engine/pi/piAiModels';
-import { PI_AI_MODELS_CACHE } from '@pivi/pivi-agent-core/engine/pi/piModelRegistry';
+} from '@yapi/yapi-agent-core/engine/pi/piAiModels';
+import { PI_AI_MODELS_CACHE } from '@yapi/yapi-agent-core/engine/pi/piModelRegistry';
 
 describe('customProviders foundation', () => {
   it('creates fixed ids for local presets and unique ids for multi-instance kinds', () => {

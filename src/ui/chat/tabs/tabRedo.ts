@@ -1,13 +1,13 @@
-import { resolveUserMessageDisplayText } from '@pivi/pivi-agent-core/context/context';
-import type { ChatMessage, ImageAttachment } from '@pivi/pivi-agent-core/foundation';
+import { resolveUserMessageDisplayText } from '@yapi/yapi-agent-core/context/context';
+import type { ChatMessage, ImageAttachment } from '@yapi/yapi-agent-core/foundation';
 import {
   type ChatTurnRequest,
   chatTurnRequestFromSnapshot,
-} from '@pivi/pivi-agent-core/runtime';
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+} from '@yapi/yapi-agent-core/runtime';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 import { Notice } from 'obsidian';
 
-import type { PiviChatHost } from '@/app/hostContracts';
+import type { YapiChatHost } from '@/app/hostContracts';
 import { t } from '@/app/i18n';
 import { TodoEventPresenter } from '@/ui/chat/stream/TodoEventPresenter';
 import { confirm } from '@/ui/shared/modals/ConfirmModal';
@@ -83,7 +83,7 @@ function countMessagesAfterTargetAssistant(messages: ChatMessage[], assistantInd
 
 export async function handleRedoRequest(
   tab: TabData,
-  plugin: PiviChatHost,
+  plugin: YapiChatHost,
   ports: ChatPorts,
   assistantMessageId: string,
 ): Promise<void> {

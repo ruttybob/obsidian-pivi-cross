@@ -1,5 +1,5 @@
 /**
- * Pivi - Markdown Utilities
+ * Yapi - Markdown Utilities
  *
  * Markdown manipulation helpers.
  */

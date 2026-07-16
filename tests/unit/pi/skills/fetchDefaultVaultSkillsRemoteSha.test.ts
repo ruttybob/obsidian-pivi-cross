@@ -1,6 +1,6 @@
-import type { HttpClient, HttpRequest, HttpResponse } from '@pivi/pivi-agent-core/ports';
-import { DEFAULT_VAULT_SKILLS_COMMITS_URL } from '@pivi/pivi-agent-core/skills/vault/defaultVaultSkills';
-import { fetchDefaultVaultSkillsRemoteSha } from '@pivi/pivi-agent-core/skills/vault/fetchDefaultVaultSkillsRemoteSha';
+import type { HttpClient, HttpRequest, HttpResponse } from '@yapi/yapi-agent-core/ports';
+import { DEFAULT_VAULT_SKILLS_COMMITS_URL } from '@yapi/yapi-agent-core/skills/vault/defaultVaultSkills';
+import { fetchDefaultVaultSkillsRemoteSha } from '@yapi/yapi-agent-core/skills/vault/fetchDefaultVaultSkillsRemoteSha';
 
 function createHttpResponse(
   status: number,
@@ -37,7 +37,7 @@ describe('fetchDefaultVaultSkillsRemoteSha', () => {
       url: DEFAULT_VAULT_SKILLS_COMMITS_URL,
       headers: {
         Accept: 'application/vnd.github+json',
-        'User-Agent': 'pivi-obsidian-plugin',
+        'User-Agent': 'yapi-obsidian-plugin',
       },
     });
   });

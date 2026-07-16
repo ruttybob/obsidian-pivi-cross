@@ -1,4 +1,4 @@
-import type { AskUserQuestionItem } from '@pivi/pivi-agent-core/foundation/tools';
+import type { AskUserQuestionItem } from '@yapi/yapi-agent-core/foundation/tools';
 
 import { updateFocusIndicator } from './inlineAskUserQuestionRender';
 import type { InlineAskUserQuestionHost } from './inlineAskUserQuestionTypes';
@@ -136,7 +136,7 @@ function handleQuestionTabKeys(host: InlineAskUserQuestionHost, e: KeyboardEvent
       } else if (host.canShowCustomInputForQuestion(q)) {
         host.isInputFocused = true;
         const customRow = host.currentItems[host.focusedItemIndex];
-        const input = customRow?.querySelector('.pivi-ask-custom-text') as HTMLInputElement;
+        const input = customRow?.querySelector('.yapi-ask-custom-text') as HTMLInputElement;
         input?.focus();
       }
       break;

@@ -1,6 +1,6 @@
-import type { OpenSessionState } from '@pivi/pivi-agent-core/foundation';
+import type { OpenSessionState } from '@yapi/yapi-agent-core/foundation';
 
-import type { PiviChatView } from '@/app/hostContracts';
+import type { YapiChatView } from '@/app/hostContracts';
 import {
   deleteSession,
   type PluginSessionContext,
@@ -10,7 +10,7 @@ import {
 function createView(overrides: {
   resetSession?: jest.Mock<Promise<void>, [string]>;
   boundSessionFiles?: string[];
-} = {}): PiviChatView {
+} = {}): YapiChatView {
   const resetSession = overrides.resetSession ?? jest.fn(async () => undefined);
   return {
     leaf: {} as never,
@@ -51,7 +51,7 @@ describe('plugin session API semantic view maintenance', () => {
     const secondReset = jest.fn(async (_openSessionId: string) => undefined);
     const deleted = {
       id: 'session-1',
-      sessionFile: '.pivi/sessions/deleted.jsonl',
+      sessionFile: '.yapi/sessions/deleted.jsonl',
     } as OpenSessionState;
     const setDeletedSessionFiles = jest.fn(async () => undefined);
     const context = createContext({
@@ -72,7 +72,7 @@ describe('plugin session API semantic view maintenance', () => {
     await deleteSession(context, 'session-1');
 
     expect(setDeletedSessionFiles).toHaveBeenCalledWith([
-      '.pivi/sessions/deleted.jsonl',
+      '.yapi/sessions/deleted.jsonl',
     ]);
     expect(firstReset).toHaveBeenCalledWith('session-1');
     expect(secondReset).toHaveBeenCalledWith('session-1');
@@ -81,8 +81,8 @@ describe('plugin session API semantic view maintenance', () => {
   it('protects session files bound by a live semantic view handle during purge', async () => {
     const deleteSessionFile = jest.fn(async () => undefined);
     const setDeletedSessionFiles = jest.fn(async () => undefined);
-    const boundFile = '.pivi/sessions/bound.jsonl';
-    const staleFile = '.pivi/sessions/stale.jsonl';
+    const boundFile = '.yapi/sessions/bound.jsonl';
+    const staleFile = '.yapi/sessions/stale.jsonl';
     const context = createContext({
       requireSessionStore: () => ({ deleteSession: deleteSessionFile }) as never,
       storage: {

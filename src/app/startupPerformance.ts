@@ -8,14 +8,14 @@ export async function measureStartupPhase<T>(
   if (!performanceApi?.mark || !performanceApi.measure) return action();
 
   const sequence = measurementSequence++;
-  const start = `pivi:startup:${phase}:${sequence}:start`;
-  const end = `pivi:startup:${phase}:${sequence}:end`;
+  const start = `yapi:startup:${phase}:${sequence}:start`;
+  const end = `yapi:startup:${phase}:${sequence}:end`;
   performanceApi.mark(start);
   try {
     return await action();
   } finally {
     performanceApi.mark(end);
-    performanceApi.measure(`pivi:startup:${phase}`, start, end);
+    performanceApi.measure(`yapi:startup:${phase}`, start, end);
     performanceApi.clearMarks(start);
     performanceApi.clearMarks(end);
   }

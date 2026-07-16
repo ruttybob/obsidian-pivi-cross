@@ -2,7 +2,7 @@ import {
   textResult,
   TOOL_OBSIDIAN_NOTE_INFO,
   type ToolSpec,
-} from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/tools';
 
 import type { ObsidianToolDeps } from './deps';
 

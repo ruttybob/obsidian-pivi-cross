@@ -158,7 +158,7 @@ export async function setupNoteToolbarIntegration(
       `command=${deps.commandId}`,
     ];
     if (deps.itemStyle === "label-and-icon") {
-      itemArgs.push("label=Pivi");
+      itemArgs.push("label=Yapi");
     }
     itemArgs.push(
       `icon=${deps.itemIcon ?? "message-square-plus"}`,
@@ -197,7 +197,7 @@ async function synchronizeExistingToolbarItem(
   if (!api) return null;
 
   const icon = deps.itemIcon ?? 'message-square-plus';
-  const label = deps.itemStyle === 'label-and-icon' ? 'Pivi' : '';
+  const label = deps.itemStyle === 'label-and-icon' ? 'YaPi' : '';
   if (api.getIcon() !== icon) await api.setIcon(icon);
   if (api.getLabel() !== label) await api.setLabel(label);
   if (api.getTooltip() !== deps.itemTooltip) await api.setTooltip(deps.itemTooltip);

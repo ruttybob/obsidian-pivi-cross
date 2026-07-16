@@ -1,7 +1,7 @@
-import type { SubagentInfo, ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
-import type { TaskResultInterpreter } from '@pivi/pivi-agent-core/tools';
-import { TOOL_SPAWN_AGENT, TOOL_TASK } from '@pivi/pivi-agent-core/tools/toolNames';
-import { extractToolResultContent } from '@pivi/pivi-agent-core/tools/toolResultContent';
+import type { SubagentInfo, ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
+import type { TaskResultInterpreter } from '@yapi/yapi-agent-core/tools';
+import { TOOL_SPAWN_AGENT, TOOL_TASK } from '@yapi/yapi-agent-core/tools/toolNames';
+import { extractToolResultContent } from '@yapi/yapi-agent-core/tools/toolResultContent';
 
 import { SUBAGENT_WRITER_NAMES } from '../subagentProfiles';
 import { SubagentAsyncManagerBase } from './SubagentAsyncManagerBase';

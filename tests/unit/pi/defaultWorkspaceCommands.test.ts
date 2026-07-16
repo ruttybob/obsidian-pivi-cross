@@ -2,8 +2,8 @@ import {
   DEFAULT_WORKSPACE_COMMANDS,
   ensureDefaultWorkspaceCommands,
   seedDefaultWorkspaceCommands,
-} from '@pivi/pivi-agent-core/skills/commands/defaultWorkspaceCommands';
-import type { FileStore } from '@pivi/pivi-agent-core/ports';
+} from '@yapi/yapi-agent-core/skills/commands/defaultWorkspaceCommands';
+import type { FileStore } from '@yapi/yapi-agent-core/ports';
 
 describe('default workspace commands', () => {
   function createAdapter(existing: readonly string[] = []) {
@@ -26,26 +26,26 @@ describe('default workspace commands', () => {
       'polish',
     ]);
     expect(adapter.write).toHaveBeenCalledWith(
-      '.pivi/commands/summarize.md',
+      '.yapi/commands/summarize.md',
       expect.stringMatching(/icon: list-collapse[\s\S]*integration-key: default-summarize[\s\S]*\{\{selected_text\}\}/),
     );
     expect(adapter.write).toHaveBeenCalledWith(
-      '.pivi/commands/polish.md',
+      '.yapi/commands/polish.md',
       expect.stringMatching(/icon: sparkles[\s\S]*integration-key: default-polish[\s\S]*\{\{selected_text\}\}/),
     );
   });
 
   it('does not overwrite an existing command with the same name', async () => {
-    const { adapter } = createAdapter(['.pivi/commands/summarize.md']);
+    const { adapter } = createAdapter(['.yapi/commands/summarize.md']);
 
     await seedDefaultWorkspaceCommands(adapter);
 
     expect(adapter.write).not.toHaveBeenCalledWith(
-      '.pivi/commands/summarize.md',
+      '.yapi/commands/summarize.md',
       expect.any(String),
     );
     expect(adapter.write).toHaveBeenCalledWith(
-      '.pivi/commands/polish.md',
+      '.yapi/commands/polish.md',
       expect.any(String),
     );
   });

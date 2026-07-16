@@ -1,19 +1,19 @@
-import type { PiviChatView, PiviChatViewHandle } from '@/app/hostContracts';
+import type { YapiChatView, YapiChatViewHandle } from '@/app/hostContracts';
 import { activateOpenSessionElsewhere } from '@/app/ui/activateOpenSessionElsewhere';
 
 function createView(
-  leaf: PiviChatView['leaf'],
+  leaf: YapiChatView['leaf'],
   options: { hasSession?: boolean; activateResult?: boolean } = {},
 ): {
-  view: PiviChatView;
-  handle: PiviChatViewHandle;
+  view: YapiChatView;
+  handle: YapiChatViewHandle;
 } {
   const handle = {
     maintenance: {
       hasSession: jest.fn(() => options.hasSession ?? false),
       activateSession: jest.fn(async () => options.activateResult ?? true),
     },
-  } as unknown as PiviChatViewHandle;
+  } as unknown as YapiChatViewHandle;
   return {
     view: { leaf, getChatHandle: () => handle },
     handle,
@@ -22,8 +22,8 @@ function createView(
 
 describe('activateOpenSessionElsewhere', () => {
   it('reveals and activates the first matching view other than the current leaf', async () => {
-    const currentLeaf = {} as PiviChatView['leaf'];
-    const otherLeaf = {} as PiviChatView['leaf'];
+    const currentLeaf = {} as YapiChatView['leaf'];
+    const otherLeaf = {} as YapiChatView['leaf'];
     const current = createView(currentLeaf, { hasSession: true });
     const other = createView(otherLeaf, { hasSession: true });
     const revealLeaf = jest.fn(async () => {});
@@ -41,8 +41,8 @@ describe('activateOpenSessionElsewhere', () => {
   });
 
   it('does not reveal a view when no other mounted handle owns the session', async () => {
-    const currentLeaf = {} as PiviChatView['leaf'];
-    const other = createView({} as PiviChatView['leaf']);
+    const currentLeaf = {} as YapiChatView['leaf'];
+    const other = createView({} as YapiChatView['leaf']);
     const revealLeaf = jest.fn(async () => {});
 
     await expect(activateOpenSessionElsewhere({

@@ -1,11 +1,11 @@
 import { createHash } from 'crypto';
 
-import { PIVI_MCP_OAUTH_DIR } from '@pivi/pivi-agent-core/mcp/paths';
-import { McpVaultAuthStore } from '@pivi/pivi-agent-core/mcp/oauth/mcpVaultAuthStore';
+import { YAPI_MCP_OAUTH_DIR } from '@yapi/yapi-agent-core/mcp/paths';
+import { McpVaultAuthStore } from '@yapi/yapi-agent-core/mcp/oauth/mcpVaultAuthStore';
 
 function entryPath(serverName: string): string {
   const storageKey = createHash('sha256').update(serverName, 'utf8').digest('hex');
-  return `${PIVI_MCP_OAUTH_DIR}/sha256-${storageKey}/tokens.json`;
+  return `${YAPI_MCP_OAUTH_DIR}/sha256-${storageKey}/tokens.json`;
 }
 
 class MemoryVaultAdapter {

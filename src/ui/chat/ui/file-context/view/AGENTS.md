@@ -6,6 +6,6 @@
 
 ## Rules
 
-- Create the chip with the shared `createContextBadgeElement()` path and anchor its document lookup to the view-owned indicator container; use scoped `.pivi-*` classes and accessible labels.
+- Create the chip with the shared `createContextBadgeElement()` path and anchor its document lookup to the view-owned indicator container; use scoped `.yapi-*` classes and accessible labels.
 - Keep callbacks injected from UI managers; do not mutate runtime/session state directly.
 - `destroy()` must remove the view-owned indicator container without disturbing sibling composer nodes.

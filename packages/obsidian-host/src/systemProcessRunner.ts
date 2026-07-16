@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 
-import type { ProcessRunner, ProcessRunRequest, ProcessRunResult } from '@pivi/pivi-agent-core/ports';
+import type { ProcessRunner, ProcessRunRequest, ProcessRunResult } from '@yapi/yapi-agent-core/ports';
 
 export const systemProcessRunner: ProcessRunner = {
   run(request: ProcessRunRequest): Promise<ProcessRunResult> {

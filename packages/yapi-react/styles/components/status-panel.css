@@ -1,0 +1,154 @@
+/* Status Panel - persistent bottom panel for todos and command output */
+.yapi-status-panel-container {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  inset-inline: 14px;
+  inset-block-end: 48px;
+  flex-shrink: 0;
+  padding: 0;
+  max-height: min(32vh, 260px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.yapi-status-panel {
+  pointer-events: auto;
+  padding: 4px 8px 6px;
+  border-radius: var(--yapi-radius-md);
+  background: color-mix(in srgb, var(--yapi-host-background-primary) 86%, transparent);
+  -webkit-backdrop-filter: var(--yapi-material-blur-sm);
+  backdrop-filter: var(--yapi-material-blur-sm);
+}
+
+/* Todo Section */
+
+.yapi-status-panel-todos {
+  margin-top: var(--yapi-spacing-xs);
+}
+
+.yapi-status-panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  padding: 4px 0;
+  cursor: pointer;
+  border-radius: var(--yapi-radius-xs);
+  transition: background var(--yapi-duration-fast) var(--yapi-ease-out);
+  overflow: hidden;
+}
+
+.yapi-status-panel-header:hover {
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-status-panel-header:focus-visible {
+  outline: 2px solid var(--yapi-host-interactive-accent);
+  outline-offset: 2px;
+}
+
+.yapi-status-panel-icon {
+  display: flex;
+  align-items: center;
+  color: var(--yapi-host-text-accent);
+  flex-shrink: 0;
+}
+
+.yapi-status-panel-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.yapi-status-panel-label {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-base);
+  font-weight: 500;
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-status-panel-current {
+  flex: 1;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-base);
+  color: var(--yapi-host-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yapi-status-panel-status {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.yapi-status-panel-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+.yapi-status-panel-status.status-completed {
+  color: var(--yapi-host-color-green);
+}
+
+.yapi-status-panel-content {
+  padding: 2px 0;
+}
+
+/* Individual todo item - shared by status panel and inline tool via .yapi-todo-list-container */
+.yapi-todo-list-container .yapi-todo-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 1px 0;
+}
+
+.yapi-todo-list-container .yapi-todo-status-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.yapi-todo-list-container .yapi-todo-status-icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.yapi-todo-list-container .yapi-todo-text {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  line-height: 1.4;
+  flex: 1;
+  padding-left: var(--yapi-spacing-md);
+}
+
+.yapi-todo-list-container .yapi-todo-pending .yapi-todo-status-icon {
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-todo-list-container .yapi-todo-pending .yapi-todo-status-icon svg {
+  transform: scale(2);
+}
+
+.yapi-todo-list-container .yapi-todo-pending .yapi-todo-text {
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-todo-list-container .yapi-todo-in_progress .yapi-todo-status-icon {
+  color: var(--yapi-host-interactive-accent);
+}
+
+.yapi-todo-list-container .yapi-todo-in_progress .yapi-todo-status-icon svg {
+  transform: scale(2);
+}
+
+.yapi-todo-list-container .yapi-todo-in_progress .yapi-todo-text {
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-todo-list-container .yapi-todo-completed .yapi-todo-status-icon {
+  color: var(--yapi-host-color-green);
+}
+
+.yapi-todo-list-container .yapi-todo-completed .yapi-todo-text {
+  color: var(--yapi-host-text-muted);
+}

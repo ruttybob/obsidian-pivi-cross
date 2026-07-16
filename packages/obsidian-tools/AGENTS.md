@@ -1,10 +1,10 @@
-# @pivi/obsidian-tools package guide
+# @yapi/obsidian-tools package guide
 
 *This file extends the root [AGENTS.md](../../AGENTS.md). Follow root guidance first, then these package-specific rules.*
 
 ## Purpose
 
-`@pivi/obsidian-tools` provides concrete Obsidian-native agent tools. It adapts abstract tool contracts from `@pivi/pivi-agent-core/tools` to Obsidian vault operations, CLI-backed gaps, frontmatter handling, vault edit helpers, history recovery, and injected image generation that persists outputs as Obsidian attachments.
+`@yapi/obsidian-tools` provides concrete Obsidian-native agent tools. It adapts abstract tool contracts from `@yapi/yapi-agent-core/tools` to Obsidian vault operations, CLI-backed gaps, frontmatter handling, vault edit helpers, history recovery, and injected image generation that persists outputs as Obsidian attachments.
 
 ## Public entrypoints
 
@@ -29,7 +29,7 @@
 
 ## Boundaries
 
-- Tool implementations use `@pivi/obsidian-host` APIs and the Obsidian CLI transport where public API coverage is unavailable.
+- Tool implementations use `@yapi/obsidian-host` APIs and the Obsidian CLI transport where public API coverage is unavailable.
 - Image generation tools depend only on an injected generator port; Pi/Codex provider wiring stays in app/Pi composition.
 - Do not import UI renderers. Return structured/text tool results and let UI packages render them.
 - Mutating vault operations execute directly; optional tools are setting-gated: `allowCommand`, `allowBash` plus `bashAllowlist`, `allowEval`, and `allowExternalRead` plus allowed external directory roots for external filesystem tools.
@@ -39,10 +39,10 @@
 ## Tool display contract
 
 - Obsidian tool factories in `packages/obsidian-tools/src/obsidian/*` define execution only: `name`, `label`, `description`, parameters, and result shape.
-- Any new Obsidian tool constant must be added to `packages/pivi-agent-core/src/tools/obsidianToolNames.ts`, and its complete Chat presentation entry must be added once to `packages/pivi-agent-core/src/tools/toolPresentation.ts`. That canonical entry owns kind, icon, translation key, visibility/grouping, and pure summary behavior; tests must cover the descriptor and both renderer surfaces.
+- Any new Obsidian tool constant must be added to `packages/yapi-agent-core/src/tools/obsidianToolNames.ts`, and its complete Chat presentation entry must be added once to `packages/yapi-agent-core/src/tools/toolPresentation.ts`. That canonical entry owns kind, icon, translation key, visibility/grouping, and pure summary behavior; tests must cover the descriptor and both renderer surfaces.
 - Chat UI renderers must use `appendToolIcon`/`getToolIcon`; they must not hardcode Obsidian tool icon names or add per-tool CSS sizing.
-- Tool-call alignment is class-based: standard 16px `.pivi-tool-icon`, 14px only through `.pivi-tool-icon--small`, and no ad hoc `margin-top`/`transform` nudges for tool icons.
-- Vault skills such as `defuddle` are not `@pivi/obsidian-tools` tools; every skill/tool call rendered in a nested/subshell tool list must use the shared `TOOL_SKILL`/`getToolIcon`/`appendToolIcon` contract and the same `.pivi-tool-icon` or `.pivi-tool-icon--small` class standard as adjacent tool rows.
+- Tool-call alignment is class-based: standard 16px `.yapi-tool-icon`, 14px only through `.yapi-tool-icon--small`, and no ad hoc `margin-top`/`transform` nudges for tool icons.
+- Vault skills such as `defuddle` are not `@yapi/obsidian-tools` tools; every skill/tool call rendered in a nested/subshell tool list must use the shared `TOOL_SKILL`/`getToolIcon`/`appendToolIcon` contract and the same `.yapi-tool-icon` or `.yapi-tool-icon--small` class standard as adjacent tool rows.
 
 ## Package map
 

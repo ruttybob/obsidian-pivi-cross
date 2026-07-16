@@ -1,5 +1,5 @@
-import type { ExternalOpener } from '@pivi/pivi-agent-core/ports';
-import { openAuthUrl } from '@pivi/pivi-agent-core/mcp/oauth/openAuthUrl';
+import type { ExternalOpener } from '@yapi/yapi-agent-core/ports';
+import { openAuthUrl } from '@yapi/yapi-agent-core/mcp/oauth/openAuthUrl';
 
 describe('openAuthUrl', () => {
 

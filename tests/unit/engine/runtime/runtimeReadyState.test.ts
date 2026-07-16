@@ -1,4 +1,4 @@
-import { RuntimeReadyState } from '@pivi/pivi-agent-core/runtime/runtimeReadyState';
+import { RuntimeReadyState } from '@yapi/yapi-agent-core/runtime/runtimeReadyState';
 
 describe('RuntimeReadyState', () => {
   it('starts not ready', () => {

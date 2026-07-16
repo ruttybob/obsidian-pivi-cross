@@ -1,16 +1,16 @@
-import { VIEW_TYPE_PIVI } from "@pivi/pivi-agent-core/foundation";
+import { VIEW_TYPE_YAPI } from "@yapi/yapi-agent-core/foundation";
 import { addIcon } from "obsidian";
 
 import { t } from "@/app/i18n";
-import { PiviViewHost } from "@/app/ui/PiviViewHost";
-import type PiviPlugin from "@/main"
+import { YapiViewHost } from "@/app/ui/YapiViewHost";
+import type YapiPlugin from "@/main"
 
-export function registerPiviViews(plugin: PiviPlugin): void {
+export function registerYapiViews(plugin: YapiPlugin): void {
   addIcon(
-    "pivi-p",
+    "yapi-p",
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
       <defs>
-        <mask id="pivi-p-cutout">
+        <mask id="yapi-p-cutout">
           <rect width="100" height="100" fill="black" />
           <rect x="23" y="14" width="18" height="72" rx="9" fill="white" />
           <g transform="rotate(18 56 35)">
@@ -21,16 +21,16 @@ export function registerPiviViews(plugin: PiviPlugin): void {
           </g>
         </mask>
       </defs>
-      <rect width="100" height="100" fill="#6F6F6F" mask="url(#pivi-p-cutout)" />
+      <rect width="100" height="100" fill="#6F6F6F" mask="url(#yapi-p-cutout)" />
     </svg>`,
   );
 
   plugin.registerView(
-    VIEW_TYPE_PIVI,
-    (leaf) => new PiviViewHost(leaf, plugin, () => plugin.ensureWorkspaceServices()),
+    VIEW_TYPE_YAPI,
+    (leaf) => new YapiViewHost(leaf, plugin, () => plugin.ensureWorkspaceServices()),
   );
 
-  plugin.addRibbonIcon("pivi-p", t("commands.openPiviRibbon"), () => {
+  plugin.addRibbonIcon("yapi-p", t("commands.openYapiRibbon"), () => {
     void plugin.activateView();
   });
 }

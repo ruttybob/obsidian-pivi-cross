@@ -1,4 +1,4 @@
-import { createContextBadgeViewModel } from '@pivi/pivi-react/context-badges';
+import { createContextBadgeViewModel } from '@yapi/yapi-react/context-badges';
 import { setIcon } from 'obsidian';
 
 import { t } from '@/app/i18n';
@@ -33,10 +33,10 @@ export function createContextBadgeElement(
   const isInline = options.inline === true;
   const el = isInline ? doc.win.createSpan() : doc.win.createEl('button');
 
-  el.addClass('pivi-context-badge');
-  el.addClass(`pivi-context-badge--${vm.tone}`);
-  el.addClass(`pivi-context-badge-kind-${vm.kind}`);
-  if (isInline) el.addClass('pivi-context-badge--inline');
+  el.addClass('yapi-context-badge');
+  el.addClass(`yapi-context-badge--${vm.tone}`);
+  el.addClass(`yapi-context-badge-kind-${vm.kind}`);
+  if (isInline) el.addClass('yapi-context-badge--inline');
   addClasses(el, options.classNames ?? []);
 
   if (isInline) {
@@ -53,18 +53,18 @@ export function createContextBadgeElement(
   if (vm.ariaLabel) el.setAttribute('aria-label', vm.ariaLabel);
 
   const iconEl = doc.win.createSpan();
-  iconEl.className = 'pivi-context-badge-icon';
+  iconEl.className = 'yapi-context-badge-icon';
   renderIcon(iconEl, vm.icon);
   el.appendChild(iconEl);
 
   const labelEl = doc.win.createSpan();
-  labelEl.className = 'pivi-context-badge-label';
+  labelEl.className = 'yapi-context-badge-label';
   labelEl.textContent = vm.label;
   el.appendChild(labelEl);
 
   if (options.onRemove && vm.removable) {
     const removeEl = doc.win.createSpan();
-    removeEl.className = 'pivi-context-badge-remove';
+    removeEl.className = 'yapi-context-badge-remove';
     removeEl.contentEditable = 'false';
     removeEl.setAttribute('role', 'button');
     removeEl.setAttribute('tabindex', '0');
@@ -86,7 +86,7 @@ export function createContextBadgeElement(
   }
 
   if (options.onClick && vm.clickable) {
-    el.addClass('pivi-context-badge--clickable');
+    el.addClass('yapi-context-badge--clickable');
     el.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();

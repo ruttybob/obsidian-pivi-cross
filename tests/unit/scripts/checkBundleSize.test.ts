@@ -7,7 +7,7 @@ const rootDir = process.cwd();
 
 describe('bundle size gate', () => {
   it('passes when main.js is below the 5 MB Obsidian limit', () => {
-    const tempDir = mkdtempSync(join(tmpdir(), 'pivi-bundle-size-'));
+    const tempDir = mkdtempSync(join(tmpdir(), 'yapi-bundle-size-'));
     const bundle = join(tempDir, 'main.js');
     writeFileSync(bundle, Buffer.alloc(1024, 0));
 
@@ -27,7 +27,7 @@ checkBundleSizeAtPath(${JSON.stringify(bundle)});`,
   });
 
   it('fails when the bundle exceeds the configured ceiling', () => {
-    const tempDir = mkdtempSync(join(tmpdir(), 'pivi-bundle-size-'));
+    const tempDir = mkdtempSync(join(tmpdir(), 'yapi-bundle-size-'));
     const oversizedBundle = join(tempDir, 'main.js');
     writeFileSync(oversizedBundle, Buffer.alloc(5 * 1024 * 1024 + 1, 0));
 

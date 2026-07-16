@@ -1,0 +1,106 @@
+/* Thinking selector (effort for adaptive models, token budget for custom) */
+.yapi-thinking-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Effort / budget container (shared layout) */
+.yapi-thinking-effort,
+.yapi-thinking-budget {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.yapi-thinking-gears {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  border-radius: var(--yapi-radius-xs);
+}
+
+.yapi-thinking-gears.is-open {
+  z-index: 3000;
+}
+
+/* Current selection (visible when collapsed) */
+.yapi-thinking-current {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  font-family: inherit;
+  font-size: var(--yapi-text-xs);
+  line-height: 1.2;
+  color: var(--yapi-host-text-accent);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--yapi-radius-xs);
+  white-space: nowrap;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  min-height: 0;
+  height: auto;
+  margin: 0;
+  transition: scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+/* Options container - expands vertically upward */
+.yapi-thinking-options {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--yapi-material-bg-secondary);
+  -webkit-backdrop-filter: var(--yapi-material-blur-lg);
+  backdrop-filter: var(--yapi-material-blur-lg);
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  box-shadow: var(--yapi-shadow-popover-up-sm);
+  padding: var(--yapi-spacing-xs);
+  z-index: 3000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--yapi-duration-fast) var(--yapi-ease-out), visibility var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+/* Expand while React owns the hover/focus selection lifecycle. */
+.yapi-thinking-gears.is-open .yapi-thinking-options {
+  opacity: 1;
+  visibility: visible;
+}
+
+.yapi-thinking-options .yapi-thinking-gear {
+  padding: 3px 8px;
+  font-size: var(--yapi-text-xs);
+  color: var(--yapi-host-text-muted);
+  cursor: pointer;
+  border-radius: var(--yapi-radius-xs);
+  transition: background var(--yapi-duration-instant) var(--yapi-ease-out), color var(--yapi-duration-instant) var(--yapi-ease-out);
+  white-space: nowrap;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  width: 100%;
+  height: auto;
+  text-align: start;
+}
+
+.yapi-thinking-gear.selected {
+  background: transparent;
+  color: var(--yapi-host-text-accent);
+  font-weight: 500;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-thinking-gear:hover {
+    background: var(--yapi-host-background-hover);
+    color: var(--yapi-host-text-normal);
+  }
+}

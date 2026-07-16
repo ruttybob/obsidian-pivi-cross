@@ -1,0 +1,52 @@
+/* Full-size Image Modal */
+.yapi-image-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  cursor: pointer;
+}
+
+.yapi-image-modal {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  cursor: default;
+}
+
+.yapi-image-modal img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--yapi-radius-md);
+  box-shadow: var(--yapi-shadow-modal);
+}
+
+.yapi-image-modal-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--yapi-host-background-secondary);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--yapi-host-text-muted);
+  box-shadow: var(--yapi-shadow-control);
+  transition: background var(--yapi-duration-fast) var(--yapi-ease-out), color var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-image-modal-close:hover {
+  background: var(--yapi-host-background-error);
+  color: var(--yapi-host-text-on-accent);
+}

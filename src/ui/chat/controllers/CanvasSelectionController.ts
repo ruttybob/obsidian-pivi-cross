@@ -1,4 +1,4 @@
-import type { CanvasSelectionContext } from '@pivi/pivi-agent-core/context/canvas';
+import type { CanvasSelectionContext } from '@yapi/yapi-agent-core/context/canvas';
 import type { App, ItemView } from 'obsidian';
 
 import { t } from '@/app/i18n';
@@ -112,9 +112,9 @@ export class CanvasSelectionController {
       this.indicatorEl.textContent = nodeIds.length === 1
         ? t('chat.selection.canvasNodeSelected')
         : t('chat.selection.canvasNodesSelected', { count: nodeIds.length });
-      this.indicatorEl.removeClass('pivi-hidden');
+      this.indicatorEl.removeClass('yapi-hidden');
     } else {
-      this.indicatorEl.addClass('pivi-hidden');
+      this.indicatorEl.addClass('yapi-hidden');
     }
     this.updateContextRowVisibility();
   }

@@ -1,4 +1,4 @@
-import type { ChatCatalogPort } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { ChatCatalogPort } from '@yapi/yapi-agent-core/runtime/chatPorts';
 
 import type {
   DropdownMcpServerProvider,

@@ -1,0 +1,39 @@
+.yapi-todo-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yapi-spacing-xs);
+}
+
+.yapi-todo-panel-progress,
+.yapi-todo-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-todo-progress-summary {
+  flex-shrink: 0;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-todo-progress-meter {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  overflow: hidden;
+  border-radius: var(--yapi-radius-pill);
+  background: var(--yapi-host-border);
+}
+
+.yapi-todo-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--yapi-host-interactive-accent);
+  transition: width var(--yapi-duration-normal) var(--yapi-ease-in-out);
+}
+
+.yapi-todo-panel-list {
+  padding-top: 2px;
+}

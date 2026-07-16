@@ -13,9 +13,9 @@ coordinator: "Codex"
 
 `docs/11-chat-ui-evolution.md` (Data and performance direction, step 2) targets true recent-first hydration. At activation, the verified state was:
 
-- `packages/pivi-agent-core/src/engine/pi/session/piSessionStore.ts` (`PiSessionStore`): `open()`, `getMessages()`, `getUsage()`, `readUiContext()` each call `SessionTreeStore.openSnapshot()`, which opens and parses the complete JSONL file through the upstream Pi `SessionManager`, then maps every entry via `messageMapper.entriesToChatMessages()`.
-- `packages/pivi-agent-core/src/engine/pi/session/sessionTreeStore.ts` called the private Pi `_rewriteFile()` after every append; the only index was Pi's in-memory `_buildIndex()`.
-- The "recent 100" limit lives in the React layer, not storage: `CHAT_PROJECTION_PAGE_SIZE = 100` in `packages/pivi-react/src/store/chatProjectionStore.ts`; `replaceAll()` projects the tail and `prependPreviousPage()` reveals older already-parsed in-memory pages. Memory and parse cost therefore stay O(session length).
+- `packages/yapi-agent-core/src/engine/pi/session/piSessionStore.ts` (`PiSessionStore`): `open()`, `getMessages()`, `getUsage()`, `readUiContext()` each call `SessionTreeStore.openSnapshot()`, which opens and parses the complete JSONL file through the upstream Pi `SessionManager`, then maps every entry via `messageMapper.entriesToChatMessages()`.
+- `packages/yapi-agent-core/src/engine/pi/session/sessionTreeStore.ts` called the private Pi `_rewriteFile()` after every append; the only index was Pi's in-memory `_buildIndex()`.
+- The "recent 100" limit lives in the React layer, not storage: `CHAT_PROJECTION_PAGE_SIZE = 100` in `packages/yapi-react/src/store/chatProjectionStore.ts`; `replaceAll()` projects the tail and `prependPreviousPage()` reveals older already-parsed in-memory pages. Memory and parse cost therefore stay O(session length).
 - The external-context migration (`migrateSessionFileIfPresent` / `stripExternalContextsFromSessionJsonl`) performs an additional full read per lazy open.
 
 Design concern (must be resolved by a Decision before implementation): docs/11 assumes an offset index over an append-mostly file, but the current write path rewrites the whole file on every append. An index over a fully rewritten file is invalidated on every turn. This spec therefore includes the write-path question, which docs/11 does not spell out.
@@ -35,10 +35,10 @@ Outcome: the session layer can hydrate the latest bounded entry range without pa
 
 In scope:
 
-- Index design and lifecycle inside `packages/pivi-agent-core/src/engine/pi/session/` (index is engine-side; the `SessionStore` port in core exposes only range semantics).
+- Index design and lifecycle inside `packages/yapi-agent-core/src/engine/pi/session/` (index is engine-side; the `SessionStore` port in core exposes only range semantics).
 - Write-path decision: either (a) make appends true appends with an incremental index update, keeping `_rewriteFile()` only for truncate/fork/migration, or (b) keep rewrites and rebuild the cheap index from the rewrite buffer in the same operation. Option (a) is preferred if Pi `SessionManager` semantics allow it; record the choice as a Decision with evidence.
 - Moving the external-context migration check behind the index (migrate once, record done-marker in index metadata) so lazy opens stop re-reading full files.
-- Feeding `packages/pivi-react/src/store/chatProjectionStore.ts` paging from the range API through existing `ChatPorts` seams (`@pivi/pivi-agent-core/runtime/chatPorts`), wired in `src/ui/chat` controllers.
+- Feeding `packages/yapi-react/src/store/chatProjectionStore.ts` paging from the range API through existing `ChatPorts` seams (`@yapi/yapi-agent-core/runtime/chatPorts`), wired in `src/ui/chat` controllers.
 
 Not in scope:
 
@@ -53,7 +53,7 @@ Not in scope:
 | 2026-07-15 | Index must never be trusted over the file: any mismatch (size, mtime, offset checksum) triggers explicit invalidation and full rebuild | docs/11: "fail explicitly when indexed offsets no longer match the session file" | WS-02, WS-04 |
 | 2026-07-15 | Write-path choice (true append vs rewrite-with-index-refresh) is the first implementation task and blocks the rest | The current `flushToDisk()` full rewrite determines whether offsets can be stable at all | WS-01 |
 | 2026-07-15 | Use true append after one eager header bootstrap; reserve rewrites for truncate and upstream migration | Installed Pi 0.80.6 updates its in-memory entry/index/leaf state and calls `appendFileSync` from every public typed append when `flushed=true`; a real-package compatibility test proves byte-prefix stability and reopen semantics | WS-01, WS-02, WS-04 |
-| 2026-07-15 | Store the optimization as append-only `<session>.jsonl.pivi-index` JSONL sidecars with UTF-8 byte offsets, line hashes, chained checkpoints, and bounded source fingerprints | Normal appends update without O(n) sidecar rewrites; nanosecond stat identity plus head/tail hashes detect source replacement, per-line hashes detect offset mismatch, and the line checksum chain detects sidecar edits; atomic full rebuild always starts from JSONL | WS-02, WS-03, WS-04, WS-06 |
+| 2026-07-15 | Store the optimization as append-only `<session>.jsonl.yapi-index` JSONL sidecars with UTF-8 byte offsets, line hashes, chained checkpoints, and bounded source fingerprints | Normal appends update without O(n) sidecar rewrites; nanosecond stat identity plus head/tail hashes detect source replacement, per-line hashes detect offset mismatch, and the line checksum chain detects sidecar edits; atomic full rebuild always starts from JSONL | WS-02, WS-03, WS-04, WS-06 |
 | 2026-07-16 | Validate every cached live session source before mutation and reject stale writes; never repair a mismatch silently after append | A stale Pi manager can otherwise append an obsolete parent chain before index refresh notices external replacement. Preflight protects the authoritative file, postflight requires the exact appended entry IDs, and either failure evicts the live cache and raises a typed error | WS-02, WS-04 |
 | 2026-07-16 | Page by final projected message groups and use each group's first visible message id as the cursor; keep `getMessages()` as the full runtime/LLM path | JSONL rows do not map one-to-one to UI messages: assistant segments and tool results merge, later UI overlays decorate earlier entries, and adjacent duplicate pending users collapse. The range index records only the hashes/targets needed to reproduce those boundaries without reading all message bodies | WS-03, WS-04, WS-05 |
 | 2026-07-16 | Range pages mirror `getLinearVisiblePrefix()`, while trailing compaction remains LLM-only; required session writes propagate typed index failures before committing in-memory state | Partial and full UI hydration must return the same visible messages. A trailing compaction changes model context but is not a UI message today. Save, redo, fork, and compaction must reject held-source mismatches instead of reporting success or forking replacement bytes | WS-04, WS-05 |
@@ -70,13 +70,13 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 | WS-02 | Index format + lifecycle (build, incremental update on append, invalidate on truncate/fork/external change, rebuild) in `engine/pi/session/` | Codex | Done | WS-01 | New unit suite under `tests/unit/pi/` covering all lifecycle transitions |
 | WS-03 | Range read API on the session layer (`openRecent(limit)`, `readOlder(beforeEntryId, limit)`) surfaced through `SessionStore`/`ChatPorts` | Codex | Done | WS-02 | Typecheck + port contract tests |
 | WS-04 | Partial-hydration correctness: redo/fork/compaction/save with partially hydrated UI; explicit-failure tests for stale offsets | Codex | Done | WS-03 | Extend `tests/unit/pi/sessionTreeStore*`-adjacent suites |
-| WS-05 | UI paging hookup: `prependPreviousPage()` requests older ranges via ports; keep TanStack prepend anchoring stable | Codex | Done | WS-03 | `tests/pivi-react/MessageList.test.tsx` prepend cases + manual scroll test in Obsidian |
+| WS-05 | UI paging hookup: `prependPreviousPage()` requests older ranges via ports; keep TanStack prepend anchoring stable | Codex | Done | WS-03 | `tests/yapi-react/MessageList.test.tsx` prepend cases + manual scroll test in Obsidian |
 | WS-06 | Migration interplay: external-context migration runs once per file, recorded so lazy opens skip full reads | Codex | Done | WS-02 | Migration idempotence tests remain green |
 | WS-07 | Before/after measurements with spec 001 harness (cold open, older-page load, append cost on 5K fixture) | Codex | Done | WS-05, spec 001 | Recorded traces in Progress and handoff |
 
 Guidance for low-context agents:
 
-1. Read `packages/pivi-agent-core/src/engine/pi/AGENTS.md` and `packages/pivi-agent-core/src/session/` types before touching storage.
+1. Read `packages/yapi-agent-core/src/engine/pi/AGENTS.md` and `packages/yapi-agent-core/src/session/` types before touching storage.
 2. Never modify files under `node_modules/@earendil-works/`; interact with Pi only through the existing shim/adapter surface in `engine/pi`.
 3. Any new typed error belongs in core `foundation` or session types, not ad-hoc `throw new Error` strings, if an error family already exists there.
 4. Keep `tests/integration/**` JSONL compatibility fixtures green; old session files must open unchanged.
@@ -91,8 +91,8 @@ Guidance for low-context agents:
 ## Documentation sync
 
 - Numbered developer docs: `docs/11-chat-ui-evolution.md` (Indexed JSONL range reads section becomes "implemented" with the chosen write-path decision) plus the session/persistence numbered doc.
-- Nearest local guidance: `packages/pivi-agent-core/src/engine/pi/AGENTS.md`.
-- Parent/package guidance: `packages/pivi-agent-core/AGENTS.md`.
+- Nearest local guidance: `packages/yapi-agent-core/src/engine/pi/AGENTS.md`.
+- Parent/package guidance: `packages/yapi-agent-core/AGENTS.md`.
 - Root guidance and roadmap: `AGENTS.md` architecture status if the storage claim changes.
 
 ## Progress and handoff
@@ -115,8 +115,8 @@ Guidance for low-context agents:
 
 ### 2026-07-15 — WS-01 true-append decision — Codex
 
-- Changed: normal user, assistant/tool, Pivi custom-entry, UI-context, message-UI, and compaction writes no longer call `_rewriteFile()` after Pi has already persisted them. Session creation still writes the header eagerly once, while redo truncation remains a deliberate full rewrite.
-- Evidence: installed `@earendil-works/pi-coding-agent@0.80.6` routes public typed appends through `_appendEntry()` and `_persist()`; with Pivi's existing eager `flushed=true` bootstrap, `_persist()` uses `appendFileSync` both before and after the first assistant. `piSessionAppendCompatibility.test.ts` runs the real installed ESM package in a child process, verifies every old byte remains a prefix across Unicode user/custom/assistant/compaction writes, and reopens the result with `SessionManager.open()` while preserving entries, leaf, custom-entry exclusion, and compaction context.
+- Changed: normal user, assistant/tool, Yapi custom-entry, UI-context, message-UI, and compaction writes no longer call `_rewriteFile()` after Pi has already persisted them. Session creation still writes the header eagerly once, while redo truncation remains a deliberate full rewrite.
+- Evidence: installed `@earendil-works/pi-coding-agent@0.80.6` routes public typed appends through `_appendEntry()` and `_persist()`; with Yapi's existing eager `flushed=true` bootstrap, `_persist()` uses `appendFileSync` both before and after the first assistant. `piSessionAppendCompatibility.test.ts` runs the real installed ESM package in a child process, verifies every old byte remains a prefix across Unicode user/custom/assistant/compaction writes, and reopens the result with `SessionManager.open()` while preserving entries, leaf, custom-entry exclusion, and compaction context.
 - Verification: `npm run test -- --runInBand tests/unit/pi/sessionTreeStore.test.ts tests/integration/piSessionAppendCompatibility.test.ts` (2 suites / 19 tests passed); temporary direct prototype reopened 3 incrementally appended entries with the same session id.
 - Remaining: WS-02 through WS-07.
 - Blockers: none.
@@ -124,7 +124,7 @@ Guidance for low-context agents:
 
 ### 2026-07-15 — WS-02 index format and lifecycle — Codex
 
-- Changed: added a rebuildable `.pivi-index` sidecar with UTF-8 byte offsets, entry/custom/role metadata, per-line SHA-256 values, an index-line checksum chain, and append checkpoints carrying file size, device/inode, nanosecond mtime/ctime, and bounded head/tail hashes. Rebuild uses a temporary file plus rename; normal indexed appends extend the sidecar; truncate/bootstrap/fork/delete paths invalidate sidecars.
+- Changed: added a rebuildable `.yapi-index` sidecar with UTF-8 byte offsets, entry/custom/role metadata, per-line SHA-256 values, an index-line checksum chain, and append checkpoints carrying file size, device/inode, nanosecond mtime/ctime, and bounded head/tail hashes. Rebuild uses a temporary file plus rename; normal indexed appends extend the sidecar; truncate/bootstrap/fork/delete paths invalidate sidecars.
 - Evidence: source replacement or truncation raises `SessionIndexStaleError`; malformed or edited sidecars raise `SessionIndexCorruptError`; an indexed-line checksum/identity mismatch also raises the stale error. Both errors live in the host-neutral session contract. JSONL scanning uses Buffer offsets, including Unicode fixture coverage.
 - Verification: `npm run typecheck`; `npm run lint`; `npm run check:boundaries`; `npm run test -- --runInBand tests/unit/pi/sessionJsonlIndex.test.ts tests/unit/pi/sessionTreeStore.test.ts tests/unit/pi/piSessionStore.test.ts` (3 suites / 43 tests passed after the accepted stale-write guard revisions).
 - Remaining: WS-03 through WS-07; WS-06 will connect the existing external-context rewrite to the same explicit index invalidation/done-marker lifecycle.
@@ -135,14 +135,14 @@ Guidance for low-context agents:
 
 - Changed: after review, all live append, truncate, and fork mutations now validate the held source fingerprint before touching Pi manager state. A mismatch evicts the cached store and raises `SessionIndexStaleError`. Append postflight verifies the unchanged prefix and exact new entry IDs; it no longer catches index failures and silently rebuilds after a durable write. The sidecar also records `message_ui.targetEntryId`, one-time external-context migration state, and delegates legacy Pi format upgrades to `SessionManager.open()` before offset construction.
 - Evidence: regression coverage rejects a changed live source before `appendMessage`, unexpected tail entries, same-size edits with restored mtime, torn checkpoints, edited offsets, and stale held-index batch reads. Unicode offsets, target overlay IDs, v1 migration delegation, migration-marker reset, replacement/rebuild, and append-only sidecar prefixes remain covered.
-- Verification: `npm run typecheck && npm run lint && npm run check:boundaries`; 4 focused suites / 44 tests; `npm run build && npm run check:bundle-size` (`main.js` 2,987,023 bytes); `obsidian plugin:reload id=pivi`; `obsidian dev:errors` (`No errors captured.`).
+- Verification: `npm run typecheck && npm run lint && npm run check:boundaries`; 4 focused suites / 44 tests; `npm run build && npm run check:bundle-size` (`main.js` 2,987,023 bytes); `obsidian plugin:reload id=yapi`; `obsidian dev:errors` (`No errors captured.`).
 - Remaining: WS-03 through WS-07.
 - Blockers: none; the user approved the pre-mutation typed-failure direction on 2026-07-16.
 - Next action: run the full WS-02 gate, commit the verified index lifecycle, then begin the range API.
 
 ### 2026-07-16 — WS-03 bounded range API — Codex
 
-- Changed: `SessionStore` now exposes `openRecent(ref, limit)` and `readOlder(ref, beforeEntryId, limit)` as host-neutral `SessionMessagePage` results. The Pi implementation groups JSONL into the exact messages produced by `messageMapper`: compactions stand alone, contiguous assistant/tool-result segments merge, later `pivi/message-ui` overlays are fetched by target id, and adjacent duplicate pending users collapse using normalized-text hashes stored in index version 2. Unknown cursors raise `SessionRangeCursorError`.
+- Changed: `SessionStore` now exposes `openRecent(ref, limit)` and `readOlder(ref, beforeEntryId, limit)` as host-neutral `SessionMessagePage` results. The Pi implementation groups JSONL into the exact messages produced by `messageMapper`: compactions stand alone, contiguous assistant/tool-result segments merge, later `yapi/message-ui` overlays are fetched by target id, and adjacent duplicate pending users collapse using normalized-text hashes stored in index version 2. Unknown cursors raise `SessionRangeCursorError`.
 - Changed: `OpenSessionManager`, the plugin session API, the composition host, and `ChatSessionPort` now route the same bounded operations by open-session id without invoking full hydration. Existing `getMessages()` remains the complete runtime/LLM history path until WS-05 switches only UI projection hydration.
 - Evidence: the 5K-message fixture returns the newest 100 messages after reading exactly 100 indexed entries and less than 5% of transcript bytes; storage integration tests cover recent/older pages; manager/port tests prove the durable ref and cursor are forwarded without calling `open()` or `getMessages()`.
 - Verification: `npm run typecheck`; `npm run lint`; `npm run check:boundaries`; 5 storage/index suites / 45 tests before the first atomic commit; 5 manager/port/controller suites / 54 tests before the second atomic commit.
@@ -178,7 +178,7 @@ Guidance for low-context agents:
 - Changed: legacy migration is single-flight per session file. It validates the held source after reading, writes device-local session/turn overlays before the durable rewrite, invalidates the sidecar before writing sanitized JSONL, then rebuilds and verifies marker completion.
 - Failure semantics: read-only stale/corrupt sidecars are invalidated and rebuilt from authoritative JSONL; source replacement during migration, device-local cache failure, JSONL write failure, and index rebuild failure propagate explicitly. A malformed no-sidecar session retains the existing startup warn/skip behavior, while explicitly opening it still fails with its file and line.
 - Evidence: temp-filesystem tests prove legacy migration and marker rebuild, zero repeated body reads across startup/lazy open, clean-file marker creation without rewrite, concurrent single-flight behavior, pre-mutation stale rejection, local-cache failure before rewrite, malformed-session isolation, and idempotence.
-- Verification: `tests/unit/pi/piSessionStore.test.ts` + `sessionJsonlIndex.test.ts`, typecheck, lint, boundaries, production build, and Pivi reload are recorded in the commit handoff.
+- Verification: `tests/unit/pi/piSessionStore.test.ts` + `sessionJsonlIndex.test.ts`, typecheck, lint, boundaries, production build, and Yapi reload are recorded in the commit handoff.
 - Remaining: WS-07 performance measurements and final spec verification/archive.
 - Blockers: none.
 - Next action: capture 5K cold-open, older-page, and append-cost measurements with the spec 001 harness.
@@ -186,9 +186,9 @@ Guidance for low-context agents:
 ### 2026-07-16 — WS-07 isolated performance comparison — Codex
 
 - Changed: added a development-only isolated 5K command that copies the fixed fixture to a unique temporary session id, records cold open, drives the real upward-scroll older-page path, restores the original tab, and deletes the temporary JSONL/index with tab persistence suspended. Added a filesystem-only append benchmark that compares the removed append-plus-`_rewriteFile()` behavior with the indexed true-append path on fresh temporary copies.
-- Evidence: three final main-window runs at `0356645c` kept the 5,002-line / 1,800,428-byte fixture hash and `.pivi/tab-manager-state.json` bytes unchanged and left zero temporary session files. Cold-open median was 82.1 ms event-to-paint, 25 rows / 542 DOM nodes, 34 Markdown renders / 96.4 ms, and 2 long tasks (489 ms longest), versus the pre-spec baseline's 98 ms, 25 / 541, 48 renders, and 2 tasks. The new controlled trace-start-to-paint boundary was 741.4 ms; the prior operator-driven traces did not have that comparable boundary.
+- Evidence: three final main-window runs at `0356645c` kept the 5,002-line / 1,800,428-byte fixture hash and `.yapi/tab-manager-state.json` bytes unchanged and left zero temporary session files. Cold-open median was 82.1 ms event-to-paint, 25 rows / 542 DOM nodes, 34 Markdown renders / 96.4 ms, and 2 long tasks (489 ms longest), versus the pre-spec baseline's 98 ms, 25 / 541, 48 renders, and 2 tasks. The new controlled trace-start-to-paint boundary was 741.4 ms; the prior operator-driven traces did not have that comparable boundary.
 - Evidence: one older page measured 25 rows / 518 DOM nodes, 15 Markdown renders / 35.2 ms, 0 px anchor drift, and 1 long task / 55 ms median, versus 31 / 700, 46 renders, 0 px, and no task before. Append cost measured 12.933 ms per old rewrite versus 0.242 ms per indexed append across five trials of twenty appends (53.457×).
-- Traces: cold `2026-07-15T19-27-18-395Z`, `19-27-20-945Z`, `19-27-23-493Z`; older `19-27-19-231Z`, `19-27-21-809Z`, `19-27-24-368Z`, all with the full indexed scenario suffix under `.pivi/perf-traces/`.
+- Traces: cold `2026-07-15T19-27-18-395Z`, `19-27-20-945Z`, `19-27-23-493Z`; older `19-27-19-231Z`, `19-27-21-809Z`, `19-27-24-368Z`, all with the full indexed scenario suffix under `.yapi/perf-traces/`.
 - Verification: 2 focused suites / 28 tests, typecheck, lint, boundaries, production build/deploy/reload, production debug-marker absence, and `obsidian dev:errors` = `No errors captured.` The final full-suite/coverage gate is recorded in the completion summary.
 - Remaining: final full verification and archive only.
 - Blockers: none.

@@ -101,7 +101,7 @@ class FakeElement {
   }
 
   private createChild(options?: { cls?: string; text?: string }): FakeElement {
-    const childRect = options?.cls?.includes('pivi-welcome-greeting')
+    const childRect = options?.cls?.includes('yapi-welcome-greeting')
       ? { left: 350, top: 280, width: 300, height: 140 }
       : { left: 0, top: 0, width: 220, height: 100 };
     const child = new FakeElement(this.win, options?.cls, childRect);
@@ -167,19 +167,19 @@ class FakeElement {
 function createWelcome(reducedMotion = false): { welcome: FakeElement; win: FakeWindow } {
   const win = new FakeWindow();
   win.reducedMotion = reducedMotion;
-  const welcome = new FakeElement(win, 'pivi-welcome', {
+  const welcome = new FakeElement(win, 'yapi-welcome', {
     left: 0,
     top: 0,
     width: 1000,
     height: 700,
   });
-  welcome.createDiv({ cls: 'pivi-welcome-greeting', text: 'Welcome' });
+  welcome.createDiv({ cls: 'yapi-welcome-greeting', text: 'Welcome' });
   return { welcome, win };
 }
 
 function getRenderedQuoteText(card: FakeElement): string {
   return card
-    .findAllByClass('pivi-welcome-quote-char')
+    .findAllByClass('yapi-welcome-quote-char')
     .map(character => character.text)
     .join('');
 }
@@ -236,12 +236,12 @@ describe('QuoteBackgroundController', () => {
     );
 
     controller.start();
-    const layer = welcome.findByClass('pivi-welcome-quote-layer')!;
+    const layer = welcome.findByClass('yapi-welcome-quote-layer')!;
     expect(layer.attributes.get('aria-hidden')).toBe('true');
     win.flushAnimationFrames();
 
-    const cards = layer.findAllByClass('pivi-welcome-quote');
-    const characterSets = cards.map(card => card.findAllByClass('pivi-welcome-quote-char'));
+    const cards = layer.findAllByClass('yapi-welcome-quote');
+    const characterSets = cards.map(card => card.findAllByClass('yapi-welcome-quote-char'));
     const characterCounts = characterSets.map(characters => characters.length);
     const startTickInterval = Math.ceil(Math.max(...characterCounts) / 5);
     const startIntervalMs = startTickInterval * 120;
@@ -257,11 +257,11 @@ describe('QuoteBackgroundController', () => {
     expectDefined(firstCharacterSet);
     const firstCharacter = firstCharacterSet[0];
     expectDefined(firstCharacter);
-    expect(firstCharacter.hasClass('pivi-quote-char-visible')).toBe(true);
+    expect(firstCharacter.hasClass('yapi-quote-char-visible')).toBe(true);
     characterSets.slice(1).forEach(characters => {
       const firstCharacter = characters[0];
       expectDefined(firstCharacter);
-      expect(firstCharacter.hasClass('pivi-quote-char-visible')).toBe(false);
+      expect(firstCharacter.hasClass('yapi-quote-char-visible')).toBe(false);
     });
 
     const firstFinishedTime = finishTimes[firstFinishedIndex];
@@ -269,34 +269,34 @@ describe('QuoteBackgroundController', () => {
     const finishedCard = cards[firstFinishedIndex];
     expectDefined(finishedCard);
     jest.advanceTimersByTime(firstFinishedTime + 3500);
-    expect(finishedCard.hasClass('pivi-quote-visible')).toBe(false);
+    expect(finishedCard.hasClass('yapi-quote-visible')).toBe(false);
     expect(
       cards.some(
         (card, index) =>
           index !== firstFinishedIndex &&
-          !card.findByClass('pivi-welcome-quote-author')?.hasClass('pivi-quote-author-visible'),
+          !card.findByClass('yapi-welcome-quote-author')?.hasClass('yapi-quote-author-visible'),
       ),
     ).toBe(true);
 
     win.flushAnimationFrames();
-    const cardsDuringFade = layer.findAllByClass('pivi-welcome-quote');
+    const cardsDuringFade = layer.findAllByClass('yapi-welcome-quote');
     expect(cardsDuringFade).toHaveLength(5);
     expect(cardsDuringFade).toEqual(cards);
 
     jest.advanceTimersByTime(1500);
-    expect(layer.findAllByClass('pivi-welcome-quote')).not.toContain(finishedCard);
+    expect(layer.findAllByClass('yapi-welcome-quote')).not.toContain(finishedCard);
 
     win.flushAnimationFrames();
-    const cardsAfterFade = layer.findAllByClass('pivi-welcome-quote');
+    const cardsAfterFade = layer.findAllByClass('yapi-welcome-quote');
     const replacementCards = cardsAfterFade.filter(card => !cards.includes(card));
     expect(cardsAfterFade).toHaveLength(5);
     expect(replacementCards).toHaveLength(1);
     const replacementCard = replacementCards[0];
     expectDefined(replacementCard);
     expect(initialQuoteTexts.has(getRenderedQuoteText(replacementCard))).toBe(false);
-    const replacementCharacter = replacementCard.findAllByClass('pivi-welcome-quote-char')[0];
+    const replacementCharacter = replacementCard.findAllByClass('yapi-welcome-quote-char')[0];
     expectDefined(replacementCharacter);
-    expect(replacementCharacter.hasClass('pivi-quote-char-visible')).toBe(true);
+    expect(replacementCharacter.hasClass('yapi-quote-char-visible')).toBe(true);
     const replacementRect = getPlacedQuoteRect(replacementCard);
     cardsAfterFade
       .filter(card => card !== replacementCard)
@@ -305,7 +305,7 @@ describe('QuoteBackgroundController', () => {
       });
 
     controller.stop();
-    expect(welcome.findByClass('pivi-welcome-quote-layer')).toBeUndefined();
+    expect(welcome.findByClass('yapi-welcome-quote-layer')).toBeUndefined();
     expectDefined(FakeResizeObserver.instances[0]);
     expect(FakeResizeObserver.instances[0].disconnected).toBe(true);
     expect(win.pendingAnimationFrames).toBe(0);
@@ -321,17 +321,17 @@ describe('QuoteBackgroundController', () => {
 
     controller.start();
     win.flushAnimationFrames();
-    const layer = welcome.findByClass('pivi-welcome-quote-layer')!;
-    const cards = layer.findAllByClass('pivi-welcome-quote');
+    const layer = welcome.findByClass('yapi-welcome-quote-layer')!;
+    const cards = layer.findAllByClass('yapi-welcome-quote');
 
     expect(cards).toHaveLength(5);
     cards.forEach(card => {
       expect(
         card
-          .findAllByClass('pivi-welcome-quote-char')
-          .every(character => character.hasClass('pivi-quote-char-visible')),
+          .findAllByClass('yapi-welcome-quote-char')
+          .every(character => character.hasClass('yapi-quote-char-visible')),
       ).toBe(true);
-      expect(card.findByClass('pivi-welcome-quote-author')?.hasClass('pivi-quote-author-visible')).toBe(
+      expect(card.findByClass('yapi-welcome-quote-author')?.hasClass('yapi-quote-author-visible')).toBe(
         true,
       );
     });

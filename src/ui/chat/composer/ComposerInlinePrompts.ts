@@ -83,21 +83,21 @@ export class ComposerInlinePrompts {
 
   private hideInputContainer(inputContainerEl: HTMLElement): void {
     this.inputContainerHideDepth++;
-    inputContainerEl.addClass('pivi-hidden');
+    inputContainerEl.addClass('yapi-hidden');
   }
 
   private restoreInputContainer(inputContainerEl: HTMLElement): void {
     if (this.inputContainerHideDepth <= 0) return;
     this.inputContainerHideDepth--;
     if (this.inputContainerHideDepth === 0) {
-      inputContainerEl.removeClass('pivi-hidden');
+      inputContainerEl.removeClass('yapi-hidden');
     }
   }
 
   private resetInputContainerVisibility(): void {
     if (this.inputContainerHideDepth > 0) {
       this.inputContainerHideDepth = 0;
-      this.deps.getInputContainerEl().removeClass('pivi-hidden');
+      this.deps.getInputContainerEl().removeClass('yapi-hidden');
     }
   }
 }

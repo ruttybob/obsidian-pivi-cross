@@ -1,0 +1,181 @@
+/* Image Context - Preview & Attachments */
+
+/* Image preview container (in input area) */
+.yapi-image-preview {
+  display: none;
+  flex-wrap: wrap;
+  gap: var(--yapi-spacing-sm);
+  padding: 8px 0;
+  margin-bottom: var(--yapi-spacing-xs);
+}
+
+/* Individual image preview chip */
+.yapi-image-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  padding: 6px 8px;
+  background: var(--yapi-host-background-primary);
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-md);
+  max-width: 200px;
+}
+
+.yapi-image-chip:hover {
+  border-color: var(--yapi-host-interactive-accent);
+}
+
+/* Image thumbnail */
+.yapi-image-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--yapi-radius-xs);
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.yapi-image-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Image info */
+.yapi-image-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.yapi-image-name {
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-normal);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yapi-image-size {
+  font-size: 10px;
+  color: var(--yapi-host-text-muted);
+}
+
+/* Remove button */
+.yapi-image-remove {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--yapi-duration-fast) var(--yapi-ease-out);
+  flex-shrink: 0;
+  font-size: 0; /* Hide text character */
+}
+
+.yapi-image-remove::before,
+.yapi-image-remove::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 2px;
+  background: var(--yapi-host-text-muted);
+  border-radius: 1px;
+  transition: background var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-image-remove::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.yapi-image-remove::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.yapi-image-remove:hover {
+  background: var(--yapi-host-background-error);
+}
+
+.yapi-image-remove:hover::before,
+.yapi-image-remove:hover::after {
+  background: var(--yapi-host-text-on-accent);
+}
+
+/* Drop overlay - inside input wrapper */
+.yapi-drop-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(var(--yapi-brand-rgb), 0.08);
+  border: 2px dashed var(--yapi-brand);
+  border-radius: var(--yapi-radius-sm);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.yapi-drop-overlay.visible {
+  display: flex;
+}
+
+.yapi-drop-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--yapi-spacing-xs);
+  color: var(--yapi-brand);
+}
+
+.yapi-drop-content svg {
+  opacity: 0.7;
+}
+
+.yapi-drop-content span {
+  font-size: var(--yapi-text-sm);
+  font-weight: 500;
+}
+
+/* Images in Messages (displayed above user bubble) */
+
+/* Images container - right-aligned above user message */
+.yapi-message-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+  margin-bottom: 6px;
+  padding-right: var(--yapi-spacing-xs);
+}
+
+/* Individual image in message - standardized size */
+.yapi-message-image {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--yapi-radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--yapi-duration-fast) var(--yapi-ease-out), box-shadow var(--yapi-duration-fast) var(--yapi-ease-out);
+  background: var(--yapi-host-background-secondary);
+  border: 1px solid var(--yapi-host-border);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-message-image:hover {
+    transform: scale(1.03);
+    box-shadow: var(--yapi-shadow-md);
+  }
+}
+
+.yapi-message-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

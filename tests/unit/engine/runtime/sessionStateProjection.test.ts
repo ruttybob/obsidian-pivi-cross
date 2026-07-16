@@ -1,10 +1,10 @@
-import type { OpenSessionState } from '@pivi/pivi-agent-core/foundation';
+import type { OpenSessionState } from '@yapi/yapi-agent-core/foundation';
 import {
   buildSessionStateUpdates,
   getLegacySessionFileFromAgentState,
   LEGACY_PI_SESSION_FILE_STATE_KEY,
   removeLegacySessionFileFromAgentState,
-} from '@pivi/pivi-agent-core/runtime/sessionStateProjection';
+} from '@yapi/yapi-agent-core/runtime/sessionStateProjection';
 
 describe('getLegacySessionFileFromAgentState', () => {
   it.each([

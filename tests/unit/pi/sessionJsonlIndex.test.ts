@@ -14,11 +14,11 @@ import {
   rebuildSessionJsonlIndex,
   refreshSessionJsonlIndexAfterAppend,
   validateSessionJsonlIndexSource,
-} from '@pivi/pivi-agent-core/engine/pi/session/sessionJsonlIndex';
+} from '@yapi/yapi-agent-core/engine/pi/session/sessionJsonlIndex';
 import {
   SessionIndexCorruptError,
   SessionIndexStaleError,
-} from '@pivi/pivi-agent-core/session';
+} from '@yapi/yapi-agent-core/session';
 
 function line(value: unknown): string {
   return `${JSON.stringify(value)}\n`;
@@ -29,7 +29,7 @@ describe('sessionJsonlIndex', () => {
   let sessionFile: string;
 
   beforeEach(() => {
-    root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-session-index-'));
+    root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-session-index-'));
     sessionFile = path.join(root, 'session.jsonl');
     fs.writeFileSync(sessionFile, [
       line({ type: 'session', version: 3, id: 'session-1', timestamp: '2026-01-01T00:00:00.000Z', cwd: root }),
@@ -65,7 +65,7 @@ describe('sessionJsonlIndex', () => {
     const priorIndexBytes = fs.readFileSync(initial.indexFile);
     fs.appendFileSync(sessionFile, line({
       type: 'custom',
-      customType: 'pivi/message-ui',
+      customType: 'yapi/message-ui',
       id: 'ui-1',
       parentId: 'user-1',
       timestamp: '2026-01-01T00:00:02.000Z',
@@ -89,7 +89,7 @@ describe('sessionJsonlIndex', () => {
   it('marks legacy external-context payloads for one-time migration', () => {
     fs.appendFileSync(sessionFile, line({
       type: 'custom',
-      customType: 'pivi/message-ui',
+      customType: 'yapi/message-ui',
       id: 'legacy-ui-1',
       parentId: 'user-1',
       timestamp: '2026-01-01T00:00:02.000Z',
@@ -168,7 +168,7 @@ describe('sessionJsonlIndex', () => {
 
     fs.appendFileSync(sessionFile, line({
       type: 'custom',
-      customType: 'pivi/message-ui',
+      customType: 'yapi/message-ui',
       id: 'ui-after-metadata-drift',
       parentId: 'user-1',
       timestamp: '2026-01-01T00:00:02.000Z',

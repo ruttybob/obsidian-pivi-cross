@@ -2,8 +2,8 @@ import {
   requiresSelectedText,
   resolveWorkspaceCommandPrompt,
   type WorkspaceCommandPromptContext,
-} from '@pivi/pivi-agent-core/skills/commands/resolveWorkspaceCommandPrompt';
-import type { SlashCatalogEntry } from '@pivi/pivi-agent-core/skills/commands/slashCommandEntry';
+} from '@yapi/yapi-agent-core/skills/commands/resolveWorkspaceCommandPrompt';
+import type { SlashCatalogEntry } from '@yapi/yapi-agent-core/skills/commands/slashCommandEntry';
 
 export interface ResolvedComposerWorkspaceCommand {
   promptContent: string;

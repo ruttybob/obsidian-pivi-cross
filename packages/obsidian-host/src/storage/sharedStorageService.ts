@@ -1,18 +1,18 @@
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
 import type { Plugin } from "obsidian";
 import { Notice } from "obsidian";
 
 import type { SharedAppStorage } from "../bootstrap/storage";
 import type { AppTabManagerState } from "../bootstrap/types";
 import {
-  type PiviSettingsCodec,
-  PiviSettingsStorage,
-  type StoredPiviSettings,
-} from "../settings/piviSettingsStorage";
+  type StoredYapiSettings,
+  type YapiSettingsCodec,
+  YapiSettingsStorage,
+} from "../settings/yapiSettingsStorage";
 import { ObsidianVaultFileAdapter } from "./obsidianVaultFileAdapter";
 
-const PIVI_STORAGE_PATH = ".pivi";
-const TAB_MANAGER_STATE_PATH = `${PIVI_STORAGE_PATH}/tab-manager-state.json`;
+const YAPI_STORAGE_PATH = ".yapi";
+const TAB_MANAGER_STATE_PATH = `${YAPI_STORAGE_PATH}/tab-manager-state.json`;
 const logger = new PluginLogger('SharedStorageService');
 
 
@@ -31,7 +31,7 @@ const DEFAULT_STORAGE_NOTICES: SharedStorageNoticeMessages = {
 };
 
 export class SharedStorageService implements SharedAppStorage {
-  readonly piviSettings: PiviSettingsStorage;
+  readonly yapiSettings: YapiSettingsStorage;
 
   private adapter: ObsidianVaultFileAdapter;
   private plugin: Plugin;
@@ -39,23 +39,23 @@ export class SharedStorageService implements SharedAppStorage {
 
   constructor(
     plugin: Plugin,
-    settingsCodec?: PiviSettingsCodec,
+    settingsCodec?: YapiSettingsCodec,
     notices?: Partial<SharedStorageNoticeMessages>,
   ) {
     this.plugin = plugin;
     this.adapter = new ObsidianVaultFileAdapter(plugin.app);
-    this.piviSettings = new PiviSettingsStorage(this.adapter, settingsCodec);
+    this.yapiSettings = new YapiSettingsStorage(this.adapter, settingsCodec);
     this.notices = { ...DEFAULT_STORAGE_NOTICES, ...notices };
   }
 
-  async initialize(): Promise<{ pivi: Record<string, unknown> }> {
+  async initialize(): Promise<{ yapi: Record<string, unknown> }> {
     await this.ensureDirectories();
-    const pivi = await this.piviSettings.load();
-    return { pivi };
+    const yapi = await this.yapiSettings.load();
+    return { yapi };
   }
 
-  async savePiviSettings(settings: Record<string, unknown>): Promise<void> {
-    await this.piviSettings.save(settings as StoredPiviSettings);
+  async saveYapiSettings(settings: Record<string, unknown>): Promise<void> {
+    await this.yapiSettings.save(settings as StoredYapiSettings);
   }
 
   async setTabManagerState(state: AppTabManagerState): Promise<void> {
@@ -140,8 +140,8 @@ export class SharedStorageService implements SharedAppStorage {
   }
 
   private async ensureDirectories(): Promise<void> {
-    await this.adapter.ensureFolder(PIVI_STORAGE_PATH);
-    await this.adapter.ensureFolder(`${PIVI_STORAGE_PATH}/sessions`);
+    await this.adapter.ensureFolder(YAPI_STORAGE_PATH);
+    await this.adapter.ensureFolder(`${YAPI_STORAGE_PATH}/sessions`);
   }
 
   private async writeTabManagerStateFile(state: AppTabManagerState): Promise<void> {

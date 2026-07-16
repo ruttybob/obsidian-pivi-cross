@@ -1,4 +1,4 @@
-import type { HomeFileStore } from "@pivi/pivi-agent-core/ports";
+import type { HomeFileStore } from "@yapi/yapi-agent-core/ports";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";

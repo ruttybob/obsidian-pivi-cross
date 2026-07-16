@@ -1,13 +1,13 @@
 import type {
   ChatPerfProjectionCommitReason,
   ChatPerfProjectionEventKind,
-} from '@pivi/pivi-react/store';
+} from '@yapi/yapi-react/store';
 import type { App, DataAdapter } from 'obsidian';
 
 import type { ChatPerfController } from '@/app/chatPerformanceController';
 
-const CHAT_PERF_TRACE_DIRECTORY = '.pivi/perf-traces';
-const CHAT_PERF_TRACE_SCHEMA = 'pivi-chat-perf-v1';
+const CHAT_PERF_TRACE_DIRECTORY = '.yapi/perf-traces';
+const CHAT_PERF_TRACE_SCHEMA = 'yapi-chat-perf-v1';
 
 type ChatPerfWindowType = 'main' | 'pop-out';
 
@@ -98,7 +98,7 @@ export interface ChatPerfTrace {
   readonly endedAt: string | null;
   readonly environment: {
     readonly obsidianVersion: string;
-    readonly piviVersion: string;
+    readonly yapiVersion: string;
     readonly windowTypes: readonly ChatPerfWindowType[];
     readonly longTaskWindowTypes: readonly ChatPerfWindowType[];
   };
@@ -158,7 +158,7 @@ class ObsidianChatPerfRecorder implements ChatPerfController {
 
   constructor(
     private readonly app: App,
-    private readonly piviVersion: string,
+    private readonly yapiVersion: string,
     private readonly obsidianVersion: string,
     private readonly mainWindow: Window,
   ) {}
@@ -217,7 +217,7 @@ class ObsidianChatPerfRecorder implements ChatPerfController {
       endedAt,
       environment: {
         obsidianVersion: this.obsidianVersion,
-        piviVersion: this.piviVersion,
+        yapiVersion: this.yapiVersion,
         windowTypes: [...trace.windowTypes].sort(),
         longTaskWindowTypes: [...trace.longTaskWindowTypes].sort(),
       },
@@ -425,9 +425,9 @@ class ObsidianChatPerfRecorder implements ChatPerfController {
 
 export function createChatPerfController(
   app: App,
-  piviVersion: string,
+  yapiVersion: string,
   obsidianVersion: string,
   mainWindow: Window,
 ): ChatPerfController {
-  return new ObsidianChatPerfRecorder(app, piviVersion, obsidianVersion, mainWindow);
+  return new ObsidianChatPerfRecorder(app, yapiVersion, obsidianVersion, mainWindow);
 }

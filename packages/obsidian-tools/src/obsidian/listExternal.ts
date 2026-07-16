@@ -2,7 +2,7 @@ import {
   textResult,
   TOOL_OBSIDIAN_LIST_EXTERNAL,
   type ToolSpec,
-} from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/tools';
 
 import type { ObsidianToolDeps } from './deps';
 import { getStringField } from './readShared';

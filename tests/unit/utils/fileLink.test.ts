@@ -501,7 +501,7 @@ describe('fileLink utils', () => {
       expect(link.textContent).toBe('Emap2ligand');
       expect(link.getAttribute('data-href')).toBe('project/Emap2ligand.md');
       expect(link.className).toContain('internal-link');
-      expect(link.className).toContain('pivi-file-link');
+      expect(link.className).toContain('yapi-file-link');
     });
 
     it('leaves non-existing paths as inline code', () => {

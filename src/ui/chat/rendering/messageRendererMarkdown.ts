@@ -1,11 +1,11 @@
-import type { MentionBadgeParseContext } from '@pivi/pivi-agent-core/context/mentions';
-import type { ChatTurnRequestSnapshot } from '@pivi/pivi-agent-core/foundation';
-import { escapeMathDelimitersForStreaming } from '@pivi/pivi-agent-core/foundation/streamingMath';
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { MentionBadgeParseContext } from '@yapi/yapi-agent-core/context/mentions';
+import type { ChatTurnRequestSnapshot } from '@yapi/yapi-agent-core/foundation';
+import { escapeMathDelimitersForStreaming } from '@yapi/yapi-agent-core/foundation/streamingMath';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 import type { App, Component } from 'obsidian';
 import { MarkdownRenderer, setIcon } from 'obsidian';
 
-import type { PiviChatHost } from '@/app/hostContracts';
+import type { YapiChatHost } from '@/app/hostContracts';
 import { t } from '@/app/i18n';
 import { createContextBadgeElement } from '@/ui/shared/context-badge/ContextBadgeRenderer';
 import { createMentionVaultLookup } from '@/ui/shared/mention/createMentionVaultLookup';
@@ -23,7 +23,7 @@ import type { RenderContentOptions } from './messageRendererTypes';
 
 export interface MessageRendererMarkdownHost {
   readonly app: App;
-  readonly plugin: PiviChatHost;
+  readonly plugin: YapiChatHost;
   readonly ports: ChatPorts;
   readonly component: Component;
 }
@@ -88,35 +88,35 @@ export function getMermaidDiagramSize(svg: SVGSVGElement): { width: number; heig
 }
 
 function scrollNearestMessagesContainer(el: HTMLElement, deltaY: number): void {
-  const messagesEl = el.closest<HTMLElement>('.pivi-messages');
+  const messagesEl = el.closest<HTMLElement>('.yapi-messages');
   if (!messagesEl) return;
   messagesEl.scrollTop += deltaY;
 }
 
 function enhanceMermaidDiagram(container: HTMLElement): void {
-  if (container.dataset.piviMermaidEnhanced === 'true') return;
+  if (container.dataset.yapiMermaidEnhanced === 'true') return;
 
   const svg = container.querySelector<SVGSVGElement>('svg');
   if (!svg) return;
-  container.classList.add('pivi-rendered-mermaid');
+  container.classList.add('yapi-rendered-mermaid');
 
   const doc = getActiveDocument(container);
   const scroll = doc.win.createDiv();
-  scroll.className = 'pivi-mermaid-scroll';
+  scroll.className = 'yapi-mermaid-scroll';
   const zoomSurface = doc.win.createDiv();
-  zoomSurface.className = 'pivi-mermaid-zoom-surface';
+  zoomSurface.className = 'yapi-mermaid-zoom-surface';
 
   const parent = container.parentElement;
   if (!parent) return;
 
-  container.dataset.piviMermaidEnhanced = 'true';
+  container.dataset.yapiMermaidEnhanced = 'true';
 
   parent.insertBefore(scroll, container);
   scroll.appendChild(zoomSurface);
   zoomSurface.appendChild(container);
 
   const controls = doc.win.createDiv();
-  controls.className = 'pivi-mermaid-controls';
+  controls.className = 'yapi-mermaid-controls';
   scroll.appendChild(controls);
 
   let scale = 1;
@@ -137,7 +137,7 @@ function enhanceMermaidDiagram(container: HTMLElement): void {
     zoomSurface.style.height = `${scaledHeight}px`;
     container.style.transform = `scale(${scale})`;
     const scaleLabel = `${Math.round(scale * 100)}%`;
-    scroll.dataset.piviMermaidScale = scaleLabel;
+    scroll.dataset.yapiMermaidScale = scaleLabel;
     if (resetButton) resetButton.textContent = scaleLabel;
   };
 
@@ -149,9 +149,9 @@ function enhanceMermaidDiagram(container: HTMLElement): void {
   const makeButton = (label: string, ariaLabel: string, onClick: () => void, icon?: string): HTMLButtonElement => {
     const button = doc.win.createEl('button');
     button.type = 'button';
-    button.className = 'pivi-mermaid-control-btn';
+    button.className = 'yapi-mermaid-control-btn';
     if (icon) {
-      button.addClass('pivi-mermaid-control-btn-icon');
+      button.addClass('yapi-mermaid-control-btn-icon');
       setIcon(button, icon);
     } else {
       button.textContent = label;
@@ -245,7 +245,7 @@ export async function renderUserMessageText(
   if (autoAttachedNotePath) {
     el.empty();
     const badges = el.ownerDocument.win.createDiv();
-    badges.className = 'pivi-user-context-badges';
+    badges.className = 'yapi-user-context-badges';
     badges.appendChild(createContextBadgeElement(
       { kind: 'file', token: `[[${autoAttachedNotePath}]]`, path: autoAttachedNotePath },
       {
@@ -274,7 +274,7 @@ export async function renderMarkdownContent(
   options?: RenderContentOptions,
 ): Promise<void> {
   el.addClass('markdown-rendered');
-  el.addClass('pivi-markdown-rendered');
+  el.addClass('yapi-markdown-rendered');
   el.empty();
 
   try {
@@ -291,10 +291,10 @@ export async function renderMarkdownContent(
     );
 
     el.querySelectorAll<HTMLElement>('ul.contains-task-list').forEach((list) => {
-      list.classList.add('pivi-markdown-task-list');
+      list.classList.add('yapi-markdown-task-list');
     });
     el.querySelectorAll<HTMLElement>('li.task-list-item').forEach((item) => {
-      item.classList.add('pivi-markdown-task-item');
+      item.classList.add('yapi-markdown-task-item');
     });
 
     const component = options?.component ?? host.component;
@@ -305,11 +305,11 @@ export async function renderMarkdownContent(
       // Treating that placeholder as a normal code block creates an empty shell
       // with a misleading YAML copy label in isolated Markdown previews.
       if (pre.classList.contains('frontmatter')) return;
-      if (pre.parentElement?.classList.contains('pivi-code-wrapper')) return;
+      if (pre.parentElement?.classList.contains('yapi-code-wrapper')) return;
 
       const doc = getActiveDocument(pre);
       const wrapper = doc.win.createDiv();
-      wrapper.className = 'pivi-code-wrapper';
+      wrapper.className = 'yapi-code-wrapper';
       pre.parentElement?.insertBefore(wrapper, pre);
       wrapper.appendChild(pre);
 
@@ -318,9 +318,9 @@ export async function renderMarkdownContent(
         const match = code.className.match(/language-(\w+)/);
         if (match?.[1]) {
           const language = match[1];
-          wrapper.classList.add('pivi-code-wrapper--language');
+          wrapper.classList.add('yapi-code-wrapper--language');
           const label = doc.win.createSpan();
-          label.className = 'pivi-code-lang-label';
+          label.className = 'yapi-code-lang-label';
           label.textContent = language;
           wrapper.appendChild(label);
           label.addEventListener('click', () => {
@@ -342,7 +342,7 @@ export async function renderMarkdownContent(
 
       const copyBtn = pre.querySelector('.copy-code-button');
       if (copyBtn) {
-        copyBtn.classList.add('pivi-code-copy-button');
+        copyBtn.classList.add('yapi-code-copy-button');
         wrapper.appendChild(copyBtn);
       }
     });
@@ -354,7 +354,7 @@ export async function renderMarkdownContent(
     trimEmptyEdgeParagraphs(el);
   } catch {
     el.createDiv({
-      cls: 'pivi-render-error',
+      cls: 'yapi-render-error',
       text: t('chat.stream.renderFailed'),
     });
   }

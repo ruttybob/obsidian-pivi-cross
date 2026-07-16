@@ -1,0 +1,201 @@
+/* @ Mention dropdown */
+.yapi-mention-dropdown {
+  display: none;
+  position: absolute;
+  bottom: var(--yapi-anchored-dropdown-bottom, 100%);
+  left: var(--yapi-anchored-dropdown-left, 0);
+  right: auto;
+  width: var(--yapi-anchored-dropdown-width, min(320px, 50%));
+  max-width: min(100%, 480px);
+  margin-bottom: var(--yapi-spacing-xs);
+  opacity: 0;
+  transform: translateY(4px) scaleY(0.96);
+  background: var(--yapi-material-bg-secondary);
+  -webkit-backdrop-filter: var(--yapi-material-blur-lg);
+  backdrop-filter: var(--yapi-material-blur-lg);
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  box-shadow: var(--yapi-shadow-popover-up-md);
+  z-index: 7100;
+  max-height: 250px;
+  overflow-y: auto;
+  transform-origin: bottom left;
+  will-change: opacity, transform;
+  transition:
+    opacity var(--yapi-duration-fast) var(--yapi-ease-out),
+    transform var(--yapi-duration-fast) var(--yapi-ease-out),
+    display var(--yapi-duration-fast) allow-discrete;
+  transition-behavior: allow-discrete;
+}
+
+.yapi-mention-dropdown.visible {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+}
+
+@starting-style {
+  .yapi-mention-dropdown.visible {
+    opacity: 0;
+    transform: translateY(4px) scaleY(0.96);
+  }
+}
+
+/* Fixed positioning for inline editor */
+.yapi-mention-dropdown-fixed {
+  position: fixed;
+  bottom: var(--yapi-fixed-dropdown-bottom);
+  left: var(--yapi-fixed-dropdown-left);
+  right: auto;
+  width: var(--yapi-fixed-dropdown-width);
+  max-width: min(75vw, 480px);
+  z-index: 10003;
+}
+
+.yapi-mention-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 28px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background var(--yapi-duration-instant) var(--yapi-ease-out);
+}
+
+.yapi-mention-item.selected {
+  background: var(--yapi-host-background-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-mention-item:hover {
+    background: var(--yapi-host-background-hover);
+  }
+}
+
+.yapi-mention-icon {
+  display: flex;
+  align-items: center;
+  color: var(--yapi-host-text-muted);
+  flex-shrink: 0;
+}
+
+.yapi-mention-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.yapi-mention-path {
+  font-size: var(--yapi-text-base);
+  color: var(--yapi-host-text-normal);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yapi-mention-path-secondary {
+  font-size: var(--yapi-text-xs);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-mention-empty {
+  padding: 9px 12px;
+  text-align: center;
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-text-base);
+}
+
+/* Scrollbar for mention dropdown */
+.yapi-mention-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.yapi-mention-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.yapi-mention-dropdown::-webkit-scrollbar-thumb {
+  background: var(--yapi-host-border);
+  border-radius: var(--yapi-radius-xs);
+}
+
+.yapi-mention-item--workspace-folder .yapi-mention-icon {
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-mention-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.yapi-mention-name {
+  font-size: var(--yapi-text-base);
+  font-weight: 500;
+  color: var(--yapi-host-interactive-accent);
+}
+
+.yapi-mention-desc {
+  font-size: var(--yapi-text-xs);
+  color: var(--yapi-host-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* External context root items in @-mention dropdown */
+.yapi-mention-item--context-folder .yapi-mention-icon {
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-mention-name-folder {
+  color: var(--yapi-host-text-normal);
+  font-weight: 500;
+}
+
+.yapi-mention-name-file {
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-mention-name-file-alias {
+  color: var(--yapi-host-interactive-accent);
+}
+
+/* Agent folder items in @-mention dropdown */
+.yapi-mention-item--agent-folder .yapi-mention-icon {
+  color: var(--yapi-host-link-color);
+}
+
+.yapi-mention-name-agent-folder {
+  color: var(--yapi-host-link-color);
+  font-weight: 600;
+}
+
+/* Agent items in @-mention dropdown (inside @Agents/) */
+.yapi-mention-item--agent .yapi-mention-icon {
+  color: var(--yapi-host-link-color);
+}
+
+.yapi-mention-item--agent .yapi-mention-text {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.yapi-mention-item--agent .yapi-mention-name-agent {
+  color: var(--yapi-host-text-normal);
+  font-size: var(--yapi-text-base);
+  flex-shrink: 0;
+}
+
+.yapi-mention-item--agent .yapi-mention-agent-desc {
+  font-size: var(--yapi-text-xs);
+  color: var(--yapi-host-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}

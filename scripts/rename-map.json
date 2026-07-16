@@ -51,17 +51,11 @@
       { "from": ".pivi", "to": ".yapi" }
     ],
     "files": [
-      { "from": "src/ui/chat/view/PiviView.ts", "to": "src/ui/chat/view/YapiView.ts" },
-      { "from": "src/ui/settings/PiviSettings.ts", "to": "src/ui/settings/YapiSettings.ts" },
-      { "from": "src/ui/settings/piviSettingsHotkeys.ts", "to": "src/ui/settings/yapiSettingsHotkeys.ts" },
-      { "from": "src/ui/settings/piviSettingsTabs.ts", "to": "src/ui/settings/yapiSettingsTabs.ts" },
       { "from": "src/app/settings/piviSettingsCodec.ts", "to": "src/app/settings/yapiSettingsCodec.ts" },
-      { "from": "src/ui/chat/rendering/piviToolDisplay.ts", "to": "src/ui/chat/rendering/yapiToolDisplay.ts" },
       { "from": "packages/obsidian-host/src/settings/piviSettingsStorage.ts", "to": "packages/obsidian-host/src/settings/yapiSettingsStorage.ts" },
       { "from": "tests/helpers/mockPiviPlugin.ts", "to": "tests/helpers/mockYapiPlugin.ts" },
       { "from": "tests/helpers/mockPiviSettings.ts", "to": "tests/helpers/mockYapiSettings.ts" },
       { "from": "tests/unit/app/settings/piviSettingsStorage.test.ts", "to": "tests/unit/app/settings/yapiSettingsStorage.test.ts" },
-      { "from": "tests/unit/features/chat/piviToolDisplay.test.ts", "to": "tests/unit/features/chat/yapiToolDisplay.test.ts" },
       { "from": "assets/icons/pivi-p.svg", "to": "assets/icons/yapi-yp.svg" },
       { "from": "assets/pivi-example-sm.png", "to": "assets/yapi-example-sm.png" },
       { "from": "packages/obsidian-host/styles/pivi-theme.css", "to": "packages/obsidian-host/styles/yapi-theme.css" },
@@ -69,7 +63,13 @@
       { "from": "src/app/ui/PiviSettingTabHost.ts", "to": "src/app/ui/YapiSettingTabHost.ts" },
       { "from": "src/app/ui/PiviViewHost.ts", "to": "src/app/ui/YapiViewHost.ts" },
       { "from": "tests/unit/app/piviViewActivation.test.ts", "to": "tests/unit/app/yapiViewActivation.test.ts" },
-      { "from": "tests/yapi-react/PiviViewHost.test.ts", "to": "tests/yapi-react/YapiViewHost.test.ts" }
+      { "from": "tests/yapi-react/PiviViewHost.test.ts", "to": "tests/yapi-react/YapiViewHost.test.ts" },
+      { "from": "tests/yapi-react/PiviSettingTabHost.test.ts", "to": "tests/yapi-react/YapiSettingTabHost.test.ts" },
+      { "from": "tests/__mocks__/registerPiviBundledOAuthFlowLoaders.ts", "to": "tests/__mocks__/registerYapiBundledOAuthFlowLoaders.ts" },
+      { "from": "packages/yapi-agent-core/src/engine/pi/piviXaiOAuthDeviceFlow.ts", "to": "packages/yapi-agent-core/src/engine/pi/yapiXaiOAuthDeviceFlow.ts" },
+      { "from": "packages/yapi-agent-core/src/engine/pi/registerPiviBundledOAuthFlowLoaders.ts", "to": "packages/yapi-agent-core/src/engine/pi/registerYapiBundledOAuthFlowLoaders.ts" },
+      { "from": "scripts/generate-pivi-070-session-fixture.mjs", "to": "scripts/generate-yapi-070-session-fixture.mjs" },
+      { "from": "tests/fixtures/sessions/tag-generated-pivi-0.7.0-v3.jsonl", "to": "tests/fixtures/sessions/tag-generated-yapi-0.7.0-v3.jsonl" }
     ]
   },
   "allowlist": {

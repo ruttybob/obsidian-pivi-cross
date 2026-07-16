@@ -3,7 +3,7 @@ import {
   buildOldStringNotFoundMessage,
   curlyDoubleQuotesToAscii,
   detectOldStringMismatchHint,
-} from '@pivi/obsidian-tools';
+} from '@yapi/obsidian-tools';
 
 describe('vaultEditMatch', () => {
   it('maps ASCII quotes to alternating curly pairs', () => {

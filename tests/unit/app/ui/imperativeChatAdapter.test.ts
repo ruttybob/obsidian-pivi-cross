@@ -5,12 +5,12 @@ import {
   NOOP_CHAT_PERF_RECORDER,
   type ChatPerfRecorder,
   type ChatTabSnapshotItem,
-} from '@pivi/pivi-react/store';
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+} from '@yapi/yapi-react/store';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 import { Component, type Editor, type MarkdownView } from 'obsidian';
 
-import type { PiviChatCompositionHost } from '@/app/hostContracts';
+import type { YapiChatCompositionHost } from '@/app/hostContracts';
 import { createImperativeChatAdapter } from '@/app/ui/imperativeChatAdapter';
 import {
   runDevelopmentMarkdownStream,
@@ -122,7 +122,7 @@ function createTab(overrides: Partial<TestTab> = {}): TestTab {
   return {
     id: 'tab-1',
     openSessionId: 'session-1',
-    sessionFile: '.pivi/sessions/one.jsonl',
+    sessionFile: '.yapi/sessions/one.jsonl',
     draftModel: 'draft-model',
     service: createService(),
     serviceInitialized: true,
@@ -227,7 +227,7 @@ function createHarness(options: HarnessOptions = {}) {
     persistTabManagerState: jest.fn(),
   };
   const adapter = createImperativeChatAdapter({
-    plugin: plugin as unknown as PiviChatCompositionHost,
+    plugin: plugin as unknown as YapiChatCompositionHost,
     view: {} as never,
     getContainerEl: () => ({ ownerDocument }) as HTMLElement,
     chatIcon: null,
@@ -410,7 +410,7 @@ describe('imperative chat semantic view handle', () => {
       .resolves.toMatchObject({ bytes: 100 * 1024, chunks: 64 });
 
     expect(manager.createTab).toHaveBeenCalledTimes(1);
-    expect(synthetic.id).toMatch(/^pivi-development-markdown-stream-/);
+    expect(synthetic.id).toMatch(/^yapi-development-markdown-stream-/);
     expect(synthetic.sessionFile).toBeNull();
     expect(syntheticState.messages).toEqual([]);
     expect(manager.switchToTab).toHaveBeenLastCalledWith('original');
@@ -618,7 +618,7 @@ describe('imperative chat semantic view handle', () => {
     harness.manager.createTab.mockImplementation(async (_openSessionId, tabId, options) => {
       expect(options).toMatchObject({
         sessionFile: expect.stringMatching(
-          /^\.pivi\/sessions\/perf-isolated-indexed-paging-\d+\.jsonl$/,
+          /^\.yapi\/sessions\/perf-isolated-indexed-paging-\d+\.jsonl$/,
         ),
       });
       const messages = Array.from({ length: 100 }, (_, index) => ({
@@ -722,7 +722,7 @@ describe('imperative chat semantic view handle', () => {
     harness.manager.createTab.mockImplementation(async (_openSessionId, tabId, options) => {
       expect(options).toMatchObject({
         sessionFile: expect.stringMatching(
-          /^\.pivi\/sessions\/perf-isolated-subagents-\d+\.jsonl$/,
+          /^\.yapi\/sessions\/perf-isolated-subagents-\d+\.jsonl$/,
         ),
       });
       const toolCalls = Array.from({ length: 20 }, (_, index) => ({
@@ -764,7 +764,7 @@ describe('imperative chat semantic view handle', () => {
     harness.manager.closeTab.mockImplementation(async (tabId: string) => tabs.delete(tabId));
 
     const afterRender = jest.fn(async () => {
-      expect(activeTabId).toMatch(/^pivi-development-subagents-/);
+      expect(activeTabId).toMatch(/^yapi-development-subagents-/);
       expect(tabs.size).toBe(2);
     });
     await expect(harness.handle.development?.run20SubagentsWorkload({ afterRender }))
@@ -793,7 +793,7 @@ describe('imperative chat semantic view handle', () => {
 
   it('restores non-empty persisted bindings and creates a blank tab otherwise', async () => {
     const persistedState: PersistedTabManagerState = {
-      openTabs: [{ tabId: 'restored-tab', sessionFile: '.pivi/sessions/restored.jsonl' }],
+      openTabs: [{ tabId: 'restored-tab', sessionFile: '.yapi/sessions/restored.jsonl' }],
       activeTabId: 'restored-tab',
     };
     const restored = createHarness({ persistedState });
@@ -1111,13 +1111,13 @@ describe('imperative chat semantic view handle', () => {
       createTab({
         id: 'duplicate',
         openSessionId: 'session-2',
-        sessionFile: '.pivi/sessions/one.jsonl',
+        sessionFile: '.yapi/sessions/one.jsonl',
       }),
       createTab({ id: 'unbound', openSessionId: null, sessionFile: null }),
     ]);
 
     expect(handle.maintenance.getBoundSessionFiles()).toEqual([
-      '.pivi/sessions/one.jsonl',
+      '.yapi/sessions/one.jsonl',
     ]);
     expect(handle.maintenance.hasSession('session-2')).toBe(true);
     expect(handle.maintenance.hasSession('missing')).toBe(false);
@@ -1178,7 +1178,7 @@ describe('imperative chat semantic view handle', () => {
     });
     expect(cancelStreaming).toHaveBeenCalledTimes(1);
     expect(modelService.syncSession).toHaveBeenCalledWith(
-      { sessionFile: '.pivi/sessions/one.jsonl' },
+      { sessionFile: '.yapi/sessions/one.jsonl' },
       externalContexts,
     );
     expect(modelService.resetSession).toHaveBeenCalledTimes(1);
@@ -1211,7 +1211,7 @@ describe('imperative chat semantic view handle', () => {
       failedTabs: 1,
     });
     expect(warn).toHaveBeenCalledWith(
-      '[Pivi:ImperativeChatAdapter] tab failed to restart after environment change',
+      '[Yapi:ImperativeChatAdapter] tab failed to restart after environment change',
       expect.any(Error),
     );
     expect(skipped.syncSession).not.toHaveBeenCalled();

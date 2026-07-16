@@ -8,12 +8,12 @@ describe('Pi session append compatibility', () => {
       import path from 'node:path';
       import { SessionManager } from '@earendil-works/pi-coding-agent';
 
-      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-pi-append-compat-'));
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-pi-append-compat-'));
       try {
-        const sessionDir = path.join(root, '.pivi', 'sessions');
+        const sessionDir = path.join(root, '.yapi', 'sessions');
         const manager = SessionManager.create(root, sessionDir, { id: 'append-compat' });
 
-        // Pivi eagerly persists the header, then leaves all typed entries to
+        // Yapi eagerly persists the header, then leaves all typed entries to
         // Pi's public append methods. These two fields are the existing narrow
         // adapter seam required to opt out of Pi's deferred first flush.
         manager._rewriteFile();
@@ -41,7 +41,7 @@ describe('Pi session append compatibility', () => {
           timestamp: 1,
         });
         assertAppend(userId);
-        assertAppend(manager.appendCustomEntry('pivi_session_meta', {
+        assertAppend(manager.appendCustomEntry('yapi_session_meta', {
           title: 'Append compatibility',
           createdAt: 1,
         }));
@@ -63,7 +63,7 @@ describe('Pi session append compatibility', () => {
           timestamp: 2,
         }));
         const checkpoint = {
-          piviCheckpoint: {
+          yapiCheckpoint: {
             schemaVersion: 1,
             continuationSummary: 'Continue from the recent request.',
             goal: 'Verify compatibility',

@@ -1,0 +1,103 @@
+.yapi-thinking {
+  color: var(--yapi-host-text-accent);
+  padding-block: var(--yapi-spacing-xs);
+  padding-inline: 14px;
+  text-align: start;
+  animation: yapi-thinking-pulse 1.5s ease-in-out infinite;
+}
+
+.yapi-thinking.yapi-thinking--compact {
+  color: var(--yapi-compact);
+}
+
+.yapi-thinking-hint {
+  color: var(--yapi-host-text-muted);
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+
+.yapi-thinking-block {
+  margin: 2px 0 4px;
+  border-inline-start: 1px solid var(--yapi-border-subtle);
+  border-radius: var(--yapi-radius-sm);
+  background: var(--yapi-surface-subtle);
+  overflow: hidden;
+}
+
+.yapi-text-block+.yapi-thinking-block {
+  margin-top: var(--yapi-spacing-xs);
+}
+
+.yapi-thinking-block+.yapi-text-block {
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-thinking-block+.yapi-tool-call {
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-tool-call+.yapi-thinking-block {
+  margin-top: 2px;
+}
+
+.yapi-thinking-header {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  padding: 3px 8px;
+  cursor: pointer;
+  overflow: hidden;
+  list-style: none;
+}
+
+.yapi-thinking-header::-webkit-details-marker {
+  display: none;
+}
+
+.yapi-thinking-header:hover {
+  background: rgba(var(--yapi-host-mono-rgb-100), 0.03);
+}
+
+.yapi-thinking-label {
+  flex: 1;
+  font-size: var(--yapi-text-base);
+  font-weight: 500;
+  color: var(--yapi-host-text-accent);
+}
+
+/* Thinking block content - tree-branch style */
+.yapi-thinking-content {
+  padding: 4px 0;
+  padding-inline-start: var(--yapi-spacing-xl);
+  font-size: var(--yapi-text-base);
+  line-height: 1.5;
+  color: var(--yapi-host-text-muted);
+  max-height: 400px;
+  overflow-y: auto;
+  border-inline-start: 2px solid var(--yapi-host-border);
+  margin-inline-start: 14px;
+  margin-inline-end: var(--yapi-spacing-sm);
+  margin-block-end: 6px;
+}
+
+.yapi-thinking-content p {
+  margin: 0 0 8px 0;
+}
+
+.yapi-thinking-content p:last-child {
+  margin-bottom: 0;
+}
+
+.yapi-thinking-content .yapi-code-wrapper {
+  margin: 8px 0;
+}
+
+.yapi-thinking-content .yapi-code-wrapper pre {
+  padding: 8px 10px;
+  border-radius: var(--yapi-radius-xs);
+}
+
+.yapi-thinking-content code {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+}

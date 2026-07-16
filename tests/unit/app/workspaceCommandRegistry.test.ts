@@ -1,10 +1,10 @@
-const mockEnsurePiviViewOpen = jest.fn();
+const mockEnsureYapiViewOpen = jest.fn();
 
-jest.mock('@/app/piviViewActivation', () => ({
-  ensurePiviViewOpen: mockEnsurePiviViewOpen,
+jest.mock('@/app/yapiViewActivation', () => ({
+  ensureYapiViewOpen: mockEnsureYapiViewOpen,
 }));
 
-import type { SlashCatalogEntry } from '@pivi/pivi-agent-core/skills/commands/slashCommandEntry';
+import type { SlashCatalogEntry } from '@yapi/yapi-agent-core/skills/commands/slashCommandEntry';
 import {
   getWorkspaceCommandFullId,
   WorkspaceCommandRegistry,
@@ -29,7 +29,7 @@ const entry: SlashCatalogEntry = {
 
 function createHarness(selectedText = 'Selected text') {
   const sendWorkspaceCommandInNewSession = jest.fn(async () => true);
-  mockEnsurePiviViewOpen.mockResolvedValue({
+  mockEnsureYapiViewOpen.mockResolvedValue({
     getChatHandle: () => ({ commands: { sendWorkspaceCommandInNewSession } }),
   });
   const ownerWindow = {
@@ -48,7 +48,7 @@ function createHarness(selectedText = 'Selected text') {
       workspace: { getActiveViewOfType: () => markdownView },
       vault: { read: jest.fn(async () => 'Whole note') },
     },
-    manifest: { id: 'pivi' },
+    manifest: { id: 'yapi' },
     settings: { chatViewPlacement: 'right-sidebar' as const },
     addCommand: jest.fn((command) => { commands.push(command); return command; }),
     removeCommand: jest.fn(),
@@ -76,7 +76,7 @@ describe('WorkspaceCommandRegistry', () => {
     });
     expect(commands[1]?.id).toBe(commands[0]?.id);
     expect(host.removeCommand).toHaveBeenCalledWith(
-      getWorkspaceCommandFullId('pivi', 'stable-key'),
+      getWorkspaceCommandFullId('yapi', 'stable-key'),
     );
   });
 

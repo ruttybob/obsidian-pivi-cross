@@ -86,7 +86,7 @@ ${rows(archived)}
 }
 
 function createFixture() {
-  const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-specs-'));
+  const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-specs-'));
   mkdirSync(join(fixtureRoot, 'specs/archive'), { recursive: true });
   writeFileSync(join(fixtureRoot, 'specs/000-template.md'), templateContents());
   writeFileSync(join(fixtureRoot, 'specs/README.md'), indexContents());

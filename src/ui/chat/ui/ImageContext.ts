@@ -1,4 +1,4 @@
-import type { ImageAttachment, ImageMediaType } from '@pivi/pivi-agent-core/foundation';
+import type { ImageAttachment, ImageMediaType } from '@yapi/yapi-agent-core/foundation';
 import { Notice } from 'obsidian';
 import * as path from 'path';
 
@@ -42,8 +42,8 @@ export class ImageContextManager {
     this.callbacks = callbacks;
 
     // Create image preview in previewContainerEl, before file indicator if present
-    const fileIndicator = this.previewContainerEl.querySelector('.pivi-file-indicator');
-    this.imagePreviewEl = this.previewContainerEl.createDiv({ cls: 'pivi-image-preview' });
+    const fileIndicator = this.previewContainerEl.querySelector('.yapi-file-indicator');
+    this.imagePreviewEl = this.previewContainerEl.createDiv({ cls: 'yapi-image-preview' });
     if (fileIndicator && fileIndicator.parentElement === this.previewContainerEl) {
       this.previewContainerEl.insertBefore(this.imagePreviewEl, fileIndicator);
     }
@@ -84,11 +84,11 @@ export class ImageContextManager {
   }
 
   private setupDragAndDrop() {
-    const inputWrapper = this.containerEl.querySelector('.pivi-input-wrapper') as HTMLElement;
+    const inputWrapper = this.containerEl.querySelector('.yapi-input-wrapper') as HTMLElement;
     if (!inputWrapper) return;
 
-    this.dropOverlay = inputWrapper.createDiv({ cls: 'pivi-drop-overlay' });
-    const dropContent = this.dropOverlay.createDiv({ cls: 'pivi-drop-content' });
+    this.dropOverlay = inputWrapper.createDiv({ cls: 'yapi-drop-overlay' });
+    const dropContent = this.dropOverlay.createDiv({ cls: 'yapi-drop-content' });
     const ownerDocument = inputWrapper.ownerDocument ?? window.document;
     const svg = ownerDocument.win.createSvg('svg');
     svg.setAttribute('viewBox', '0 0 24 24');
@@ -140,7 +140,7 @@ export class ImageContextManager {
     e.preventDefault();
     e.stopPropagation();
 
-    const inputWrapper = this.containerEl.querySelector('.pivi-input-wrapper');
+    const inputWrapper = this.containerEl.querySelector('.yapi-input-wrapper');
     if (!inputWrapper) {
       this.dropOverlay?.removeClass('visible');
       return;
@@ -258,13 +258,13 @@ export class ImageContextManager {
     this.imagePreviewEl.empty();
 
     if (this.attachedImages.size === 0) {
-      this.imagePreviewEl.removeClass('pivi-visible-flex');
-      this.imagePreviewEl.addClass('pivi-hidden');
+      this.imagePreviewEl.removeClass('yapi-visible-flex');
+      this.imagePreviewEl.addClass('yapi-hidden');
       return;
     }
 
-    this.imagePreviewEl.addClass('pivi-visible-flex');
-    this.imagePreviewEl.removeClass('pivi-hidden');
+    this.imagePreviewEl.addClass('yapi-visible-flex');
+    this.imagePreviewEl.removeClass('yapi-hidden');
 
     for (const [id, image] of this.attachedImages) {
       this.renderImagePreview(id, image);
@@ -272,9 +272,9 @@ export class ImageContextManager {
   }
 
   private renderImagePreview(id: string, image: ImageAttachment) {
-    const previewEl = this.imagePreviewEl.createDiv({ cls: 'pivi-image-chip' });
+    const previewEl = this.imagePreviewEl.createDiv({ cls: 'yapi-image-chip' });
 
-    const thumbEl = previewEl.createDiv({ cls: 'pivi-image-thumb' });
+    const thumbEl = previewEl.createDiv({ cls: 'yapi-image-thumb' });
     thumbEl.createEl('img', {
       attr: {
         src: `data:${image.mediaType};base64,${image.data}`,
@@ -282,15 +282,15 @@ export class ImageContextManager {
       },
     });
 
-    const infoEl = previewEl.createDiv({ cls: 'pivi-image-info' });
-    const nameEl = infoEl.createSpan({ cls: 'pivi-image-name' });
+    const infoEl = previewEl.createDiv({ cls: 'yapi-image-info' });
+    const nameEl = infoEl.createSpan({ cls: 'yapi-image-name' });
     nameEl.setText(this.truncateName(image.name, 20));
     nameEl.setAttribute('title', image.name);
 
-    const sizeEl = infoEl.createSpan({ cls: 'pivi-image-size' });
+    const sizeEl = infoEl.createSpan({ cls: 'yapi-image-size' });
     sizeEl.setText(this.formatSize(image.size));
 
-    const removeEl = previewEl.createSpan({ cls: 'pivi-image-remove' });
+    const removeEl = previewEl.createSpan({ cls: 'yapi-image-remove' });
     removeEl.setText('\u00D7');
     removeEl.setAttribute('aria-label', t('chat.image.remove'));
 
@@ -308,8 +308,8 @@ export class ImageContextManager {
 
   private showFullImage(image: ImageAttachment) {
     const ownerDocument = this.containerEl.ownerDocument ?? window.document;
-    const overlay = ownerDocument.body.createDiv({ cls: 'pivi-image-modal-overlay' });
-    const modal = overlay.createDiv({ cls: 'pivi-image-modal' });
+    const overlay = ownerDocument.body.createDiv({ cls: 'yapi-image-modal-overlay' });
+    const modal = overlay.createDiv({ cls: 'yapi-image-modal' });
 
     modal.createEl('img', {
       attr: {
@@ -318,7 +318,7 @@ export class ImageContextManager {
       },
     });
 
-    const closeBtn = modal.createDiv({ cls: 'pivi-image-modal-close' });
+    const closeBtn = modal.createDiv({ cls: 'yapi-image-modal-close' });
     closeBtn.setText('\u00D7');
 
     const handleEsc = (e: KeyboardEvent) => {

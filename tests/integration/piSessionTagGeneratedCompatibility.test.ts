@@ -1,16 +1,16 @@
 import { spawnSync } from 'node:child_process';
 
-describe('Pivi 0.7.0 tag-generated session compatibility', () => {
+describe('Yapi 0.7.0 tag-generated session compatibility', () => {
   it('migrates device-local paths and hydrates the frozen writer output idempotently', () => {
     const script = String.raw`
       import { createHash } from 'node:crypto';
       import fs from 'node:fs';
       import os from 'node:os';
       import path from 'node:path';
-      import { PiSessionStore } from '@pivi/pivi-agent-core/engine/pi/session/piSessionStore';
-      import { readSessionJsonlIndex } from '@pivi/pivi-agent-core/engine/pi/session/sessionJsonlIndex';
-      import { OpenSessionManager } from '@pivi/pivi-agent-core/session/openSessionManager';
-      import { getPiviSessionDir, toVaultRelativePath } from '@pivi/pivi-agent-core/session/sessionPaths';
+      import { PiSessionStore } from '@yapi/yapi-agent-core/engine/pi/session/piSessionStore';
+      import { readSessionJsonlIndex } from '@yapi/yapi-agent-core/engine/pi/session/sessionJsonlIndex';
+      import { OpenSessionManager } from '@yapi/yapi-agent-core/session/openSessionManager';
+      import { getYapiSessionDir, toVaultRelativePath } from '@yapi/yapi-agent-core/session/sessionPaths';
 
       const fixtureSha256 = '3c191e3440fc1a95859ddb6a07687a74a2b5cc383062c0fab3b0c53e357ef67b';
       const source = path.join(
@@ -18,10 +18,10 @@ describe('Pivi 0.7.0 tag-generated session compatibility', () => {
         'tests',
         'fixtures',
         'sessions',
-        'tag-generated-pivi-0.7.0-v3.jsonl',
+        'tag-generated-yapi-0.7.0-v3.jsonl',
       );
-      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-0.7.0-head-open-'));
-      const sessionDir = getPiviSessionDir(root);
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-0.7.0-head-open-'));
+      const sessionDir = getYapiSessionDir(root);
       const target = path.join(sessionDir, path.basename(source));
       fs.mkdirSync(sessionDir, { recursive: true });
       fs.copyFileSync(source, target);
@@ -98,12 +98,12 @@ describe('Pivi 0.7.0 tag-generated session compatibility', () => {
         };
         const expected = {
           sessionId: '01907a90-5e00-7424-8909-0a4242424242',
-          title: 'Pivi 0.7.0 tag-generated fixture',
+          title: 'Yapi 0.7.0 tag-generated fixture',
           roles: ['user', 'assistant'],
-          userContent: 'Hello from the Pivi 0.7.0 writer.',
+          userContent: 'Hello from the Yapi 0.7.0 writer.',
           assistantContent: 'Restored answer from the tag-generated fixture.',
-          sessionExternalContextPaths: ['/synthetic/pivi-0.7.0/session-context'],
-          turnExternalContextPaths: ['/synthetic/pivi-0.7.0/turn-context'],
+          sessionExternalContextPaths: ['/synthetic/yapi-0.7.0/session-context'],
+          turnExternalContextPaths: ['/synthetic/yapi-0.7.0/turn-context'],
           enabledMcpServers: ['synthetic-mcp'],
         };
         if (JSON.stringify(restored) !== JSON.stringify(expected)) {

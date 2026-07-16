@@ -6,7 +6,7 @@
 
 `src/ui/chat/rendering/` contains the imperative owner-realm adapters that React cannot express directly: Obsidian Markdown, rich tool bodies, write/edit diffs, stored nested subagent bodies, and ask-user fallback content.
 
-React components under `packages/pivi-react/src/chat/messages/` own message shells, block ordering, thinking, grouping, actions, duration, and live updates. Stream/runtime code writes serializable `ChatMessage` state only; it must never call or retain adapters from this directory.
+React components under `packages/yapi-react/src/chat/messages/` own message shells, block ordering, thinking, grouping, actions, duration, and live updates. Stream/runtime code writes serializable `ChatMessage` state only; it must never call or retain adapters from this directory.
 
 ```mermaid
 flowchart LR
@@ -30,7 +30,7 @@ Each adapter exclusively owns the children of one empty React-provided container
 | `src/ui/chat/rendering/messageRendererMarkdown.ts` | Obsidian Markdown rendering, first-turn auto-note badge restoration, input-derived mention badges, file-link processing, code wrappers, math, and owner-window-aware Mermaid controls. Expanded `attachedFilePaths` are runtime context and must never be enumerated as UI badges. |
 | `src/ui/chat/rendering/ToolCallRenderer.ts`, `toolCallExpandedDispatcher.ts`, `toolCall*Expanded.ts` | Rich tool-body adapter registry used inside React-owned tool slots. |
 | `src/ui/chat/rendering/WriteEditRenderer.ts`, `DiffRenderer.ts` | Content-only write/edit renderer for the complete upstream diff-line snapshot. The surrounding generic tool shell owns the sole header/collapse boundary and viewport bound. |
-| `src/ui/chat/rendering/SubagentRenderer.ts`, `AsyncSubagentRenderer.ts`, `subagentRendererShared.ts` | Stored nested subagent body adapters with stale-render protection. `createSubagentShell()` in `subagentRendererShared.ts` builds the shared `pivi-subagent-list pivi-subagent-card` header/content shell for sync and async renderers. Runtime managers must never call them. |
+| `src/ui/chat/rendering/SubagentRenderer.ts`, `AsyncSubagentRenderer.ts`, `subagentRendererShared.ts` | Stored nested subagent body adapters with stale-render protection. `createSubagentShell()` in `subagentRendererShared.ts` builds the shared `yapi-subagent-list yapi-subagent-card` header/content shell for sync and async renderers. Runtime managers must never call them. |
 | `src/app/ui/createSubagentContentAdapter.ts` | App-owned React message-content bridge that mounts and incrementally updates stored subagent adapters. |
 | `src/app/ui/createStreamingMarkdownContentAdapter.ts` | App-owned stable Markdown bridge with rendered sealed segments, an escaped live tail, rewrite rebuilding, and terminal fidelity rendering. |
 | `src/ui/chat/rendering/InlineAskUserQuestion.ts`, `inlineAskUserQuestion*.ts` | Interactive ask-user adapter where native input/keyboard behavior remains imperative. |
@@ -39,33 +39,33 @@ Each adapter exclusively owns the children of one empty React-provided container
 ## Patterns and constraints
 
 - Keep this directory presentation-only. Do not execute tools, mutate vault files, create chat services, interpret provider events, or persist sessions here.
-- Consume host-neutral models and helpers from non-engine `@pivi/pivi-agent-core/*` subpaths. Follow the `src/ui/AGENTS.md` prohibition on engine, raw Pi SDK, host-adapter, concrete-tool, and workspace implementation imports.
+- Consume host-neutral models and helpers from non-engine `@yapi/yapi-agent-core/*` subpaths. Follow the `src/ui/AGENTS.md` prohibition on engine, raw Pi SDK, host-adapter, concrete-tool, and workspace implementation imports.
 - Treat `ChatMessage`, `ContentBlock`, `ToolCallInfo`, `ToolDiffData`, `SubagentInfo`, and todo display models as upstream contracts. Normalize or parse only display-specific variants; do not recreate runtime policy.
 - Render from durable message state. Stored subagent renderers are owner-realm adapters only; runtime managers and stream coordination must not create, retain, or update their DOM state.
 - A mounted stored subagent must be updated through `updateStoredSubagent`; rebuilding it for every stream chunk discards expansion state and multiplies Markdown/tool rendering. Running text is retained in state and rendered as Markdown only when the subagent reaches a terminal result.
-- Every subagent uses the same individual card path regardless of sibling count. The inner shell surface is `.pivi-subagent-card` on the shared `pivi-subagent-list` wrapper. Visible terminal results must strip fenced `pivi-agent-report` protocol blocks without mutating the durable result. Animate the profile icon and bottom light bar only in the canonical `running` state; queued, waiting, and terminal states are static.
+- Every subagent uses the same individual card path regardless of sibling count. The inner shell surface is `.yapi-subagent-card` on the shared `yapi-subagent-list` wrapper. Visible terminal results must strip fenced `yapi-agent-report` protocol blocks without mutating the durable result. Animate the profile icon and bottom light bar only in the canonical `running` state; queued, waiting, and terminal states are static.
 - A mounted rich tool body must receive tool-entity changes through its adapter `update` path. Do not remount it for status/input/result patches; remount only when React supplies a new stable tool generation.
-- Extend tool bodies through `toolCallExpandedDispatcher.ts`; block classification, grouping, ordering, labels, and shell state belong to `@pivi/pivi-react`.
+- Extend tool bodies through `toolCallExpandedDispatcher.ts`; block classification, grouping, ordering, labels, and shell state belong to `@yapi/yapi-react`.
 - Completed Markdown Read results use the injected Obsidian Markdown renderer with the resolved vault path as `sourcePath`; generic/external reads render Markdown only for explicit Markdown paths. Render the complete snapshot result only after expansion.
 - Markdown Structure/Outline keeps JSON as its tool protocol but renders a YAML-style heading list in the UI. Malformed protocol results fall back to complete lazy raw text.
 - Write/edit adapters render content only. Diff stats live in the generic tool header, and no adapter may create a nested write/edit header or collapsible shell.
 - Write/edit, stored nested subagents, and ask-user interaction remain isolated adapters; never route ordinary React-renderable content through them.
-- Use `setupCollapsible()` rather than ad hoc toggles. It owns keyboard activation, `aria-expanded`, chevrons, `.expanded`, and `.pivi-hidden`. React transcript tools and step groups keep their own button-based disclosure in `ToolCallView`; do not merge that runtime with imperative `setupCollapsible()`—the split is intentional (React owns top-level transcript tools, imperative owns adapter-mounted subagent bodies and stored tool rows).
+- Use `setupCollapsible()` rather than ad hoc toggles. It owns keyboard activation, `aria-expanded`, chevrons, `.expanded`, and `.yapi-hidden`. React transcript tools and step groups keep their own button-based disclosure in `ToolCallView`; do not merge that runtime with imperative `setupCollapsible()`—the split is intentional (React owns top-level transcript tools, imperative owns adapter-mounted subagent bodies and stored tool rows).
 - Build DOM with Obsidian helpers and `textContent`/`setText`; tool results and agent output are untrusted display data.
 - All plugin chrome and ARIA copy must use `t()` and receive matching locale updates. Raw tool identifiers, commands, paths, results, and agent content may remain untranslated.
-- Keep CSS class contracts stable; styling is owned by `packages/pivi-react/styles/`, not this directory.
-- Normalize host-rendered task-list, code-copy, and Mermaid nodes onto stable `.pivi-*` presentation classes before package CSS consumes them. Host classes may be queried inside this adapter, but must not become selectors in `packages/pivi-react/styles/`.
+- Keep CSS class contracts stable; styling is owned by `packages/yapi-react/styles/`, not this directory.
+- Normalize host-rendered task-list, code-copy, and Mermaid nodes onto stable `.yapi-*` presentation classes before package CSS consumes them. Host classes may be queried inside this adapter, but must not become selectors in `packages/yapi-react/styles/`.
 - For element-bound document/window work, including animation-frame scheduling for scrolling, use `getActiveDocument()` and `getActiveWindow()` so pop-out windows remain functional.
 - Preserve accessibility roles, labels, status text, keyboard controls, and decorative `aria-hidden` attributes when changing headers or icons.
 - Bound large output through compact collapsed summaries, first-open lazy construction, viewport-capped scroll owners (one third for top-level tools/steps, two thirds for subagents), and constant-node raw text. Expanded presentation must not discard available lines, fields, paths, tasks, queries, Markdown, or diff context; preserve only truncation already imposed by the source/tool contract.
 - Imperative nested-subagent step groups mirror the React header contract: count plus unique translated tool names in first-use order, followed by the shared slash-separated per-status counts, with input/result details confined to expanded rows.
-- Imperative Agent headers mirror the React `pivi-activity-*` layout and canonical status mapping while retaining their own DOM ownership. They may recompute elapsed text on lifecycle updates but must not start a recurring timer from legacy render helpers that return only bare DOM.
+- Imperative Agent headers mirror the React `yapi-activity-*` layout and canonical status mapping while retaining their own DOM ownership. They may recompute elapsed text on lifecycle updates but must not start a recurring timer from legacy render helpers that return only bare DOM.
 
 ## Gotchas
 
 - Tool icons are a cross-package contract. `getToolIcon()` may return `MCP_ICON_MARKER`, which must go through `appendMcpIcon()` rather than Obsidian `setIcon()`. Do not duplicate icon maps locally.
-- Tool semantics are single-sourced in `@pivi/pivi-agent-core/tools/toolPresentation`: add or rename a tool there once for kind, icon, translation keys, visibility/grouping, and summary. `toolPresentationI18n.ts` only translates title/step tokens and composes ARIA text; `obsidianToolResultPresentation.ts` only decides whether structured Obsidian results use the compact imperative body. Expanded-body capability remains in the dispatcher.
-- Obsidian tool display names are keyed by canonical constants from `@pivi/pivi-agent-core/tools/obsidianToolNames`; unknown tools intentionally fall back to their raw names.
+- Tool semantics are single-sourced in `@yapi/yapi-agent-core/tools/toolPresentation`: add or rename a tool there once for kind, icon, translation keys, visibility/grouping, and summary. `toolPresentationI18n.ts` only translates title/step tokens and composes ARIA text; `obsidianToolResultPresentation.ts` only decides whether structured Obsidian results use the compact imperative body. Expanded-body capability remains in the dispatcher.
+- Obsidian tool display names are keyed by canonical constants from `@yapi/yapi-agent-core/tools/obsidianToolNames`; unknown tools intentionally fall back to their raw names.
 - `contentBlocks` order is authoritative, but historical/provider data can leave tool calls unreferenced. Preserve orphan rendering and ID deduplication.
 - Streaming tool input is reduced into durable `ChatMessage` entities and dispatched through `ChatProjectionStore` before rendering. React content blocks own order and status; imperative renderers must not retain stream-specific DOM maps or create duplicate tool rows.
 - Async Markdown can finish out of order. Subagent rendering uses generation tokens to discard stale completions; preserve that guard when rerendering prompt or result sections.

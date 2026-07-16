@@ -1,4 +1,4 @@
-import type { DiffLine, DiffStats } from '@pivi/pivi-agent-core/foundation/diff';
+import type { DiffLine, DiffStats } from '@yapi/yapi-agent-core/foundation/diff';
 
 import { t } from '@/app/i18n';
 
@@ -23,22 +23,22 @@ export function renderDiffContent(
   containerEl.empty();
   if (!diffLines.some(line => line.type !== 'equal')) {
     // No changes
-    const noChanges = containerEl.createDiv({ cls: 'pivi-diff-no-changes' });
+    const noChanges = containerEl.createDiv({ cls: 'yapi-diff-no-changes' });
     noChanges.setText(t('chat.stream.noChanges'));
     return;
   }
 
-  const hunkEl = containerEl.createDiv({ cls: 'pivi-diff-hunk' });
+  const hunkEl = containerEl.createDiv({ cls: 'yapi-diff-hunk' });
   for (const line of diffLines) {
-    const lineEl = hunkEl.createDiv({ cls: `pivi-diff-line pivi-diff-${line.type}` });
+    const lineEl = hunkEl.createDiv({ cls: `yapi-diff-line yapi-diff-${line.type}` });
 
     // Line prefix
     const prefix = line.type === 'insert' ? '+' : line.type === 'delete' ? '-' : ' ';
-    const prefixEl = lineEl.createSpan({ cls: 'pivi-diff-prefix' });
+    const prefixEl = lineEl.createSpan({ cls: 'yapi-diff-prefix' });
     prefixEl.setText(prefix);
 
     // Line content
-    const contentEl = lineEl.createSpan({ cls: 'pivi-diff-text' });
+    const contentEl = lineEl.createSpan({ cls: 'yapi-diff-text' });
     contentEl.setText(line.text || ' '); // Show space for empty lines
   }
 }

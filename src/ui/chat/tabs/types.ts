@@ -1,4 +1,4 @@
-import type { PiChatService, TitleGenerationService } from '@pivi/pivi-agent-core/runtime';
+import type { PiChatService, TitleGenerationService } from '@yapi/yapi-agent-core/runtime';
 import type { Component } from 'obsidian';
 
 import type { SlashCommandDropdown } from '@/ui/shared/components/SlashCommandDropdown';
@@ -19,9 +19,9 @@ import type { ImageContextManager } from '../ui/ImageContext';
 import type { InlineContextManager } from '../ui/InlineContext';
 import type { RichChatInput } from '../ui/RichChatInput';
 /**
- * Minimal interface for the PiviView methods used by TabManager and Tab.
+ * Minimal interface for the YapiView methods used by TabManager and Tab.
  * Extends Component for Obsidian integration (event handling, cleanup).
- * Avoids circular dependency by not importing PiviView directly.
+ * Avoids circular dependency by not importing YapiView directly.
  */
 export type TabManagerViewHost = Component;
 

@@ -1,18 +1,18 @@
-import { credentialToApiKey, getPiAiCredentialSecretId } from '@pivi/pivi-agent-core/auth/piProviderCredentials';
+import { credentialToApiKey, getPiAiCredentialSecretId } from '@yapi/yapi-agent-core/auth/piProviderCredentials';
 import {
   createObsidianCredentialStore,
   migratePiProviderCredentialsToKeychain,
   ObsidianCredentialStore,
-} from '@pivi/pivi-agent-core/engine/pi/piProviderCredentialStore';
+} from '@yapi/yapi-agent-core/engine/pi/piProviderCredentialStore';
 import {
   getProviderCredentialSecret,
   getProviderCredentialSecretId,
   isProviderDisabled,
   isSecretStorageAvailable,
   parseProviderCredentialSecretId,
-} from '@pivi/pivi-agent-core/auth/providerSecretStorage';
-import type { SyncSecretStore } from '@pivi/pivi-agent-core/ports';
-import { createWebSearchCredentialStore, getWebSearchCredentialSecretId } from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/auth/providerSecretStorage';
+import type { SyncSecretStore } from '@yapi/yapi-agent-core/ports';
+import { createWebSearchCredentialStore, getWebSearchCredentialSecretId } from '@yapi/yapi-agent-core/tools';
 import { SecretStorage } from 'obsidian';
 
 describe('ProviderSecretStorage', () => {
@@ -27,9 +27,9 @@ describe('ProviderSecretStorage', () => {
   }
 
   it('builds stable secret ids per provider', () => {
-    expect(getPiAiCredentialSecretId('anthropic')).toBe('pivi-anthropic-credential');
-    expect(getProviderCredentialSecretId('anthropic', 'api-key')).toBe('pivi-anthropic-api-key');
-    expect(parseProviderCredentialSecretId('pivi-openai-api-key')).toEqual({
+    expect(getPiAiCredentialSecretId('anthropic')).toBe('yapi-anthropic-credential');
+    expect(getProviderCredentialSecretId('anthropic', 'api-key')).toBe('yapi-anthropic-api-key');
+    expect(parseProviderCredentialSecretId('yapi-openai-api-key')).toEqual({
       providerId: 'openai',
       kind: 'api-key',
     });
@@ -93,7 +93,7 @@ describe('ProviderSecretStorage', () => {
 
   it('hard-migrates credential-v2 entries into unversioned credential entries', () => {
     secretStorage.setSecret(
-      'pivi-anthropic-credential-v2',
+      'yapi-anthropic-credential-v2',
       JSON.stringify({ type: 'api_key', key: 'sk-v2' }),
     );
 
@@ -101,7 +101,7 @@ describe('ProviderSecretStorage', () => {
 
     expect(synced.changed).toBe(true);
     expect(synced.addedProviders).toEqual(['anthropic']);
-    expect(secretStorage.getSecret('pivi-anthropic-credential-v2')).toBeNull();
+    expect(secretStorage.getSecret('yapi-anthropic-credential-v2')).toBeNull();
     expect(secretStorage.getSecret(getPiAiCredentialSecretId('anthropic'))).toBe(
       JSON.stringify({ type: 'api_key', key: 'sk-v2' }),
     );
@@ -201,7 +201,7 @@ describe('ProviderSecretStorage', () => {
       [canonicalId, JSON.stringify({ type: 'api_key', key: 'sk-test' })],
       [getProviderCredentialSecretId('anthropic', 'api-key'), ''],
       [getProviderCredentialSecretId('anthropic', 'oauth-token'), ''],
-      ['pivi-anthropic-credential-v2', ''],
+      ['yapi-anthropic-credential-v2', ''],
     ]);
     const writes: string[] = [];
     const store: SyncSecretStore = {
@@ -330,13 +330,13 @@ describe('ObsidianCredentialStore over SyncSecretStore', () => {
   it('does not rewrite legacy slots when writing a canonical credential', () => {
     const secretStorage = createInMemorySyncSecretStore();
     secretStorage.setSecret(getProviderCredentialSecretId('anthropic', 'api-key'), 'sk-legacy-slot');
-    secretStorage.setSecret('pivi-anthropic-credential-v2', JSON.stringify({ type: 'api_key', key: 'sk-v2' }));
+    secretStorage.setSecret('yapi-anthropic-credential-v2', JSON.stringify({ type: 'api_key', key: 'sk-v2' }));
 
     const store = new ObsidianCredentialStore(secretStorage);
     store.writeSync('anthropic', { type: 'api_key', key: 'sk-canonical' });
 
     expect(secretStorage.getSecret(getProviderCredentialSecretId('anthropic', 'api-key'))).toBe('sk-legacy-slot');
-    expect(secretStorage.getSecret('pivi-anthropic-credential-v2')).not.toBeNull();
+    expect(secretStorage.getSecret('yapi-anthropic-credential-v2')).not.toBeNull();
     expect(store.readSync('anthropic')).toEqual({ type: 'api_key', key: 'sk-canonical' });
   });
 
@@ -394,8 +394,8 @@ describe('isSecretStorageAvailable', () => {
   it('accepts Obsidian-like sync secret stores with optional listSecrets prefix', () => {
     const store = createSyncSecretStore();
     expect(isSecretStorageAvailable(store)).toBe(true);
-    store.setSecret('pivi-openai-api-key', 'sk-test');
-    expect(store.listSecrets('pivi-')).toEqual(['pivi-openai-api-key']);
+    store.setSecret('yapi-openai-api-key', 'sk-test');
+    expect(store.listSecrets('yapi-')).toEqual(['yapi-openai-api-key']);
   });
 });
 

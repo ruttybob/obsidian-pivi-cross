@@ -51,9 +51,9 @@ The session UI path now performs true recent-first hydration. Cold open reads in
 
 Turn completion persists the produced assistant/tool sequence once, after the provider prompt resolves. A failed append is surfaced as a turn error instead of being logged while the UI appears successfully complete. On reopen, the indexed page joins each persisted `message_ui.turnRequest` to its user entry so current-note and attached-file badges, tool activity, and the final assistant response restore as one transcript turn.
 
-Session writes use the [installed Pi dependency](../package.json)'s typed append methods after a single eager header bootstrap. Prior JSONL bytes therefore remain stable during normal message, Pivi metadata, UI context, and compaction appends. Full rewrites are reserved for non-append mutations such as redo truncation and upstream format migration; those operations are index-invalidation boundaries.
+Session writes use the [installed Pi dependency](../package.json)'s typed append methods after a single eager header bootstrap. Prior JSONL bytes therefore remain stable during normal message, Yapi metadata, UI context, and compaction appends. Full rewrites are reserved for non-append mutations such as redo truncation and upstream format migration; those operations are index-invalidation boundaries.
 
-Each indexed session uses a rebuildable `<session>.jsonl.pivi-index` JSONL sidecar. It stores UTF-8 byte offsets, projection-relevant metadata such as `message_ui.targetEntryId`, and per-line SHA-256 values, plus append checkpoints containing file identity, modification time, size, bounded head/tail hashes, one-time migration state, and a checksum chain over every index line. Normal session appends extend both files; rewrite boundaries delete the sidecar so the next indexed read rebuilds it atomically from the authoritative session JSONL. Read-only consumers discard a stale/corrupt optimization and rebuild before returning data. Every cached live mutation instead validates its held source fingerprint before touching Pi state, and append postflight requires the exact expected entry IDs; held-write mismatches remain typed failures and are never hidden by a post-write automatic rebuild. Filesystem change time is neither recorded nor compared because sync/provenance metadata updates can change it without changing JSONL bytes; size, device, inode, mtime, and bounded byte hashes remain the mutation guard.
+Each indexed session uses a rebuildable `<session>.jsonl.yapi-index` JSONL sidecar. It stores UTF-8 byte offsets, projection-relevant metadata such as `message_ui.targetEntryId`, and per-line SHA-256 values, plus append checkpoints containing file identity, modification time, size, bounded head/tail hashes, one-time migration state, and a checksum chain over every index line. Normal session appends extend both files; rewrite boundaries delete the sidecar so the next indexed read rebuilds it atomically from the authoritative session JSONL. Read-only consumers discard a stale/corrupt optimization and rebuild before returning data. Every cached live mutation instead validates its held source fingerprint before touching Pi state, and append postflight requires the exact expected entry IDs; held-write mismatches remain typed failures and are never hidden by a post-write automatic rebuild. Filesystem change time is neither recorded nor compared because sync/provenance metadata updates can change it without changing JSONL bytes; size, device, inode, mtime, and bounded byte hashes remain the mutation guard.
 
 The external-context privacy migration uses the sidecar's one-time marker. A completed marker skips session-body reads on startup and lazy open. A stale/corrupt pre-existing sidecar is discarded as an optimization before the authoritative JSONL is inspected. A legacy marker validates the held source after reading, writes device-local paths before rewriting JSONL, invalidates offsets before the rewrite, and rebuilds the marker from the sanitized authoritative file. Concurrent opens share one migration attempt; source changes during migration plus cache-write, JSONL-write, and rebuild failures remain explicit.
 
@@ -83,7 +83,7 @@ A block update may remeasure its virtual row, but it should not rerender sibling
 
 One sequenced in-memory event plane now wraps whole-message publication. The store reconciles keyed entities, preserves unchanged snapshot identities, publishes only changed entities, and notifies removals. Projected rows subscribe to stable structure metadata; copy actions resolve the current full message only when invoked. Markdown, tool, and stored-subagent adapters mount once for a stable entity generation and receive subsequent snapshots through `update`.
 
-Disclosure growth stays on that virtual route. `MessageList` measures the active owner-realm messages viewport and publishes `--pivi-expanded-content-max-height` at one third of it and `--pivi-subagent-expanded-max-height` at two thirds. Expanded top-level tool and steps-group wrappers use the one-third maximum; expanded subagent cards use the two-thirds maximum (CSS fallbacks `min(320px, 33vh)` and `min(640px, 66vh)`). Each wrapper keeps `overflow: hidden` while its direct body child owns the sole internal scrollbar; the direct header is layout-fixed at the card top and never sticks to the transcript. `beginDisclosureResize` temporarily anchors the activated header while React commits, virtual-row measurement, and asynchronous Markdown settle; pointer/keyboard transcript navigation cancels that anchor before user-directed scrolling. Full snapshot-backed bodies mount only after expansion; raw long text uses a constant-node representation, and nested disclosures share their parent's scroll body. Nested titles inside the body scrollport use sticky positioning with measured offsets. Inside a subagent, the steps title sticks at `top: 0` in the content scrollport and tool titles stick below it at the measured steps height. Reaching the internal scroll end preserves disclosure state and card height; continued scrolling chains to the outer transcript so the fixed-height card moves upward as a whole.
+Disclosure growth stays on that virtual route. `MessageList` measures the active owner-realm messages viewport and publishes `--yapi-expanded-content-max-height` at one third of it and `--yapi-subagent-expanded-max-height` at two thirds. Expanded top-level tool and steps-group wrappers use the one-third maximum; expanded subagent cards use the two-thirds maximum (CSS fallbacks `min(320px, 33vh)` and `min(640px, 66vh)`). Each wrapper keeps `overflow: hidden` while its direct body child owns the sole internal scrollbar; the direct header is layout-fixed at the card top and never sticks to the transcript. `beginDisclosureResize` temporarily anchors the activated header while React commits, virtual-row measurement, and asynchronous Markdown settle; pointer/keyboard transcript navigation cancels that anchor before user-directed scrolling. Full snapshot-backed bodies mount only after expansion; raw long text uses a constant-node representation, and nested disclosures share their parent's scroll body. Nested titles inside the body scrollport use sticky positioning with measured offsets. Inside a subagent, the steps title sticks at `top: 0` in the content scrollport and tool titles stick below it at the measured steps height. Reaching the internal scroll end preserves disclosure state and card height; continued scrolling chains to the outer transcript so the fixed-height card moves upward as a whole.
 
 ### Sequenced UI event protocol
 
@@ -146,17 +146,17 @@ Deterministic tests continue to enforce commit and mount invariants. Real Obsidi
 - cold session-open and older-page load latency;
 - main-window and pop-out behavior.
 
-Use fixed scenarios for 1K/5K messages, 100KB Markdown, 20 subagents, scrolling away from the end, late background events, repeated prepend, and session switching. Record environment, Obsidian/Pivi version, window type, and scenario shape with every numerical result. Performance claims require before/after measurements.
+Use fixed scenarios for 1K/5K messages, 100KB Markdown, 20 subagents, scrolling away from the end, late background events, repeated prepend, and session switching. Record environment, Obsidian/Yapi version, window type, and scenario shape with every numerical result. Performance claims require before/after measurements.
 
 #### Real-Obsidian measurement protocol
 
-The development build exposes explicit trace lifecycle commands. Traces use schema `pivi-chat-perf-v1` and are written under `.pivi/perf-traces/`; production builds contain none of these commands or recorder wiring.
+The development build exposes explicit trace lifecycle commands. Traces use schema `yapi-chat-perf-v1` and are written under `.yapi/perf-traces/`; production builds contain none of these commands or recorder wiring.
 
 1. Generate or refresh the four fixed session files with `node scripts/generate-perf-sessions.mjs <vault>`.
-2. Start the development build, run `obsidian dev:debug on`, clear captured console output, reload Pivi, and confirm `obsidian dev:errors` is clean.
-3. Put one stable scenario name in `.pivi/perf-scenario.txt`. Run `Pivi: Debug: start chat performance trace`, perform exactly one scenario, optionally run the manual heap-sample command after the workload, then run `Pivi: Debug: stop and export chat performance trace`.
-4. Record Obsidian and Pivi versions, the Pivi commit/worktree, window type, fixture shape, workload repetitions, trace filename, and any manual timing boundary. Do not compare full trace duration when it includes CLI or operator dwell; use event-to-commit/paint, render, row, DOM, long-task, heap, and anchor events for numerical comparisons.
-5. After development-only runs, restore and deploy the production bundle with `npm run build`, run `obsidian plugin:reload id=pivi`, verify the debug command IDs/markers are absent from `main.js`, and confirm `obsidian dev:errors` is clean.
+2. Start the development build, run `obsidian dev:debug on`, clear captured console output, reload Yapi, and confirm `obsidian dev:errors` is clean.
+3. Put one stable scenario name in `.yapi/perf-scenario.txt`. Run `Yapi: Debug: start chat performance trace`, perform exactly one scenario, optionally run the manual heap-sample command after the workload, then run `Yapi: Debug: stop and export chat performance trace`.
+4. Record Obsidian and Yapi versions, the Yapi commit/worktree, window type, fixture shape, workload repetitions, trace filename, and any manual timing boundary. Do not compare full trace duration when it includes CLI or operator dwell; use event-to-commit/paint, render, row, DOM, long-task, heap, and anchor events for numerical comparisons.
+5. After development-only runs, restore and deploy the production bundle with `npm run build`, run `obsidian plugin:reload id=yapi`, verify the debug command IDs/markers are absent from `main.js`, and confirm `obsidian dev:errors` is clean.
 
 The fixed scenario shapes are:
 
@@ -175,7 +175,7 @@ Append cost uses a filesystem-only companion benchmark so no real session is mut
 
 #### 2026-07-15 baseline
 
-Environment: Obsidian 1.13.2, Pivi 0.9.0, Darwin 25.5 arm64 on Apple M2 Pro, Node 26.5.0. This is the pre-spec-002/003/004 comparison baseline. The isolated session-switch trace was captured after the ResizeObserver animation-frame correction and retained the pre-run tab-state SHA-256 exactly.
+Environment: Obsidian 1.13.2, Yapi 0.9.0, Darwin 25.5 arm64 on Apple M2 Pro, Node 26.5.0. This is the pre-spec-002/003/004 comparison baseline. The isolated session-switch trace was captured after the ResizeObserver animation-frame correction and retained the pre-run tab-state SHA-256 exactly.
 
 | Scenario | Window | Comparable baseline result | Trace file |
 |---|---|---|---|
@@ -193,32 +193,32 @@ Heap deltas remain diagnostic rather than pass/fail evidence because garbage col
 
 #### 2026-07-16 indexed-session result
 
-Environment: Obsidian 1.13.2, Pivi 0.9.0 at `0356645c`, Darwin 25.5 arm64 on Apple M2 Pro, Node 26.5.0. Each UI scenario ran three times in the main window against the regenerated 5K fixture (5,002 JSONL lines / 1,800,428 bytes); the table reports medians. The isolated command left `.pivi/tab-manager-state.json` byte-identical on every run, kept the source fixture hash unchanged, and removed every temporary session/index after completion.
+Environment: Obsidian 1.13.2, Yapi 0.9.0 at `0356645c`, Darwin 25.5 arm64 on Apple M2 Pro, Node 26.5.0. Each UI scenario ran three times in the main window against the regenerated 5K fixture (5,002 JSONL lines / 1,800,428 bytes); the table reports medians. The isolated command left `.yapi/tab-manager-state.json` byte-identical on every run, kept the source fixture hash unchanged, and removed every temporary session/index after completion.
 
 | Scenario | Pre-spec-002 baseline | Indexed result | Evidence |
 |---|---|---|---|
 | 5K cold open | 98 ms event-to-paint; 25 rows / 541 DOM; 48 Markdown renders; 2 long tasks | 82.1 ms event-to-paint; 25 rows / 542 DOM; 34 Markdown renders / 96.4 ms; 2 long tasks, longest 489 ms. The new controlled trace-start-to-paint boundary was 741.4 ms; the old operator-driven traces did not provide a comparable start boundary. | `2026-07-15T19-27-18-395Z`, `19-27-20-945Z`, `19-27-23-493Z` indexed cold-open traces |
 | One older page | 31 rows / 700 DOM; 46 Markdown renders; 0 px drift; no long task | 25 rows / 518 DOM; 15 Markdown renders / 35.2 ms; 0 px drift; 1 long task, longest 55 ms | Matching `19-27-19-231Z`, `19-27-21-809Z`, `19-27-24-368Z` indexed older-page traces |
-| One append on 5K | Former path rewrote the complete JSONL after Pi's append | 12.933 ms rewrite median versus 0.242 ms indexed-append median (53.457×) across five 20-append trials | `pivi-session-append-benchmark-v1`, commit `0356645c`; benchmark uses fresh temporary copies and emulates the exact removed `_rewriteFile()` step |
+| One append on 5K | Former path rewrote the complete JSONL after Pi's append | 12.933 ms rewrite median versus 0.242 ms indexed-append median (53.457×) across five 20-append trials | `yapi-session-append-benchmark-v1`, commit `0356645c`; benchmark uses fresh temporary copies and emulates the exact removed `_rewriteFile()` step |
 
 The cold-open comparable event-to-paint value improved by 16.2%. The controlled start-to-paint number is retained as the reproducible boundary for future storage comparisons rather than being compared to the older operator-dwell trace duration.
 
 #### 2026-07-16 granular-subscription result
 
-Environment: Obsidian 1.13.2, Pivi 0.9.0, Darwin 25.5 arm64. The deterministic React tests are the authoritative isolation evidence because the trace schema records projection commits and host Markdown renders, not sibling component renders. Spec 003 intentionally retains whole-message ingestion, and its 100KB fixture contains one changing Markdown block, so neither the 67 projection commits nor the 65 affected-block renders should fall in this step.
+Environment: Obsidian 1.13.2, Yapi 0.9.0, Darwin 25.5 arm64. The deterministic React tests are the authoritative isolation evidence because the trace schema records projection commits and host Markdown renders, not sibling component renders. Spec 003 intentionally retains whole-message ingestion, and its 100KB fixture contains one changing Markdown block, so neither the 67 projection commits nor the 65 affected-block renders should fall in this step.
 
 | Window | Result | Evidence |
 |---|---|---|
 | Main | 67 projection commits; 65 synthetic-block Markdown renders / 450.8 ms; max 2 workload rows / 3,463 DOM nodes; 1 workload long task, 256 ms; max 18.7 ms event-to-paint | `2026-07-15T20-11-05-930Z-spec-003-granular-main.json` |
 | Pop-out | 67 projection commits; 65 synthetic-block Markdown renders / 431.3 ms; max 2 workload rows / 3,463 DOM nodes; 1 workload long task, 261 ms; max 69.8 ms event-to-paint | `2026-07-15T20-12-38-380Z-spec-003-granular-popout.json` |
 
-Both traces stayed inside the 100KB workload ceilings and identified only their expected owner window. Workload row/long-task bounds select the interval from the first synthetic-message commit through the final synthetic-block render. Restoring the prior active 5K transcript afterward raised the whole-trace row maxima to 25 in main and 20 in the pop-out, added one cleanup long task per trace, and produced 41/30 unrelated Markdown renders. Isolated-workload render counts therefore select the canonical `pivi-development-markdown-stream-assistant` block ID. These bounds distinguish workload events from cleanup and are not evidence of fewer renders inside the changing block.
+Both traces stayed inside the 100KB workload ceilings and identified only their expected owner window. Workload row/long-task bounds select the interval from the first synthetic-message commit through the final synthetic-block render. Restoring the prior active 5K transcript afterward raised the whole-trace row maxima to 25 in main and 20 in the pop-out, added one cleanup long task per trace, and produced 41/30 unrelated Markdown renders. Isolated-workload render counts therefore select the canonical `yapi-development-markdown-stream-assistant` block ID. These bounds distinguish workload events from cleanup and are not evidence of fewer renders inside the changing block.
 
 Deterministic tests separately prove that a text/thinking delta does not invoke a sibling Markdown adapter, a tool status or nested-subagent patch updates only its stored-subagent island without remounting sibling tool bodies, same-shape assistant content does not rerun row action predicates, and ResizeObserver growth remeasures only the owning virtual row.
 
 #### 2026-07-16 hidden-cadence result
 
-Environment: Obsidian 1.13.2, Pivi 0.9.0, Darwin 25.5 arm64. The same disposable 102,400-byte / 64-chunk workload used for the visible baseline ran with the target owner document reporting hidden. These are background-work proxies from the spec 001 recorder, not direct CPU-time measurements.
+Environment: Obsidian 1.13.2, Yapi 0.9.0, Darwin 25.5 arm64. The same disposable 102,400-byte / 64-chunk workload used for the visible baseline ran with the target owner document reporting hidden. These are background-work proxies from the spec 001 recorder, not direct CPU-time measurements.
 
 | Window | Hidden result | Visible comparison | Evidence |
 |---|---|---|---|
@@ -229,13 +229,13 @@ Both traces identify only the expected owner window and finish with a complete t
 
 #### 2026-07-16 isolated subagent result
 
-Environment: Obsidian 1.13.2, Pivi 0.9.0 at `8b56684`, Darwin 25.5 arm64. The isolated 20-subagent command ran three times in the main window against the fixed fixture. Each run stopped its trace before restoring the original tab, then removed the disposable tab, temporary JSONL, and index while tab persistence remained suspended.
+Environment: Obsidian 1.13.2, Yapi 0.9.0 at `8b56684`, Darwin 25.5 arm64. The isolated 20-subagent command ran three times in the main window against the fixed fixture. Each run stopped its trace before restoring the original tab, then removed the disposable tab, temporary JSONL, and index while tab persistence remained suspended.
 
 | Scenario | Pre-spec-008 baseline | Spec-008 median | Evidence |
 |---|---|---|---|
 | 20 subagents | 1 projection commit; max 2 rows / 758 DOM nodes; 4 Markdown renders; 1 long task | 1 projection commit; max 2 rows / 73 DOM nodes; 2 Markdown renders / 1.6 ms; 1 long task, longest 467 ms | `2026-07-16T04-36-47-327Z`, `04-38-00-858Z`, `04-38-38-523Z` isolated traces |
 
-Every run stayed inside the 20-subagent regression ceiling. `.pivi/tab-manager-state.json` retained the same SHA-256 before and after the three runs, no temporary session remained, and the deployed production bundle was restored with the development command absent and `obsidian dev:errors` clean. The discarded `04-30-51-653Z` trace is retained as diagnostic evidence: it stopped after cleanup and therefore mixed the original transcript's 25 rows / 34 Markdown renders into the workload boundary; the pre-cleanup hook corrected that harness error.
+Every run stayed inside the 20-subagent regression ceiling. `.yapi/tab-manager-state.json` retained the same SHA-256 before and after the three runs, no temporary session remained, and the deployed production bundle was restored with the development command absent and `obsidian dev:errors` clean. The discarded `04-30-51-653Z` trace is retained as diagnostic evidence: it stopped after cleanup and therefore mixed the original transcript's 25 rows / 34 Markdown renders into the workload boundary; the pre-cleanup hook corrected that harness error.
 
 #### Regression budgets
 
@@ -296,7 +296,7 @@ Only objective and outcome are required; failed, cancelled, and orphaned outcome
 
 ### Conservative context envelope
 
-Provider usage remains authoritative when present. Otherwise, Pivi may estimate system instructions, recent turns, selected context, tools, Agent reports, checkpoints, and reserved output using the existing content-aware estimator.
+Provider usage remains authoritative when present. Otherwise, Yapi may estimate system instructions, recent turns, selected context, tools, Agent reports, checkpoints, and reserved output using the existing content-aware estimator.
 
 The estimate does not need tokenizer-level precision. It must instead reserve enough headroom that compaction happens before the provider limit:
 
@@ -325,7 +325,7 @@ Version-1 checkpoints now preserve more than one narrative summary. The durable 
 - source entry bounds and token estimates;
 - checkpoint schema version.
 
-Each valid checkpoint is additive `details.piviCheckpoint` data on the existing Pi compaction entry. The readable summary and upstream compaction fields remain canonical for old consumers. A later checkpoint replaces live continuation state, carries forward stable decisions/artifacts, retains the original source start, and renders that merged ledger into the plain summary. Invalid or unknown structured data takes the legacy summary-only path. Frozen synthetic pre-change, mixed-chain, and v1 migration shapes exercise reopen/fork compatibility; no provenance-verifiable 0.7.0 session bytes are checked into this repository.
+Each valid checkpoint is additive `details.yapiCheckpoint` data on the existing Pi compaction entry. The readable summary and upstream compaction fields remain canonical for old consumers. A later checkpoint replaces live continuation state, carries forward stable decisions/artifacts, retains the original source start, and renders that merged ledger into the plain summary. Invalid or unknown structured data takes the legacy summary-only path. Frozen synthetic pre-change, mixed-chain, and v1 migration shapes exercise reopen/fork compatibility; no provenance-verifiable 0.7.0 session bytes are checked into this repository.
 
 ## Visual language
 
@@ -342,7 +342,7 @@ Narrative is the primary reading surface:
 
 Narrative remains quiet and document-like. It uses the host UI/body fonts, current message rhythm, and Obsidian Markdown fidelity. Tools and execution logs must not compete with the answer for visual weight.
 
-Subagent conclusions stay inside their individual cards. Fenced `pivi-agent-report` data is reserved for parent recovery and is stripped from visible results; it does not create separate Narrative chrome or expose protocol JSON.
+Subagent conclusions stay inside their individual cards. Fenced `yapi-agent-report` data is reserved for parent recovery and is stripped from visible results; it does not create separate Narrative chrome or expose protocol JSON.
 
 ### Activity layer
 
@@ -373,7 +373,7 @@ Researcher
 
 Each expanded card preserves its prompt, direct tools, nested delegated work, and visible terminal text inside a fixed-max-height body scrollport. Top-level tools and step groups cap at one third of the messages viewport; subagent cards cap at two thirds. Nested tool disclosures inside an expanded card reuse the ancestor scroll body rather than adding a second scrollbar.
 
-The transcript remains the primary scroll container. Expanded Activity cards own one internal scrollbar on their direct body child while the wrapper height stays fixed at the measured maximum; reaching that internal scroll end chains further wheel or touch scrolling to the transcript so the whole card scrolls away. Individual tool headers may still show elapsed time through the shared `pivi-activity-*` row contract; subagent headers do not.
+The transcript remains the primary scroll container. Expanded Activity cards own one internal scrollbar on their direct body child while the wrapper height stays fixed at the measured maximum; reaching that internal scroll end chains further wheel or touch scrolling to the transcript so the whole card scrolls away. Individual tool headers may still show elapsed time through the shared `yapi-activity-*` row contract; subagent headers do not.
 
 The implemented foundation uses one seven-state lifecycle vocabulary with localized status text. While a subagent is running, its profile icon and bottom light bar move; queued/waiting states and every terminal state are static. Completion keeps the same profile icon, stops its motion, and removes the flowing bar. Composer chrome never mirrors active subagents.
 

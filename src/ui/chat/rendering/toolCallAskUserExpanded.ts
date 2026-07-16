@@ -1,5 +1,5 @@
-import type { AskUserQuestionItem, AskUserQuestionOption, ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
-import { extractResolvedAnswersFromResultText } from '@pivi/pivi-agent-core/tools/toolInput';
+import type { AskUserQuestionItem, AskUserQuestionOption, ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
+import { extractResolvedAnswersFromResultText } from '@yapi/yapi-agent-core/tools/toolInput';
 
 import { t } from '@/app/i18n';
 
@@ -29,20 +29,20 @@ export function renderAskUserQuestionResult(container: HTMLElement, toolCall: To
   const answers = resolveAskUserAnswers(toolCall);
   if (!questions || !Array.isArray(questions) || !answers) return false;
 
-  const reviewEl = container.createDiv({ cls: 'pivi-ask-review' });
+  const reviewEl = container.createDiv({ cls: 'yapi-ask-review' });
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i];
     if (!q) continue;
     const answer = formatAnswer(
       (q.id ? answers[q.id] : undefined) ?? answers[q.question]
     );
-    const pairEl = reviewEl.createDiv({ cls: 'pivi-ask-review-pair' });
-    pairEl.createDiv({ text: `${i + 1}.`, cls: 'pivi-ask-review-num' });
-    const bodyEl = pairEl.createDiv({ cls: 'pivi-ask-review-body' });
-    bodyEl.createDiv({ text: q.question, cls: 'pivi-ask-review-q-text' });
+    const pairEl = reviewEl.createDiv({ cls: 'yapi-ask-review-pair' });
+    pairEl.createDiv({ text: `${i + 1}.`, cls: 'yapi-ask-review-num' });
+    const bodyEl = pairEl.createDiv({ cls: 'yapi-ask-review-body' });
+    bodyEl.createDiv({ text: q.question, cls: 'yapi-ask-review-q-text' });
     bodyEl.createDiv({
       text: answer || 'Not answered',
-      cls: answer ? 'pivi-ask-review-a-text' : 'pivi-ask-review-empty',
+      cls: answer ? 'yapi-ask-review-a-text' : 'yapi-ask-review-empty',
     });
   }
 
@@ -63,7 +63,7 @@ export function renderAskUserQuestionFallback(container: HTMLElement, toolCall: 
 
   if (initialText || toolCall.result) {
     container.createDiv({
-      cls: 'pivi-ask-review-prompt',
+      cls: 'yapi-ask-review-prompt',
       text: initialText || toolCall.result || 'Waiting for answer...',
     });
   }
@@ -71,18 +71,18 @@ export function renderAskUserQuestionFallback(container: HTMLElement, toolCall: 
   for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {
     const question = questions[questionIndex];
     if (!question) continue;
-    const reviewEl = container.createDiv({ cls: 'pivi-ask-review' });
-    const pairEl = reviewEl.createDiv({ cls: 'pivi-ask-review-pair' });
-    pairEl.createDiv({ text: `${questionIndex + 1}.`, cls: 'pivi-ask-review-num' });
-    const bodyEl = pairEl.createDiv({ cls: 'pivi-ask-review-body' });
-    bodyEl.createDiv({ text: question.question, cls: 'pivi-ask-review-q-text' });
+    const reviewEl = container.createDiv({ cls: 'yapi-ask-review' });
+    const pairEl = reviewEl.createDiv({ cls: 'yapi-ask-review-pair' });
+    pairEl.createDiv({ text: `${questionIndex + 1}.`, cls: 'yapi-ask-review-num' });
+    const bodyEl = pairEl.createDiv({ cls: 'yapi-ask-review-body' });
+    bodyEl.createDiv({ text: question.question, cls: 'yapi-ask-review-q-text' });
 
     if (!Array.isArray(question.options) || question.options.length === 0) {
-      bodyEl.createDiv({ cls: 'pivi-ask-review-empty', text: t('chat.stream.noOptionsRecorded') });
+      bodyEl.createDiv({ cls: 'yapi-ask-review-empty', text: t('chat.stream.noOptionsRecorded') });
       continue;
     }
 
-    const listEl = bodyEl.createDiv({ cls: 'pivi-ask-list' });
+    const listEl = bodyEl.createDiv({ cls: 'yapi-ask-list' });
     question.options.forEach((option, optionIndex) => {
       renderAskUserQuestionOption(listEl, option, optionIndex, question.multiSelect === true);
     });
@@ -95,19 +95,19 @@ export function renderAskUserQuestionOption(
   optionIndex: number,
   isMultiSelect: boolean,
 ): void {
-  const itemEl = parentEl.createDiv({ cls: 'pivi-ask-item is-disabled' });
+  const itemEl = parentEl.createDiv({ cls: 'yapi-ask-item is-disabled' });
 
   if (isMultiSelect) {
-    itemEl.createDiv({ cls: 'pivi-ask-check', text: '[ ] ' });
+    itemEl.createDiv({ cls: 'yapi-ask-check', text: '[ ] ' });
   } else {
-    itemEl.createDiv({ cls: 'pivi-ask-item-num', text: `${optionIndex + 1}. ` });
+    itemEl.createDiv({ cls: 'yapi-ask-item-num', text: `${optionIndex + 1}. ` });
   }
 
-  const contentEl = itemEl.createDiv({ cls: 'pivi-ask-item-content' });
-  const labelRowEl = contentEl.createDiv({ cls: 'pivi-ask-label-row' });
-  labelRowEl.createDiv({ cls: 'pivi-ask-item-label', text: option.label });
+  const contentEl = itemEl.createDiv({ cls: 'yapi-ask-item-content' });
+  const labelRowEl = contentEl.createDiv({ cls: 'yapi-ask-label-row' });
+  labelRowEl.createDiv({ cls: 'yapi-ask-item-label', text: option.label });
 
   if (option.description) {
-    contentEl.createDiv({ cls: 'pivi-ask-item-desc', text: option.description });
+    contentEl.createDiv({ cls: 'yapi-ask-item-desc', text: option.description });
   }
 }

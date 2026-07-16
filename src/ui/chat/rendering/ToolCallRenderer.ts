@@ -1,12 +1,12 @@
-import type { ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
+import type { ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
 import {
   isWriteEditTool,
   TOOL_ASK_USER_QUESTION,
   TOOL_BASH,
   TOOL_TODO_WRITE,
-} from '@pivi/pivi-agent-core/tools/toolNames';
-import { getToolPresentationDescriptor } from '@pivi/pivi-agent-core/tools/toolPresentation';
-import { extractToolResultContent } from '@pivi/pivi-agent-core/tools/toolResultContent';
+} from '@yapi/yapi-agent-core/tools/toolNames';
+import { getToolPresentationDescriptor } from '@yapi/yapi-agent-core/tools/toolPresentation';
+import { extractToolResultContent } from '@yapi/yapi-agent-core/tools/toolResultContent';
 
 import { setupCollapsible } from './collapsible';
 import { renderDiffStats } from './DiffRenderer';
@@ -92,7 +92,7 @@ function renderSourceTruncationMetadata(
     }
   }
   content.createDiv({
-    cls: 'pivi-tool-source-truncation',
+    cls: 'yapi-tool-source-truncation',
     text: metadata.join(' · '),
   });
 }
@@ -101,24 +101,24 @@ function createToolElementStructure(
   parentEl: HTMLElement,
   toolCall: ToolCallInfo
 ): ToolElementStructure {
-  const toolEl = parentEl.createDiv({ cls: 'pivi-tool-call' });
+  const toolEl = parentEl.createDiv({ cls: 'yapi-tool-call' });
   const descriptor = getToolPresentationDescriptor(toolCall.name);
-  if (descriptor.className) toolEl.addClass(`pivi-tool-call-${descriptor.className}`);
+  if (descriptor.className) toolEl.addClass(`yapi-tool-call-${descriptor.className}`);
 
-  const header = toolEl.createDiv({ cls: 'pivi-tool-header' });
+  const header = toolEl.createDiv({ cls: 'yapi-tool-header' });
 
-  const iconEl = header.createSpan({ cls: 'pivi-tool-icon' });
+  const iconEl = header.createSpan({ cls: 'yapi-tool-icon' });
   iconEl.setAttribute('aria-hidden', 'true');
   appendToolIcon(iconEl, toolCall.name);
 
-  const nameEl = header.createSpan({ cls: 'pivi-tool-name' });
+  const nameEl = header.createSpan({ cls: 'yapi-tool-name' });
   nameEl.setText(getToolName(toolCall.name, toolCall.input, toolCall.result));
 
-  const summaryEl = header.createSpan({ cls: 'pivi-tool-summary' });
+  const summaryEl = header.createSpan({ cls: 'yapi-tool-summary' });
   summaryEl.setText(getToolSummary(toolCall.name, toolCall.input, toolCall.result));
 
   const diffStatsEl = isWriteEditTool(toolCall.name)
-    ? header.createSpan({ cls: 'pivi-write-edit-stats' })
+    ? header.createSpan({ cls: 'yapi-write-edit-stats' })
     : null;
   if (diffStatsEl && toolCall.diffData) {
     renderDiffStats(diffStatsEl, toolCall.diffData.stats);
@@ -128,9 +128,9 @@ function createToolElementStructure(
     ? createCurrentTaskPreview(header, toolCall.input)
     : null;
 
-  const statusEl = header.createSpan({ cls: 'pivi-tool-status' });
+  const statusEl = header.createSpan({ cls: 'yapi-tool-status' });
 
-  const content = toolEl.createDiv({ cls: 'pivi-tool-content' });
+  const content = toolEl.createDiv({ cls: 'yapi-tool-content' });
 
   return { toolEl, header, iconEl, nameEl, summaryEl, statusEl, content, currentTaskEl };
 }
@@ -145,10 +145,10 @@ export function renderToolContent(
   if (isWriteEditTool(toolCall.name)) {
     renderWriteEditContent(content, toolCall);
   } else if (toolCall.name === TOOL_TODO_WRITE) {
-    content.addClass('pivi-tool-content-todo');
+    content.addClass('yapi-tool-content-todo');
     renderTodoWriteResult(content, toolCall.input);
   } else if (toolCall.name === TOOL_ASK_USER_QUESTION) {
-    content.addClass('pivi-tool-content-ask');
+    content.addClass('yapi-tool-content-ask');
     if (initialText) {
       renderAskUserQuestionFallback(content, toolCall, 'Waiting for answer...');
     } else if (!renderAskUserQuestionResult(content, toolCall)) {
@@ -157,15 +157,15 @@ export function renderToolContent(
   } else if (toolCall.name === TOOL_BASH) {
     renderBashContent(content, toolCall.input, toolCall.result ?? '', initialText);
   } else if (initialText) {
-    const resultRow = content.createDiv({ cls: 'pivi-tool-result-row' });
-    const resultText = resultRow.createSpan({ cls: 'pivi-tool-result-text' });
+    const resultRow = content.createDiv({ cls: 'yapi-tool-result-row' });
+    const resultText = resultRow.createSpan({ cls: 'yapi-tool-result-text' });
     resultText.setText(initialText);
   } else {
     const markdownPreview = options.renderMarkdown
       ? resolveMarkdownReadPreview(toolCall)
       : null;
     if (markdownPreview && options.renderMarkdown) {
-      const previewEl = content.createDiv({ cls: 'pivi-tool-read-markdown' });
+      const previewEl = content.createDiv({ cls: 'yapi-tool-read-markdown' });
       return options.renderMarkdown(
         previewEl,
         markdownPreview.markdown,
@@ -230,20 +230,20 @@ export function updateToolCallElement(
   }
 
   if (toolCall.name === TOOL_TODO_WRITE) {
-    const statusEl = toolEl.querySelector('.pivi-tool-status') as HTMLElement;
+    const statusEl = toolEl.querySelector('.yapi-tool-status') as HTMLElement;
     if (statusEl) {
       setTodoWriteStatus(statusEl, toolCall.input);
     }
-    const content = toolEl.querySelector('.pivi-tool-content') as HTMLElement;
+    const content = toolEl.querySelector('.yapi-tool-content') as HTMLElement;
     if (content && shouldRenderStoredBody(storedState)) {
       renderTodoWriteResult(content, toolCall.input);
       markStoredBodyRendered(storedState);
     }
-    const nameEl = toolEl.querySelector('.pivi-tool-name') as HTMLElement;
+    const nameEl = toolEl.querySelector('.yapi-tool-name') as HTMLElement;
     if (nameEl) {
       nameEl.setText(getToolName(toolCall.name, toolCall.input, toolCall.result));
     }
-    const currentTaskEl = toolEl.querySelector('.pivi-tool-current') as HTMLElement;
+    const currentTaskEl = toolEl.querySelector('.yapi-tool-current') as HTMLElement;
     if (currentTaskEl) {
       const currentTask = getCurrentTask(toolCall.input);
       currentTaskEl.setText(currentTask ? (currentTask.activeForm ?? currentTask.content) : '');
@@ -251,21 +251,21 @@ export function updateToolCallElement(
     return;
   }
 
-  const statusEl = toolEl.querySelector('.pivi-tool-status') as HTMLElement;
+  const statusEl = toolEl.querySelector('.yapi-tool-status') as HTMLElement;
   if (statusEl) {
     setGenericToolHeaderRight(statusEl, toolCall);
   }
 
-  const diffStatsEl = toolEl.querySelector<HTMLElement>('.pivi-write-edit-stats');
+  const diffStatsEl = toolEl.querySelector<HTMLElement>('.yapi-write-edit-stats');
   if (diffStatsEl) {
     diffStatsEl.empty();
     if (toolCall.diffData) renderDiffStats(diffStatsEl, toolCall.diffData.stats);
   }
 
   if (toolCall.name === TOOL_ASK_USER_QUESTION) {
-    const content = toolEl.querySelector('.pivi-tool-content') as HTMLElement;
+    const content = toolEl.querySelector('.yapi-tool-content') as HTMLElement;
     if (content && shouldRenderStoredBody(storedState)) {
-      content.addClass('pivi-tool-content-ask');
+      content.addClass('yapi-tool-content-ask');
       if (!renderAskUserQuestionResult(content, toolCall)) {
         renderAskUserQuestionFallback(content, toolCall);
       }
@@ -274,7 +274,7 @@ export function updateToolCallElement(
     return;
   }
 
-  const content = toolEl.querySelector('.pivi-tool-content') as HTMLElement;
+  const content = toolEl.querySelector('.yapi-tool-content') as HTMLElement;
   if (content && shouldRenderStoredBody(storedState)) {
     content.empty();
     void renderToolContent(content, toolCall, undefined, options);
@@ -290,7 +290,7 @@ export function tryUpdateToolInStepGroup(
   toolCallElements: Map<string, HTMLElement>,
 ): boolean {
   const toolEl = toolCallElements.get(toolId);
-  if (!toolEl?.classList.contains('pivi-tool-call-in-step-group')) return false;
+  if (!toolEl?.classList.contains('yapi-tool-call-in-step-group')) return false;
 
   const state = findToolStepGroupState(toolEl);
   updateToolCallElement(toolEl, toolCall, state?.renderOptions);

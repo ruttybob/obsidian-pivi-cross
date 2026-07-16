@@ -1,7 +1,7 @@
-import type { StreamChunk, UsageInfo } from '@pivi/pivi-agent-core/foundation';
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
-import type { SessionMessagePage } from '@pivi/pivi-agent-core/session';
-import { deriveTodoVisualizationModel } from '@pivi/pivi-agent-core/tools';
+import type { StreamChunk, UsageInfo } from '@yapi/yapi-agent-core/foundation';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
+import type { SessionMessagePage } from '@yapi/yapi-agent-core/session';
+import { deriveTodoVisualizationModel } from '@yapi/yapi-agent-core/tools';
 import {
   type ChatPerfRecorder,
   type ChatProjectionEventMetadata,
@@ -13,7 +13,7 @@ import {
   createChatStreamSnapshot,
   createInitialChatUiSnapshot,
   reduceChatStreamSnapshot,
-} from '@pivi/pivi-react/store';
+} from '@yapi/yapi-react/store';
 
 import type {
   ChatMessage,

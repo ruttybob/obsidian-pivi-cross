@@ -1,14 +1,14 @@
-import { DEFAULT_PIVI_SETTINGS } from '@pivi/pivi-agent-core/foundation/settingsDefaults';
-import { reconcileActiveModelFields } from '@pivi/pivi-agent-core/foundation/activeModel';
-import { DEFAULT_MODEL_KEY } from '@pivi/pivi-agent-core/foundation/settingsDefaults';
-import type { PiviSettings } from '@pivi/pivi-agent-core/foundation/settings';
+import { DEFAULT_YAPI_SETTINGS } from '@yapi/yapi-agent-core/foundation/settingsDefaults';
+import { reconcileActiveModelFields } from '@yapi/yapi-agent-core/foundation/activeModel';
+import { DEFAULT_MODEL_KEY } from '@yapi/yapi-agent-core/foundation/settingsDefaults';
+import type { YapiSettings } from '@yapi/yapi-agent-core/foundation/settings';
 
-function settingsFixture(overrides: Partial<PiviSettings> = {}): PiviSettings {
+function settingsFixture(overrides: Partial<YapiSettings> = {}): YapiSettings {
   return {
-    ...DEFAULT_PIVI_SETTINGS,
+    ...DEFAULT_YAPI_SETTINGS,
     ...overrides,
     agentSettings: {
-      ...DEFAULT_PIVI_SETTINGS.agentSettings,
+      ...DEFAULT_YAPI_SETTINGS.agentSettings,
       ...(overrides.agentSettings ?? {}),
     },
   };
@@ -19,7 +19,7 @@ describe('reconcileActiveModelFields', () => {
     const settings = settingsFixture({
       model: 'openai/gpt-4.1',
       agentSettings: {
-        ...DEFAULT_PIVI_SETTINGS.agentSettings,
+        ...DEFAULT_YAPI_SETTINGS.agentSettings,
         visibleModels: ['opencode-go/deepseek-v4-flash'],
       },
     });
@@ -32,7 +32,7 @@ describe('reconcileActiveModelFields', () => {
     const settings = settingsFixture({
       model: '',
       agentSettings: {
-        ...DEFAULT_PIVI_SETTINGS.agentSettings,
+        ...DEFAULT_YAPI_SETTINGS.agentSettings,
         visibleModels: ['openai-codex/gpt-5.4'],
       },
     });
@@ -45,7 +45,7 @@ describe('reconcileActiveModelFields', () => {
     const settings = settingsFixture({
       model: '',
       agentSettings: {
-        ...DEFAULT_PIVI_SETTINGS.agentSettings,
+        ...DEFAULT_YAPI_SETTINGS.agentSettings,
         visibleModels: [],
       },
     });

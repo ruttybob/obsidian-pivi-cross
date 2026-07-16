@@ -1,0 +1,63 @@
+/* Navigation Sidebar */
+.yapi-nav-sidebar {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: var(--yapi-spacing-xs);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--yapi-duration-normal) var(--yapi-ease-out);
+}
+
+.yapi-nav-sidebar.visible {
+    opacity: 0.15;
+    pointer-events: auto;
+}
+
+.yapi-nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--yapi-radius-pill);
+    background: var(--yapi-host-background-primary);
+    border: 1px solid var(--yapi-host-border);
+    color: var(--yapi-host-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition:
+        background var(--yapi-duration-normal) var(--yapi-ease-out),
+        color var(--yapi-duration-normal) var(--yapi-ease-out),
+        transform var(--yapi-duration-normal) var(--yapi-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .yapi-nav-sidebar.visible:hover {
+        opacity: 1;
+    }
+
+    .yapi-nav-btn:hover {
+        background: var(--yapi-host-background-secondary);
+        color: var(--yapi-host-text-normal);
+        transform: scale(1.05);
+    }
+}
+
+.yapi-nav-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Specific button spacing/grouping if needed */
+.yapi-nav-btn-top {
+    margin-bottom: var(--yapi-spacing-xs);
+}
+
+.yapi-nav-btn-bottom {
+    margin-top: var(--yapi-spacing-xs);
+}

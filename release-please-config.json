@@ -2,7 +2,7 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "package-name": "pivi",
+      "package-name": "yapi",
       "include-component-in-tag": false,
       "include-v-in-tag": false,
       "bump-minor-pre-major": true,

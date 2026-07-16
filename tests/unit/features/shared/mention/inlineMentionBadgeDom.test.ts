@@ -1,5 +1,5 @@
 import { shouldSyncMentionBadgesOnInput } from '@/ui/shared/mention/inlineMentionBadgeDom';
-import type { MentionBadgeParseContext, MentionVaultLookup } from '@pivi/pivi-agent-core/context/mentions';
+import type { MentionBadgeParseContext, MentionVaultLookup } from '@yapi/yapi-agent-core/context/mentions';
 
 function emptyVault(): MentionVaultLookup {
   return {
@@ -44,7 +44,7 @@ describe('shouldSyncMentionBadgesOnInput', () => {
 
   it('does not sync absolute filesystem paths into slash command badges', () => {
     const ctx = createContext();
-    const text = '/Users/shuuul/Projects/pivi/zed ';
+    const text = '/Users/shuuul/Projects/yapi/zed ';
     expect(
       shouldSyncMentionBadgesOnInput(editorWithBadgeCount(0), text, text.length, ctx),
     ).toBe(false);

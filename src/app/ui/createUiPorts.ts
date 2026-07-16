@@ -1,38 +1,38 @@
-import type { OpenSessionState, SessionSummary } from '@pivi/pivi-agent-core/foundation';
-import { getPiAgentSettings } from '@pivi/pivi-agent-core/foundation/agentSettings';
-import { getSubagentRuntimeSettingsFromBag } from '@pivi/pivi-agent-core/foundation/settings';
+import type { OpenSessionState, SessionSummary } from '@yapi/yapi-agent-core/foundation';
+import { getPiAgentSettings } from '@yapi/yapi-agent-core/foundation/agentSettings';
+import { getSubagentRuntimeSettingsFromBag } from '@yapi/yapi-agent-core/foundation/settings';
 import {
   getObsidianToolsSettingsFromBag,
   resolveObsidianToolsSettings,
   resolveWebSearchToolsSettings,
   WEB_PROVIDER_CAPABILITIES,
   WEB_PROVIDER_IDS,
-} from '@pivi/pivi-agent-core/foundation/settings';
+} from '@yapi/yapi-agent-core/foundation/settings';
 import {
   getEnvironmentReviewKeysForScope,
   getRuntimeEnvironmentText,
-} from '@pivi/pivi-agent-core/foundation/settingsAgentEnvironment';
-import { parseEnvironmentVariables } from '@pivi/pivi-agent-core/foundation/settingsEnv';
-import type { AuxQueryRunner } from '@pivi/pivi-agent-core/runtime/auxQueryRunner';
+} from '@yapi/yapi-agent-core/foundation/settingsAgentEnvironment';
+import { parseEnvironmentVariables } from '@yapi/yapi-agent-core/foundation/settingsEnv';
+import type { AuxQueryRunner } from '@yapi/yapi-agent-core/runtime/auxQueryRunner';
 import type {
   ChatPorts,
   ChatSettingsSnapshot,
-} from '@pivi/pivi-agent-core/runtime/chatPorts';
-import type { PiChatService } from '@pivi/pivi-agent-core/runtime/piChatService';
-import type { SessionMessagePage } from '@pivi/pivi-agent-core/session';
-import { providerApiKeyEnvVar, TOOL_OBSIDIAN_BASH } from '@pivi/pivi-agent-core/tools';
-import type { SettingsPorts } from '@pivi/pivi-react/ports';
+} from '@yapi/yapi-agent-core/runtime/chatPorts';
+import type { PiChatService } from '@yapi/yapi-agent-core/runtime/piChatService';
+import type { SessionMessagePage } from '@yapi/yapi-agent-core/session';
+import { providerApiKeyEnvVar, TOOL_OBSIDIAN_BASH } from '@yapi/yapi-agent-core/tools';
+import type { SettingsPorts } from '@yapi/yapi-react/ports';
 import type {
   SettingsGeneralSnapshot,
   SettingsSubagentsSnapshot,
-} from '@pivi/pivi-react/settings';
-import type { ChatPerfRecorder } from '@pivi/pivi-react/store';
+} from '@yapi/yapi-react/settings';
+import type { ChatPerfRecorder } from '@yapi/yapi-react/store';
 import { getIconIds } from 'obsidian';
 
 import type {
-  PiviChatCompositionHost,
-  PiviPluginWorkspace,
-  PiviSettingsHost,
+  YapiChatCompositionHost,
+  YapiPluginWorkspace,
+  YapiSettingsHost,
 } from '@/app/hostContracts';
 
 import { createMcpSettingsPort } from './createMcpSettingsPorts';
@@ -59,7 +59,7 @@ import {
 } from './settingsHotkeys';
 
 /** Composition-only plugin capabilities adapted into core-owned chat ports. */
-export type ChatUiCompositionHost = PiviChatCompositionHost & {
+export type ChatUiCompositionHost = YapiChatCompositionHost & {
   getChatPerfRecorder(): ChatPerfRecorder;
   createChatService(): PiChatService;
   createAuxQueryRunner(): AuxQueryRunner;
@@ -102,7 +102,7 @@ function cloneChatCustomProviders(
 
 export function createChatUiPorts(
   host: ChatUiCompositionHost,
-  workspace: PiviPluginWorkspace | null,
+  workspace: YapiPluginWorkspace | null,
 ): ChatPorts {
   const ws = () => requireWorkspace(workspace);
   const uiFacades = host.getUiFacades();
@@ -265,8 +265,8 @@ export function createChatUiPorts(
 }
 
 export function createSettingsUiPorts(
-  host: PiviSettingsHost,
-  workspace: PiviPluginWorkspace | null,
+  host: YapiSettingsHost,
+  workspace: YapiPluginWorkspace | null,
 ): SettingsPorts {
   const ws = requireWorkspace(workspace);
   const uiFacades = host.getUiFacades();

@@ -1,4 +1,4 @@
-import type { SlashCatalogEntry } from '@pivi/pivi-agent-core/skills/commands/slashCommandEntry';
+import type { SlashCatalogEntry } from '@yapi/yapi-agent-core/skills/commands/slashCommandEntry';
 import { setIcon } from 'obsidian';
 
 import { SlashCommandDropdown } from '@/ui/shared/components/SlashCommandDropdown';
@@ -192,16 +192,16 @@ describe('SlashCommandDropdown controller', () => {
     dropdown.handleInputChange();
     await flushAsyncDropdown();
 
-    expect(container.querySelectorAll('.pivi-slash-icon--skill').length).toBeGreaterThan(0);
-    expect(container.querySelectorAll('.pivi-slash-icon--command').length).toBeGreaterThan(0);
-    expect(container.querySelectorAll('.pivi-slash-icon--tool').length).toBeGreaterThan(0);
-    expect(container.querySelectorAll('.pivi-slash-icon--mcp').length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('.yapi-slash-icon--skill').length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('.yapi-slash-icon--command').length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('.yapi-slash-icon--tool').length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('.yapi-slash-icon--mcp').length).toBeGreaterThan(0);
     expect(setIcon).toHaveBeenCalledWith(expect.anything(), 'sparkles');
     expect(setIcon).toHaveBeenCalledWith(expect.anything(), 'terminal');
     expect(setIcon).toHaveBeenCalledWith(expect.anything(), 'image-plus');
     expect(appendMcpIcon).toHaveBeenCalled();
-    expect(container.querySelector('.pivi-slash-detail')?.cssProps).toMatchObject({
-      '--pivi-slash-detail-max-width': '0px',
+    expect(container.querySelector('.yapi-slash-detail')?.cssProps).toMatchObject({
+      '--yapi-slash-detail-max-width': '0px',
     });
   });
 
@@ -300,7 +300,7 @@ describe('SlashCommandDropdown controller', () => {
     await flushAsyncDropdown();
 
     expect(dropdown.isVisible()).toBe(false);
-    expect(container.hasClass('pivi-slash-dropdown-open')).toBe(false);
+    expect(container.hasClass('yapi-slash-dropdown-open')).toBe(false);
   });
 
   it('keeps cache invalidation monotonic while an older request is pending', async () => {
@@ -353,6 +353,6 @@ describe('SlashCommandDropdown controller', () => {
 
     expect(input.listeners.get('input')?.size).toBe(0);
     expect(container.children).toHaveLength(0);
-    expect(container.hasClass('pivi-slash-dropdown-open')).toBe(false);
+    expect(container.hasClass('yapi-slash-dropdown-open')).toBe(false);
   });
 });

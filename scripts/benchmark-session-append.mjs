@@ -14,10 +14,10 @@ import { performance } from 'node:perf_hooks';
 
 import {
   ensureSessionJsonlIndex,
-} from '../packages/pivi-agent-core/src/engine/pi/session/sessionJsonlIndex.ts';
+} from '../packages/yapi-agent-core/src/engine/pi/session/sessionJsonlIndex.ts';
 import {
   SessionTreeStore,
-} from '../packages/pivi-agent-core/src/engine/pi/session/sessionTreeStore.ts';
+} from '../packages/yapi-agent-core/src/engine/pi/session/sessionTreeStore.ts';
 
 const FIXTURE_NAME = 'perf-002-5k-messages.jsonl';
 const TRIALS = 5;
@@ -33,15 +33,15 @@ function round(value) {
 }
 
 function copyFixture(vaultPath, root, name) {
-  const sessions = path.join(root, '.pivi', 'sessions');
+  const sessions = path.join(root, '.yapi', 'sessions');
   mkdirSync(sessions, { recursive: true });
   const target = path.join(sessions, name);
-  cpSync(path.join(vaultPath, '.pivi', 'sessions', FIXTURE_NAME), target);
+  cpSync(path.join(vaultPath, '.yapi', 'sessions', FIXTURE_NAME), target);
   return target;
 }
 
 function benchmarkRewrite(vaultPath, trial) {
-  const root = mkdtempSync(path.join(tmpdir(), `pivi-append-rewrite-${trial}-`));
+  const root = mkdtempSync(path.join(tmpdir(), `yapi-append-rewrite-${trial}-`));
   try {
     const sessionFile = copyFixture(vaultPath, root, 'rewrite.jsonl');
     const manager = SessionManager.open(sessionFile, path.dirname(sessionFile), root);
@@ -70,11 +70,11 @@ function benchmarkRewrite(vaultPath, trial) {
 }
 
 function benchmarkIndexedAppend(vaultPath, trial) {
-  const root = mkdtempSync(path.join(tmpdir(), `pivi-append-indexed-${trial}-`));
+  const root = mkdtempSync(path.join(tmpdir(), `yapi-append-indexed-${trial}-`));
   try {
     const sessionFile = copyFixture(vaultPath, root, 'indexed.jsonl');
     ensureSessionJsonlIndex(sessionFile);
-    const relativeSessionFile = '.pivi/sessions/indexed.jsonl';
+    const relativeSessionFile = '.yapi/sessions/indexed.jsonl';
     const store = SessionTreeStore.open(root, relativeSessionFile);
     const bytesBefore = statSync(sessionFile).size;
     const startedAt = performance.now();
@@ -101,7 +101,7 @@ function main() {
       'Usage: node --import tsx scripts/benchmark-session-append.mjs <vault>',
     );
   }
-  const fixture = path.join(vaultPath, '.pivi', 'sessions', FIXTURE_NAME);
+  const fixture = path.join(vaultPath, '.yapi', 'sessions', FIXTURE_NAME);
   const fixtureLines = readFileSync(fixture, 'utf8').trimEnd().split('\n').length;
   const rewrite = Array.from({ length: TRIALS }, (_, trial) => benchmarkRewrite(vaultPath, trial));
   const indexedAppend = Array.from(
@@ -115,7 +115,7 @@ function main() {
   }).trim();
 
   process.stdout.write(`${JSON.stringify({
-    schema: 'pivi-session-append-benchmark-v1',
+    schema: 'yapi-session-append-benchmark-v1',
     commit,
     platform: `${process.platform} ${process.arch}`,
     node: process.version,

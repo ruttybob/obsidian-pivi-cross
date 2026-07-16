@@ -1,5 +1,5 @@
-import type { HttpClient, HttpRequest, HttpResponse } from '@pivi/pivi-agent-core/ports';
-import { testEndpointConnectivity } from '@pivi/pivi-agent-core/runtime/connectivity';
+import type { HttpClient, HttpRequest, HttpResponse } from '@yapi/yapi-agent-core/ports';
+import { testEndpointConnectivity } from '@yapi/yapi-agent-core/runtime/connectivity';
 
 function createHttpResponse(status: number): HttpResponse {
   return {

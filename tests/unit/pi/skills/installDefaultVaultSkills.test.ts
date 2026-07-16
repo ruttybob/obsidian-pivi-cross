@@ -1,11 +1,11 @@
-import type { HttpClient, HttpRequest, HttpResponse, ProcessRunner } from '@pivi/pivi-agent-core/ports';
-import * as fetchRemoteSha from '@pivi/pivi-agent-core/skills/vault/fetchDefaultVaultSkillsRemoteSha';
+import type { HttpClient, HttpRequest, HttpResponse, ProcessRunner } from '@yapi/yapi-agent-core/ports';
+import * as fetchRemoteSha from '@yapi/yapi-agent-core/skills/vault/fetchDefaultVaultSkillsRemoteSha';
 import {
   installDefaultVaultSkills,
   type DefaultVaultSkillsContext,
-} from '@pivi/pivi-agent-core/skills/vault/ensureDefaultVaultSkills';
-import * as notifyModule from '@pivi/pivi-agent-core/skills/vault/notifyVaultSkillsChanged';
-import { VaultSkillsService } from '@pivi/pivi-agent-core/skills/vault/vaultSkillsService';
+} from '@yapi/yapi-agent-core/skills/vault/ensureDefaultVaultSkills';
+import * as notifyModule from '@yapi/yapi-agent-core/skills/vault/notifyVaultSkillsChanged';
+import { VaultSkillsService } from '@yapi/yapi-agent-core/skills/vault/vaultSkillsService';
 
 function mockHttpClient(): HttpClient {
   return {
@@ -20,7 +20,7 @@ function mockHttpClient(): HttpClient {
 }
 
 describe('installDefaultVaultSkills', () => {
-  const vaultPath = '/tmp/pivi-vault-test';
+  const vaultPath = '/tmp/yapi-vault-test';
 
   afterEach(() => {
     jest.restoreAllMocks();

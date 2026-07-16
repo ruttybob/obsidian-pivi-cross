@@ -3,19 +3,19 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-import type { FileStore } from '@pivi/pivi-agent-core/session';
-import type { DeviceLocalExternalContextStore } from '@pivi/pivi-agent-core/session';
-import { getPiviSessionDir } from '@pivi/pivi-agent-core/session/sessionPaths';
+import type { FileStore } from '@yapi/yapi-agent-core/session';
+import type { DeviceLocalExternalContextStore } from '@yapi/yapi-agent-core/session';
+import { getYapiSessionDir } from '@yapi/yapi-agent-core/session/sessionPaths';
 import {
   PiSessionStore,
   stripExternalContextsFromSessionJsonl,
-} from '@pivi/pivi-agent-core/engine/pi/session/piSessionStore';
-import { SessionTreeStore } from '@pivi/pivi-agent-core/engine/pi/session/sessionTreeStore';
+} from '@yapi/yapi-agent-core/engine/pi/session/piSessionStore';
+import { SessionTreeStore } from '@yapi/yapi-agent-core/engine/pi/session/sessionTreeStore';
 import {
-  PIVI_MESSAGE_UI,
-  PIVI_SESSION_META,
-  PIVI_UI_CONTEXT,
-} from '@pivi/pivi-agent-core/session/types';
+  YAPI_MESSAGE_UI,
+  YAPI_SESSION_META,
+  YAPI_UI_CONTEXT,
+} from '@yapi/yapi-agent-core/session/types';
 
 function countCustomEntries(vaultPath: string, sessionFile: string, customType: string): number {
   return SessionTreeStore.openSnapshot(vaultPath, sessionFile)
@@ -25,7 +25,7 @@ function countCustomEntries(vaultPath: string, sessionFile: string, customType: 
 }
 
 function createMigrationFixture(files: Record<string, string>) {
-  const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-session-migration-'));
+  const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-session-migration-'));
   for (const [file, content] of Object.entries(files)) {
     const absoluteFile = path.join(vaultPath, file);
     fs.mkdirSync(path.dirname(absoluteFile), { recursive: true });
@@ -50,15 +50,15 @@ function createMigrationFixture(files: Record<string, string>) {
 
 describe('PiSessionStore range reads', () => {
   it('reopens persisted request badges, tool activity, and the final response together', async () => {
-    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-session-store-complete-turn-'));
-    const sessionFile = '.pivi/sessions/session.jsonl';
+    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-session-store-complete-turn-'));
+    const sessionFile = '.yapi/sessions/session.jsonl';
     const absoluteFile = path.join(vaultPath, sessionFile);
     fs.mkdirSync(path.dirname(absoluteFile), { recursive: true });
     const line = (value: unknown) => `${JSON.stringify(value)}\n`;
     fs.writeFileSync(absoluteFile, [
       line({ type: 'session', version: 3, id: 'session-1', timestamp: '2026-01-01T00:00:00.000Z', cwd: vaultPath }),
       line({ type: 'message', id: 'user-1', parentId: null, timestamp: '2026-01-01T00:00:01.000Z', message: { role: 'user', content: 'Inspect these notes', timestamp: 1 } }),
-      line({ type: 'custom', customType: PIVI_MESSAGE_UI, id: 'ui-1', parentId: 'user-1', timestamp: '2026-01-01T00:00:01.100Z', data: { targetEntryId: 'user-1', displayContent: '/tests', turnRequest: { text: 'Inspect these notes', currentNotePath: 'wiki/Han Lee.md', attachedFilePaths: ['wiki/Han Lee.md', 'daily/2026-07-16.md'] } } }),
+      line({ type: 'custom', customType: YAPI_MESSAGE_UI, id: 'ui-1', parentId: 'user-1', timestamp: '2026-01-01T00:00:01.100Z', data: { targetEntryId: 'user-1', displayContent: '/tests', turnRequest: { text: 'Inspect these notes', currentNotePath: 'wiki/Han Lee.md', attachedFilePaths: ['wiki/Han Lee.md', 'daily/2026-07-16.md'] } } }),
       line({ type: 'message', id: 'assistant-tool', parentId: 'ui-1', timestamp: '2026-01-01T00:00:02.000Z', message: { role: 'assistant', content: [{ type: 'toolCall', id: 'call-1', name: 'obsidian_read', arguments: { path: 'wiki/Han Lee.md' } }], timestamp: 2 } }),
       line({ type: 'message', id: 'tool-result', parentId: 'assistant-tool', timestamp: '2026-01-01T00:00:03.000Z', message: { role: 'toolResult', toolCallId: 'call-1', toolName: 'obsidian_read', content: [{ type: 'text', text: 'note body' }], isError: false, timestamp: 3 } }),
       line({ type: 'message', id: 'assistant-final', parentId: 'tool-result', timestamp: '2026-01-01T00:00:04.000Z', message: { role: 'assistant', content: 'Finished reading.', timestamp: 4 } }),
@@ -92,8 +92,8 @@ describe('PiSessionStore range reads', () => {
   });
 
   it('exposes recent and older durable message pages through SessionStore', async () => {
-    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-session-store-range-'));
-    const sessionFile = '.pivi/sessions/session.jsonl';
+    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-session-store-range-'));
+    const sessionFile = '.yapi/sessions/session.jsonl';
     const absoluteFile = path.join(vaultPath, sessionFile);
     fs.mkdirSync(path.dirname(absoluteFile), { recursive: true });
     const line = (value: unknown) => `${JSON.stringify(value)}\n`;
@@ -126,14 +126,14 @@ describe('PiSessionStore range reads', () => {
   });
 
   it('opens session identity and lists indexed summaries without full snapshots', async () => {
-    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-session-store-indexed-list-'));
-    const sessionDir = getPiviSessionDir(vaultPath);
+    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-session-store-indexed-list-'));
+    const sessionDir = getYapiSessionDir(vaultPath);
     const sessionFile = path.join(sessionDir, 'session.jsonl');
     fs.mkdirSync(sessionDir, { recursive: true });
     fs.writeFileSync(sessionFile, [
       JSON.stringify({ type: 'session', version: 3, id: 'session-1', timestamp: '2026-01-01T00:00:00.000Z', cwd: vaultPath }),
       JSON.stringify({ type: 'message', id: 'user-1', parentId: null, timestamp: '2026-01-01T00:00:01.000Z', message: { role: 'user', content: 'indexed preview', timestamp: 1 } }),
-      JSON.stringify({ type: 'custom', id: 'meta-1', parentId: 'user-1', timestamp: '2026-01-01T00:00:02.000Z', customType: PIVI_SESSION_META, data: { title: 'Indexed title', titleSource: 'custom', lastResponseAt: 42 } }),
+      JSON.stringify({ type: 'custom', id: 'meta-1', parentId: 'user-1', timestamp: '2026-01-01T00:00:02.000Z', customType: YAPI_SESSION_META, data: { title: 'Indexed title', titleSource: 'custom', lastResponseAt: 42 } }),
       '',
     ].join('\n'));
     const snapshotSpy = jest.spyOn(SessionTreeStore, 'openSnapshot');
@@ -166,16 +166,16 @@ describe('PiSessionStore deleteSession', () => {
     const adapter = { delete: jest.fn() } as unknown as FileStore;
     const store = new PiSessionStore(adapter, '/vault');
 
-    await store.deleteSession('/vault/.pivi/sessions/session.jsonl');
+    await store.deleteSession('/vault/.yapi/sessions/session.jsonl');
 
-    expect(adapter.delete).toHaveBeenCalledWith('.pivi/sessions/session.jsonl');
+    expect(adapter.delete).toHaveBeenCalledWith('.yapi/sessions/session.jsonl');
   });
 });
 
 describe('PiSessionStore usage restoration', () => {
   it('keeps an unresolved model context window unknown instead of inventing a limit', async () => {
-    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-session-store-usage-'));
-    const sessionFile = '.pivi/sessions/session.jsonl';
+    const vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-session-store-usage-'));
+    const sessionFile = '.yapi/sessions/session.jsonl';
     const absoluteFile = path.join(vaultPath, sessionFile);
     fs.mkdirSync(path.dirname(absoluteFile), { recursive: true });
     fs.writeFileSync(absoluteFile, [
@@ -212,11 +212,11 @@ describe('PiSessionStore custom metadata persistence', () => {
     const ref = await store.create(vaultPath);
 
     await store.writeSessionMeta(ref, { title: 'Research', createdAt: 1, lastResponseAt: 2 });
-    const afterFirstWrite = countCustomEntries(vaultPath, ref.sessionFile, PIVI_SESSION_META);
+    const afterFirstWrite = countCustomEntries(vaultPath, ref.sessionFile, YAPI_SESSION_META);
 
     await store.writeSessionMeta(ref, { title: 'Research', createdAt: 1, lastResponseAt: 2 });
 
-    expect(countCustomEntries(vaultPath, ref.sessionFile, PIVI_SESSION_META)).toBe(afterFirstWrite);
+    expect(countCustomEntries(vaultPath, ref.sessionFile, YAPI_SESSION_META)).toBe(afterFirstWrite);
   });
 
   it('does not append duplicate UI context entries when values are unchanged', async () => {
@@ -229,7 +229,7 @@ describe('PiSessionStore custom metadata persistence', () => {
       externalContextPaths: ['A.md'],
       enabledMcpServers: ['vault'],
     });
-    const afterFirstWrite = countCustomEntries(vaultPath, ref.sessionFile, PIVI_UI_CONTEXT);
+    const afterFirstWrite = countCustomEntries(vaultPath, ref.sessionFile, YAPI_UI_CONTEXT);
 
     await store.writeUiContext(ref, {
       currentNote: 'Daily.md',
@@ -237,7 +237,7 @@ describe('PiSessionStore custom metadata persistence', () => {
       enabledMcpServers: ['vault'],
     });
 
-    expect(countCustomEntries(vaultPath, ref.sessionFile, PIVI_UI_CONTEXT)).toBe(afterFirstWrite);
+    expect(countCustomEntries(vaultPath, ref.sessionFile, YAPI_UI_CONTEXT)).toBe(afterFirstWrite);
   });
 });
 
@@ -245,11 +245,11 @@ describe('PiSessionStore device-local external contexts', () => {
   it('strips legacy paths while preserving line order, untouched lines, and final newline', () => {
     const header = '{"type":"session","id":"session-1"}';
     const context = JSON.stringify({
-      type: 'custom', customType: PIVI_UI_CONTEXT,
+      type: 'custom', customType: YAPI_UI_CONTEXT,
       data: { currentNote: 'Daily.md', externalContextPaths: ['/root'] },
     });
     const turn = JSON.stringify({
-      type: 'custom', customType: PIVI_MESSAGE_UI,
+      type: 'custom', customType: YAPI_MESSAGE_UI,
       data: {
         targetEntryId: 'user-1',
         displayContent: 'hello',
@@ -275,16 +275,16 @@ describe('PiSessionStore device-local external contexts', () => {
   it('fails with the session and line number when legacy JSONL is malformed', () => {
     expect(() => stripExternalContextsFromSessionJsonl(
       '{"type":"session"}\nnot-json\n',
-      '.pivi/sessions/broken.jsonl',
-    )).toThrow('.pivi/sessions/broken.jsonl at line 2');
+      '.yapi/sessions/broken.jsonl',
+    )).toThrow('.yapi/sessions/broken.jsonl at line 2');
   });
 
   it('migrates every legacy session before startup continues and is idempotent', async () => {
-    const sessionFile = '.pivi/sessions/a.jsonl';
+    const sessionFile = '.yapi/sessions/a.jsonl';
     const content = `${JSON.stringify({ type: 'session', version: 3, id: 'session-1', timestamp: '2026-01-01T00:00:00.000Z', cwd: '/vault' })}\n${JSON.stringify({
       type: 'custom',
       id: 'ui-1',
-      customType: PIVI_MESSAGE_UI,
+      customType: YAPI_MESSAGE_UI,
       data: {
         targetEntryId: 'user-1',
         turnRequest: { text: 'hello', externalContextPaths: ['/device/root'] },
@@ -318,7 +318,7 @@ describe('PiSessionStore device-local external contexts', () => {
   });
 
   it('records clean files once and skips body reads on later startup and lazy open', async () => {
-    const sessionFile = '.pivi/sessions/clean.jsonl';
+    const sessionFile = '.yapi/sessions/clean.jsonl';
     const content = `${JSON.stringify({
       type: 'session',
       version: 3,
@@ -342,11 +342,11 @@ describe('PiSessionStore device-local external contexts', () => {
   });
 
   it('coalesces concurrent migration requests for the same session file', async () => {
-    const sessionFile = '.pivi/sessions/concurrent.jsonl';
+    const sessionFile = '.yapi/sessions/concurrent.jsonl';
     const content = `${JSON.stringify({ type: 'session', version: 3, id: 'concurrent', timestamp: '2026-01-01T00:00:00.000Z', cwd: '/vault' })}\n${JSON.stringify({
       type: 'custom',
       id: 'context-1',
-      customType: PIVI_UI_CONTEXT,
+      customType: YAPI_UI_CONTEXT,
       data: { externalContextPaths: ['/device/root'] },
     })}\n`;
     const fixture = createMigrationFixture({ [sessionFile]: content });
@@ -365,11 +365,11 @@ describe('PiSessionStore device-local external contexts', () => {
   });
 
   it('rejects a source replacement before device-local state or JSONL is written', async () => {
-    const sessionFile = '.pivi/sessions/stale.jsonl';
+    const sessionFile = '.yapi/sessions/stale.jsonl';
     const content = `${JSON.stringify({ type: 'session', version: 3, id: 'stale', timestamp: '2026-01-01T00:00:00.000Z', cwd: '/vault' })}\n${JSON.stringify({
       type: 'custom',
       id: 'context-1',
-      customType: PIVI_UI_CONTEXT,
+      customType: YAPI_UI_CONTEXT,
       data: { externalContextPaths: ['/device/root'] },
     })}\n`;
     const fixture = createMigrationFixture({ [sessionFile]: content });
@@ -402,13 +402,13 @@ describe('PiSessionStore device-local external contexts', () => {
   });
 
   it('skips a malformed legacy session at startup while migrating valid sessions', async () => {
-    const validFile = '.pivi/sessions/valid-0.7.0.jsonl';
-    const malformedFile = '.pivi/sessions/malformed-0.7.0.jsonl';
+    const validFile = '.yapi/sessions/valid-0.7.0.jsonl';
+    const malformedFile = '.yapi/sessions/malformed-0.7.0.jsonl';
     const contents = new Map([
       [validFile, `${JSON.stringify({ type: 'session', version: 3, id: 'valid', timestamp: '2026-01-01T00:00:00.000Z', cwd: '/vault' })}\n${JSON.stringify({
         type: 'custom',
         id: 'valid-ui',
-        customType: PIVI_MESSAGE_UI,
+        customType: YAPI_MESSAGE_UI,
         data: {
           targetEntryId: 'user-1',
           turnRequest: { text: 'hello', externalContextPaths: ['/device/root'] },
@@ -435,7 +435,7 @@ describe('PiSessionStore device-local external contexts', () => {
   });
 
   it('still rejects a malformed session when that specific session is opened', async () => {
-    const sessionFile = '.pivi/sessions/malformed-0.7.0.jsonl';
+    const sessionFile = '.yapi/sessions/malformed-0.7.0.jsonl';
     const fixture = createMigrationFixture({
       [sessionFile]: '{"type":"session","id":"broken"}\nnot-json\n',
     });
@@ -449,10 +449,10 @@ describe('PiSessionStore device-local external contexts', () => {
   });
 
   it('does not rewrite JSONL when the device-local cache write fails', async () => {
-    const sessionFile = '.pivi/sessions/a.jsonl';
+    const sessionFile = '.yapi/sessions/a.jsonl';
     const content = `${JSON.stringify({
       type: 'custom',
-      customType: PIVI_UI_CONTEXT,
+      customType: YAPI_UI_CONTEXT,
       data: { externalContextPaths: ['/device/root'] },
     })}\n`;
     const fixture = createMigrationFixture({ [sessionFile]: content });
@@ -489,7 +489,7 @@ describe('PiSessionStore device-local external contexts', () => {
 
     const entries = SessionTreeStore.openSnapshot(vaultPath, updated.sessionFile).getEntries();
     const uiEntry = entries.find((entry) => (
-      entry.type === 'custom' && entry.customType === PIVI_MESSAGE_UI
+      entry.type === 'custom' && entry.customType === YAPI_MESSAGE_UI
     ));
     expect(JSON.stringify(uiEntry)).not.toContain('externalContextPaths');
     const messages = await store.getMessages(updated);

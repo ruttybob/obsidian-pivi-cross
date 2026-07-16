@@ -1,0 +1,845 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "add": "Ajouter",
+    "remove": "Retirer",
+    "clear": "Effacer",
+    "loading": "Chargement",
+    "error": "Erreur",
+    "confirm": "Confirmer",
+    "disabled": "Désactivé",
+    "enable": "Activer",
+    "disable": "Désactiver",
+    "line": "ligne",
+    "lines": "lignes",
+    "copied": "Copié !"
+  },
+  "chat": {
+    "fork": {
+      "ariaLabel": "Bifurquer la conversation",
+      "notice": "Bifurquée vers un nouvel onglet",
+      "failed": "Échec de la bifurcation : {error}",
+      "unavailableStreaming": "Impossible de bifurquer pendant le streaming",
+      "unavailableNoUuid": "Impossible de bifurquer : identifiants de message manquants",
+      "errorMessageNotFound": "Message introuvable",
+      "errorNoSession": "Aucun ID de session disponible",
+      "commandNoMessages": "Impossible de bifurquer : aucun message dans la conversation",
+      "commandNoAssistantUuid": "Impossible de bifurquer : aucune réponse d’assistant avec identifiants"
+    },
+    "redo": {
+      "ariaLabel": "Refaire la réponse de l’agent",
+      "confirmTruncate": "Refaire cette réponse supprimera tous les messages suivants dans ce chat. Continuer ?",
+      "confirmTruncateAction": "Refaire et supprimer",
+      "failed": "Échec de la reprise : {error}",
+      "unavailableStreaming": "Impossible de refaire pendant le streaming",
+      "unavailableNoTurn": "Impossible de refaire : tour utilisateur correspondant introuvable",
+      "unavailableRuntime": "Impossible de refaire : runtime de chat indisponible",
+      "unavailableRewind": "Point de retour indisponible"
+    },
+    "messageActions": {
+      "copyAriaLabel": "Copier le message",
+      "copyAgentResponseAriaLabel": "Copier cette réponse de l’agent",
+      "scrollToRecentUserAriaLabel": "Aller au message utilisateur le plus récent"
+    },
+    "inlineContext": {
+      "addSelectionToChatInput": "Ajouter la sélection à la saisie du chat",
+      "selectTextFirst": "Sélectionnez d’abord du texte dans une note.",
+      "noActiveChatInput": "Impossible de trouver une saisie de chat active.",
+      "selectionAdded": "Sélection ajoutée à la saisie du chat."
+    },
+    "composer": {
+      "placeholder": "Comment puis-je vous aider aujourd’hui ?",
+      "modelAria": "Modèle",
+      "reasoningAria": "Raisonnement",
+      "sendAria": "Envoyer le message",
+      "stopAria": "Arrêter la réponse",
+      "sendEmptyAria": "Saisissez un message à envoyer",
+      "sendTitle": "Envoyer",
+      "stopTitle": "Arrêter",
+      "sendEmptyTitle": "Saisissez un message"
+    },
+    "tabs": {
+      "startNewChat": "Démarrer un nouveau chat",
+      "switchTab": "Changer d’onglet : {title}",
+      "archiveTab": "Archiver {title}",
+      "restoreTab": "Restaurer {title}",
+      "editTitle": "Modifier le titre de {title}",
+      "editTitleInputLabel": "Titre de l’onglet",
+      "closeTab": "Fermer {title}",
+      "archived": "Archivé",
+      "failedCreateChat": "Échec de la création du chat",
+      "failedSwitchTab": "Échec du changement d’onglet",
+      "failedCloseTab": "Échec de la fermeture de l’onglet",
+      "failedEditTitle": "Échec de la modification du titre de l’onglet",
+      "failedArchiveTab": "Échec de l’archivage de l’onglet"
+    },
+    "errors": {
+      "initAgentFailed": "Échec de l’initialisation du service agent. Réessayez.",
+      "agentUnavailable": "Service agent indisponible. Rechargez le plugin.",
+      "noTextSelected": "Aucun texte sélectionné dans l’éditeur actif.",
+      "templateVarsFailed": "Échec de la résolution des variables de commande de modèle.",
+      "unableCreateForkTab": "Impossible de créer l’onglet de bifurcation",
+      "initChatService": "Échec de l’initialisation du service de chat"
+    },
+    "toolbar": {
+      "externalContexts": "Contextes externes",
+      "externalEmpty": "Aucun contexte externe",
+      "externalAdd": "Ajouter un dossier…",
+      "externalPickerFailed": "Impossible d’ouvrir le sélecteur de dossier.",
+      "externalPickerTitle": "Sélectionner un contexte externe",
+      "externalPathAria": "Contexte externe {path}",
+      "externalPin": "Épingler {path}",
+      "externalUnpin": "Désépingler {path}",
+      "externalUnavailable": "Indisponible : {reason}",
+      "externalRemove": "Supprimer le chemin",
+      "externalActiveTitle": "{count} contexte(s) externe(s) (cliquer pour en ajouter)",
+      "externalIdleTitle": "Ajouter des contextes externes (cliquer)"
+    },
+    "selection": {
+      "linesSelected": "{count} {lines} sélectionnée(s)",
+      "canvasNodeSelected": "1 nœud de canvas sélectionné",
+      "canvasNodesSelected": "{count} nœuds de canvas sélectionnés"
+    },
+    "nav": {
+      "scrollToTop": "Aller en haut",
+      "scrollToBottom": "Aller en bas",
+      "previousMessage": "Message précédent",
+      "nextMessage": "Message suivant",
+      "resumeAutoScroll": "Reprendre le défilement automatique"
+    },
+    "queue": {
+      "queued": "⌙ En attente : {preview}",
+      "edit": "Modifier le message en attente",
+      "discard": "Supprimer le message en attente",
+      "images": "Images jointes"
+    },
+    "usage": {
+      "input": "{tokens} / {limit} ({percentage} %)",
+      "unknownContextLength": "Impossible de déterminer la longueur de contexte du modèle actuel."
+    },
+    "todos": {
+      "progress": "Tâches {completed}/{total}",
+      "collapse": "Réduire la liste des tâches — {completed} sur {total} terminées",
+      "expand": "Développer la liste des tâches — {completed} sur {total} terminées"
+    },
+    "activity": {
+      "backgroundTask": "Tâche en arrière-plan",
+      "subagentTask": "Tâche du sous-agent",
+      "expand": "Cliquer pour développer",
+      "collapse": "Cliquer pour réduire",
+      "prompt": "Instruction",
+      "result": "Résultat",
+      "noPrompt": "Aucune instruction fournie",
+      "sessionEnded": "La session s’est terminée avant la fin de la tâche",
+      "done": "Terminé",
+      "error": "Erreur"
+    },
+    "status": {
+      "count": "{count} {status}",
+      "queued": "En file",
+      "running": "En cours",
+      "waiting": "En attente",
+      "completed": "Terminé",
+      "failed": "Échec",
+      "cancelled": "Annulé",
+      "orphaned": "Orphelin",
+      "orphanedDescription": "La session s’est terminée avant cette activité. Relancez-la pour la récupérer."
+    },
+    "stream": {
+      "thoughtFor": "Réfléchi pendant {seconds}s",
+      "thought": "Réflexion",
+      "defaultDurationFlavor": "Terminé",
+      "responseDuration": "* {flavor} en {duration}",
+      "thinkingExpandAria": "Réflexion étendue — cliquer pour développer",
+      "writing": "Écriture…",
+      "statusDone": "TERMINÉ",
+      "noChanges": "Aucun changement",
+      "tasksUpdated": "Tâches mises à jour",
+      "steps": "{count} étape(s)",
+      "sessionCompacted": "Session compactée",
+      "earlierHistory": "Historique antérieur",
+      "compactionTokenTransition": "Environ {before} jetons vers {after} jetons",
+      "expandCheckpoint": "Afficher le point de contrôle",
+      "collapseCheckpoint": "Masquer le point de contrôle",
+      "checkpointDetails": "Détails du point de contrôle",
+      "checkpointGoal": "Objectif",
+      "checkpointConstraints": "Contraintes",
+      "checkpointDecisions": "Décisions",
+      "checkpointArtifacts": "Artefacts",
+      "checkpointOpenWork": "Travail restant",
+      "checkpointQuestions": "Questions non résolues",
+      "checkpointNextSteps": "Étapes suivantes",
+      "checkpointSource": "Entrées sources",
+      "checkpointSourceBounds": "{first} → {last} ; conserver {kept}",
+      "checkpointEstimate": "Estimation du point de contrôle",
+      "interrupted": "Interrompu",
+      "interruptHint": "· Que doit faire YaPi à la place ?",
+      "renderFailed": "Échec du rendu du contenu du message.",
+      "escInterruptDuration": "esc pour interrompre · {duration}",
+      "noResult": "Aucun résultat",
+      "noDetails": "Aucun détail",
+      "noDescription": "Aucune description disponible.",
+      "noTextualDiff": "Aucun diff textuel disponible",
+      "fileDeleted": "Fichier supprimé",
+      "noMatches": "Aucune correspondance",
+      "urlUnavailable": "URL indisponible",
+      "findInPage": "Rechercher dans la page",
+      "openPage": "Ouvrir la page",
+      "noOptionsRecorded": "Aucune option enregistrée"
+    },
+    "askUser": {
+      "reviewAnswers": "Vérifier vos réponses",
+      "submitAnswers": "Envoyer les réponses",
+      "readyToSubmit": "Prêt à envoyer vos réponses ?",
+      "typeSomething": "Saisissez quelque chose.",
+      "enterSecret": "Saisissez le secret.",
+      "notAnswered": "Sans réponse",
+      "submit": "Envoyer"
+    },
+    "slash": {
+      "ariaLabel": "Commandes slash",
+      "noMatches": "Aucune commande correspondante",
+      "kindCommand": "Commande",
+      "kindSkill": "Compétence",
+      "kindTool": "Outil",
+      "kindMcpServer": "Serveur MCP",
+      "kindMcpTool": "Outil MCP",
+      "mcpServerDetail": "Serveur MCP : {server}",
+      "mcpToolDetail": "Serveur MCP : {server} · outil : {tool}"
+    },
+    "contextBadges": {
+      "mcpToolTooltip": "Outil MCP : {server}/{tool}",
+      "mcpServerTooltip": "Serveur MCP : {server}",
+      "skillTooltip": "Compétence : {skill}",
+      "toolTooltip": "Outil : {tool}",
+      "agentTooltip": "Agent : {agent}",
+      "inlineContextSource": "Contexte intégré depuis {path}",
+      "inlineContextSelection": "Sélection : {range}",
+      "inlineContextPreview": "Aperçu : {preview}",
+      "removeInlineContext": "Retirer le contexte intégré de {note} {range}"
+    },
+    "image": {
+      "dropHere": "Déposer l’image ici",
+      "remove": "Retirer l’image",
+      "unavailable": "Les pièces jointes image ne sont pas disponibles dans le runtime actuel."
+    },
+    "welcome": {
+      "happySunday": "Bon dimanche{name}",
+      "sundaySession": "Session du dimanche ?",
+      "welcomeWeekend": "Bon week-end{name}",
+      "happyMonday": "Bon lundi{name}",
+      "backAtIt": "On s’y remet{name}",
+      "backAtItBang": "On s’y remet !",
+      "happyTuesday": "Bon mardi{name}",
+      "happyWednesday": "Bon mercredi{name}",
+      "happyThursday": "Bon jeudi{name}",
+      "happyFriday": "Bon vendredi{name}",
+      "fridayFeeling": "L’esprit du vendredi{name}",
+      "happySaturday": "Bon samedi{name}",
+      "happySaturdayBang": "Bon samedi !",
+      "goodMorning": "Bonjour{name}",
+      "coffeeYapi": "Un café et YaPi ?",
+      "goodAfternoon": "Bon après-midi{name}",
+      "heyThere": "Salut{name}",
+      "howsItGoing": "Comment ça va{name} ?",
+      "goodEvening": "Bonsoir{name}",
+      "evening": "Bonsoir{name}",
+      "howWasYourDay": "Comment s’est passée ta journée{name} ?",
+      "nightOwl": "Bonsoir, oiseau de nuit",
+      "hiHowAreYou": "Salut{name}, comment allez-vous ?",
+      "hiHowAreYouNoName": "Salut, comment allez-vous ?",
+      "welcomeBack": "Bon retour{name} !",
+      "whatsNew": "Quoi de neuf{name} ?",
+      "nameReturns": "{userName} est de retour !",
+      "absolutelyRight": "Vous avez tout à fait raison !"
+    },
+    "mention": {
+      "agents": "Agents",
+      "noMatches": "Aucune correspondance"
+    },
+    "file": {
+      "openFailed": "Impossible d’ouvrir le fichier : {path}",
+      "openError": "Échec de l’ouverture du fichier : {message}"
+    },
+    "mermaid": {
+      "zoomOut": "Dézoomer le diagramme Mermaid",
+      "resetZoom": "Réinitialiser le zoom du diagramme Mermaid",
+      "zoomIn": "Zoomer le diagramme Mermaid",
+      "fitToWidth": "Ajuster le diagramme Mermaid à la largeur"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "ariaLabel": "Sections des paramètres",
+      "general": "Général",
+      "models": "Modèles",
+      "skills": "Compétences",
+      "tools": "Outils",
+      "subagents": "Sous-agents",
+      "commands": "Commandes"
+    },
+    "integrations": {
+      "heading": "Intégrations"
+    },
+    "styleSettings": {
+      "name": "Style Settings",
+      "desc": "Personnalisez l'apparence de YaPi avec le plugin Style Settings.",
+      "open": "Ouvrir Style Settings",
+      "installationOpened": "La page du plugin Style Settings a été ouverte. Installez-le ou activez-le, puis revenez à Intégrations."
+    },
+    "layout": "Mise en page",
+    "chatBehavior": "Comportement du chat",
+    "personalizationContext": "Personnalisation et contexte",
+    "inputShortcuts": "Saisie et raccourcis",
+    "userName": {
+      "name": "Comment YaPi doit-il vous appeler ?",
+      "desc": "Votre nom pour les salutations personnalisées (laisser vide pour les salutations génériques)"
+    },
+    "excludedTags": {
+      "name": "Tags exclus",
+      "desc": "Les notes avec ces tags ne seront pas chargées automatiquement comme contexte.",
+      "placeholder": "Ajouter un tag",
+      "inputLabel": "Ajouter un tag exclu",
+      "removeAria": "Supprimer le tag exclu {value}"
+    },
+    "autoTitle": {
+      "name": "Générer automatiquement les titres de conversation",
+      "desc": "Génère automatiquement les titres après le premier message de l’utilisateur."
+    },
+    "compaction": {
+      "title": "Compactage",
+      "autoCompact": {
+        "name": "Compacter automatiquement les conversations",
+        "desc": "Résume automatiquement l’ancien historique de session après une réponse lorsque l’usage du contexte dépasse le seuil."
+      },
+      "threshold": {
+        "name": "Seuil de compactage",
+        "desc": "Pourcentage de la fenêtre de contexte du modèle actuel qui déclenche le compactage automatique."
+      },
+      "keepRecent": {
+        "name": "Conserver le contexte récent",
+        "desc": "Nombre approximatif de tokens d’historique récent à conserver tels quels après compactage."
+      }
+    },
+    "navMappings": {
+      "name": "Mappages de navigation style Vim",
+      "desc": "Un mappage par ligne. Format : \"map <touche> <action>\" (actions : scrollUp, scrollDown, focusInput)."
+    },
+    "requireCommandOrControlEnterToSend": {
+      "name": "Exiger Command/Ctrl+Entrée pour envoyer",
+      "desc": "Si activé, Entrée insère une nouvelle ligne. Command+Entrée ou Ctrl+Entrée envoie."
+    },
+    "inlineEditHotkey": {
+      "name": "Édition en ligne"
+    },
+    "openChatHotkey": {
+      "name": "Ouvrir le chat"
+    },
+    "newSessionHotkey": {
+      "name": "Nouvelle session"
+    },
+    "newTabHotkey": {
+      "name": "Nouvel onglet"
+    },
+    "closeTabHotkey": {
+      "name": "Fermer l’onglet"
+    },
+    "addSelectionHotkey": {
+      "name": "Ajouter la sélection à la saisie du chat"
+    },
+    "noteToolbar": {
+      "heading": "Note Toolbar",
+      "desc": "Installe ou active Note Toolbar si nécessaire, puis ajoute la commande de sélection de YaPi à la barre affichée pour le texte sélectionné.",
+      "setupLabelAndIcon": "YaPi + icône",
+      "setupIconOnly": "Icône uniquement",
+      "itemTooltip": "Ajouter la sélection à la saisie YaPi",
+      "commandTooltip": "Exécuter /{name} dans une nouvelle session YaPi",
+      "installed": "YaPi a été ajouté à la barre de texte sélectionné.",
+      "alreadyInstalled": "YaPi est déjà présent dans la barre de texte sélectionné.",
+      "styleSettingsOpened": "YaPi utilise déjà l’autre style. Les réglages de son élément Note Toolbar ont été ouverts pour modifier manuellement le libellé.",
+      "installRequired": "Installez Note Toolbar pour utiliser cette action.",
+      "needsToolbar": "Choisissez une barre dans Note Toolbar → Emplacements d’affichage → Texte sélectionné, puis relancez la configuration.",
+      "activationOpened": "La page du plugin Note Toolbar a été ouverte. Activez-le, puis relancez la configuration.",
+      "manualSetupOpened": "Les paramètres de Note Toolbar ont été ouverts. Ajoutez la commande YaPi manuellement ou activez la CLI officielle d’Obsidian et réessayez.",
+      "unsupportedVersion": "Note Toolbar {version} ne prend pas en charge la configuration automatique. Mettez-le à jour et réessayez.",
+      "invalidConfig": "La configuration de la barre de texte sélectionné est invalide. Réparez-la dans Note Toolbar et réessayez.",
+      "verificationFailed": "Note Toolbar a signalé une réussite, mais la commande YaPi n’a pas pu être vérifiée.",
+      "failed": "Impossible de configurer Note Toolbar : {message}",
+      "unknownError": "Erreur inconnue"
+    },
+    "slashCommands": {
+      "desc": "Gérez les commandes personnalisées du {workspaceName} dans .yapi/commands/. Déclenchées par /nom."
+    },
+    "subagents": {
+      "enableSpawn": {
+        "name": "Activer spawn_agent",
+        "desc": "Expose l’outil spawn_agent pour que Pi délègue des sous-tâches ciblées aux sous-agents."
+      },
+      "allowBackground": {
+        "name": "Autoriser les sous-agents en arrière-plan",
+        "desc": "Autorise les appels spawn_agent avec run_in_background=true. Les résultats complétés réhydratent la carte du sous-agent."
+      },
+      "maxConcurrent": {
+        "name": "Sous-agents simultanés max.",
+        "desc": "Limite stricte des sous-agents d’arrière-plan concurrents. Chaque appel spawn_agent a un worker isolé."
+      }
+    },
+    "environment": "Environnement",
+    "tabBarPosition": {
+      "name": "Position de la barre d’onglets",
+      "desc": "Afficher les onglets en haut dans l’en-tête du chat ou en bas au-dessus de la saisie.",
+      "input": "Bas",
+      "header": "Haut"
+    },
+    "enableAutoScroll": {
+      "name": "Défilement automatique pendant le streaming",
+      "desc": "Défiler automatiquement vers le bas pendant que Pi diffuse les réponses. Désactiver pour rester en haut et lire depuis le début."
+    },
+    "deferMathRenderingDuringStreaming": {
+      "name": "Différer le rendu mathématique pendant le streaming",
+      "desc": "Afficher le LaTeX brut pendant la diffusion, puis rendre les formules une fois chaque bloc de texte terminé."
+    },
+    "chatViewPlacement": {
+      "name": "Ouvrir YaPi dans",
+      "desc": "Où le panneau de chat s’ouvre lors de sa création",
+      "rightSidebar": "Barre latérale droite",
+      "leftSidebar": "Barre latérale gauche",
+      "mainTab": "Onglet principal de l’éditeur"
+    },
+    "language": {
+      "name": "Langue",
+      "desc": "Changer la langue d’affichage de l’interface du plugin"
+    },
+    "sessionFiles": {
+      "heading": "Fichiers de session",
+      "deleteRemoved": {
+        "name": "Supprimer les fichiers de session retirés",
+        "desc": "Supprime définitivement uniquement les fichiers de session retirés de l’historique, non archivés et non ouverts.",
+        "button": "Supprimer",
+        "success": "{count} fichier(s) de session retiré(s) supprimé(s).",
+        "failed": "Échec de la suppression des fichiers de session retirés"
+      }
+    },
+    "sharedEnvironment": {
+      "name": "Variables d’environnement",
+      "desc": "Variables d’environnement pour le runtime Pi (KEY=VALUE, une par ligne). Préfixe export shell pris en charge.",
+      "placeholder": "KEY=VALUE",
+      "reviewOwnership": "Vérifier la propriété de l’environnement pour : {keys}"
+    },
+    "tools": {
+      "sections": {
+        "builtIn": "Outils intégrés",
+        "web": "Outils web",
+        "mcp": "Serveurs MCP"
+      },
+      "heading": "Bascules d’outils",
+      "intro": "Activez ou désactivez les outils {hostName} exposés à l’agent. Les changements s’appliquent aux nouveaux tours après rafraîchissement du prompt.",
+      "unavailableOfficialCli": "Nécessite la CLI officielle Obsidian.",
+      "unavailableExternalRead": "Nécessite l’accès en lecture externe et au moins un répertoire autorisé.",
+      "unavailableCodex": "Nécessite une connexion OpenAI Codex."
+    },
+    "bash": {
+      "heading": "Accès Bash",
+      "allowlist": {
+        "name": "Commandes bash autorisées",
+        "desc": "Activez ou désactivez l’outil bash via la bascule bash des outils. Un exécutable nu comme git autorise ses sous-commandes ; une commande avec espaces comme npm run build autorise exactement ce préfixe. which, type et pwd sont toujours autorisés. La syntaxe de contrôle shell est rejetée.",
+        "inputLabel": "Ajouter une commande bash autorisée",
+        "removeAria": "Supprimer la commande bash autorisée {value}"
+      }
+    },
+    "externalRead": {
+      "heading": "Accès au système de fichiers externe",
+      "allow": {
+        "name": "Autoriser la lecture/liste de fichiers externes",
+        "desc": "Permet à YaPi de lire et lister les fichiers sous les répertoires externes autorisés ci-dessous, plus les dossiers de contexte externe de la session de chat actuelle."
+      },
+      "directories": {
+        "name": "Répertoires externes autorisés",
+        "desc": "Les outils de lecture/liste externes n’accèdent qu’aux chemins dans ces répertoires absolus et aux dossiers de contexte externe de la session.",
+        "placeholder": "/Users/me/workspace",
+        "inputLabel": "Ajouter un répertoire externe autorisé",
+        "removeAria": "Supprimer le répertoire externe autorisé {value}",
+        "browse": "Parcourir",
+        "browseTooltip": "Ouvrir le sélecteur de dossier système et ajouter le chemin sélectionné",
+        "pickerFailed": "Impossible d’ouvrir le sélecteur de dossier."
+      },
+      "notSaved": "Répertoires de lecture externe non enregistrés : {error}",
+      "pathMustBeAbsolute": "Le chemin doit être absolu : {path}"
+    },
+    "webSearch": {
+      "intro": "Faites glisser les fournisseurs pour définir leur priorité. WebSearch et WebFetch basculent automatiquement en cas d’indisponibilité, de limite ou de quota épuisé.",
+      "capability": {
+        "search": "Recherche",
+        "fetch": "Récupération"
+      },
+      "status": {
+        "configured": "Configuré",
+        "anonymous": "Anonyme",
+        "missingKey": "Clé manquante",
+        "disabled": "Désactivé"
+      },
+      "providerKeyRequired": "{provider} nécessite une clé API et est ignoré sans clé configurée.",
+      "providerKeyOptional": "{provider} autorise l’accès anonyme avec des limites réduites ; une clé API augmente le quota.",
+      "fixedFallbacks": "Replis finaux : WebSearch utilise le MCP public Exa ; WebFetch utilise HTTP direct.",
+      "reorder": {
+        "handle": "Réordonner {provider}, position actuelle {position}",
+        "position": "{provider} déplacé en position {position} sur {total}.",
+        "saved": "Ordre des fournisseurs enregistré.",
+        "cancelled": "Réorganisation annulée."
+      },
+      "apiKeyName": "Clé API {provider}",
+      "apiKeyPlaceholder": "Saisir la clé API…",
+      "apiKeySavedPlaceholder": "Enregistrée dans le {secureStorageName}",
+      "removeKey": "Retirer"
+    },
+    "modelsTab": {
+      "intro": "Les clés API et jetons OAuth sont stockés dans le {secureStorageName}. Les fournisseurs désactivés restent enregistrés mais sont masqués dans le sélecteur de modèles.",
+      "secureStorageRequired": "Les clés API des fournisseurs nécessitent {hostName} {version} ou plus récent avec {secureStorageName}. Mettez à jour {hostName} pour stocker les identifiants en toute sécurité.",
+      "authHeading": "Authentification et identifiants",
+      "apiKey": "Clé API",
+      "apiKeyOptional": "Clé API (facultative)",
+      "apiKeyDesc": "Enregistrée dans le {secureStorageName} sous {secretId}.",
+      "apiKeyPlaceholder": "Saisir la clé API…",
+      "apiKeySavedPlaceholder": "Enregistrée dans le {secureStorageName}",
+      "oauthToken": "Jeton OAuth",
+      "oauthTokenDesc": "Enregistré dans le {secureStorageName} sous {secretId}.",
+      "oauthTokenPlaceholder": "Saisir le jeton OAuth…",
+      "oauthTokenSavedPlaceholder": "Enregistré dans le {secureStorageName}",
+      "clear": "Effacer",
+      "candidateModels": "Pool de modèles candidats",
+      "noModels": "Aucun modèle chargé. Récupérez les modèles depuis le point de terminaison, puis activez-les ici.",
+      "addProvider": "+ Ajouter un fournisseur",
+      "addProviderAdded": "Ajouté",
+      "removedProvider": "Fournisseur {name} retiré.",
+      "removeConfirmTitle": "Supprimer le fournisseur {name} ?",
+      "removeConfirmDescription": "Cela supprime le fournisseur et ses sélections de modèles. Les identifiants enregistrés sont conservés par défaut.",
+      "removeCredential": "Supprimer également les identifiants de ce fournisseur de {secureStorageName}",
+      "testProvider": "Tester le fournisseur",
+      "testing": "Test…",
+      "testReady": "{name} prêt : {detail}",
+      "testFailed": "Échec du test {name} : {detail}",
+      "testError": "Erreur de test {name} : {message}",
+      "readinessProviderUnavailable": "Le fournisseur de disponibilité du modèle n’est pas disponible.",
+      "status": {
+        "ready": "Prêt",
+        "missingCredential": "Identifiant manquant",
+        "oauthExpired": "OAuth expiré",
+        "disabled": "Désactivé",
+        "unavailable": "Indisponible"
+      },
+      "statusDesc": {
+        "ready": "Des identifiants sont présents localement.",
+        "missingCredential": "Ajoutez une clé API ou un identifiant OAuth pris en charge pour utiliser ce fournisseur.",
+        "oauthExpired": "Un identifiant OAuth existe, mais il est expiré. Reconnectez-vous avant d’utiliser ce fournisseur.",
+        "disabled": "Les identifiants sont conservés, mais ce fournisseur est masqué de la sélection de modèles.",
+        "unavailable": "Aucune métadonnée de modèle pi-ai locale pour ce fournisseur pour l’instant."
+      },
+      "codex": {
+        "name": "OpenAI Codex",
+        "desc": "Connectez-vous avec votre abonnement ChatGPT/Codex. Identifiants dans le {secureStorageName}.",
+        "connect": "Connecter",
+        "reconnect": "Reconnecter",
+        "disconnect": "Déconnecter",
+        "connected": "OpenAI Codex connecté.",
+        "disconnected": "OpenAI Codex déconnecté.",
+        "loginFailed": "Échec de la connexion Codex : {message}"
+      },
+      "addSectionLocal": "Local",
+      "addSectionCustom": "API personnalisée",
+      "addSectionOAuth": "OAuth",
+      "addSectionApi": "API",
+      "endpointHeading": "Point de terminaison",
+      "displayName": "Nom affiché",
+      "displayNameDesc": "Affiché dans la liste des fournisseurs et le regroupement du sélecteur de modèles.",
+      "baseUrl": "URL de base",
+      "baseUrlDesc": "Racine de l’API, y compris le chemin de version si nécessaire (par ex. /v1).",
+      "baseUrlPlaceholder": "http://localhost:11434/v1",
+      "fetchModels": "Récupérer les modèles",
+      "fetchingModels": "Récupération des modèles…",
+      "fetchModelsSuccess": "{name} : {count} modèles chargés.",
+      "fetchModelsFailed": "{name} : échec de la récupération des modèles : {message}",
+      "authHeadingOptional": "Authentification (facultative)",
+      "apiKeyOptionalDesc": "Facultatif. Laissez vide pour les serveurs locaux sans authentification. Si renseignée, enregistrée dans le {secureStorageName} sous {secretId}.",
+      "apiKeyOptionalPlaceholder": "Clé API facultative…",
+      "grokBuild": {
+        "name": "Grok Build",
+        "desc": "Connectez-vous à Grok Build avec votre compte xAI. Les identifiants sont stockés dans {secureStorageName}.",
+        "connect": "Connecter",
+        "reconnect": "Reconnecter",
+        "disconnect": "Déconnecter",
+        "connected": "Grok Build connecté.",
+        "disconnected": "Grok Build déconnecté.",
+        "loginFailed": "Échec de la connexion Grok Build : {message}"
+      },
+      "claude": {
+        "name": "Claude",
+        "desc": "Connectez-vous avec votre abonnement Claude Pro ou Max dans le navigateur. Les identifiants sont stockés dans {secureStorageName}.",
+        "connect": "Connecter",
+        "reconnect": "Reconnecter",
+        "disconnect": "Déconnecter",
+        "connected": "Claude connecté.",
+        "disconnected": "Claude déconnecté.",
+        "loginFailed": "Échec de la connexion Claude : {message}"
+      },
+      "oauthCommon": {
+        "cancel": "Annuler",
+        "deviceCode": "Code d'appareil",
+        "cancelled": "Connexion annulée."
+      }
+    },
+    "skills": {
+      "intro": "Les compétences d’agent sont dans .yapi/skills/ et se chargent au tour suivant (outil skill + prompt système). YaPi n’installe ou ne met à jour qu’après une action ci-dessous.",
+      "defaultBundle": {
+        "name": "Compétences {hostName} officielles",
+        "desc": "Installe ou met à jour le bundle officiel kepano/obsidian-skills pour ce {workspaceName}. Accède à GitHub/skills.sh, exécute npx skills et écrit sous .yapi/skills/.",
+        "button": "Installer les compétences officielles",
+        "updateButton": "Mettre à jour les compétences officielles",
+        "label": "Bundle officiel :",
+        "installMore": "Installer plus depuis skills.sh avec owner/repo."
+      },
+      "remote": {
+        "name": "Installer à distance",
+        "desc": "Accepte owner/repo, URL GitHub, URL git, URL d’arbre de dépôt ou chemins locaux. Listez d’abord les compétences distantes, puis choisissez lesquelles installer.",
+        "listButton": "Lister les compétences",
+        "installSelected": "Installer les compétences sélectionnées",
+        "heading": "Compétences distantes",
+        "clearSelected": "Effacer la sélection distante",
+        "securityNotice": "Avis de sécurité skills.sh",
+        "reviewSkillMd": "Examinez SKILL.md avant d’installer."
+      },
+      "installed": {
+        "heading": "Compétences installées",
+        "empty": "Aucune compétence dans .yapi/skills/ pour l’instant. Installez-en une ci-dessous.",
+        "updateAll": "Tout mettre à jour",
+        "enableAria": "Activer la compétence {name}",
+        "disableAria": "Désactiver la compétence {name}",
+        "updateAria": "Mettre à jour la compétence {name}",
+        "removeAria": "Retirer la compétence {name}",
+        "installAria": "Installer la compétence {name}"
+      },
+      "notices": {
+        "noRemote": "Aucune compétence distante trouvée pour cette source.",
+        "selectOne": "Sélectionnez au moins une compétence à installer."
+      }
+    },
+    "slashCommandsUi": {
+      "internalHeading": "Commandes internes",
+      "heading": "Commandes personnalisées",
+      "add": "+ Ajouter une commande",
+      "addAria": "Ajouter une commande personnalisée",
+      "empty": "Aucune commande personnalisée. Ajoutez-en une pour le menu /.",
+      "loading": "Chargement des commandes personnalisées…",
+      "loadFailed": "Échec du chargement des commandes personnalisées : {message}",
+      "editAria": "Modifier la commande {name}",
+      "deleteAria": "Supprimer la commande {name}",
+      "deleteConfirm": "Supprimer la commande personnalisée /{name} ? Son élément Note Toolbar ne sera pas supprimé ; supprimez-le manuellement.",
+      "deleteFailed": "Échec de la suppression de la commande personnalisée : {message}"
+    },
+    "createCommand": {
+      "titleCreate": "Créer une commande slash personnalisée",
+      "titleEdit": "Modifier une commande slash personnalisée",
+      "name": {
+        "name": "Nom de la commande",
+        "desc": "Slug utilisé après / (ex. explain, critique)",
+        "placeholder": "explain"
+      },
+      "description": {
+        "name": "Description",
+        "desc": "Description affichée dans l’autocomplétion des commandes slash",
+        "placeholder": "Critiquer le code étape par étape"
+      },
+      "argumentHint": {
+        "name": "Indication d’argument",
+        "desc": "Indication facultative dans la liste ; le nom de la commande est utilisé par défaut"
+      },
+      "icon": {
+        "name": "Icône",
+        "desc": "Icône affichée pour la commande et son élément Note Toolbar",
+        "choose": "Choisir une icône",
+        "pickerTitle": "Choisir une icône",
+        "search": "Rechercher des icônes",
+        "searchPlaceholder": "Rechercher par nom d’icône…",
+        "results": "Résultats d’icônes",
+        "noResults": "Aucune icône correspondante"
+      },
+      "template": {
+        "name": "Invite",
+        "desc": "Instructions envoyées lors de l’exécution de la commande."
+      },
+      "needName": "Veuillez indiquer un nom de commande valide.",
+      "needTemplate": "Veuillez saisir une invite.",
+      "duplicate": "Une commande personnalisée /{name} existe déjà.",
+      "saveFailed": "Échec de l’enregistrement de la commande slash personnalisée.",
+      "newCommand": "nouvelle-commande",
+      "addToNoteToolbar": "Ajouter à Note Toolbar",
+      "addToNoteToolbarFailed": "La commande a été enregistrée, mais n’a pas pu être ajoutée à Note Toolbar : {message}"
+    },
+    "mcp": {
+      "empty": "Aucun serveur MCP configuré. Cliquez sur Ajouter pour en créer un.",
+      "add": "+ Ajouter un MCP",
+      "importJson": "Importer du JSON",
+      "importJsonTitle": "Importer une configuration MCP",
+      "importJsonDescription": "Collez ci-dessous la configuration MCP au format JSON. YaPi ne la lit qu’après avoir choisi Importer.",
+      "importJsonField": "Configuration MCP en JSON",
+      "importJsonPlaceholder": "{\"mcpServers\":{\"example\":{\"type\":\"http\",\"url\":\"https://example.com/mcp\"}}}",
+      "importAction": "Importer",
+      "importFailed": "Échec de l’importation de la configuration MCP",
+      "noValidConfig": "Aucune configuration MCP valide dans le JSON collé",
+      "importedNone": "Aucun nouveau serveur MCP importé",
+      "clearOauth": "Effacer les identifiants OAuth",
+      "refreshTools": "Connecter / actualiser les outils",
+      "toolCount": "{count} outils",
+      "typeStdio": "stdio (commande locale)",
+      "typeHttp": "http / sse (distant)",
+      "contextSavingTitle": "Badges slash : les jetons /{name} mettent ce serveur en évidence dans le compositeur",
+      "oauthBadge": "OAuth",
+      "oauthAuthenticated": "OAuth authentifié",
+      "oauthExpiredBadge": "Expiré",
+      "oauthExpiredTitle": "Jeton OAuth expiré",
+      "refreshFailed": "Échec de l’actualisation des outils",
+      "saveFailed": "Échec de l’enregistrement du serveur MCP",
+      "alreadyExists": "Le serveur « {name} » existe déjà",
+      "deleteConfirm": "Supprimer le serveur MCP « {name} » ?",
+      "authFailed": "Échec d’auth pour « {name} »",
+      "modal": {
+        "titleAdd": "Ajouter un serveur MCP",
+        "serverName": "Nom du serveur",
+        "serverNamePlaceholder": "my-mcp-server",
+        "serverNameInvalid": "Le nom du serveur ne peut contenir que des lettres, chiffres, points, tirets et underscores",
+        "needName": "Veuillez saisir un nom de serveur",
+        "type": "Type",
+        "typeStdioOption": "Stdio",
+        "typeSseOption": "SSE",
+        "typeHttpOption": "HTTP",
+        "command": "Commande",
+        "needCommand": "Veuillez saisir une commande",
+        "url": "URL",
+        "urlPlaceholder": "http://localhost:3000/sse",
+        "needUrl": "Veuillez saisir une URL",
+        "env": "Variables d’environnement",
+        "headersName": "En-têtes",
+        "authHeading": "Authentification",
+        "authAuto": "Auto",
+        "authOauth": "OAuth",
+        "authBearer": "Jeton Bearer",
+        "authNone": "Aucun",
+        "oauthGrant": "Type de grant OAuth",
+        "grantAuthCode": "Code d’autorisation",
+        "grantClientCredentials": "Identifiants client",
+        "clientId": "ID client",
+        "clientSecret": "Secret client",
+        "bearerToken": "Jeton Bearer",
+        "bearerTokenEnv": "Variable d’env. du jeton Bearer",
+        "scope": "Portée"
+      },
+      "test": {
+        "connecting": "Actualisation des outils…",
+        "failed": "Échec de la connexion",
+        "connected": "Outils actualisés",
+        "availableTools": "Outils disponibles ({count})",
+        "noTools": "Ce serveur n’a renvoyé aucun outil."
+      }
+    }
+  },
+  "commands": {
+    "openChatView": "Ouvrir la vue chat",
+    "runWorkspaceCommand": "Exécuter /{name} dans une nouvelle session",
+    "workspaceCommandEmpty": "Sélectionnez du texte avant d’exécuter cette commande.",
+    "workspaceCommandUnavailable": "Cette commande de l’espace de travail est indisponible.",
+    "inlineEdit": "Édition en ligne",
+    "newTab": "Nouvel onglet",
+    "newSession": "Nouvelle session (onglet actuel)",
+    "closeCurrentTab": "Fermer l’onglet actuel",
+    "openYapiRibbon": "Ouvrir YaPi",
+    "inlineEditUnavailableView": "Édition en ligne indisponible : impossible d’accéder à la vue Markdown active.",
+    "inlineEditInserted": "Inséré",
+    "inlineEditApplied": "Modification appliquée"
+  },
+  "tools": {
+    "display": {
+      "read": "Lire",
+      "readDesc": "Lire le corps des notes par chemin relatif au vault ou nom de fichier style wikilien.",
+      "edit": "Modifier",
+      "editDesc": "Remplacer du texte exact dans des notes existantes. Préféré pour les éditions partielles.",
+      "write": "Écrire",
+      "writeDesc": "Créer des notes, ajouter en début/fin, ou écraser intentionnellement des notes entières.",
+      "search": "Rechercher",
+      "searchDesc": "Rechercher du texte, des tags, ou lister des fichiers markdown dans des dossiers.",
+      "noteInfo": "Infos note",
+      "noteInfoDesc": "Lire les métadonnées, tags, liens sortants et le frontmatter.",
+      "links": "Liens",
+      "linksDesc": "Lire les liens sortants ou rétroliens d’une note.",
+      "properties": "Propriétés",
+      "propertiesDesc": "Lister, lire, définir ou retirer des propriétés YAML frontmatter.",
+      "tasks": "Tâches",
+      "tasksDesc": "Lister ou basculer des tâches markdown.",
+      "history": "Historique",
+      "historyDesc": "Lister, lire et restaurer les versions d’historique de fichiers Obsidian.",
+      "delete": "Supprimer",
+      "deleteDesc": "Déplacer des fichiers ou dossiers du vault vers la corbeille.",
+      "move": "Déplacer",
+      "moveDesc": "Renommer ou déplacer des fichiers/dossiers du vault et laisser Obsidian mettre à jour les liens.",
+      "list": "Lister",
+      "listDesc": "Lister les enfants directs des dossiers du vault, y compris les pièces jointes.",
+      "readExternal": "Lire l’externe",
+      "readExternalDesc": "Lire des fichiers sous des répertoires externes autorisés par chemin absolu.",
+      "listExternal": "Lister l’externe",
+      "listExternalDesc": "Lister les enfants directs de répertoires externes autorisés par chemin absolu.",
+      "mkdir": "Mkdir",
+      "mkdirDesc": "Créer des dossiers dans le vault.",
+      "open": "Ouvrir",
+      "openDesc": "Ouvrir un fichier du vault dans l’espace de travail Obsidian.",
+      "attachment": "Pièce jointe",
+      "attachmentDesc": "Résoudre les métadonnées/URL de ressources de pièces jointes ou les chemins disponibles.",
+      "generateImage": "Générer une image",
+      "generateImageDesc": "Générer des images avec Codex, les enregistrer en pièces jointes, et éventuellement les intégrer dans des notes.",
+      "bash": "Bash",
+      "bashDesc": "Exécuter des commandes shell d’une ligne lorsque le bascule Bash est activé et que la commande correspond à la liste d’autorisation.",
+      "outline": "Plan",
+      "command": "Commande",
+      "eval": "Évaluer",
+      "daily": "Note quotidienne",
+      "dailyDesc": "Lire, ajouter ou préfixer la note quotidienne, ou résoudre son chemin. Nécessite le plugin Daily Notes.",
+      "graph": "Analyse de graphe",
+      "graphDesc": "Analyser le graphe du vault : orphelins (pas de rétroliens), culs-de-sac (pas de liens sortants) et non résolus (wikilinks cassés).",
+      "tags": "Étiquettes",
+      "tagsDesc": "Lister toutes les étiquettes du vault avec leurs compteurs, ou obtenir les détails d'une étiquette.",
+      "base": "Bases",
+      "baseDesc": "Interroger Obsidian Bases (bases de données intégrées) : lister les fichiers de base, inspecter les vues ou obtenir des résultats de requêtes. Seules les requêtes nécessitent la CLI officielle d'Obsidian."
+    },
+    "steps": {
+      "readFile": "Lire le fichier",
+      "writeFile": "Écrire le fichier",
+      "editFile": "Modifier le fichier",
+      "runCommand": "Exécuter la commande",
+      "searchWeb": "Rechercher sur le web",
+      "listDir": "Lister le répertoire",
+      "globFiles": "Trouver des fichiers",
+      "applyPatch": "Appliquer le correctif",
+      "tasksProgress": "Tâches {completed}/{total}",
+      "tasks": "Tâches",
+      "skill": "Compétence",
+      "searchCode": "Rechercher du code",
+      "fetchPage": "Récupérer la page",
+      "runSkill": "Exécuter la compétence",
+      "findTools": "Trouver des outils",
+      "sendInput": "Envoyer l’entrée",
+      "callMcp": "Appeler MCP",
+      "listMcpResources": "Lister les ressources MCP",
+      "readMcpResource": "Lire la ressource MCP",
+      "editNotebook": "Modifier le carnet"
+    }
+  },
+  "inlineEdit": {
+    "placeholderInsert": "Instructions d’insertion…",
+    "placeholderEdit": "Instructions d’édition…",
+    "placeholderReply": "Répondre pour continuer…",
+    "unavailableEditor": "Édition en ligne indisponible : impossible d’accéder à l’éditeur actif. Réouvrez la note."
+  },
+  "host": {
+    "failedSaveTabLayout": "Échec de l’enregistrement de la disposition des onglets",
+    "failedSaveDeletedSessions": "Échec de l’enregistrement de la liste des sessions supprimées"
+  }
+}

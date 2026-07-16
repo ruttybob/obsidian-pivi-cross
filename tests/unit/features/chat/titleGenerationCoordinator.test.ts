@@ -1,9 +1,9 @@
 import { TitleGenerationCoordinator } from '@/ui/chat/controllers/TitleGenerationCoordinator';
 import type { ChatState } from '@/ui/chat/state/ChatState';
 import type { SessionController } from '@/ui/chat/controllers/SessionController';
-import type { TitleGenerationService } from '@pivi/pivi-agent-core/runtime/auxTypes';
-import type { PiChatService } from '@pivi/pivi-agent-core/runtime/piChatService';
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { TitleGenerationService } from '@yapi/yapi-agent-core/runtime/auxTypes';
+import type { PiChatService } from '@yapi/yapi-agent-core/runtime/piChatService';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 import { createFakeChatPorts } from '../../../helpers/createFakeChatPorts';
 
 describe('TitleGenerationCoordinator', () => {

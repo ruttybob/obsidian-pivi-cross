@@ -47,7 +47,7 @@ class SessionFixture {
     this.parentId = null;
     this.offset = 1;
     this.append('custom', 'session-meta', {
-      customType: 'pivi/session-meta',
+      customType: 'yapi/session-meta',
       data: {
         title,
         titleSource: 'custom',
@@ -100,7 +100,7 @@ class SessionFixture {
 
   appendMessageUi(id, data) {
     return this.append('custom', id, {
-      customType: 'pivi/message-ui',
+      customType: 'yapi/message-ui',
       data,
     });
   }
@@ -231,7 +231,7 @@ export function generatePerfSessions(vaultPathInput) {
   if (!existsSync(vaultPath) || !statSync(vaultPath).isDirectory()) {
     throw new Error(`Vault path is not a directory: ${vaultPath}`);
   }
-  const sessionsDirectory = join(vaultPath, '.pivi', 'sessions');
+  const sessionsDirectory = join(vaultPath, '.yapi', 'sessions');
   mkdirSync(sessionsDirectory, { recursive: true });
   const fixtures = [
     ['perf-001-1k-messages.jsonl', createTranscriptFixture(vaultPath, 1_000)],

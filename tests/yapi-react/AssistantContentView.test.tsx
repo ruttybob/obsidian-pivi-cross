@@ -1,0 +1,521 @@
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
+import { TOOL_OBSIDIAN_EDIT } from '@yapi/yapi-agent-core/tools/obsidianToolNames';
+import { TOOL_ASK_USER_QUESTION, TOOL_BASH, TOOL_EDIT, TOOL_READ, TOOL_WRITE } from '@yapi/yapi-agent-core/tools/toolNames';
+import { act, fireEvent, render } from '@testing-library/react';
+
+import { createI18n, I18nProvider } from '../../packages/yapi-react/src/i18n';
+import {
+  AssistantContentView,
+  isAssistantToolOnlyMessage,
+  messageHasVisibleAssistantContent,
+} from '../../packages/yapi-react/src/chat/messages/AssistantContentView';
+import type {
+  MessageContentAdapter,
+  MessageContentAdapters,
+  StreamingMarkdownValue,
+} from '../../packages/yapi-react/src/chat/messages/types';
+import { ChatProjectionStore } from '../../packages/yapi-react/src/store';
+import { withTestPresentationPlatform } from '../helpers/presentationPlatform';
+
+function renderAssistant(message: ChatMessage, contentAdapters?: MessageContentAdapters) {
+  return render(withTestPresentationPlatform(
+    <I18nProvider i18n={createI18n()}>
+      <AssistantContentView contentAdapters={contentAdapters} message={message} />
+    </I18nProvider>,
+  ));
+}
+
+function assistantMessage(overrides: Partial<ChatMessage> = {}): ChatMessage {
+  return {
+    id: 'assistant-1',
+    role: 'assistant',
+    content: '',
+    timestamp: 1,
+    ...overrides,
+  };
+}
+
+describe('AssistantContentView', () => {
+  it('uses shared response metadata typography for the duration footer', () => {
+    const { container } = renderAssistant(assistantMessage({
+      content: 'Done',
+      durationFlavorWord: 'Distilled',
+      durationSeconds: 202,
+    }));
+
+    expect(container.querySelector('.yapi-baked-duration')).toHaveClass('yapi-response-meta');
+    expect(container.querySelector('.yapi-response-footer')).toHaveTextContent('Distilled for 3:22');
+  });
+
+  it('keeps content blocks ordered, resolves referenced tools by id, then renders orphan tools', () => {
+    const { container } = renderAssistant(assistantMessage({
+      contentBlocks: [
+        { type: 'text', content: 'Before' },
+        { type: 'tool_use', toolId: 'known' },
+        { type: 'thinking', content: 'Reasoning' },
+        { type: 'context_compacted' },
+        { type: 'text', content: 'After' },
+      ],
+      toolCalls: [
+        { id: 'known', name: 'read', input: { path: 'known.md' }, status: 'completed' },
+        { id: 'orphan', name: 'read', input: { path: 'orphan.md' }, status: 'completed' },
+      ],
+    }));
+
+    const sequence = [...container.querySelectorAll('.yapi-text-block, .yapi-tool-call, .yapi-thinking-block, .yapi-compact-boundary')]
+      .map(element => element.className.includes('yapi-text-block') ? element.textContent : element.getAttribute('data-tool-id') ?? element.className);
+    expect(sequence).toEqual([
+      'Before',
+      'known',
+      'yapi-thinking-block',
+      'yapi-memory-boundary yapi-compact-boundary',
+      'After',
+      'orphan',
+    ]);
+  });
+
+  it('renders an approximate compaction transition without a live announcement', () => {
+    const { container, getByRole } = renderAssistant(assistantMessage({
+      contentBlocks: [{
+        type: 'context_compacted',
+        tokensAfter: 9_200,
+        tokensBefore: 86_400,
+      }],
+    }));
+
+    expect(container.querySelector('.yapi-memory-chip')).toHaveTextContent('Session compacted~86K → ~9K');
+    expect(getByRole('separator')).toHaveAccessibleName('Approximately ~86K tokens to ~9K tokens');
+    expect(container.querySelector('[aria-live]')).toBeNull();
+  });
+
+  it('does not invent token values for a legacy compaction block', () => {
+    const { container, getByRole } = renderAssistant(assistantMessage({
+      contentBlocks: [{ type: 'context_compacted' }],
+    }));
+
+    expect(getByRole('separator')).toHaveAccessibleName('Session compacted');
+    expect(container.querySelector('.yapi-memory-chip-transition')).toBeNull();
+  });
+
+  it('expands structured checkpoint details without nesting the separator', () => {
+    const { container, getByRole } = renderAssistant(assistantMessage({
+      contentBlocks: [{
+        type: 'context_compacted',
+        checkpoint: {
+          artifacts: [{ label: 'Spec', vaultPath: 'specs/007.md' }],
+          constraints: ['Keep values estimated'],
+          continuationSummary: 'Continue the context inspector work.',
+          decisions: ['Use the existing ring'],
+          goal: 'Finish checkpoint presentation',
+          nextSteps: ['Run focused tests'],
+          openWork: ['Wire restored sessions'],
+          source: {
+            firstEntryId: 'entry-1',
+            firstKeptEntryId: 'entry-8',
+            lastEntryId: 'entry-7',
+          },
+          tokenEstimate: 1_250,
+          unresolvedQuestions: ['Verify row measurement'],
+        },
+        summary: 'Stored compatibility summary.',
+      }],
+    }));
+
+    const trigger = getByRole('button', { name: 'View checkpoint' });
+    expect(getByRole('separator')).not.toContainElement(trigger);
+    fireEvent.click(trigger);
+    const panel = getByRole('region', { name: 'Checkpoint details' });
+    expect(panel).toHaveTextContent('Continue the context inspector work.');
+    expect(panel).toHaveTextContent('Use the existing ring');
+    expect(panel).toHaveTextContent('Spec — specs/007.md');
+    expect(panel).toHaveTextContent('entry-1 → entry-7; keep entry-8');
+    expect(panel).toHaveTextContent('~1K');
+    expect(container.querySelector('.yapi-checkpoint-panel')).not.toHaveStyle({ overflow: 'auto' });
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('expands only the persisted summary for a legacy checkpoint', () => {
+    const { getByRole, queryByText } = renderAssistant(assistantMessage({
+      contentBlocks: [{
+        type: 'context_compacted',
+        summary: 'Legacy persisted summary only.',
+      }],
+    }));
+
+    fireEvent.click(getByRole('button', { name: 'View checkpoint' }));
+    expect(getByRole('region', { name: 'Checkpoint details' }))
+      .toHaveTextContent('Legacy persisted summary only.');
+    expect(queryByText('Decisions')).toBeNull();
+  });
+
+  it('merges Write and edit tool uses into contiguous step groups', () => {
+    const { container, getByRole } = renderAssistant(assistantMessage({
+      contentBlocks: [
+        { type: 'tool_use', toolId: 'bash-1' },
+        { type: 'tool_use', toolId: 'edit-1' },
+        { type: 'tool_use', toolId: 'write-1' },
+        { type: 'tool_use', toolId: 'obsidian-edit-1' },
+        { type: 'tool_use', toolId: 'read-1' },
+      ],
+      toolCalls: [
+        { id: 'bash-1', name: TOOL_BASH, input: { command: 'pwd' }, status: 'completed' },
+        { id: 'edit-1', name: TOOL_EDIT, input: { file_path: 'a.md' }, status: 'completed' },
+        { id: 'write-1', name: TOOL_WRITE, input: { file_path: 'b.md' }, status: 'completed' },
+        { id: 'obsidian-edit-1', name: TOOL_OBSIDIAN_EDIT, input: { path: 'c.md' }, status: 'completed' },
+        { id: 'read-1', name: TOOL_READ, input: { file_path: 'a.md' }, status: 'completed' },
+      ],
+    }));
+
+    expect(container.querySelector('.yapi-tool-step-group')).not.toBeNull();
+    const groupHeader = getByRole('button', { name: /5 steps/ });
+    expect(groupHeader).toHaveAccessibleName('5 steps, Bash, Edit, Write, Read');
+    expect(container.querySelector('.yapi-tool-step-group-summary')).toHaveTextContent('Bash, Edit, Write, Read');
+    expect(groupHeader.textContent).not.toContain('pwd');
+    expect(groupHeader.textContent).not.toContain('a.md');
+    fireEvent.click(groupHeader);
+    expect([...container.querySelectorAll('[data-tool-id]')].map(row => row.getAttribute('data-tool-id')))
+      .toEqual(['bash-1', 'edit-1', 'write-1', 'obsidian-edit-1', 'read-1']);
+  });
+
+  it('mounts each markdown block in its own empty React slot and cleans up stale generations', () => {
+    const mounts: string[] = [];
+    const cleanups: string[] = [];
+    const updates: string[] = [];
+    const markdown: MessageContentAdapter<StreamingMarkdownValue> = {
+      mount(container, value, context) {
+        expect(container.childElementCount).toBe(0);
+        mounts.push(`${value.content}:${context.generation}`);
+        container.textContent = `rendered:${value.content}`;
+        return () => cleanups.push(context.generation);
+      },
+      update(container, value) {
+        updates.push(value.content);
+        container.textContent = `rendered:${value.content}`;
+      },
+    };
+    const first = assistantMessage({ contentBlocks: [{ type: 'text', content: 'one' }, { type: 'text', content: 'two' }] });
+    const rendered = renderAssistant(first, { markdown });
+
+    expect(rendered.container.textContent).toContain('rendered:one');
+    expect(rendered.container.textContent).toContain('rendered:two');
+    rendered.rerender(withTestPresentationPlatform(
+      <I18nProvider i18n={createI18n()}>
+        <AssistantContentView contentAdapters={{ markdown }} message={assistantMessage({ contentBlocks: [{ type: 'text', content: 'three' }] })} />
+      </I18nProvider>,
+    ));
+
+    expect(cleanups).toContain('assistant-1:text:1');
+    expect(mounts).toContain('one:assistant-1:text:0');
+    expect(updates).toContain('three');
+  });
+
+  it('updates only the subscribed Markdown block whose entity changed', () => {
+    const updates: string[] = [];
+    const markdown: MessageContentAdapter<StreamingMarkdownValue> = {
+      mount(container, value) {
+        container.textContent = value.content;
+      },
+      update(_container, value) {
+        updates.push(`${value.blockId}:${value.content}`);
+      },
+    };
+    const store = new ChatProjectionStore();
+    const initial = assistantMessage({
+      content: 'one\ntwo',
+      contentBlocks: [
+        { type: 'text', content: 'one' },
+        { type: 'text', content: 'two' },
+      ],
+    });
+    store.replaceAll([initial]);
+    const message = store.getMessageSnapshot(initial.id);
+    if (!message) throw new Error('Expected projected assistant message');
+    render(withTestPresentationPlatform(
+      <I18nProvider i18n={createI18n()}>
+        <AssistantContentView
+          contentAdapters={{ markdown }}
+          message={message as ChatMessage}
+          projectionStore={store}
+        />
+      </I18nProvider>,
+    ));
+
+    act(() => store.upsertNow({
+      ...initial,
+      content: 'one updated\ntwo',
+      contentBlocks: [
+        { type: 'text', content: 'one updated' },
+        { type: 'text', content: 'two' },
+      ],
+    }));
+
+    expect(updates).toEqual(['assistant-1:text:0:one updated']);
+  });
+
+  it('uses the pending ask-user adapter but renders completed results as readable React fallback', () => {
+    const askUser: MessageContentAdapter<NonNullable<ChatMessage['toolCalls']>[number]> = {
+      mount(container) {
+        container.textContent = 'Interactive question';
+      },
+    };
+    const { container, getByRole, rerender } = renderAssistant(assistantMessage({
+      contentBlocks: [{ type: 'tool_use', toolId: 'ask' }],
+      toolCalls: [{ id: 'ask', name: TOOL_ASK_USER_QUESTION, input: {}, status: 'running' }],
+    }), { askUser });
+    fireEvent.click(getByRole('button'));
+    expect(container.textContent).toContain('Interactive question');
+
+    rerender(withTestPresentationPlatform(
+      <I18nProvider i18n={createI18n()}>
+        <AssistantContentView message={assistantMessage({
+          contentBlocks: [{ type: 'tool_use', toolId: 'ask' }],
+          toolCalls: [{ id: 'ask', name: TOOL_ASK_USER_QUESTION, input: {}, status: 'completed', result: 'chosen answer' }],
+        })} />
+      </I18nProvider>,
+    ));
+    expect(container.textContent).toContain('chosen answer');
+  });
+
+  it('hides internal tools from rows and groups while preserving visible orphan order', () => {
+    const { container } = renderAssistant(assistantMessage({
+      contentBlocks: [
+        { type: 'tool_use', toolId: 'hidden-output' },
+        { type: 'tool_use', toolId: 'read-1' },
+        { type: 'tool_use', toolId: 'silent-stdin' },
+        { type: 'tool_use', toolId: 'custom-out' },
+        { type: 'tool_use', toolId: 'read-2' },
+      ],
+      toolCalls: [
+        { id: 'hidden-output', name: 'TaskOutput', input: {}, status: 'completed' },
+        { id: 'read-1', name: 'read', input: { path: 'a.md' }, status: 'completed' },
+        { id: 'silent-stdin', name: 'write_stdin', input: {}, status: 'completed' },
+        { id: 'custom-out', name: 'custom_tool_call_output', input: {}, status: 'completed' },
+        { id: 'read-2', name: 'read', input: { path: 'b.md' }, status: 'completed' },
+        { id: 'orphan-hidden', name: 'TaskOutput', input: {}, status: 'completed' },
+        { id: 'orphan-visible', name: 'read', input: { path: 'c.md' }, status: 'completed' },
+      ],
+    }));
+
+    const toolIds = [...container.querySelectorAll('[data-tool-id]')].map(el => el.getAttribute('data-tool-id'));
+    expect(toolIds).toEqual(['read-1', 'read-2', 'orphan-visible']);
+    expect(container.querySelector('.yapi-tool-step-group')).toBeNull();
+  });
+
+  it('ignores whitespace text/thinking for visibility and does not mark subagent/write as tool-only', () => {
+    expect(messageHasVisibleAssistantContent(assistantMessage({
+      content: '   ',
+      contentBlocks: [{ type: 'thinking', content: '  ' }],
+    }))).toBe(false);
+
+    expect(isAssistantToolOnlyMessage(assistantMessage({
+      contentBlocks: [{ type: 'tool_use', toolId: 'bash-1' }],
+      toolCalls: [{ id: 'bash-1', name: 'Bash', input: { command: 'ls' }, status: 'completed' }],
+    }))).toBe(true);
+
+    expect(isAssistantToolOnlyMessage(assistantMessage({
+      contentBlocks: [{ type: 'tool_use', toolId: 'write-1' }],
+      toolCalls: [{ id: 'write-1', name: 'Write', input: { file_path: 'a.md' }, status: 'completed' }],
+    }))).toBe(true);
+
+    expect(isAssistantToolOnlyMessage(assistantMessage({
+      contentBlocks: [{ type: 'tool_use', toolId: 'edit-1' }],
+      toolCalls: [{ id: 'edit-1', name: TOOL_EDIT, input: { file_path: 'a.md' }, status: 'completed' }],
+    }))).toBe(true);
+
+    expect(isAssistantToolOnlyMessage(assistantMessage({
+      contentBlocks: [{ type: 'subagent', subagentId: 'sub-1', mode: 'sync' }],
+      toolCalls: [{
+        id: 'sub-1',
+        name: 'Task',
+        input: {},
+        status: 'completed',
+        subagent: {
+          id: 'sub-1',
+          description: 'helper',
+          isExpanded: false,
+          status: 'completed',
+          toolCalls: [],
+        },
+      }],
+    }))).toBe(false);
+  });
+
+  it('renders consecutive subagents as independent imperative adapter slots', () => {
+    const mounted: string[] = [];
+    const subagent: NonNullable<MessageContentAdapters['subagent']> = {
+      mount(container, value) {
+        mounted.push(value.id);
+        container.dataset.subagentId = value.id;
+        container.textContent = value.description;
+      },
+    };
+    const message = assistantMessage({
+      contentBlocks: [
+        { type: 'subagent', subagentId: 'spawn-1', mode: 'async' },
+        { type: 'subagent', subagentId: 'spawn-2', mode: 'async' },
+        { type: 'subagent', subagentId: 'spawn-3', mode: 'async' },
+      ],
+      toolCalls: ['spawn-1', 'spawn-2', 'spawn-3'].map((id, index) => ({
+        id,
+        name: 'spawn_agent',
+        input: {},
+        status: index === 2 ? 'running' : 'completed',
+        subagent: {
+          id,
+          description: `Agent ${index + 1}`,
+          isExpanded: false,
+          mode: 'async',
+          status: index === 2 ? 'running' : 'completed',
+          asyncStatus: index === 2 ? 'running' : 'completed',
+          toolCalls: [],
+        },
+      })),
+    });
+    const { container } = renderAssistant(message, { subagent });
+
+    expect(mounted).toEqual(['spawn-1', 'spawn-2', 'spawn-3']);
+    expect([...container.querySelectorAll('.yapi-subagent-content-adapter')]
+      .map(element => (element as HTMLElement).dataset.subagentId))
+      .toEqual(['spawn-1', 'spawn-2', 'spawn-3']);
+    expect(container.querySelector('.yapi-agent-group')).toBeNull();
+    expect(container.querySelector('.yapi-agent-conclusion')).toBeNull();
+  });
+
+  it('updates only the changed projected subagent slot without remounting siblings', () => {
+    const mounts: string[] = [];
+    const updates: string[] = [];
+    const subagent: NonNullable<MessageContentAdapters['subagent']> = {
+      mount(container, value) {
+        mounts.push(value.id);
+        container.textContent = value.description;
+      },
+      update(container, value) {
+        updates.push(value.id);
+        container.textContent = value.description;
+      },
+    };
+    const createMessage = (secondDescription: string): ChatMessage => assistantMessage({
+      contentBlocks: [
+        { type: 'subagent', subagentId: 'spawn-1', mode: 'async' },
+        { type: 'subagent', subagentId: 'spawn-2', mode: 'async' },
+      ],
+      toolCalls: ['spawn-1', 'spawn-2'].map((id, index) => ({
+        id,
+        name: 'spawn_agent',
+        input: {},
+        status: 'running',
+        subagent: {
+          id,
+          description: index === 1 ? secondDescription : 'Unchanged',
+          isExpanded: false,
+          mode: 'async',
+          status: 'running',
+          asyncStatus: 'running',
+          toolCalls: [],
+        },
+      })),
+    });
+    const store = new ChatProjectionStore();
+    const initial = createMessage('Before');
+    store.replaceAll([initial]);
+    const projected = store.getMessageSnapshot(initial.id);
+    if (!projected) throw new Error('Expected projected assistant message');
+    const view = render(withTestPresentationPlatform(
+      <I18nProvider i18n={createI18n()}>
+        <AssistantContentView contentAdapters={{ subagent }} message={projected as ChatMessage} projectionStore={store} />
+      </I18nProvider>,
+    ));
+
+    expect(mounts).toEqual(['spawn-1', 'spawn-2']);
+    act(() => store.upsertNow(createMessage('After')));
+    expect(mounts).toEqual(['spawn-1', 'spawn-2']);
+    expect(updates).toEqual(['spawn-2']);
+    expect(view.container.querySelectorAll('.yapi-subagent-content-adapter')).toHaveLength(2);
+    expect(view.container).toHaveTextContent('UnchangedAfter');
+  });
+
+  it('renders a subagent activity directly without a spawn-agent tool shell', () => {
+    const subagentAdapter: NonNullable<MessageContentAdapters['subagent']> = {
+      mount(container, subagent) {
+        const activity = container.ownerDocument.createElement('div');
+        activity.className = 'yapi-subagent-card';
+        const icon = container.ownerDocument.createElement('span');
+        icon.className = 'yapi-subagent-icon';
+        const label = container.ownerDocument.createElement('span');
+        label.className = 'yapi-subagent-label';
+        label.textContent = subagent.writerName ?? '';
+        const summary = container.ownerDocument.createElement('span');
+        summary.className = 'yapi-subagent-step-summary';
+        summary.textContent = subagent.description;
+        activity.append(icon, label, summary);
+        container.appendChild(activity);
+      },
+    };
+    const { container } = renderAssistant(assistantMessage({
+      contentBlocks: [{ type: 'subagent', subagentId: 'spawn-1', mode: 'async' }],
+      toolCalls: [{
+        id: 'spawn-1',
+        name: 'spawn_agent',
+        input: { label: 'scan-links', message: 'Scan the assigned notes.' },
+        status: 'running',
+        subagent: {
+          id: 'spawn-1',
+          writerName: 'Austen',
+          description: 'Scan project links',
+          isExpanded: false,
+          mode: 'async',
+          status: 'running',
+          asyncStatus: 'running',
+          toolCalls: [],
+        },
+      }],
+    }), { subagent: subagentAdapter });
+
+    expect(container.querySelector('.yapi-subagent-content-adapter')).not.toBeNull();
+    expect(container.querySelector('.yapi-subagent-icon')).not.toBeNull();
+    expect(container.querySelector('.yapi-subagent-label')).toHaveTextContent('Austen');
+    expect(container.querySelector('.yapi-subagent-step-summary')).toHaveTextContent('Scan project links');
+    expect(container.querySelector('.yapi-tool-call')).toBeNull();
+    expect(container.querySelector('.yapi-tool-header')).toBeNull();
+  });
+
+  it('updates a streaming subagent adapter in place instead of remounting it', () => {
+    const mount = jest.fn((container: HTMLElement) => {
+      const activity = container.ownerDocument.createElement('div');
+      activity.className = 'yapi-subagent-card';
+      container.appendChild(activity);
+    });
+    const update = jest.fn();
+    const adapter: NonNullable<MessageContentAdapters['subagent']> = { mount, update };
+    const createMessage = (result: string): ChatMessage => assistantMessage({
+      contentBlocks: [{ type: 'subagent', subagentId: 'spawn-1', mode: 'async' }],
+      toolCalls: [{
+        id: 'spawn-1',
+        name: 'spawn_agent',
+        input: { label: 'scan', message: 'Scan notes.' },
+        status: 'running',
+        subagent: {
+          id: 'spawn-1',
+          description: 'Scan notes',
+          isExpanded: true,
+          mode: 'async',
+          status: 'running',
+          asyncStatus: 'running',
+          result,
+          toolCalls: [],
+        },
+      }],
+    });
+    const view = renderAssistant(createMessage('first'), { subagent: adapter });
+
+    view.rerender(withTestPresentationPlatform(
+      <I18nProvider i18n={createI18n()}>
+        <AssistantContentView contentAdapters={{ subagent: adapter }} message={createMessage('firstsecond')} />
+      </I18nProvider>,
+    ));
+
+    expect(mount).toHaveBeenCalledTimes(1);
+    expect(update).toHaveBeenCalledTimes(1);
+    expect(view.container.querySelectorAll('.yapi-subagent-card')).toHaveLength(1);
+  });
+});

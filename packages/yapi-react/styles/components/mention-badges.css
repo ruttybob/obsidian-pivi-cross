@@ -1,0 +1,155 @@
+/* Inline mention badges (chat history + input strip) */
+.yapi-text-with-mentions {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.yapi-user-context-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yapi-spacing-xs);
+  margin-bottom: var(--yapi-spacing-xs);
+}
+
+.yapi-context-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yapi-spacing-xs);
+  max-width: min(100%, 220px);
+  min-height: 20px;
+  padding: 1px 6px 1px 5px;
+  border-radius: var(--yapi-radius-lg);
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: var(--yapi-text-sm);
+  line-height: 1.2;
+  vertical-align: -0.15em;
+  background: var(--yapi-host-background-primary);
+  color: var(--yapi-host-text-normal);
+}
+
+button.yapi-context-badge {
+  height: auto;
+  min-height: 20px;
+  min-width: 0;
+  padding: 1px 6px 1px 5px;
+  border-radius: var(--yapi-radius-lg);
+  font-size: var(--yapi-text-sm);
+  font-weight: inherit;
+  line-height: 1.2;
+  appearance: none;
+  box-shadow: none;
+  cursor: default;
+}
+
+.yapi-context-badge--clickable {
+  cursor: pointer;
+}
+
+.yapi-context-badge--context,
+.yapi-context-badge--attachment {
+  border-color: var(--yapi-host-border);
+}
+
+.yapi-context-badge--context.yapi-context-badge--clickable:hover,
+.yapi-context-badge--attachment.yapi-context-badge--clickable:hover {
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-context-badge--tool {
+  border-color: rgba(var(--yapi-brand-rgb), 0.35);
+  background: rgba(var(--yapi-brand-rgb), 0.14);
+  color: color-mix(in srgb, var(--yapi-brand) 72%, var(--yapi-host-text-normal));
+}
+
+.yapi-context-badge--tool:hover:not(:disabled) {
+  background: rgba(var(--yapi-brand-rgb), 0.22);
+  border-color: rgba(var(--yapi-brand-rgb), 0.45);
+}
+
+.yapi-context-badge--inline {
+  --yapi-inline-context-accent-rgb: 167, 139, 250;
+  min-height: 18px;
+  padding: 1px 5px 1px 4px;
+  border-radius: var(--yapi-radius-md);
+  font-size: 0.88em;
+  line-height: 1.1;
+  vertical-align: -0.1em;
+  border-color: var(--yapi-host-border);
+  background: var(--yapi-host-background-primary);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-context-badge--inline:hover {
+  background: var(--yapi-host-background-hover);
+  border-color: var(--yapi-host-border-hover);
+}
+
+.yapi-context-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-context-badge--tool .yapi-context-badge-icon {
+  color: color-mix(in srgb, var(--yapi-brand) 80%, var(--yapi-host-text-muted));
+}
+
+.yapi-context-badge--inline .yapi-context-badge-icon {
+  color: color-mix(in srgb, rgb(var(--yapi-inline-context-accent-rgb)) 80%, var(--yapi-host-text-muted));
+}
+
+.yapi-context-badge-icon svg {
+  width: 11px;
+  height: 11px;
+}
+
+.yapi-context-badge--inline .yapi-context-badge-icon svg {
+  width: 11px;
+  height: 11px;
+}
+
+.yapi-context-badge-kind-skill .yapi-context-badge-icon svg,
+.yapi-context-badge-kind-tool .yapi-context-badge-icon svg,
+.yapi-context-badge-kind-mcp .yapi-context-badge-icon svg {
+  width: 10px;
+  height: 10px;
+}
+
+.yapi-context-badge--inline.yapi-context-badge-kind-skill .yapi-context-badge-icon svg,
+.yapi-context-badge--inline.yapi-context-badge-kind-tool .yapi-context-badge-icon svg,
+.yapi-context-badge--inline.yapi-context-badge-kind-mcp .yapi-context-badge-icon svg {
+  width: 10px;
+  height: 10px;
+}
+
+.yapi-context-badge-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.yapi-context-badge-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  margin-inline-start: 1px;
+  border-radius: 50%;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  font-size: var(--yapi-text-base);
+  line-height: 1;
+  opacity: 0.72;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-context-badge-remove:hover {
+    background: var(--yapi-host-background-hover);
+    opacity: 1;
+  }
+}

@@ -1,8 +1,8 @@
-import type { MentionBadgeParseContext } from '@pivi/pivi-agent-core/context/mentions';
+import type { MentionBadgeParseContext } from '@yapi/yapi-agent-core/context/mentions';
 import {
   isMentionStart,
   resolveExternalRootMentionAtIndex,
-} from '@pivi/pivi-agent-core/context/mentions';
+} from '@yapi/yapi-agent-core/context/mentions';
 import type { App, EventRef } from 'obsidian';
 import { Notice, TFile } from 'obsidian';
 

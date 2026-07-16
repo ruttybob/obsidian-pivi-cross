@@ -2,9 +2,9 @@ import {
   type SessionRef,
   SessionIndexStaleError,
   type SessionStore,
-} from '@pivi/pivi-agent-core/session';
-import type { ChatMessage, OpenSessionState, UsageInfo } from '@pivi/pivi-agent-core/foundation';
-import { OpenSessionManager } from '@pivi/pivi-agent-core/session/openSessionManager';
+} from '@yapi/yapi-agent-core/session';
+import type { ChatMessage, OpenSessionState, UsageInfo } from '@yapi/yapi-agent-core/foundation';
+import { OpenSessionManager } from '@yapi/yapi-agent-core/session/openSessionManager';
 
 const hydratedMessage: ChatMessage = {
   id: 'm1',
@@ -48,7 +48,7 @@ function createOpenSession(overrides: Partial<OpenSessionState> = {}): OpenSessi
     createdAt: 1,
     updatedAt: 1,
     sessionId: 'sdk-session',
-    sessionFile: '.pivi/sessions/test.jsonl',
+    sessionFile: '.yapi/sessions/test.jsonl',
     leafId: null,
     messages: [],
     ...overrides,
@@ -141,7 +141,7 @@ describe('OpenSessionManager linear hydration', () => {
     });
 
     const ref = {
-      sessionFile: '.pivi/sessions/test.jsonl',
+      sessionFile: '.yapi/sessions/test.jsonl',
       leafId: null,
       sessionId: 'sdk-session',
     };
@@ -263,7 +263,7 @@ describe('OpenSessionManager linear hydration', () => {
       expect.objectContaining({
         title: 'Durable custom title',
         titleSource: 'custom',
-        sessionFile: '.pivi/sessions/test.jsonl',
+        sessionFile: '.yapi/sessions/test.jsonl',
       }),
     ]);
   });
@@ -278,7 +278,7 @@ describe('OpenSessionManager linear hydration', () => {
 
     const openSession = await manager.switch('conv-1');
 
-    expect(store.open).toHaveBeenCalledWith('.pivi/sessions/test.jsonl');
+    expect(store.open).toHaveBeenCalledWith('.yapi/sessions/test.jsonl');
     expect(openSession?.leafId).toBeNull();
     expect(openSession?.messages).toEqual([hydratedMessage]);
   });
@@ -322,7 +322,7 @@ describe('OpenSessionManager linear hydration', () => {
     const openSession = await manager.switch('conv-1');
 
     expect(store.getUsage).toHaveBeenCalledWith({
-      sessionFile: '.pivi/sessions/test.jsonl',
+      sessionFile: '.yapi/sessions/test.jsonl',
       leafId: undefined,
       sessionId: 'sdk-session',
     });
@@ -399,7 +399,7 @@ describe('OpenSessionManager linear hydration', () => {
   it('attaches an existing sessionFile without overwriting durable title meta', async () => {
     const store = createStore();
     store.listSessions.mockResolvedValue([{
-      sessionFile: '.pivi/sessions/existing.jsonl',
+      sessionFile: '.yapi/sessions/existing.jsonl',
       sessionId: 'sdk-existing',
       title: 'Custom title',
       titleSource: 'custom',
@@ -414,14 +414,14 @@ describe('OpenSessionManager linear hydration', () => {
     });
 
     const openSession = await manager.create({
-      sessionFile: '.pivi/sessions/existing.jsonl',
+      sessionFile: '.yapi/sessions/existing.jsonl',
       sessionId: 'sdk-existing',
     });
 
     expect(openSession).toEqual(expect.objectContaining({
       title: 'Custom title',
       titleSource: 'custom',
-      sessionFile: '.pivi/sessions/existing.jsonl',
+      sessionFile: '.yapi/sessions/existing.jsonl',
       sessionId: 'sdk-existing',
       hasOlderMessages: true,
       totalMessageCount: 12,
@@ -442,7 +442,7 @@ describe('OpenSessionManager linear hydration', () => {
 
     const deleted = await manager.delete('conv-1');
 
-    expect(deleted?.sessionFile).toBe('.pivi/sessions/test.jsonl');
+    expect(deleted?.sessionFile).toBe('.yapi/sessions/test.jsonl');
     expect(manager.getAll()).toEqual([]);
     expect(store.deleteSession).not.toHaveBeenCalled();
   });
@@ -491,7 +491,7 @@ describe('OpenSessionManager linear hydration', () => {
 
     expect(store.appendMessageUiPatches).toHaveBeenCalledWith(
       {
-        sessionFile: '.pivi/sessions/test.jsonl',
+        sessionFile: '.yapi/sessions/test.jsonl',
         leafId: null,
         sessionId: 'sdk-session',
       },
@@ -521,7 +521,7 @@ describe('OpenSessionManager linear hydration', () => {
     const store = createStore();
     const stale = new SessionIndexStaleError(
       'Session changed before save',
-      '.pivi/sessions/test.jsonl',
+      '.yapi/sessions/test.jsonl',
     );
     store.open.mockRejectedValue(stale);
     const original = createOpenSession({
@@ -550,7 +550,7 @@ describe('OpenSessionManager linear hydration', () => {
     const store = createStore();
     const stale = new SessionIndexStaleError(
       'Session changed before UI overlay append',
-      '.pivi/sessions/test.jsonl',
+      '.yapi/sessions/test.jsonl',
     );
     store.appendMessageUiPatches.mockRejectedValue(stale);
     const original = createOpenSession({

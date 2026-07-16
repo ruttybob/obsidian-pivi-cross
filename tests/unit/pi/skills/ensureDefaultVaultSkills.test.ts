@@ -3,7 +3,7 @@ import {
   ensureDefaultVaultSkills,
   shouldSeedDefaultVaultSkills,
   shouldUpgradeDefaultVaultSkills,
-} from '@pivi/pivi-agent-core/skills/vault/ensureDefaultVaultSkills';
+} from '@yapi/yapi-agent-core/skills/vault/ensureDefaultVaultSkills';
 
 describe('shouldSeedDefaultVaultSkills', () => {
   it('returns true when not seeded and no skills installed', () => {
@@ -62,7 +62,7 @@ describe('ensureDefaultVaultSkills', () => {
     const saveSettings = jest.fn(async () => undefined);
     const settings: DefaultVaultSkillsContext['settings'] = {};
     const context = {
-      app: { vault: { adapter: { basePath: '/tmp/pivi-missing-skills-test' } } },
+      app: { vault: { adapter: { basePath: '/tmp/yapi-missing-skills-test' } } },
       settings,
       saveSettings,
       refreshVaultSkills: jest.fn(async () => undefined),

@@ -1,23 +1,23 @@
-import { buildCursorContext } from "@pivi/pivi-agent-core/context/editor";
+import { buildCursorContext } from "@yapi/yapi-agent-core/context/editor";
 import type { Editor } from "obsidian";
 import { MarkdownView, Notice } from "obsidian";
 
 import { t } from "@/app/i18n";
 import { createInlineEditPort } from "@/app/ui/createInlineEditPort";
-import type PiviPlugin from "@/main"
+import type YapiPlugin from "@/main"
 import {
   type InlineEditContext,
   InlineEditModal,
 } from "@/ui/inline-edit/ui/InlineEditModal";
 import { getActiveWindow } from "@/ui/shared/dom";
 
-import { findPiviView } from "./viewAccess";
+import { findYapiView } from "./viewAccess";
 
 export const ADD_SELECTION_TO_CHAT_INPUT_COMMAND_ID =
   "add-selection-to-chat-input";
-const CHAT_PERF_SCENARIO_PATH = '.pivi/perf-scenario.txt';
+const CHAT_PERF_SCENARIO_PATH = '.yapi/perf-scenario.txt';
 
-export function registerPiviCommands(plugin: PiviPlugin): void {
+export function registerYapiCommands(plugin: YapiPlugin): void {
   if (process.env.NODE_ENV !== 'production') registerChatPerfCommands(plugin);
   plugin.addCommand({
     id: "open-view",
@@ -64,9 +64,9 @@ export function registerPiviCommands(plugin: PiviPlugin): void {
         view,
         editContext,
         notePath,
-        findPiviView(plugin.app)?.getChatHandle()?.commands.getInlineEditModel() ?? null,
+        findYapiView(plugin.app)?.getChatHandle()?.commands.getInlineEditModel() ?? null,
         () =>
-          findPiviView(plugin.app)
+          findYapiView(plugin.app)
             ?.getChatHandle()
             ?.commands.getActiveExternalContexts() ?? [],
         createInlineEditPort(plugin),
@@ -143,7 +143,7 @@ export function registerPiviCommands(plugin: PiviPlugin): void {
     id: "new-session",
     name: t("commands.newSession"),
     checkCallback: (checking: boolean) => {
-      const view = findPiviView(plugin.app);
+      const view = findYapiView(plugin.app);
       if (!view) return false;
 
       const commands = view.getChatHandle()?.commands;
@@ -160,7 +160,7 @@ export function registerPiviCommands(plugin: PiviPlugin): void {
     id: "close-current-tab",
     name: t("commands.closeCurrentTab"),
     checkCallback: (checking: boolean) => {
-      const view = findPiviView(plugin.app);
+      const view = findYapiView(plugin.app);
       if (!view) return false;
 
       const commands = view.getChatHandle()?.commands;
@@ -174,7 +174,7 @@ export function registerPiviCommands(plugin: PiviPlugin): void {
   });
 }
 
-function registerChatPerfCommands(plugin: PiviPlugin): void {
+function registerChatPerfCommands(plugin: YapiPlugin): void {
   plugin.addCommand({
     id: 'debug-start-chat-performance-trace',
     name: 'Debug: start chat performance trace',
@@ -207,14 +207,14 @@ function registerChatPerfCommands(plugin: PiviPlugin): void {
     name: 'Debug: run isolated 20-subagent workload',
     callback: () => {
       const controller = plugin.getChatPerfController();
-      const development = findPiviView(plugin.app)?.getChatHandle()?.development;
+      const development = findYapiView(plugin.app)?.getChatHandle()?.development;
       const ownerWindow = getActiveWindow();
       if (controller.enabled) {
         new Notice('Stop the active chat performance trace before running 20 subagents.');
         return;
       }
       if (!development) {
-        new Notice('A mounted Pivi chat view is required.');
+        new Notice('A mounted YaPi chat view is required.');
         return;
       }
 
@@ -239,14 +239,14 @@ function registerChatPerfCommands(plugin: PiviPlugin): void {
     name: 'Debug: run isolated indexed session paging workload',
     callback: () => {
       const controller = plugin.getChatPerfController();
-      const development = findPiviView(plugin.app)?.getChatHandle()?.development;
+      const development = findYapiView(plugin.app)?.getChatHandle()?.development;
       const ownerWindow = getActiveWindow();
       if (controller.enabled) {
         new Notice('Stop the active chat performance trace before running indexed paging.');
         return;
       }
       if (!development) {
-        new Notice('A mounted Pivi chat view is required.');
+        new Notice('A mounted YaPi chat view is required.');
         return;
       }
 
@@ -276,13 +276,13 @@ function registerChatPerfCommands(plugin: PiviPlugin): void {
     name: 'Debug: run large Markdown performance stream',
     callback: () => {
       const controller = plugin.getChatPerfController();
-      const development = findPiviView(plugin.app)?.getChatHandle()?.development;
+      const development = findYapiView(plugin.app)?.getChatHandle()?.development;
       if (!controller.enabled) {
         new Notice('Start a chat performance trace before running the Markdown stream.');
         return;
       }
       if (!development) {
-        new Notice('A mounted Pivi chat view is required.');
+        new Notice('A mounted YaPi chat view is required.');
         return;
       }
       void development.run100KbMarkdownStream().then(({ bytes, chunks }) => {
@@ -298,13 +298,13 @@ function registerChatPerfCommands(plugin: PiviPlugin): void {
     name: 'Debug: run isolated tab switching workload',
     callback: () => {
       const controller = plugin.getChatPerfController();
-      const development = findPiviView(plugin.app)?.getChatHandle()?.development;
+      const development = findYapiView(plugin.app)?.getChatHandle()?.development;
       if (!controller.enabled) {
         new Notice('Start a chat performance trace before running the tab switching workload.');
         return;
       }
       if (!development) {
-        new Notice('A mounted Pivi chat view is required.');
+        new Notice('A mounted YaPi chat view is required.');
         return;
       }
       void development.runTabSwitchingWorkload().then(({ switches, tabs }) => {
@@ -328,7 +328,7 @@ function registerChatPerfCommands(plugin: PiviPlugin): void {
   });
 }
 
-async function resolveChatPerfScenario(plugin: PiviPlugin): Promise<string> {
+async function resolveChatPerfScenario(plugin: YapiPlugin): Promise<string> {
   const adapter = plugin.app.vault.adapter;
   if (!(await adapter.exists(CHAT_PERF_SCENARIO_PATH))) return 'manual';
   const scenario = (await adapter.read(CHAT_PERF_SCENARIO_PATH)).trim();

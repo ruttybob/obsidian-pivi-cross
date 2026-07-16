@@ -15,7 +15,7 @@ export class FileChipsView {
     this.callbacks = callbacks;
 
     const firstChild = this.containerEl.firstChild;
-    this.fileIndicatorEl = this.containerEl.createDiv({ cls: 'pivi-file-indicator' });
+    this.fileIndicatorEl = this.containerEl.createDiv({ cls: 'yapi-file-indicator' });
     if (firstChild) {
       this.containerEl.insertBefore(this.fileIndicatorEl, firstChild);
     }
@@ -29,13 +29,13 @@ export class FileChipsView {
     this.fileIndicatorEl.empty();
 
     if (!filePath) {
-      this.fileIndicatorEl.removeClass('pivi-visible-flex');
-      this.fileIndicatorEl.addClass('pivi-hidden');
+      this.fileIndicatorEl.removeClass('yapi-visible-flex');
+      this.fileIndicatorEl.addClass('yapi-hidden');
       return;
     }
 
-    this.fileIndicatorEl.addClass('pivi-visible-flex');
-    this.fileIndicatorEl.removeClass('pivi-hidden');
+    this.fileIndicatorEl.addClass('yapi-visible-flex');
+    this.fileIndicatorEl.removeClass('yapi-hidden');
     this.renderFileChip(filePath, () => {
       this.callbacks.onRemoveAttachment(filePath);
     });
@@ -50,7 +50,7 @@ export class FileChipsView {
       path: filePath,
       label: filename,
     }, {
-      classNames: ['pivi-context-badge--auto-attach'],
+      classNames: ['yapi-context-badge--auto-attach'],
       onClick: () => this.callbacks.onOpenFile(filePath),
       onRemove: () => onRemove(),
     }));

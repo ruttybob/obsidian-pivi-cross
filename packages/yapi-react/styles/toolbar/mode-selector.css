@@ -1,0 +1,60 @@
+.yapi-mode-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding-left: var(--yapi-spacing-md);
+  padding-right: var(--yapi-spacing-sm);
+  appearance: none;
+  border: 0;
+  background: var(--yapi-host-background-primary);
+  box-shadow: none;
+  min-height: 0;
+  height: auto;
+  font-family: inherit;
+  cursor: pointer;
+  transition: scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-mode-label {
+  font-family: inherit;
+  font-size: var(--yapi-text-xs);
+  color: var(--yapi-host-text-muted);
+  min-width: 32px;
+}
+
+.yapi-mode-label.active {
+  color: var(--yapi-brand);
+  font-weight: 600;
+}
+
+.yapi-toggle-switch {
+  position: relative;
+  width: 24px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: var(--yapi-radius-pill);
+  background: var(--yapi-host-border);
+  transition: background-color var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-toggle-switch::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 2px;
+  inset-inline-start: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--yapi-host-text-muted);
+  transition: transform var(--yapi-duration-fast) var(--yapi-ease-out), background-color var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-toggle-switch.active {
+  background: var(--yapi-host-interactive-accent);
+}
+
+.yapi-toggle-switch.active::after {
+  background: var(--yapi-host-text-on-accent);
+  transform: translateX(10px);
+}

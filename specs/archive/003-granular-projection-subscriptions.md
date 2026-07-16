@@ -13,8 +13,8 @@ coordinator: "Codex"
 
 `docs/11-chat-ui-evolution.md` (step 3) wants the hottest message interiors on narrow entity subscriptions so one block/tool/Agent update stops invalidating the whole message row. Verified current state:
 
-- `packages/pivi-react/src/store/chatProjectionStore.ts` already exposes entity-addressed state and subscriptions: `ChatBlockEntity` (`${messageId}:block:${index}`), `ChatToolEntity` (tool id), `ChatAgentRunEntity` (subagent `agentId ?? id`), with hooks `useChatProjectionBlock/Tool/AgentRun`. Tests in `tests/pivi-react/chatUiStore.test.tsx` already prove entity publishes do not notify unrelated message subscribers.
-- The shipped transcript does not use them: `ProjectedMessageRow` in `packages/pivi-react/src/chat/messages/MessageList.tsx` subscribes per whole message via `useChatProjectionMessage` and renders `MessageView` → `AssistantContentView` → `TextBlockView` / `ToolCallView` as plain props. Every streaming text delta re-renders the entire row, including sibling blocks and tool shells.
+- `packages/yapi-react/src/store/chatProjectionStore.ts` already exposes entity-addressed state and subscriptions: `ChatBlockEntity` (`${messageId}:block:${index}`), `ChatToolEntity` (tool id), `ChatAgentRunEntity` (subagent `agentId ?? id`), with hooks `useChatProjectionBlock/Tool/AgentRun`. Tests in `tests/yapi-react/chatUiStore.test.tsx` already prove entity publishes do not notify unrelated message subscribers.
+- The shipped transcript does not use them: `ProjectedMessageRow` in `packages/yapi-react/src/chat/messages/MessageList.tsx` subscribes per whole message via `useChatProjectionMessage` and renders `MessageView` → `AssistantContentView` → `TextBlockView` / `ToolCallView` as plain props. Every streaming text delta re-renders the entire row, including sibling blocks and tool shells.
 - Updates enter the store as whole-message upserts: `ChatState.notifyMessageChanged()` → `projectionStore.queueUpsert(message)` (from `src/ui/chat/`), not granular events. The activation audit found that the store originally rebuilt and notified every entity in the message, so entity reconciliation is a correctness prerequisite for narrowing the React side independently of spec 004's event-plane work.
 - Virtual rows are measured dynamically (`measureElement`, estimate 120px, overscan 6); a block growing must trigger remeasure of its own row only.
 
@@ -33,7 +33,7 @@ Outcome: streaming text, tool status, and subagent status updates re-render only
 
 In scope:
 
-- `packages/pivi-react/src/chat/messages/`: `MessageList.tsx`, `MessageView.tsx`, `AssistantContentView.tsx`, `ToolCallView.tsx`, plus small subscription wrapper components.
+- `packages/yapi-react/src/chat/messages/`: `MessageList.tsx`, `MessageView.tsx`, `AssistantContentView.tsx`, `ToolCallView.tsx`, plus small subscription wrapper components.
 - Making sure `queueUpsert()` entity diffing publishes the exact entity keys the new subscribers need (verify against store tests; extend if a needed entity change is not published).
 - Memoization boundaries: `MessageView` stays memoized; entity components memo on their snapshot identity after the store reconciliation gate preserves unchanged identities.
 
@@ -59,19 +59,19 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 
 | ID | Deliverable | Agent | Status | Dependencies | Verification |
 |---|---|---|---|---|---|
-| WS-00 | Reconcile block/tool/agent entity snapshots on whole-message upsert; preserve unchanged identities, publish changed entities only, and notify removals | Codex | Done | None | Extended `tests/pivi-react/chatUiStore.test.tsx` + typecheck/lint/boundaries |
-| WS-01 | Block-level subscription: wrapper component around `TextBlockView`/`ThinkingBlockView` using `useChatProjectionBlock`; render-count regression test | Codex | Done | WS-00 | `npm run test -- tests/pivi-react/AssistantContentView.test.tsx` (extended) |
-| WS-02 | Tool-level subscription in `ToolCallView` via `useChatProjectionTool`; status-flip render isolation test | Codex | Done | WS-00 | `npm run test -- tests/pivi-react/ToolCallView.test.tsx` (extended) |
+| WS-00 | Reconcile block/tool/agent entity snapshots on whole-message upsert; preserve unchanged identities, publish changed entities only, and notify removals | Codex | Done | None | Extended `tests/yapi-react/chatUiStore.test.tsx` + typecheck/lint/boundaries |
+| WS-01 | Block-level subscription: wrapper component around `TextBlockView`/`ThinkingBlockView` using `useChatProjectionBlock`; render-count regression test | Codex | Done | WS-00 | `npm run test -- tests/yapi-react/AssistantContentView.test.tsx` (extended) |
+| WS-02 | Tool-level subscription in `ToolCallView` via `useChatProjectionTool`; status-flip render isolation test | Codex | Done | WS-00 | `npm run test -- tests/yapi-react/ToolCallView.test.tsx` (extended) |
 | WS-03 | Agent-run subscription for `ImperativeSubagentSlot` via `useChatProjectionAgentRun`; keep adapter `update` contract intact | Codex | Done | WS-00 | Extended jsdom test + projection store tests |
-| WS-04 | Row-shell narrowing: `ProjectedMessageRow`/`MessageView` subscribe to shell metadata; block list identity churn audit | Codex | Done | WS-01..WS-03 | `tests/pivi-react/MessageList.test.tsx` mounted-row invariants stay green |
+| WS-04 | Row-shell narrowing: `ProjectedMessageRow`/`MessageView` subscribe to shell metadata; block list identity churn audit | Codex | Done | WS-01..WS-03 | `tests/yapi-react/MessageList.test.tsx` mounted-row invariants stay green |
 | WS-05 | Remeasure correctness: growing subscribed block remeasures its row; manual streaming check in main + pop-out windows | Codex | Done | WS-01 | Jest + manual per root AGENTS.md deploy flow (`npm run build && obsidian reload`) |
 | WS-06 | Deterministic isolation evidence plus Spec 001 main/pop-out non-regression traces | Codex | Done | WS-01..WS-05, spec 001 | Render-count tests and recorded traces in Progress and handoff |
 
 Guidance for low-context agents:
 
-1. Read `packages/pivi-react/AGENTS.md` and `src/ui/chat/rendering/AGENTS.md` first; do not import anything from `src/**` into `packages/pivi-react` (architecture check enforces this).
+1. Read `packages/yapi-react/AGENTS.md` and `src/ui/chat/rendering/AGENTS.md` first; do not import anything from `src/**` into `packages/yapi-react` (architecture check enforces this).
 2. Entity IDs: block ID format is `${messageId}:block:${index}`; confirm the exact helper in `chatProjectionStore.ts` instead of hand-building strings in components.
-3. When adding render-count tests, copy the explicit `mounts` array pattern from `tests/pivi-react/AssistantContentView.test.tsx`.
+3. When adding render-count tests, copy the explicit `mounts` array pattern from `tests/yapi-react/AssistantContentView.test.tsx`.
 4. Do not remove the existing prop-based render path until all consumers are migrated in the same change; no dead dual paths at completion.
 
 ## Verification
@@ -84,7 +84,7 @@ Guidance for low-context agents:
 ## Documentation sync
 
 - Numbered developer docs: `docs/11-chat-ui-evolution.md` (Block, tool, and Agent subscriptions section marked adopted).
-- Nearest local guidance: `packages/pivi-react/AGENTS.md` (subscription pattern and when to use it).
+- Nearest local guidance: `packages/yapi-react/AGENTS.md` (subscription pattern and when to use it).
 - Parent/package guidance: `src/ui/chat/rendering/AGENTS.md` if adapter update contracts shift.
 - Root guidance and roadmap: `AGENTS.md` architecture status paragraph on `ChatProjectionStore` usage.
 
@@ -117,7 +117,7 @@ Guidance for low-context agents:
 ### 2026-07-16 — WS-00 entity reconciliation — Codex
 
 - Changed: keyed block/tool/agent reconciliation now preserves structurally unchanged entity snapshots, publishes only changed entities, and notifies subscribers when entities disappear. Entity hooks use stable subscription and snapshot callbacks.
-- Evidence: `tests/pivi-react/chatUiStore.test.tsx` passed 12/12; `npm run typecheck`, `npm run lint`, and `npm run check:boundaries` passed.
+- Evidence: `tests/yapi-react/chatUiStore.test.tsx` passed 12/12; `npm run typecheck`, `npm run lint`, and `npm run check:boundaries` passed.
 - Remaining: WS-01..WS-06.
 - Blockers: none.
 - Next action: complete the block-level subscription boundary and its sibling render-isolation test.
@@ -125,7 +125,7 @@ Guidance for low-context agents:
 ### 2026-07-16 — WS-01 block subscriptions — Codex
 
 - Changed: projected message rows now give assistant content access to `ChatProjectionStore`; memoized text and thinking block wrappers subscribe to their canonical block IDs while the prop-based path remains available for consumers not yet migrated.
-- Evidence: `tests/pivi-react/AssistantContentView.test.tsx` passed 10/10, including a two-block regression proving one streamed block update does not call the sibling Markdown adapter; typecheck, lint, and boundaries passed.
+- Evidence: `tests/yapi-react/AssistantContentView.test.tsx` passed 10/10, including a two-block regression proving one streamed block update does not call the sibling Markdown adapter; typecheck, lint, and boundaries passed.
 - Remaining: WS-02..WS-06; remove the temporary dual presentation path once all projected interior consumers are migrated.
 - Blockers: none.
 - Next action: add tool-level subscriptions without breaking contiguous tool-group aggregation.
@@ -157,7 +157,7 @@ Guidance for low-context agents:
 ### 2026-07-16 — WS-05 deterministic remeasurement gate — Codex
 
 - Changed: added a controlled ResizeObserver regression that grows one subscribed Markdown block from 120px to 240px and proves only its virtual-row measurement changes, moving the next row to 240px and total height to 360px.
-- Evidence: `tests/pivi-react/MessageList.test.tsx` passed 10/10 without React act warnings.
+- Evidence: `tests/yapi-react/MessageList.test.tsx` passed 10/10 without React act warnings.
 - Remaining: build/deploy/reload and manual main-window plus pop-out streaming checks.
 - Blockers: none.
 - Next action: commit the deterministic gate, then run the live Obsidian validation with synthetic content only.
@@ -190,7 +190,7 @@ Guidance for low-context agents:
 ### 2026-07-16 — Completion gate and archive — Codex
 
 - Changed: synchronized the adopted structure/entity subscription contracts into durable guidance, completed the repository and production-runtime gates, and archived spec 003.
-- Evidence: `npm run test:coverage -- --runInBand` passed 232 suites / 1,753 tests with global statements/branches/functions/lines at 67.69%/56.76%/64.59%/69.14%; `npm run typecheck`, `npm run lint`, and `npm run check:boundaries` passed. `npm run build` deployed the production bundle; `npm run check:bundle-size` reported 3,006,322 bytes (2.87 MB, 2.13 MB below the cap); source and deployed artifacts matched; production debug markers were absent. Reloading Pivi produced no captured Obsidian errors, no synthetic message markers remained, and the temporary performance scenario file was absent. `npm run check:specs` passed after archival.
+- Evidence: `npm run test:coverage -- --runInBand` passed 232 suites / 1,753 tests with global statements/branches/functions/lines at 67.69%/56.76%/64.59%/69.14%; `npm run typecheck`, `npm run lint`, and `npm run check:boundaries` passed. `npm run build` deployed the production bundle; `npm run check:bundle-size` reported 3,006,322 bytes (2.87 MB, 2.13 MB below the cap); source and deployed artifacts matched; production debug markers were absent. Reloading Yapi produced no captured Obsidian errors, no synthetic message markers remained, and the temporary performance scenario file was absent. `npm run check:specs` passed after archival.
 - Remaining: none for spec 003.
 - Blockers: none.
 - Next action: activate spec 004 and execute its workstreams.
@@ -203,4 +203,4 @@ Two evidence-boundary deviations were recorded rather than hidden. First, the ac
 
 Verification covered entity identity/removal behavior, sibling block/tool/Agent isolation, row-shell isolation, latest-message actions, adapter update-without-remount behavior, virtual-row remeasurement, the full 232-suite coverage run, type/lint/boundary checks, production build and bundle budget, deployed artifact identity, development-marker absence, main/pop-out synthetic runtime traces, production reload, cleanup, and zero captured Obsidian errors.
 
-Durable conclusions were synchronized into `docs/11-chat-ui-evolution.md`, root `AGENTS.md`, `packages/pivi-react/AGENTS.md`, and `src/ui/chat/rendering/AGENTS.md`. Synthetic workload safety remains documented in `src/app/AGENTS.md` from its implementation commit.
+Durable conclusions were synchronized into `docs/11-chat-ui-evolution.md`, root `AGENTS.md`, `packages/yapi-react/AGENTS.md`, and `src/ui/chat/rendering/AGENTS.md`. Synthetic workload safety remains documented in `src/app/AGENTS.md` from its implementation commit.

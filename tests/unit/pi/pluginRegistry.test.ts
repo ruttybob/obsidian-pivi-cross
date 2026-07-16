@@ -2,10 +2,10 @@ import {
   PluginRegistry,
   createPluginLockfile,
   loadPluginContributions,
-  parsePiviPluginManifest,
+  parseYapiPluginManifest,
   type PluginResourceLoader,
   type SlashCommandContribution,
-} from '@pivi/pivi-agent-core/plugins';
+} from '@yapi/yapi-agent-core/plugins';
 
 const explainCommand: SlashCommandContribution = {
   id: 'explain',
@@ -21,9 +21,9 @@ const explainCommand: SlashCommandContribution = {
   insertPrefix: '/',
 };
 
-describe('pivi-agent-core plugin registry', () => {
+describe('yapi-agent-core plugin registry', () => {
   it('parses declarative plugin manifests', () => {
-    expect(parsePiviPluginManifest({
+    expect(parseYapiPluginManifest({
       id: 'demo-plugin',
       name: 'Demo plugin',
       version: '1.2.3',
@@ -49,14 +49,14 @@ describe('pivi-agent-core plugin registry', () => {
   });
 
   it('rejects manifests with executable or malformed resource declarations', () => {
-    expect(() => parsePiviPluginManifest({
+    expect(() => parseYapiPluginManifest({
       id: 'bad-plugin',
       name: 'Bad plugin',
       source: { kind: 'shell', location: 'install.sh' },
       resources: { skills: ['skills/a.md'] },
     })).toThrow('Unsupported plugin source kind "shell".');
 
-    expect(() => parsePiviPluginManifest({
+    expect(() => parseYapiPluginManifest({
       id: 'bad-plugin',
       name: 'Bad plugin',
       source: { kind: 'local', location: './plugin' },
@@ -65,13 +65,13 @@ describe('pivi-agent-core plugin registry', () => {
   });
 
   it('tracks registry records and loads contributions only from enabled plugins', async () => {
-    const firstManifest = parsePiviPluginManifest({
+    const firstManifest = parseYapiPluginManifest({
       id: 'enabled-plugin',
       name: 'Enabled plugin',
       source: { kind: 'local', location: './enabled' },
       resources: { commands: ['commands/explain.md'] },
     });
-    const secondManifest = parsePiviPluginManifest({
+    const secondManifest = parseYapiPluginManifest({
       id: 'disabled-plugin',
       name: 'Disabled plugin',
       source: { kind: 'local', location: './disabled' },
@@ -107,7 +107,7 @@ describe('pivi-agent-core plugin registry', () => {
   it('creates versioned lockfiles without mutating input records', () => {
     const record = {
       pluginId: 'demo-plugin',
-      source: { kind: 'npm' as const, location: '@pivi/demo-plugin', ref: '^1.0.0' },
+      source: { kind: 'npm' as const, location: '@yapi/demo-plugin', ref: '^1.0.0' },
       resolvedRef: '1.0.3',
       integrity: 'sha256-demo',
       enabledResources: { skills: ['skills/review.md'] },

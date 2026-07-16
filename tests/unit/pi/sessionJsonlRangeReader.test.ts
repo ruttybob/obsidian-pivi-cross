@@ -5,14 +5,14 @@ import path from 'path';
 import {
   openRecentSessionJsonlMessages,
   readOlderSessionJsonlMessages,
-} from '@pivi/pivi-agent-core/engine/pi/session/sessionJsonlRangeReader';
+} from '@yapi/yapi-agent-core/engine/pi/session/sessionJsonlRangeReader';
 import {
   invalidateSessionJsonlIndex,
-} from '@pivi/pivi-agent-core/engine/pi/session/sessionJsonlIndex';
+} from '@yapi/yapi-agent-core/engine/pi/session/sessionJsonlIndex';
 import {
   SessionIndexStaleError,
   SessionRangeCursorError,
-} from '@pivi/pivi-agent-core/session';
+} from '@yapi/yapi-agent-core/session';
 
 function jsonl(value: unknown): string {
   return `${JSON.stringify(value)}\n`;
@@ -44,7 +44,7 @@ describe('sessionJsonlRangeReader', () => {
   let sessionFile: string;
 
   beforeEach(() => {
-    root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-session-range-'));
+    root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-session-range-'));
     sessionFile = path.join(root, 'session.jsonl');
   });
 
@@ -115,7 +115,7 @@ describe('sessionJsonlRangeReader', () => {
       jsonl(message('assistant-2', 'assistant', 'finished', 'tool-result-1')),
       jsonl({
         type: 'custom',
-        customType: 'pivi/message-ui',
+        customType: 'yapi/message-ui',
         id: 'ui-1',
         parentId: 'assistant-2',
         timestamp: '2026-01-01T00:00:02.000Z',
@@ -187,7 +187,7 @@ describe('sessionJsonlRangeReader', () => {
       jsonl(message('user-expanded-1', 'user', 'expanded first', null)),
       jsonl({
         type: 'custom',
-        customType: 'pivi/message-ui',
+        customType: 'yapi/message-ui',
         id: 'ui-1',
         parentId: 'user-expanded-1',
         timestamp: '2026-01-01T00:00:02.000Z',
@@ -196,7 +196,7 @@ describe('sessionJsonlRangeReader', () => {
       jsonl(message('user-expanded-2', 'user', 'expanded second', 'ui-1')),
       jsonl({
         type: 'custom',
-        customType: 'pivi/message-ui',
+        customType: 'yapi/message-ui',
         id: 'ui-2',
         parentId: 'user-expanded-2',
         timestamp: '2026-01-01T00:00:03.000Z',

@@ -22,12 +22,12 @@ type AppWithHotkeyInternals = App & {
 };
 
 export const SETTINGS_HOTKEY_ROWS = [
-  { commandId: 'pivi:inline-edit', labelKey: 'settings.inlineEditHotkey.name' },
-  { commandId: 'pivi:open-view', labelKey: 'settings.openChatHotkey.name' },
-  { commandId: 'pivi:new-session', labelKey: 'settings.newSessionHotkey.name' },
-  { commandId: 'pivi:new-tab', labelKey: 'settings.newTabHotkey.name' },
-  { commandId: 'pivi:close-current-tab', labelKey: 'settings.closeTabHotkey.name' },
-  { commandId: 'pivi:add-selection-to-chat-input', labelKey: 'settings.addSelectionHotkey.name' },
+  { commandId: 'yapi:inline-edit', labelKey: 'settings.inlineEditHotkey.name' },
+  { commandId: 'yapi:open-view', labelKey: 'settings.openChatHotkey.name' },
+  { commandId: 'yapi:new-session', labelKey: 'settings.newSessionHotkey.name' },
+  { commandId: 'yapi:new-tab', labelKey: 'settings.newTabHotkey.name' },
+  { commandId: 'yapi:close-current-tab', labelKey: 'settings.closeTabHotkey.name' },
+  { commandId: 'yapi:add-selection-to-chat-input', labelKey: 'settings.addSelectionHotkey.name' },
 ] as const;
 
 function formatHotkey(hotkey: ObsidianHotkey): string {
@@ -60,7 +60,7 @@ export function openHotkeySettings(app: App): void {
     if (!tab) return;
     const searchEl = tab.searchInputEl ?? tab.searchComponent?.inputEl;
     if (!searchEl) return;
-    searchEl.value = 'Pivi';
+    searchEl.value = 'YaPi';
     tab.updateHotkeyVisibility?.();
   }, 100);
 }

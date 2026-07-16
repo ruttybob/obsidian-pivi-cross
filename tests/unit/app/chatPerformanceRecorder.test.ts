@@ -32,17 +32,17 @@ describe('chat performance recorder', () => {
 
     const path = await recorder.stopAndExport(window);
 
-    expect(path).toMatch(/^\.pivi\/perf-traces\/.+-5k-cold-open\.json$/);
-    expect(adapter.mkdir).toHaveBeenCalledWith('.pivi');
-    expect(adapter.mkdir).toHaveBeenCalledWith('.pivi/perf-traces');
+    expect(path).toMatch(/^\.yapi\/perf-traces\/.+-5k-cold-open\.json$/);
+    expect(adapter.mkdir).toHaveBeenCalledWith('.yapi');
+    expect(adapter.mkdir).toHaveBeenCalledWith('.yapi/perf-traces');
     expect(adapter.write).toHaveBeenCalledWith(path, expect.any(String));
     const trace = JSON.parse(adapter.write.mock.calls[0]?.[1] ?? '') as ChatPerfTrace;
     expect(trace).toMatchObject({
-      schema: 'pivi-chat-perf-v1',
+      schema: 'yapi-chat-perf-v1',
       scenario: '5K cold open',
       environment: {
         obsidianVersion: '1.13.2',
-        piviVersion: '0.9.0',
+        yapiVersion: '0.9.0',
         windowTypes: ['main'],
       },
     });

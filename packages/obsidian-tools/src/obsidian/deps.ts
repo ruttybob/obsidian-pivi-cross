@@ -4,9 +4,9 @@ import type {
   ExternalFileStat,
   ObsidianCliTransport,
   ObsidianVaultApi,
-} from '@pivi/obsidian-host';
-import type { ObsidianToolsSettings } from '@pivi/pivi-agent-core/foundation';
-import type { ProcessRunner } from '@pivi/pivi-agent-core/ports';
+} from '@yapi/obsidian-host';
+import type { ObsidianToolsSettings } from '@yapi/yapi-agent-core/foundation';
+import type { ProcessRunner } from '@yapi/yapi-agent-core/ports';
 
 
 export interface ObsidianImageGenerator {

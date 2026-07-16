@@ -2,7 +2,7 @@
 
 [Back to the developer handbook](README.md)
 
-A Pivi tab is an in-view conversation surface managed by `TabManager`; it is not an Obsidian `WorkspaceLeaf`. A session is a durable JSONL conversation. One or more Pivi views can exist, and opening history first looks for an existing tab binding before creating another surface.
+A Yapi tab is an in-view conversation surface managed by `TabManager`; it is not an Obsidian `WorkspaceLeaf`. A session is a durable JSONL conversation. One or more Yapi views can exist, and opening history first looks for an existing tab binding before creating another surface.
 
 ## Layer flow
 
@@ -12,10 +12,10 @@ flowchart LR
   Adapter -- "semantic calls" --> Manager["TabManager"]
   Manager -- "save/switch/hydrate" --> Controller["SessionController"]
   Controller -- "ChatPorts.sessions" --> Open["OpenSessionManager"]
-  Open -- "reads/writes" --> JSONL[(".pivi/sessions/*.jsonl")]
+  Open -- "reads/writes" --> JSONL[(".yapi/sessions/*.jsonl")]
   Manager -- "projects TabBarItem" --> Store["ChatTabsStore"]
   Store -- "immutable snapshot" --> React
-  Manager -- "persists layout" --> Layout[(".pivi/tab-manager-state.json")]
+  Manager -- "persists layout" --> Layout[(".yapi/tab-manager-state.json")]
 ```
 
 The app adapter is the only application boundary allowed to inspect the tab aggregate. React consumes serializable items and actions. `TabManager` owns ordering, active identity, the switching lock, session bindings, controller/runtime aggregates, and persistence projection.
@@ -49,7 +49,7 @@ stateDiagram-v2
 | `sessionFile` | Vault-relative JSONL path | Yes; source of truth for a tab binding |
 | `leafId` | Legacy tree-shaped JSONL compatibility field | No; not used by current product restore |
 
-Tab layout is stored in `.pivi/tab-manager-state.json`. `data.json.tabManagerState` is read only for legacy migration and removed after successful migration.
+Tab layout is stored in `.yapi/tab-manager-state.json`. `data.json.tabManagerState` is read only for legacy migration and removed after successful migration.
 
 The layout stores `tabId`, optional `sessionFile`, blank-tab `draftModel` and `draftTitle`, `isArchived`, `needsAttention`, and `activeTabId`. It does not store messages, runtime state, `openSessionId`, bound-session titles, DOM/controllers, or absolute external paths. Current writes omit `leafId`; readers accept it only for legacy compatibility, and restore ignores it.
 
@@ -82,13 +82,13 @@ Session UI hydration is recent-first. `SessionController` requests the newest 10
 
 Session identity, history summaries, usage, and UI context are also read through the JSONL sidecar index rather than a full Pi snapshot. Restored running asynchronous subagents are marked orphaned as each page appears. The Pi runtime still assembles complete model context from authoritative JSONL independently of this bounded UI projection.
 
-Compaction entries keep Pi's readable `summary`, `firstKeptEntryId`, and `tokensBefore` fields. When the compaction model returns the required section set, Pivi also stores a version-1 checkpoint under `details.piviCheckpoint`: continuation summary, goal/constraints, durable decisions, vault-relative artifacts, open work/questions, next steps, source bounds, and estimates. A later checkpoint carries forward the durable decision/artifact ledger and renders the merged state back into the plain summary, so old Pi consumers and old sessions remain valid. Missing, unknown, malformed, or device-absolute structured data uses the summary-only path.
+Compaction entries keep Pi's readable `summary`, `firstKeptEntryId`, and `tokensBefore` fields. When the compaction model returns the required section set, Yapi also stores a version-1 checkpoint under `details.yapiCheckpoint`: continuation summary, goal/constraints, durable decisions, vault-relative artifacts, open work/questions, next steps, source bounds, and estimates. A later checkpoint carries forward the durable decision/artifact ledger and renders the merged state back into the plain summary, so old Pi consumers and old sessions remain valid. Missing, unknown, malformed, or device-absolute structured data uses the summary-only path.
 
 Saving, switching, truncating, and disposing synchronously flush pending projection events first. Durable `ChatMessage[]`, session identity, and the JSONL wire format remain unchanged.
 
-Restore creates tabs inactive, isolates individual failures, and activates the persisted target only after construction finishes. This avoids accidentally warming the first restored tab. If every entry fails, Pivi creates a blank tab.
+Restore creates tabs inactive, isolates individual failures, and activates the persisted target only after construction finishes. This avoids accidentally warming the first restored tab. If every entry fails, Yapi creates a blank tab.
 
-Closing an active tab selects the visually adjacent open tab or creates a blank tab before destruction, avoiding an empty-shell flash. If creating the new tab for a fork throws, Pivi deletes the newly created session; cleanup failures are logged without hiding the original error.
+Closing an active tab selects the visually adjacent open tab or creates a blank tab before destruction, avoiding an empty-shell flash. If creating the new tab for a fork throws, Yapi deletes the newly created session; cleanup failures are logged without hiding the original error.
 
 Late stream chunks are guarded by generation and session ownership. Runtime state is never treated as the durable source of truth.
 

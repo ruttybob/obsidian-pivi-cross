@@ -1,0 +1,845 @@
+{
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "add": "Добавить",
+    "remove": "Убрать",
+    "clear": "Очистить",
+    "loading": "Загрузка",
+    "error": "Ошибка",
+    "confirm": "Подтвердить",
+    "disabled": "Отключено",
+    "enable": "Включить",
+    "disable": "Отключить",
+    "line": "строка",
+    "lines": "строк",
+    "copied": "Скопировано!"
+  },
+  "chat": {
+    "fork": {
+      "ariaLabel": "Разветвить беседу",
+      "notice": "Разветвлено в новую вкладку",
+      "failed": "Не удалось разветвить: {error}",
+      "unavailableStreaming": "Нельзя разветвить во время потока",
+      "unavailableNoUuid": "Нельзя разветвить: нет идентификаторов сообщения",
+      "errorMessageNotFound": "Сообщение не найдено",
+      "errorNoSession": "Нет доступного ID сеанса",
+      "commandNoMessages": "Нельзя разветвить: в беседе нет сообщений",
+      "commandNoAssistantUuid": "Нельзя разветвить: нет ответа ассистента с идентификаторами"
+    },
+    "redo": {
+      "ariaLabel": "Повторить ответ агента",
+      "confirmTruncate": "Повтор этого ответа удалит все последующие сообщения в этом чате. Продолжить?",
+      "confirmTruncateAction": "Повторить и удалить",
+      "failed": "Не удалось повторить: {error}",
+      "unavailableStreaming": "Нельзя повторить во время потока",
+      "unavailableNoTurn": "Нельзя повторить: соответствующий ход пользователя не найден",
+      "unavailableRuntime": "Нельзя повторить: среда чата недоступна",
+      "unavailableRewind": "Контрольная точка отката недоступна"
+    },
+    "messageActions": {
+      "copyAriaLabel": "Копировать сообщение",
+      "copyAgentResponseAriaLabel": "Копировать этот ответ агента",
+      "scrollToRecentUserAriaLabel": "К последнему сообщению пользователя"
+    },
+    "inlineContext": {
+      "addSelectionToChatInput": "Добавить выделение во ввод чата",
+      "selectTextFirst": "Сначала выделите текст в заметке.",
+      "noActiveChatInput": "Не найден активный ввод чата.",
+      "selectionAdded": "Выделение добавлено во ввод чата."
+    },
+    "composer": {
+      "placeholder": "Чем могу помочь сегодня?",
+      "modelAria": "Модель",
+      "reasoningAria": "Рассуждение",
+      "sendAria": "Отправить сообщение",
+      "stopAria": "Остановить ответ",
+      "sendEmptyAria": "Введите сообщение для отправки",
+      "sendTitle": "Отправить",
+      "stopTitle": "Стоп",
+      "sendEmptyTitle": "Введите сообщение"
+    },
+    "tabs": {
+      "startNewChat": "Начать новый чат",
+      "switchTab": "Переключить вкладку: {title}",
+      "archiveTab": "Архивировать {title}",
+      "restoreTab": "Восстановить {title}",
+      "editTitle": "Изменить заголовок {title}",
+      "editTitleInputLabel": "Заголовок вкладки",
+      "closeTab": "Закрыть {title}",
+      "archived": "В архиве",
+      "failedCreateChat": "Не удалось создать чат",
+      "failedSwitchTab": "Не удалось переключить вкладку",
+      "failedCloseTab": "Не удалось закрыть вкладку",
+      "failedEditTitle": "Не удалось изменить заголовок вкладки",
+      "failedArchiveTab": "Не удалось архивировать вкладку"
+    },
+    "errors": {
+      "initAgentFailed": "Не удалось инициализировать службу агента. Попробуйте снова.",
+      "agentUnavailable": "Служба агента недоступна. Перезагрузите плагин.",
+      "noTextSelected": "В активном редакторе нет выделенного текста.",
+      "templateVarsFailed": "Не удалось разрешить переменные шаблонной команды.",
+      "unableCreateForkTab": "Не удалось создать вкладку разветвления",
+      "initChatService": "Не удалось инициализировать сервис чата"
+    },
+    "toolbar": {
+      "externalContexts": "Внешние контексты",
+      "externalEmpty": "Нет внешних контекстов",
+      "externalAdd": "Добавить папку…",
+      "externalPickerFailed": "Не удалось открыть выбор папки.",
+      "externalPickerTitle": "Выберите внешний контекст",
+      "externalPathAria": "Внешний контекст {path}",
+      "externalPin": "Закрепить {path}",
+      "externalUnpin": "Открепить {path}",
+      "externalUnavailable": "Недоступно: {reason}",
+      "externalRemove": "Удалить путь",
+      "externalActiveTitle": "{count} внешних контекст(ов) (нажмите, чтобы добавить)",
+      "externalIdleTitle": "Добавить внешние контексты (нажмите)"
+    },
+    "selection": {
+      "linesSelected": "Выбрано {count} {lines}",
+      "canvasNodeSelected": "Выбран 1 узел холста",
+      "canvasNodesSelected": "Выбрано узлов холста: {count}"
+    },
+    "nav": {
+      "scrollToTop": "Прокрутить вверх",
+      "scrollToBottom": "Прокрутить вниз",
+      "previousMessage": "Предыдущее сообщение",
+      "nextMessage": "Следующее сообщение",
+      "resumeAutoScroll": "Возобновить автопрокрутку"
+    },
+    "queue": {
+      "queued": "⌙ В очереди: {preview}",
+      "edit": "Изменить сообщение в очереди",
+      "discard": "Удалить сообщение из очереди",
+      "images": "Изображения прикреплены"
+    },
+    "usage": {
+      "input": "{tokens} / {limit} ({percentage} %)",
+      "unknownContextLength": "Не удалось определить длину контекста текущей модели."
+    },
+    "todos": {
+      "progress": "Задачи {completed}/{total}",
+      "collapse": "Свернуть список задач — выполнено {completed} из {total}",
+      "expand": "Развернуть список задач — выполнено {completed} из {total}"
+    },
+    "activity": {
+      "backgroundTask": "Фоновая задача",
+      "subagentTask": "Задача субагента",
+      "expand": "Нажмите, чтобы развернуть",
+      "collapse": "Нажмите, чтобы свернуть",
+      "prompt": "Запрос",
+      "result": "Результат",
+      "noPrompt": "Запрос не указан",
+      "sessionEnded": "Сеанс завершился до окончания задачи",
+      "done": "Готово",
+      "error": "Ошибка"
+    },
+    "status": {
+      "count": "{count} {status}",
+      "queued": "В очереди",
+      "running": "Выполняется",
+      "waiting": "Ожидает",
+      "completed": "Завершено",
+      "failed": "Ошибка",
+      "cancelled": "Отменено",
+      "orphaned": "Потеряно",
+      "orphanedDescription": "Сеанс завершился раньше этой операции. Запустите её снова для восстановления."
+    },
+    "stream": {
+      "thoughtFor": "Думал {seconds} с",
+      "thought": "Мысль",
+      "defaultDurationFlavor": "Готово",
+      "responseDuration": "* {flavor} за {duration}",
+      "thinkingExpandAria": "Расширенное мышление — нажмите, чтобы раскрыть",
+      "writing": "Пишет…",
+      "statusDone": "ГОТОВО",
+      "noChanges": "Без изменений",
+      "tasksUpdated": "Задачи обновлены",
+      "steps": "{count} шаг(ов)",
+      "sessionCompacted": "Сеанс сжат",
+      "earlierHistory": "Более ранняя история",
+      "compactionTokenTransition": "Примерно с {before} токенов до {after} токенов",
+      "expandCheckpoint": "Показать контрольную точку",
+      "collapseCheckpoint": "Скрыть контрольную точку",
+      "checkpointDetails": "Сведения о контрольной точке",
+      "checkpointGoal": "Цель",
+      "checkpointConstraints": "Ограничения",
+      "checkpointDecisions": "Решения",
+      "checkpointArtifacts": "Артефакты",
+      "checkpointOpenWork": "Открытая работа",
+      "checkpointQuestions": "Нерешённые вопросы",
+      "checkpointNextSteps": "Следующие шаги",
+      "checkpointSource": "Исходные записи",
+      "checkpointSourceBounds": "{first} → {last}; сохранить {kept}",
+      "checkpointEstimate": "Оценка контрольной точки",
+      "interrupted": "Прервано",
+      "interruptHint": "· Что вместо этого должен сделать YaPi?",
+      "renderFailed": "Не удалось отрисовать содержимое сообщения.",
+      "escInterruptDuration": "esc для прерывания · {duration}",
+      "noResult": "Нет результата",
+      "noDetails": "Нет деталей",
+      "noDescription": "Описание недоступно.",
+      "noTextualDiff": "Текстовый diff недоступен",
+      "fileDeleted": "Файл удалён",
+      "noMatches": "Совпадений не найдено",
+      "urlUnavailable": "URL недоступен",
+      "findInPage": "Найти на странице",
+      "openPage": "Открыть страницу",
+      "noOptionsRecorded": "Параметры не записаны"
+    },
+    "askUser": {
+      "reviewAnswers": "Проверьте ответы",
+      "submitAnswers": "Отправить ответы",
+      "readyToSubmit": "Готовы отправить ответы?",
+      "typeSomething": "Введите что-нибудь.",
+      "enterSecret": "Введите секрет.",
+      "notAnswered": "Без ответа",
+      "submit": "Отправить"
+    },
+    "slash": {
+      "ariaLabel": "Слэш-команды",
+      "noMatches": "Нет подходящих команд",
+      "kindCommand": "Команда",
+      "kindSkill": "Навык",
+      "kindTool": "Инструмент",
+      "kindMcpServer": "MCP-сервер",
+      "kindMcpTool": "MCP-инструмент",
+      "mcpServerDetail": "MCP-сервер: {server}",
+      "mcpToolDetail": "MCP-сервер: {server} · инструмент: {tool}"
+    },
+    "contextBadges": {
+      "mcpToolTooltip": "MCP-инструмент: {server}/{tool}",
+      "mcpServerTooltip": "MCP-сервер: {server}",
+      "skillTooltip": "Навык: {skill}",
+      "toolTooltip": "Инструмент: {tool}",
+      "agentTooltip": "Агент: {agent}",
+      "inlineContextSource": "Встроенный контекст из {path}",
+      "inlineContextSelection": "Выделение: {range}",
+      "inlineContextPreview": "Предпросмотр: {preview}",
+      "removeInlineContext": "Удалить встроенный контекст из {note} {range}"
+    },
+    "image": {
+      "dropHere": "Перетащите изображение сюда",
+      "remove": "Удалить изображение",
+      "unavailable": "Вложения изображений недоступны в текущем runtime."
+    },
+    "welcome": {
+      "happySunday": "Счастливого воскресенья{name}",
+      "sundaySession": "Воскресный сеанс?",
+      "welcomeWeekend": "Хороших выходных{name}",
+      "happyMonday": "Счастливого понедельника{name}",
+      "backAtIt": "Снова за работу{name}",
+      "backAtItBang": "Снова за работу!",
+      "happyTuesday": "Счастливого вторника{name}",
+      "happyWednesday": "Счастливой среды{name}",
+      "happyThursday": "Счастливого четверга{name}",
+      "happyFriday": "Счастливой пятницы{name}",
+      "fridayFeeling": "Пятничное настроение{name}",
+      "happySaturday": "Счастливой субботы{name}",
+      "happySaturdayBang": "Счастливой субботы!",
+      "goodMorning": "Доброе утро{name}",
+      "coffeeYapi": "Кофе и время YaPi?",
+      "goodAfternoon": "Добрый день{name}",
+      "heyThere": "Привет{name}",
+      "howsItGoing": "Как дела{name}?",
+      "goodEvening": "Добрый вечер{name}",
+      "evening": "Вечер{name}",
+      "howWasYourDay": "Как прошёл день{name}?",
+      "nightOwl": "Привет, сова",
+      "hiHowAreYou": "Привет{name}, как ты?",
+      "hiHowAreYouNoName": "Привет, как ты?",
+      "welcomeBack": "С возвращением{name}!",
+      "whatsNew": "Что нового{name}?",
+      "nameReturns": "{userName} вернулся!",
+      "absolutelyRight": "Вы абсолютно правы!"
+    },
+    "mention": {
+      "agents": "Агенты",
+      "noMatches": "Совпадений не найдено"
+    },
+    "file": {
+      "openFailed": "Не удалось открыть файл: {path}",
+      "openError": "Не удалось открыть файл: {message}"
+    },
+    "mermaid": {
+      "zoomOut": "Уменьшить диаграмму Mermaid",
+      "resetZoom": "Сбросить масштаб диаграммы Mermaid",
+      "zoomIn": "Увеличить диаграмму Mermaid",
+      "fitToWidth": "Подогнать диаграмму Mermaid по ширине"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "ariaLabel": "Разделы настроек",
+      "general": "Общие",
+      "models": "Модели",
+      "skills": "Навыки",
+      "tools": "Инструменты",
+      "subagents": "Субагенты",
+      "commands": "Команды"
+    },
+    "integrations": {
+      "heading": "Интеграции"
+    },
+    "styleSettings": {
+      "name": "Style Settings",
+      "desc": "Настройте внешний вид YaPi с помощью плагина Style Settings.",
+      "open": "Открыть Style Settings",
+      "installationOpened": "Открыта страница плагина Style Settings. Установите или включите его, затем вернитесь в раздел интеграций."
+    },
+    "layout": "Макет",
+    "chatBehavior": "Поведение чата",
+    "personalizationContext": "Персонализация и контекст",
+    "inputShortcuts": "Ввод и сочетания клавиш",
+    "userName": {
+      "name": "Как YaPi должен обращаться к вам?",
+      "desc": "Имя для персонализированных приветствий (оставьте пустым для общих)"
+    },
+    "excludedTags": {
+      "name": "Исключённые теги",
+      "desc": "Заметки с этими тегами не загружаются автоматически как контекст.",
+      "placeholder": "Добавить тег",
+      "inputLabel": "Добавить исключённый тег",
+      "removeAria": "Удалить исключённый тег {value}"
+    },
+    "autoTitle": {
+      "name": "Автоматически генерировать заголовки бесед",
+      "desc": "Автоматически генерировать заголовки после первого сообщения пользователя."
+    },
+    "compaction": {
+      "title": "Сжатие",
+      "autoCompact": {
+        "name": "Автоматически сжимать беседы",
+        "desc": "Автоматически суммирует старую историю сеанса после ответа, когда использование контекста превышает порог."
+      },
+      "threshold": {
+        "name": "Порог сжатия",
+        "desc": "Процент текущего контекстного окна модели, запускающий автоматическое сжатие."
+      },
+      "keepRecent": {
+        "name": "Сохранять недавний контекст",
+        "desc": "Примерное число токенов недавней истории, сохраняемых без изменений после сжатия."
+      }
+    },
+    "navMappings": {
+      "name": "Сопоставления навигации в стиле Vim",
+      "desc": "По одному сопоставлению в строке. Формат: \"map <ключ> <действие>\" (действия: scrollUp, scrollDown, focusInput)."
+    },
+    "requireCommandOrControlEnterToSend": {
+      "name": "Требовать Command/Ctrl+Enter для отправки",
+      "desc": "Если включено, Enter вставляет новую строку. Command+Enter или Ctrl+Enter отправляет сообщение."
+    },
+    "inlineEditHotkey": {
+      "name": "Инлайн-редактирование"
+    },
+    "openChatHotkey": {
+      "name": "Открыть чат"
+    },
+    "newSessionHotkey": {
+      "name": "Новый сеанс"
+    },
+    "newTabHotkey": {
+      "name": "Новая вкладка"
+    },
+    "closeTabHotkey": {
+      "name": "Закрыть вкладку"
+    },
+    "addSelectionHotkey": {
+      "name": "Добавить выделение во ввод чата"
+    },
+    "noteToolbar": {
+      "heading": "Note Toolbar",
+      "desc": "При необходимости устанавливает или включает Note Toolbar и добавляет команду выделения YaPi на панель для выделенного текста.",
+      "setupLabelAndIcon": "YaPi + значок",
+      "setupIconOnly": "Только значок",
+      "itemTooltip": "Добавить выделение во ввод YaPi",
+      "commandTooltip": "Выполнить /{name} в новом сеансе YaPi",
+      "installed": "YaPi добавлен на панель выделенного текста.",
+      "alreadyInstalled": "YaPi уже есть на панели выделенного текста.",
+      "styleSettingsOpened": "YaPi уже использует другой стиль. Открыты настройки элемента Note Toolbar, где можно вручную изменить подпись.",
+      "installRequired": "Установите Note Toolbar, чтобы использовать это действие.",
+      "needsToolbar": "Выберите панель в Note Toolbar → Места отображения → Выделенный текст и запустите настройку снова.",
+      "activationOpened": "Открыта страница плагина Note Toolbar. Включите его и запустите настройку снова.",
+      "manualSetupOpened": "Открыты настройки Note Toolbar. Добавьте команду YaPi вручную или включите официальную CLI Obsidian и повторите попытку.",
+      "unsupportedVersion": "Note Toolbar {version} не поддерживает автоматическую настройку. Обновите его и повторите попытку.",
+      "invalidConfig": "Конфигурация панели выделенного текста недействительна. Исправьте её в настройках Note Toolbar и повторите попытку.",
+      "verificationFailed": "Note Toolbar сообщил об успехе, но команду YaPi не удалось проверить.",
+      "failed": "Не удалось настроить Note Toolbar: {message}",
+      "unknownError": "Неизвестная ошибка"
+    },
+    "slashCommands": {
+      "desc": "Управление пользовательскими командами {workspaceName} в .yapi/commands/. Запуск через /имя."
+    },
+    "subagents": {
+      "enableSpawn": {
+        "name": "Включить spawn_agent",
+        "desc": "Открывает инструмент spawn_agent, чтобы Pi делегировал сфокусированные подзадачи субагентам."
+      },
+      "allowBackground": {
+        "name": "Разрешить фоновые субагенты",
+        "desc": "Разрешает вызовы spawn_agent с run_in_background=true. Завершённые результаты попадают в карточку субагента."
+      },
+      "maxConcurrent": {
+        "name": "Макс. одновременных субагентов",
+        "desc": "Жёсткий лимит одновременных фоновых субагентов. Каждый spawn_agent получает изолированный воркер."
+      }
+    },
+    "environment": "Окружение",
+    "tabBarPosition": {
+      "name": "Положение панели вкладок",
+      "desc": "Показывать вкладки сверху в заголовке чата или снизу над полем ввода.",
+      "input": "Снизу",
+      "header": "Сверху"
+    },
+    "enableAutoScroll": {
+      "name": "Автопрокрутка во время потока",
+      "desc": "Автоматически прокручивать вниз, пока Pi передаёт ответы. Отключите, чтобы оставаться наверху."
+    },
+    "deferMathRenderingDuringStreaming": {
+      "name": "Отложить рендеринг формул во время потока",
+      "desc": "Показывать исходный LaTeX во время потока и рендерить формулы один раз после завершения каждого текстового блока."
+    },
+    "chatViewPlacement": {
+      "name": "Открывать YaPi в",
+      "desc": "Где открывается панель чата при создании",
+      "rightSidebar": "Правая боковая панель",
+      "leftSidebar": "Левая боковая панель",
+      "mainTab": "Основная вкладка редактора"
+    },
+    "language": {
+      "name": "Язык",
+      "desc": "Изменить язык интерфейса плагина"
+    },
+    "sessionFiles": {
+      "heading": "Файлы сеансов",
+      "deleteRemoved": {
+        "name": "Удалить снятые файлы сеансов",
+        "desc": "Окончательно удаляет только файлы сеансов, убранные из истории и не архивированные и не открытые.",
+        "button": "Удалить",
+        "success": "Удалено файлов сеансов: {count}.",
+        "failed": "Не удалось удалить снятые файлы сеансов"
+      }
+    },
+    "sharedEnvironment": {
+      "name": "Переменные окружения",
+      "desc": "Переменные окружения runtime Pi (KEY=VALUE, по одной в строке). Поддерживается префикс export.",
+      "placeholder": "KEY=VALUE",
+      "reviewOwnership": "Проверьте владельца окружения: {keys}"
+    },
+    "tools": {
+      "sections": {
+        "builtIn": "Встроенные инструменты",
+        "web": "Веб-инструменты",
+        "mcp": "Серверы MCP"
+      },
+      "heading": "Переключатели инструментов",
+      "intro": "Включайте или отключайте инструменты {hostName} для агента. Изменения действуют в новых ходах после обновления промпта.",
+      "unavailableOfficialCli": "Требуется официальный CLI Obsidian.",
+      "unavailableExternalRead": "Нужен внешний доступ на чтение и хотя бы один разрешённый каталог.",
+      "unavailableCodex": "Требуется подключение OpenAI Codex."
+    },
+    "bash": {
+      "heading": "Доступ к Bash",
+      "allowlist": {
+        "name": "Разрешённые команды bash",
+        "desc": "Включайте bash-инструмент переключателем bash. Голый исполняемый файл вроде git разрешает подкоманды; команда с пробелами вроде npm run build — только этот префикс. which, type и pwd всегда разрешены. Управляющий синтаксис shell отклоняется.",
+        "inputLabel": "Добавить разрешённую команду bash",
+        "removeAria": "Удалить разрешённую команду bash {value}"
+      }
+    },
+    "externalRead": {
+      "heading": "Доступ к внешней файловой системе",
+      "allow": {
+        "name": "Разрешить чтение/список внешних файлов",
+        "desc": "Позволяет YaPi читать и перечислять файлы в разрешённых внешних каталогах ниже, а также во внешних контекстных папках текущей сессии чата."
+      },
+      "directories": {
+        "name": "Разрешённые внешние каталоги",
+        "desc": "Внешние инструменты чтения/списка доступны только внутри этих абсолютных каталогов и внешних контекстных папок сессии.",
+        "placeholder": "/Users/me/workspace",
+        "inputLabel": "Добавить разрешённый внешний каталог",
+        "removeAria": "Удалить разрешённый внешний каталог {value}",
+        "browse": "Обзор",
+        "browseTooltip": "Открыть системный выбор папки и добавить выбранный путь",
+        "pickerFailed": "Не удалось открыть выбор папки."
+      },
+      "notSaved": "Внешние каталоги чтения не сохранены: {error}",
+      "pathMustBeAbsolute": "Путь должен быть абсолютным: {path}"
+    },
+    "webSearch": {
+      "intro": "Перетаскивайте провайдеров, чтобы задать приоритет. WebSearch и WebFetch автоматически переходят дальше при недоступности, ограничении скорости или исчерпании квоты.",
+      "capability": {
+        "search": "Поиск",
+        "fetch": "Загрузка"
+      },
+      "status": {
+        "configured": "Настроен",
+        "anonymous": "Анонимно",
+        "missingKey": "Нет ключа",
+        "disabled": "Отключён"
+      },
+      "providerKeyRequired": "{provider} требует API-ключ и пропускается, если ключ не настроен.",
+      "providerKeyOptional": "{provider} поддерживает анонимный доступ с меньшими лимитами; API-ключ увеличивает квоту.",
+      "fixedFallbacks": "Финальные варианты: WebSearch использует публичный MCP Exa; WebFetch использует прямой HTTP.",
+      "reorder": {
+        "handle": "Изменить порядок {provider}, текущая позиция {position}",
+        "position": "{provider} перемещён на позицию {position} из {total}.",
+        "saved": "Порядок провайдеров сохранён.",
+        "cancelled": "Изменение порядка отменено."
+      },
+      "apiKeyName": "API-ключ {provider}",
+      "apiKeyPlaceholder": "Введите API-ключ…",
+      "apiKeySavedPlaceholder": "Сохранено в {secureStorageName}",
+      "removeKey": "Убрать"
+    },
+    "modelsTab": {
+      "intro": "API-ключи и OAuth-токены хранятся в {secureStorageName}. Отключённые провайдеры сохранены, но скрыты в выборе моделей.",
+      "secureStorageRequired": "API-ключи провайдеров требуют {hostName} {version} или новее с {secureStorageName}. Обновите {hostName} для безопасного хранения учётных данных.",
+      "authHeading": "Аутентификация и учётные данные",
+      "apiKey": "API-ключ",
+      "apiKeyOptional": "API-ключ (необязательно)",
+      "apiKeyDesc": "Сохранён в {secureStorageName} как {secretId}.",
+      "apiKeyPlaceholder": "Введите API-ключ…",
+      "apiKeySavedPlaceholder": "Сохранено в {secureStorageName}",
+      "oauthToken": "OAuth-токен",
+      "oauthTokenDesc": "Сохранён в {secureStorageName} как {secretId}.",
+      "oauthTokenPlaceholder": "Введите OAuth-токен…",
+      "oauthTokenSavedPlaceholder": "Сохранено в {secureStorageName}",
+      "clear": "Очистить",
+      "candidateModels": "Пул кандидатных моделей",
+      "noModels": "Модели ещё не загружены. Получите список с эндпоинта и включите их здесь.",
+      "addProvider": "+ Добавить провайдера",
+      "addProviderAdded": "Добавлено",
+      "removedProvider": "Провайдер {name} удалён.",
+      "removeConfirmTitle": "Удалить провайдера {name}?",
+      "removeConfirmDescription": "Провайдер и выбранные для него модели будут удалены. Сохранённые учётные данные по умолчанию останутся.",
+      "removeCredential": "Также удалить учётные данные этого провайдера из {secureStorageName}",
+      "testProvider": "Проверить провайдера",
+      "testing": "Проверка…",
+      "testReady": "{name} готов: {detail}",
+      "testFailed": "Проверка {name} не удалась: {detail}",
+      "testError": "Ошибка проверки {name}: {message}",
+      "readinessProviderUnavailable": "Провайдер готовности модели недоступен.",
+      "status": {
+        "ready": "Готов",
+        "missingCredential": "Нет учётных данных",
+        "oauthExpired": "OAuth истёк",
+        "disabled": "Отключён",
+        "unavailable": "Недоступен"
+      },
+      "statusDesc": {
+        "ready": "Учётные данные есть локально.",
+        "missingCredential": "Добавьте API-ключ или поддерживаемые OAuth-данные для этого провайдера.",
+        "oauthExpired": "OAuth-данные есть, но срок истёк. Переподключитесь перед использованием.",
+        "disabled": "Учётные данные сохранены, но провайдер скрыт в выборе моделей.",
+        "unavailable": "Локальных метаданных моделей pi-ai для этого провайдера пока нет."
+      },
+      "codex": {
+        "name": "OpenAI Codex",
+        "desc": "Войдите с подпиской ChatGPT/Codex. Учётные данные в {secureStorageName}.",
+        "connect": "Подключить",
+        "reconnect": "Переподключить",
+        "disconnect": "Отключить",
+        "connected": "OpenAI Codex подключён.",
+        "disconnected": "OpenAI Codex отключён.",
+        "loginFailed": "Ошибка входа Codex: {message}"
+      },
+      "addSectionLocal": "Локальные",
+      "addSectionCustom": "Пользовательский API",
+      "addSectionOAuth": "OAuth",
+      "addSectionApi": "API",
+      "endpointHeading": "Эндпоинт",
+      "displayName": "Отображаемое имя",
+      "displayNameDesc": "Показывается в списке провайдеров и группировке выбора модели.",
+      "baseUrl": "Базовый URL",
+      "baseUrlDesc": "Корень API, включая путь версии при необходимости (например /v1).",
+      "baseUrlPlaceholder": "http://localhost:11434/v1",
+      "fetchModels": "Загрузить модели",
+      "fetchingModels": "Загрузка моделей…",
+      "fetchModelsSuccess": "{name}: загружено моделей: {count}.",
+      "fetchModelsFailed": "{name}: не удалось загрузить модели: {message}",
+      "authHeadingOptional": "Аутентификация (необязательно)",
+      "apiKeyOptionalDesc": "Необязательно. Оставьте пустым для локальных серверов без авторизации. При указании сохраняется в {secureStorageName} как {secretId}.",
+      "apiKeyOptionalPlaceholder": "Необязательный API-ключ…",
+      "grokBuild": {
+        "name": "Grok Build",
+        "desc": "Войдите в Grok Build с учётной записью xAI. Учётные данные сохраняются в {secureStorageName}.",
+        "connect": "Подключить",
+        "reconnect": "Переподключить",
+        "disconnect": "Отключить",
+        "connected": "Grok Build подключён.",
+        "disconnected": "Grok Build отключён.",
+        "loginFailed": "Ошибка входа Grok Build: {message}"
+      },
+      "claude": {
+        "name": "Claude",
+        "desc": "Войдите через подписку Claude Pro или Max в браузере. Учётные данные сохраняются в {secureStorageName}.",
+        "connect": "Подключить",
+        "reconnect": "Переподключить",
+        "disconnect": "Отключить",
+        "connected": "Claude подключён.",
+        "disconnected": "Claude отключён.",
+        "loginFailed": "Ошибка входа Claude: {message}"
+      },
+      "oauthCommon": {
+        "cancel": "Отмена",
+        "deviceCode": "Код устройства",
+        "cancelled": "Вход отменён."
+      }
+    },
+    "skills": {
+      "intro": "Навыки агента в .yapi/skills/ загружаются в следующем ходе (инструмент skill + системный промпт). Установка/обновление только после действия ниже.",
+      "defaultBundle": {
+        "name": "Официальные навыки {hostName}",
+        "desc": "Устанавливает или обновляет официальный пакет kepano/obsidian-skills для этого {workspaceName}. Обращается к GitHub/skills.sh, запускает npx skills и пишет в .yapi/skills/.",
+        "button": "Установить официальные навыки",
+        "updateButton": "Обновить официальные навыки",
+        "label": "Официальный пакет:",
+        "installMore": "Установите больше с skills.sh через owner/repo."
+      },
+      "remote": {
+        "name": "Установить удалённо",
+        "desc": "Принимает owner/repo, URL GitHub, git URL, URL дерева репозитория или локальные пути. Сначала список, затем выбор.",
+        "listButton": "Список навыков",
+        "installSelected": "Установить выбранные навыки",
+        "heading": "Удалённые навыки",
+        "clearSelected": "Снять выбор удалённых навыков",
+        "securityNotice": "Предупреждение безопасности skills.sh",
+        "reviewSkillMd": "Просмотрите SKILL.md перед установкой."
+      },
+      "installed": {
+        "heading": "Установленные навыки",
+        "empty": "В .yapi/skills/ пока нет навыков. Установите ниже.",
+        "updateAll": "Обновить все",
+        "enableAria": "Включить навык {name}",
+        "disableAria": "Отключить навык {name}",
+        "updateAria": "Обновить навык {name}",
+        "removeAria": "Удалить навык {name}",
+        "installAria": "Установить навык {name}"
+      },
+      "notices": {
+        "noRemote": "Для этого источника удалённые навыки не найдены.",
+        "selectOne": "Выберите хотя бы один навык для установки."
+      }
+    },
+    "slashCommandsUi": {
+      "internalHeading": "Внутренние команды",
+      "heading": "Пользовательские команды",
+      "add": "+ Добавить команду",
+      "addAria": "Добавить пользовательскую команду",
+      "empty": "Пока нет пользовательских команд. Добавьте для меню /.",
+      "loading": "Загрузка пользовательских команд…",
+      "loadFailed": "Не удалось загрузить пользовательские команды: {message}",
+      "editAria": "Редактировать команду {name}",
+      "deleteAria": "Удалить команду {name}",
+      "deleteConfirm": "Удалить пользовательскую команду /{name}? Её элемент Note Toolbar не будет удалён; удалите его вручную.",
+      "deleteFailed": "Не удалось удалить пользовательскую команду: {message}"
+    },
+    "createCommand": {
+      "titleCreate": "Создать пользовательскую слэш-команду",
+      "titleEdit": "Редактировать пользовательскую слэш-команду",
+      "name": {
+        "name": "Имя команды",
+        "desc": "Слаг после / (напр. explain, critique)",
+        "placeholder": "explain"
+      },
+      "description": {
+        "name": "Описание",
+        "desc": "Описание в автодополнении слэш-команд",
+        "placeholder": "Пошагово разобрать код"
+      },
+      "argumentHint": {
+        "name": "Подсказка аргумента",
+        "desc": "Необязательная подсказка; если поле пустое, используется имя команды"
+      },
+      "icon": {
+        "name": "Значок",
+        "desc": "Значок команды и её элемента Note Toolbar",
+        "choose": "Выбрать значок",
+        "pickerTitle": "Выберите значок",
+        "search": "Поиск значков",
+        "searchPlaceholder": "Поиск по названию значка…",
+        "results": "Результаты поиска значков",
+        "noResults": "Подходящие значки не найдены"
+      },
+      "template": {
+        "name": "Промпт",
+        "desc": "Инструкции, отправляемые при выполнении команды."
+      },
+      "needName": "Укажите допустимое имя команды.",
+      "needTemplate": "Введите промпт.",
+      "duplicate": "Пользовательская команда /{name} уже существует.",
+      "saveFailed": "Не удалось сохранить пользовательскую слэш-команду.",
+      "newCommand": "новая-команда",
+      "addToNoteToolbar": "Добавить в Note Toolbar",
+      "addToNoteToolbarFailed": "Команда сохранена, но её не удалось добавить в Note Toolbar: {message}"
+    },
+    "mcp": {
+      "empty": "MCP-серверы не настроены. Нажмите «Добавить».",
+      "add": "+ Добавить MCP",
+      "importJson": "Импорт JSON",
+      "importJsonTitle": "Импорт конфигурации MCP",
+      "importJsonDescription": "Вставьте JSON конфигурации MCP ниже. YaPi прочитает его только после выбора команды «Импортировать».",
+      "importJsonField": "JSON конфигурации MCP",
+      "importJsonPlaceholder": "{\"mcpServers\":{\"example\":{\"type\":\"http\",\"url\":\"https://example.com/mcp\"}}}",
+      "importAction": "Импортировать",
+      "importFailed": "Не удалось импортировать конфигурацию MCP",
+      "noValidConfig": "Во вставленном JSON нет допустимой конфигурации MCP",
+      "importedNone": "Новые MCP-серверы не импортированы",
+      "clearOauth": "Очистить OAuth-данные",
+      "refreshTools": "Подключить / обновить инструменты",
+      "toolCount": "Инструментов: {count}",
+      "typeStdio": "stdio (локальная команда)",
+      "typeHttp": "http / sse (удалённый)",
+      "contextSavingTitle": "Slash-бейджи: токены /{name} выделяют этот сервер в композере",
+      "oauthBadge": "OAuth",
+      "oauthAuthenticated": "OAuth пройден",
+      "oauthExpiredBadge": "Истёк",
+      "oauthExpiredTitle": "Срок OAuth-токена истёк",
+      "refreshFailed": "Не удалось обновить инструменты",
+      "saveFailed": "Не удалось сохранить MCP-сервер",
+      "alreadyExists": "Сервер «{name}» уже существует",
+      "deleteConfirm": "Удалить MCP-сервер «{name}»?",
+      "authFailed": "Ошибка auth для «{name}»",
+      "modal": {
+        "titleAdd": "Добавить MCP-сервер",
+        "serverName": "Имя сервера",
+        "serverNamePlaceholder": "my-mcp-server",
+        "serverNameInvalid": "Имя сервера может содержать только буквы, цифры, точки, дефисы и подчёркивания",
+        "needName": "Введите имя сервера",
+        "type": "Тип",
+        "typeStdioOption": "Stdio",
+        "typeSseOption": "SSE",
+        "typeHttpOption": "HTTP",
+        "command": "Команда",
+        "needCommand": "Введите команду",
+        "url": "URL",
+        "urlPlaceholder": "http://localhost:3000/sse",
+        "needUrl": "Введите URL",
+        "env": "Переменные окружения",
+        "headersName": "Заголовки",
+        "authHeading": "Аутентификация",
+        "authAuto": "Авто",
+        "authOauth": "OAuth",
+        "authBearer": "Bearer-токен",
+        "authNone": "Нет",
+        "oauthGrant": "Тип OAuth grant",
+        "grantAuthCode": "Код авторизации",
+        "grantClientCredentials": "Учётные данные клиента",
+        "clientId": "Client ID",
+        "clientSecret": "Client secret",
+        "bearerToken": "Bearer-токен",
+        "bearerTokenEnv": "Переменная окружения Bearer-токена",
+        "scope": "Область"
+      },
+      "test": {
+        "connecting": "Обновление инструментов…",
+        "failed": "Подключение не удалось",
+        "connected": "Инструменты обновлены",
+        "availableTools": "Доступные инструменты ({count})",
+        "noTools": "Сервер не вернул инструменты."
+      }
+    }
+  },
+  "commands": {
+    "openChatView": "Открыть вид чата",
+    "runWorkspaceCommand": "Выполнить /{name} в новом сеансе",
+    "workspaceCommandEmpty": "Выделите текст перед запуском этой команды.",
+    "workspaceCommandUnavailable": "Эта команда рабочего пространства недоступна.",
+    "inlineEdit": "Инлайн-редактирование",
+    "newTab": "Новая вкладка",
+    "newSession": "Новый сеанс (в текущей вкладке)",
+    "closeCurrentTab": "Закрыть текущую вкладку",
+    "openYapiRibbon": "Открыть YaPi",
+    "inlineEditUnavailableView": "Инлайн-редактирование недоступно: нет доступа к активному виду Markdown.",
+    "inlineEditInserted": "Вставлено",
+    "inlineEditApplied": "Правка применена"
+  },
+  "tools": {
+    "display": {
+      "read": "Читать",
+      "readDesc": "Читать тело заметок по относительному пути vault или имени файла в стиле wikilink.",
+      "edit": "Редактировать",
+      "editDesc": "Заменять точный текст в существующих заметках. Предпочтительно для частичных правок.",
+      "write": "Писать",
+      "writeDesc": "Создавать заметки, добавлять в начало/конец или намеренно перезаписывать целиком.",
+      "search": "Поиск",
+      "searchDesc": "Искать текст и теги заметок или перечислять markdown-файлы в папках.",
+      "noteInfo": "Сведения о заметке",
+      "noteInfoDesc": "Читать метаданные, теги, исходящие ссылки и frontmatter.",
+      "links": "Ссылки",
+      "linksDesc": "Читать исходящие ссылки или обратные ссылки заметки.",
+      "properties": "Свойства",
+      "propertiesDesc": "Перечислять, читать, задавать или удалять свойства YAML frontmatter.",
+      "tasks": "Задачи",
+      "tasksDesc": "Перечислять или переключать markdown-задачи.",
+      "history": "История",
+      "historyDesc": "Перечислять, читать и восстанавливать версии истории файлов Obsidian.",
+      "delete": "Удалить",
+      "deleteDesc": "Перемещать файлы или папки vault в корзину.",
+      "move": "Переместить",
+      "moveDesc": "Переименовывать или перемещать файлы/папки vault и обновлять ссылки в Obsidian.",
+      "list": "Список",
+      "listDesc": "Перечислять прямых потомков папок vault, включая вложения.",
+      "readExternal": "Читать внешнее",
+      "readExternalDesc": "Читать файлы в разрешённых внешних каталогах по абсолютному пути.",
+      "listExternal": "Список внешнего",
+      "listExternalDesc": "Перечислять прямых потомков разрешённых внешних каталогов по абсолютному пути.",
+      "mkdir": "Mkdir",
+      "mkdirDesc": "Создавать папки в vault.",
+      "open": "Открыть",
+      "openDesc": "Открыть файл vault в рабочей области Obsidian.",
+      "attachment": "Вложение",
+      "attachmentDesc": "Разрешать метаданные/URL ресурсов вложений или доступные пути вложений.",
+      "generateImage": "Сгенерировать изображение",
+      "generateImageDesc": "Генерировать изображения через Codex, сохранять как вложения и при необходимости вставлять в заметки.",
+      "bash": "Bash",
+      "bashDesc": "Выполнять однострочные shell-команды, когда включён Bash и команда в списке разрешённых.",
+      "outline": "Структура",
+      "command": "Команда",
+      "eval": "Вычислить",
+      "daily": "Ежедневная заметка",
+      "dailyDesc": "Читать, добавлять или вставлять в начало ежедневной заметки, или разрешить её путь. Требуется плагин Daily Notes.",
+      "graph": "Анализ графа",
+      "graphDesc": "Анализировать граф хранилища: сироты (без обратных ссылок), тупики (без исходящих ссылок) и неразрешённые (битые викиссылки).",
+      "tags": "Теги",
+      "tagsDesc": "Список всех тегов в хранилище с количеством или детали по одному тегу.",
+      "base": "Базы",
+      "baseDesc": "Запросы к Obsidian Bases (встроенные базы данных): список файлов баз, просмотр представлений или получение результатов запросов. Только запросы требуют официальный CLI Obsidian."
+    },
+    "steps": {
+      "readFile": "Читать файл",
+      "writeFile": "Записать файл",
+      "editFile": "Редактировать файл",
+      "runCommand": "Выполнить команду",
+      "searchWeb": "Поиск в сети",
+      "listDir": "Список каталога",
+      "globFiles": "Найти файлы",
+      "applyPatch": "Применить патч",
+      "tasksProgress": "Задачи {completed}/{total}",
+      "tasks": "Задачи",
+      "skill": "Навык",
+      "searchCode": "Поиск кода",
+      "fetchPage": "Получить страницу",
+      "runSkill": "Запустить навык",
+      "findTools": "Найти инструменты",
+      "sendInput": "Отправить ввод",
+      "callMcp": "Вызвать MCP",
+      "listMcpResources": "Список ресурсов MCP",
+      "readMcpResource": "Читать ресурс MCP",
+      "editNotebook": "Редактировать блокнот"
+    }
+  },
+  "inlineEdit": {
+    "placeholderInsert": "Инструкции вставки…",
+    "placeholderEdit": "Инструкции правки…",
+    "placeholderReply": "Ответьте, чтобы продолжить…",
+    "unavailableEditor": "Инлайн-редактирование недоступно: нет доступа к активному редактору. Откройте заметку снова."
+  },
+  "host": {
+    "failedSaveTabLayout": "Не удалось сохранить раскладку вкладок",
+    "failedSaveDeletedSessions": "Не удалось сохранить список удалённых сеансов"
+  }
+}

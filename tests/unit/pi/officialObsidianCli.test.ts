@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 
-import { getOfficialObsidianConfigPath, isOfficialObsidianCliEnabled } from '@pivi/obsidian-host';
+import { getOfficialObsidianConfigPath, isOfficialObsidianCliEnabled } from '@yapi/obsidian-host';
 
 jest.mock('fs', () => ({
   existsSync: jest.fn(),

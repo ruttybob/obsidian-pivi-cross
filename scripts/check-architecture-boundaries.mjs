@@ -28,14 +28,14 @@ const imperativeChatBoundaryFiles = [
   'imperativeChatMessagePresentation.ts',
 ].map((name) => path.join(srcAppUiDir, name));
 const imperativeChatBoundaryFileSet = new Set(imperativeChatBoundaryFiles);
-const obsidianReactDir = path.join(rootDir, 'packages', 'pivi-react');
-const piviReactStylesDir = path.join(obsidianReactDir, 'styles');
-const piviReactSourceDir = path.join(obsidianReactDir, 'src');
-const piviReactPortsDir = path.join(piviReactSourceDir, 'ports');
-const piviReactLocalesDir = path.join(piviReactSourceDir, 'i18n', 'locales');
-const obsidianReactPackagePattern = /^@pivi\/pivi-react(?:\/|$)/;
+const obsidianReactDir = path.join(rootDir, 'packages', 'yapi-react');
+const yapiReactStylesDir = path.join(obsidianReactDir, 'styles');
+const yapiReactSourceDir = path.join(obsidianReactDir, 'src');
+const yapiReactPortsDir = path.join(yapiReactSourceDir, 'ports');
+const yapiReactLocalesDir = path.join(yapiReactSourceDir, 'i18n', 'locales');
+const obsidianReactPackagePattern = /^@yapi\/yapi-react(?:\/|$)/;
 const retiredReactPackagePattern = new RegExp(
-  '^@pivi/' + ['obsidian', '(?:ui|react)'].join('-') + '(?:/|$)',
+  '^@yapi/' + ['obsidian', '(?:ui|react)'].join('-') + '(?:/|$)',
 );
 
 const fileBoundaryRules = [
@@ -43,14 +43,14 @@ const fileBoundaryRules = [
     name: 'src/app/hostContracts stays structural and implementation-free',
     file: 'src/app/hostContracts.ts',
     forbidden: [
-      /^@pivi\/pivi-agent-core\/engine\/pi(?:\/|$)/,
+      /^@yapi\/yapi-agent-core\/engine\/pi(?:\/|$)/,
       /^@\/app\/workspace(?:\/|$)/,
     ],
     resolvedForbiddenRoots: [srcAppWorkspaceDir],
   },
   {
-    name: 'PiviViewHost does not import chat aggregate implementations',
-    file: 'src/app/ui/PiviViewHost.ts',
+    name: 'YapiViewHost does not import chat aggregate implementations',
+    file: 'src/app/ui/YapiViewHost.ts',
     forbidden: [/^@\/ui\/chat\/tabs\/(?:TabManager|types)$/],
   },
 ];
@@ -67,17 +67,17 @@ const boundaryRules = [
     forbidden: [retiredReactPackagePattern],
   },
   {
-    name: '@pivi/pivi-react stays presentation-only and product-neutral',
-    root: 'packages/pivi-react',
+    name: '@yapi/yapi-react stays presentation-only and product-neutral',
+    root: 'packages/yapi-react',
     forbidden: [
       /^@\//,
       /^src(?:\/|$)/,
       /^@earendil-works\//,
-      /^@pivi\/pivi-agent-core$/,
-      /^@pivi\/pivi-agent-core\/engine\/pi(?:\/|$)/,
-      /^@pivi\/pivi-agent-core\/runtime(?:$|\/chatPorts(?:\/|$))/,
-      /^@pivi\/obsidian-host(?:\/|$)/,
-      /^@pivi\/obsidian-tools(?:\/|$)/,
+      /^@yapi\/yapi-agent-core$/,
+      /^@yapi\/yapi-agent-core\/engine\/pi(?:\/|$)/,
+      /^@yapi\/yapi-agent-core\/runtime(?:$|\/chatPorts(?:\/|$))/,
+      /^@yapi\/obsidian-host(?:\/|$)/,
+      /^@yapi\/obsidian-tools(?:\/|$)/,
       /^obsidian(?:\/|$)/,
       /^electron(?:\/|$)/,
       /^node:/,
@@ -86,8 +86,8 @@ const boundaryRules = [
     ],
   },
   {
-    name: '@pivi/pivi-agent-core/foundation stays runtime and SDK free',
-    root: 'packages/pivi-agent-core/src/foundation',
+    name: '@yapi/yapi-agent-core/foundation stays runtime and SDK free',
+    root: 'packages/yapi-agent-core/src/foundation',
     forbidden: [
       /^obsidian$/,
       /^electron$/,
@@ -99,19 +99,19 @@ const boundaryRules = [
     ],
   },
   {
-    name: '@pivi/pivi-agent-core/tools stays protocol-only',
-    root: 'packages/pivi-agent-core/src/tools',
+    name: '@yapi/yapi-agent-core/tools stays protocol-only',
+    root: 'packages/yapi-agent-core/src/tools',
     forbidden: [/^obsidian$/, /^electron$/, /^@earendil-works\//],
   },
   {
-    name: '@pivi/pivi-agent-core stays host-neutral',
-    root: 'packages/pivi-agent-core',
+    name: '@yapi/yapi-agent-core stays host-neutral',
+    root: 'packages/yapi-agent-core',
     forbidden: [
       /^obsidian$/,
       /^electron$/,
-      /^@pivi\/obsidian-host(?:\/|$)/,
-      /^@pivi\/obsidian-tools(?:\/|$)/,
-      /^@pivi\/pivi-react(?:\/|$)/,
+      /^@yapi\/obsidian-host(?:\/|$)/,
+      /^@yapi\/obsidian-tools(?:\/|$)/,
+      /^@yapi\/yapi-react(?:\/|$)/,
       /^@codemirror\//,
       /^react(?:\/|$)/,
       /^react-dom(?:\/|$)/,
@@ -120,54 +120,54 @@ const boundaryRules = [
     ],
   },
   {
-    name: '@pivi/pivi-agent-core auth has no raw Pi SDK imports',
-    root: 'packages/pivi-agent-core/src/auth',
+    name: '@yapi/yapi-agent-core auth has no raw Pi SDK imports',
+    root: 'packages/yapi-agent-core/src/auth',
     forbidden: [/^@earendil-works\//],
   },
   {
-    name: '@pivi/pivi-agent-core session has no direct filesystem writes',
-    root: 'packages/pivi-agent-core/src/session',
+    name: '@yapi/yapi-agent-core session has no direct filesystem writes',
+    root: 'packages/yapi-agent-core/src/session',
     forbidden: [/^node:fs(?:\/|$)/, /^fs(?:\/|$)/],
   },
   {
-    name: '@pivi/pivi-agent-core context has no raw Pi SDK imports',
-    root: 'packages/pivi-agent-core/src/context',
+    name: '@yapi/yapi-agent-core context has no raw Pi SDK imports',
+    root: 'packages/yapi-agent-core/src/context',
     forbidden: [/^@earendil-works\//],
   },
   {
-    name: '@pivi/pivi-agent-core mcp has no raw Pi SDK imports',
-    root: 'packages/pivi-agent-core/src/mcp',
+    name: '@yapi/yapi-agent-core mcp has no raw Pi SDK imports',
+    root: 'packages/yapi-agent-core/src/mcp',
     forbidden: [/^@earendil-works\//],
   },
   {
-    name: '@pivi/pivi-agent-core plugins has no raw Pi SDK imports',
-    root: 'packages/pivi-agent-core/src/plugins',
+    name: '@yapi/yapi-agent-core plugins has no raw Pi SDK imports',
+    root: 'packages/yapi-agent-core/src/plugins',
     forbidden: [/^@earendil-works\//],
   },
   {
-    name: '@pivi/pivi-agent-core prompt has no raw Pi SDK imports',
-    root: 'packages/pivi-agent-core/src/prompt',
+    name: '@yapi/yapi-agent-core prompt has no raw Pi SDK imports',
+    root: 'packages/yapi-agent-core/src/prompt',
     forbidden: [/^@earendil-works\//],
   },
   {
-    name: '@pivi/pivi-agent-core runtime has no raw Pi SDK imports',
-    root: 'packages/pivi-agent-core/src/runtime',
+    name: '@yapi/yapi-agent-core runtime has no raw Pi SDK imports',
+    root: 'packages/yapi-agent-core/src/runtime',
     forbidden: [/^@earendil-works\//],
   },
   {
-    name: '@pivi/pivi-agent-core session has no raw Pi SDK imports',
-    root: 'packages/pivi-agent-core/src/session',
+    name: '@yapi/yapi-agent-core session has no raw Pi SDK imports',
+    root: 'packages/yapi-agent-core/src/session',
     forbidden: [/^@earendil-works\//],
   },
   {
-    name: '@pivi/pivi-agent-core skills has no host or process SDK imports',
-    root: 'packages/pivi-agent-core/src/skills',
+    name: '@yapi/yapi-agent-core skills has no host or process SDK imports',
+    root: 'packages/yapi-agent-core/src/skills',
     forbidden: [
       /^obsidian$/,
       /^electron$/,
       /^@earendil-works\//,
-      /^@pivi\/obsidian-host(?:\/|$)/,
-      /^@pivi\/obsidian-tools(?:\/|$)/,
+      /^@yapi\/obsidian-host(?:\/|$)/,
+      /^@yapi\/obsidian-tools(?:\/|$)/,
       /^@\/app(?:\/|$)/,
       /^@\/ui(?:\/|$)/,
       /^node:child_process(?:\/|$)/,
@@ -175,10 +175,10 @@ const boundaryRules = [
     ],
   },
   {
-    name: '@pivi/pivi-agent-core ports stay dependency-free',
-    root: 'packages/pivi-agent-core/src/ports',
+    name: '@yapi/yapi-agent-core ports stay dependency-free',
+    root: 'packages/yapi-agent-core/src/ports',
     forbidden: [
-      /^@pivi\//,
+      /^@yapi\//,
       /^@earendil-works\//,
       /^obsidian$/,
       /^electron$/,
@@ -192,20 +192,20 @@ const boundaryRules = [
     root: 'src/ui',
     forbidden: [
       /^@earendil-works\//,
-      /^@pivi\/obsidian-tools(?:\/|$)/,
-      /^@pivi\/obsidian-host(?:\/|$)/,
+      /^@yapi\/obsidian-tools(?:\/|$)/,
+      /^@yapi\/obsidian-host(?:\/|$)/,
     ],
   },
   {
     name: 'src/ui does not import Pi engine implementations',
     root: 'src/ui',
-    forbidden: [/^@pivi\/pivi-agent-core\/engine\/pi(?:\/|$)/],
+    forbidden: [/^@yapi\/yapi-agent-core\/engine\/pi(?:\/|$)/],
   },
   {
-    name: 'src/ui uses only approved @pivi/pivi-react presentation subpaths',
+    name: 'src/ui uses only approved @yapi/yapi-react presentation subpaths',
     root: 'src/ui',
     forbidden: [
-      /^@pivi\/pivi-react(?:$|\/(?!(?:store|inline-edit|context-badges)$))/,
+      /^@yapi\/yapi-react(?:$|\/(?!(?:store|inline-edit|context-badges)$))/,
     ],
     resolvedForbiddenRoots: [obsidianReactDir],
   },
@@ -221,30 +221,30 @@ const boundaryRules = [
     forbidden: [/^@\/ui(?:\/|$)/],
   },
   {
-    name: 'only src/app/ui mounts @pivi/pivi-react surfaces',
+    name: 'only src/app/ui mounts @yapi/yapi-react surfaces',
     root: 'src',
-    forbidden: [/^@pivi\/pivi-react\/mount(?:\/|$)/],
+    forbidden: [/^@yapi\/yapi-react\/mount(?:\/|$)/],
     excludedRoots: [srcAppUiDir],
   },
   {
-    name: 'only src/app/ui imports @pivi/pivi-react presentation ports',
+    name: 'only src/app/ui imports @yapi/yapi-react presentation ports',
     root: 'src',
-    forbidden: [/^@pivi\/pivi-react\/ports(?:\/|$)/],
+    forbidden: [/^@yapi\/yapi-react\/ports(?:\/|$)/],
     excludedRoots: [srcAppUiDir],
   },
   {
-    name: '@pivi/obsidian-tools does not import raw Pi SDKs',
+    name: '@yapi/obsidian-tools does not import raw Pi SDKs',
     root: 'packages/obsidian-tools',
     forbidden: [/^@earendil-works\//, obsidianReactPackagePattern],
   },
   {
-    name: '@pivi/obsidian-host stays host-only',
+    name: '@yapi/obsidian-host stays host-only',
     root: 'packages/obsidian-host',
     forbidden: [
-      /^@pivi\/pivi-agent-core\/engine\/pi(?:\/|$)/,
-      /^@pivi\/pivi-agent-core\/skills(?:\/|$)/,
-      /^@pivi\/pivi-agent-core\/tools(?:\/|$)/,
-      /^@pivi\/obsidian-tools(?:\/|$)/,
+      /^@yapi\/yapi-agent-core\/engine\/pi(?:\/|$)/,
+      /^@yapi\/yapi-agent-core\/skills(?:\/|$)/,
+      /^@yapi\/yapi-agent-core\/tools(?:\/|$)/,
+      /^@yapi\/obsidian-tools(?:\/|$)/,
       obsidianReactPackagePattern,
     ],
   },
@@ -493,7 +493,7 @@ for (const file of appViewBoundaryFiles) {
   for (const methodName of ['getTabManager', 'getActiveTab']) {
     for (const call of collectNamedMethodCalls(file, methodName)) {
       failures.push({
-        rule: 'app uses semantic PiviChatViewHandle instead of chat aggregates',
+        rule: 'app uses semantic YapiChatViewHandle instead of chat aggregates',
         file: relativeFile,
         ...call,
       });
@@ -590,7 +590,7 @@ for (const root of [...sourceRoots, 'tests']) {
         : `./${moduleName.slice(pkg.name.length + 1)}`;
       if (!exportedSubpathMatches(pkg.exports, subpath)) {
         failures.push({
-          rule: '@pivi imports use declared package exports',
+          rule: '@yapi imports use declared package exports',
           file: relativeFile,
           line,
           moduleName,
@@ -712,7 +712,7 @@ function pushForbiddenClassTokens(file, sourceFile, valueNode, rule) {
   }
 }
 
-for (const file of listSourceFiles(piviReactSourceDir)) {
+for (const file of listSourceFiles(yapiReactSourceDir)) {
   const sourceText = fs.readFileSync(file, 'utf8');
   const sourceFile = ts.createSourceFile(file, sourceText, ts.ScriptTarget.Latest, true);
 
@@ -729,7 +729,7 @@ for (const file of listSourceFiles(piviReactSourceDir)) {
         file,
         sourceFile,
         valueNode,
-        '@pivi/pivi-react JSX uses product-owned CSS classes',
+        '@yapi/yapi-react JSX uses product-owned CSS classes',
       );
     }
 
@@ -744,7 +744,7 @@ for (const file of listSourceFiles(piviReactSourceDir)) {
           file,
           sourceFile,
           node.arguments[1],
-          '@pivi/pivi-react DOM adapters use product-owned CSS classes',
+          '@yapi/yapi-react DOM adapters use product-owned CSS classes',
         );
       }
 
@@ -758,7 +758,7 @@ for (const file of listSourceFiles(piviReactSourceDir)) {
             file,
             sourceFile,
             argument,
-            '@pivi/pivi-react DOM adapters use product-owned CSS classes',
+            '@yapi/yapi-react DOM adapters use product-owned CSS classes',
           );
         }
       }
@@ -775,7 +775,7 @@ for (const file of listSourceFiles(piviReactSourceDir)) {
         file,
         sourceFile,
         node.right,
-        '@pivi/pivi-react DOM adapters use product-owned CSS classes',
+        '@yapi/yapi-react DOM adapters use product-owned CSS classes',
       );
     }
     ts.forEachChild(node, visit);
@@ -809,7 +809,7 @@ function declarationNameText(name, sourceFile) {
   return name.getText(sourceFile);
 }
 
-for (const file of listSourceFiles(piviReactPortsDir)) {
+for (const file of listSourceFiles(yapiReactPortsDir)) {
   const sourceText = fs.readFileSync(file, 'utf8');
   const sourceFile = ts.createSourceFile(file, sourceText, ts.ScriptTarget.Latest, true);
 
@@ -827,7 +827,7 @@ for (const file of listSourceFiles(piviReactPortsDir)) {
       const forbiddenTerm = identifier && forbiddenHostIdentifierTerm(identifier);
       if (forbiddenTerm) {
         failures.push({
-          rule: '@pivi/pivi-react public ports use host-neutral identifiers',
+          rule: '@yapi/yapi-react public ports use host-neutral identifiers',
           file: path.relative(rootDir, file),
           line: sourceLine(sourceFile, node.name ?? node),
           detail: `exposes host-specific identifier "${identifier}" (${forbiddenTerm})`,
@@ -869,7 +869,7 @@ const parameterizedLocaleValues = new Map([
   ['settings.skills.defaultBundle.desc', ['workspaceName']],
 ]);
 
-for (const file of listJsonFiles(piviReactLocalesDir)) {
+for (const file of listJsonFiles(yapiReactLocalesDir)) {
   const sourceText = fs.readFileSync(file, 'utf8');
   let locale;
   try {
@@ -885,7 +885,7 @@ for (const file of listJsonFiles(piviReactLocalesDir)) {
         const needle = `"${key}"`;
         const offset = sourceText.indexOf(needle);
         failures.push({
-          rule: '@pivi/pivi-react locale keys use host-neutral terminology',
+          rule: '@yapi/yapi-react locale keys use host-neutral terminology',
           file: path.relative(rootDir, file),
           line: offset < 0 ? 1 : sourceText.slice(0, offset).split('\n').length,
           detail: `uses host-specific locale key "${[...keyPath, key].join('.')}"`,
@@ -900,7 +900,7 @@ for (const file of listJsonFiles(piviReactLocalesDir)) {
     const value = findJsonValue(locale, keyPath);
     if (typeof value !== 'string') {
       failures.push({
-        rule: '@pivi/pivi-react locale copy parameterizes host terminology',
+        rule: '@yapi/yapi-react locale copy parameterizes host terminology',
         file: path.relative(rootDir, file),
         line: 1,
         detail: `is missing required locale string "${keyPath}"`,
@@ -911,7 +911,7 @@ for (const file of listJsonFiles(piviReactLocalesDir)) {
       if (value.includes(`{${placeholder}}`)) continue;
       const offset = sourceText.indexOf(JSON.stringify(value).slice(1, -1));
       failures.push({
-        rule: '@pivi/pivi-react locale copy parameterizes host terminology',
+        rule: '@yapi/yapi-react locale copy parameterizes host terminology',
         file: path.relative(rootDir, file),
         line: offset < 0 ? 1 : sourceText.slice(0, offset).split('\n').length,
         detail: `locale string "${keyPath}" is missing {${placeholder}}`,
@@ -920,7 +920,7 @@ for (const file of listJsonFiles(piviReactLocalesDir)) {
     if (/\b(?:keychain|vault|secret\s*storage)\b/i.test(value)) {
       const offset = sourceText.indexOf(JSON.stringify(value).slice(1, -1));
       failures.push({
-        rule: '@pivi/pivi-react locale copy parameterizes host terminology',
+        rule: '@yapi/yapi-react locale copy parameterizes host terminology',
         file: path.relative(rootDir, file),
         line: offset < 0 ? 1 : sourceText.slice(0, offset).split('\n').length,
         detail: `locale string "${keyPath}" hard-codes workspace or credential terminology`,
@@ -929,12 +929,12 @@ for (const file of listJsonFiles(piviReactLocalesDir)) {
   }
 }
 
-const piviReactCssFiles = listCssFiles(piviReactStylesDir);
+const yapiReactCssFiles = listCssFiles(yapiReactStylesDir);
 const locallyDefinedCssVariables = new Set(
-  piviReactCssFiles.flatMap(file =>
+  yapiReactCssFiles.flatMap(file =>
     [...fs.readFileSync(file, 'utf8').matchAll(/(--[\w-]+)\s*:/g)].map(match => match[1])),
 );
-for (const file of piviReactCssFiles) {
+for (const file of yapiReactCssFiles) {
   const source = fs.readFileSync(file, 'utf8');
   const sourceWithoutComments = source.replace(/\/\*[\s\S]*?\*\//g, comment => '\n'.repeat(
     Math.max(0, comment.split('\n').length - 1),
@@ -946,7 +946,7 @@ for (const file of piviReactCssFiles) {
       if (!isForbiddenHostClassName(className)) continue;
       const offset = (block.index ?? 0) + (classMatch.index ?? 0);
       failures.push({
-        rule: '@pivi/pivi-react CSS selectors use product-owned classes',
+        rule: '@yapi/yapi-react CSS selectors use product-owned classes',
         file: path.relative(rootDir, file),
         line: sourceWithoutComments.slice(0, offset).split('\n').length,
         detail: `targets forbidden host class ".${className}"`,
@@ -959,7 +959,7 @@ for (const file of piviReactCssFiles) {
         if (!isForbiddenHostClassName(className)) continue;
         const offset = (block.index ?? 0) + (attributeMatch.index ?? 0);
         failures.push({
-          rule: '@pivi/pivi-react CSS selectors use product-owned classes',
+          rule: '@yapi/yapi-react CSS selectors use product-owned classes',
           file: path.relative(rootDir, file),
           line: sourceWithoutComments.slice(0, offset).split('\n').length,
           detail: `targets forbidden host class "${className}" through a class attribute selector`,
@@ -969,10 +969,10 @@ for (const file of piviReactCssFiles) {
   }
   for (const match of source.matchAll(/var\(\s*(--[\w-]+)/g)) {
     const variable = match[1];
-    if (variable.startsWith('--pivi-') || locallyDefinedCssVariables.has(variable)) continue;
+    if (variable.startsWith('--yapi-') || locallyDefinedCssVariables.has(variable)) continue;
     const line = source.slice(0, match.index).split('\n').length;
     failures.push({
-      rule: '@pivi/pivi-react CSS uses only --pivi-* or locally defined variables',
+      rule: '@yapi/yapi-react CSS uses only --yapi-* or locally defined variables',
       file: path.relative(rootDir, file),
       line,
       moduleName: variable,

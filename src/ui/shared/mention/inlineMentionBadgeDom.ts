@@ -1,5 +1,5 @@
-import type { MentionBadgeParseContext, MentionBadgePart } from '@pivi/pivi-agent-core/context/mentions';
-import { messageTextHasMentionBadges, parseMessageMentions } from '@pivi/pivi-agent-core/context/mentions';
+import type { MentionBadgeParseContext, MentionBadgePart } from '@yapi/yapi-agent-core/context/mentions';
+import { messageTextHasMentionBadges, parseMessageMentions } from '@yapi/yapi-agent-core/context/mentions';
 import type { App } from 'obsidian';
 
 import { removeContextBadgeFromComposer } from '../context-badge/ContextBadgeDom';
@@ -54,7 +54,7 @@ export function createInlineMentionBadge(
     onRemove: token.kind === 'inline-context'
       ? (_token, event) => {
         if (!(event.currentTarget instanceof HTMLElement)) return;
-        const badge = event.currentTarget.closest('.pivi-context-badge');
+        const badge = event.currentTarget.closest('.yapi-context-badge');
         if (badge instanceof HTMLElement) {
           removeContextBadgeFromComposer(badge);
         }

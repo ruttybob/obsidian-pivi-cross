@@ -1,0 +1,42 @@
+/* Image embed styles - displays ![[image.png]] wikilinks as actual images */
+
+.yapi-embedded-image {
+  display: inline-block;
+  max-width: 100%;
+  margin: 0.5em 0;
+  vertical-align: middle;
+}
+
+.yapi-embedded-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--yapi-host-radius-small);
+  cursor: pointer;
+  transition: opacity var(--yapi-duration-normal) var(--yapi-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-embedded-image img:hover {
+    opacity: 0.9;
+  }
+}
+
+/* When image is inline with text */
+.yapi-text-block p .yapi-embedded-image {
+  margin: 0.25em 0;
+}
+
+/* Block-level image (standalone on its own line) */
+.yapi-text-block p > .yapi-embedded-image:only-child {
+  display: block;
+  margin: 0.75em 0;
+}
+
+/* Fallback when image file not found */
+.yapi-embedded-image-fallback {
+  color: var(--yapi-host-text-muted);
+  font-style: italic;
+  background: var(--yapi-host-background-hover);
+  padding: 0.1em 0.4em;
+  border-radius: var(--yapi-host-radius-small);
+}

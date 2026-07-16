@@ -1,5 +1,5 @@
-import { obsidianHttpClient } from "@pivi/obsidian-host/obsidianHttpClient";
-import type { CustomProviderHttpGet } from "@pivi/pivi-agent-core/engine/pi/installPiCustomProviders";
+import { obsidianHttpClient } from "@yapi/obsidian-host/obsidianHttpClient";
+import type { CustomProviderHttpGet } from "@yapi/yapi-agent-core/engine/pi/installPiCustomProviders";
 
 export const obsidianCustomProviderHttpRequest: CustomProviderHttpGet = async (
   url,

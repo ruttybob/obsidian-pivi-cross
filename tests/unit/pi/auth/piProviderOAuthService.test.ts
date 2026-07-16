@@ -2,24 +2,24 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-import type { OAuthFlowHost, ProviderLegacyAuthData, ProviderLegacyAuthStore } from '@pivi/pivi-agent-core/ports';
-import { createFileProviderLegacyAuthStore } from '@pivi/obsidian-host/providerLegacyAuthStore';
+import type { OAuthFlowHost, ProviderLegacyAuthData, ProviderLegacyAuthStore } from '@yapi/yapi-agent-core/ports';
+import { createFileProviderLegacyAuthStore } from '@yapi/obsidian-host/providerLegacyAuthStore';
 import {
   isProviderOAuthLoginCancelled,
-} from '@pivi/pivi-agent-core/auth/providerOAuthProgress';
+} from '@yapi/yapi-agent-core/auth/providerOAuthProgress';
 import {
   ANTHROPIC_PROVIDER_ID,
   CLAUDE_PROVIDER_ID,
   CODEX_OAUTH_PROVIDER_ID,
   GROK_BUILD_PROVIDER_ID,
   XAI_PROVIDER_ID,
-} from '@pivi/pivi-agent-core/auth/piProviderCredentials';
-import { configurePiAiModels } from '@pivi/pivi-agent-core/engine/pi/piAiModels';
-import { ObsidianCredentialStore } from '@pivi/pivi-agent-core/engine/pi/piProviderCredentialStore';
+} from '@yapi/yapi-agent-core/auth/piProviderCredentials';
+import { configurePiAiModels } from '@yapi/yapi-agent-core/engine/pi/piAiModels';
+import { ObsidianCredentialStore } from '@yapi/yapi-agent-core/engine/pi/piProviderCredentialStore';
 import {
   normalizeCodexBrowserAuthUrl,
   ProviderOAuthService,
-} from '@pivi/pivi-agent-core/engine/pi/piProviderOAuthService';
+} from '@yapi/yapi-agent-core/engine/pi/piProviderOAuthService';
 import { createMockApp } from '../../../helpers/mockApp';
 
 function createMockOAuthFlowHost(): OAuthFlowHost & { openAuthUrl: jest.Mock } {
@@ -32,7 +32,7 @@ describe('ProviderOAuthService', () => {
   let tempDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-provider-oauth-'));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-provider-oauth-'));
   });
 
   afterEach(() => {
@@ -42,7 +42,7 @@ describe('ProviderOAuthService', () => {
 
   it('migrates legacy Codex auth.json credentials into SecretStorage', () => {
     const app = createMockApp({ vaultBasePath: tempDir });
-    const authDir = path.join(tempDir, '.pivi');
+    const authDir = path.join(tempDir, '.yapi');
     const authPath = path.join(authDir, 'auth.json');
     fs.mkdirSync(authDir, { recursive: true });
     fs.writeFileSync(

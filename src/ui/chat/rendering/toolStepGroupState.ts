@@ -1,9 +1,9 @@
-import type { ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
+import type { ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
 
 import type { ToolContentRenderOptions } from './ToolCallRenderer';
 
-export const TOOL_STEP_GROUP_CLASS = 'pivi-tool-step-group';
-export const TOOL_STEP_GROUP_HEADER_CLASS = 'pivi-tool-step-group-header';
+export const TOOL_STEP_GROUP_CLASS = 'yapi-tool-step-group';
+export const TOOL_STEP_GROUP_HEADER_CLASS = 'yapi-tool-step-group-header';
 
 export interface ToolStepGroupState {
   groupEl: HTMLElement;

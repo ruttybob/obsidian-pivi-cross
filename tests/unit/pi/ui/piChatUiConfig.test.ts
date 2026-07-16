@@ -1,8 +1,8 @@
-import { piChatUIConfig } from '@pivi/pivi-agent-core/engine/pi/piChatUiConfig';
+import { piChatUIConfig } from '@yapi/yapi-agent-core/engine/pi/piChatUiConfig';
 import {
   PI_AI_MODELS_CACHE,
   type PiCachedModel,
-} from '@pivi/pivi-agent-core/engine/pi/piModelRegistry';
+} from '@yapi/yapi-agent-core/engine/pi/piModelRegistry';
 
 const MODEL_KEY = 'test-provider/large-model';
 

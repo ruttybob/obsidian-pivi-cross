@@ -1,7 +1,7 @@
 import {
   createContextBadgeViewModel,
-} from '@pivi/pivi-react/context-badges';
-import { createI18n } from '@pivi/pivi-react';
+} from '@yapi/yapi-react/context-badges';
+import { createI18n } from '@yapi/yapi-react';
 import {
   mentionPartToContextBadgeToken,
 } from '@/ui/shared/context-badge/ContextBadgeParser';

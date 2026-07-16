@@ -13,9 +13,9 @@ coordinator: "Codex"
 
 `docs/11-chat-ui-evolution.md` (Agent execution model + step 8) promotes delegated work to first-class Agent runs with grouped presentation. Verified current state:
 
-- Subagent state is nested inside a tool call: `ToolCallInfo.subagent: SubagentInfo` (`packages/pivi-agent-core/src/foundation`), rendered by short-circuiting `ToolCallView` to `ImperativeSubagentSlot`, which mounts the imperative `SubagentRenderer`/`AsyncSubagentRenderer` from `src/ui/chat/rendering/`. There is no independent `AgentRun` projection; `ChatAgentRunEntity` in `packages/pivi-react/src/store/chatProjectionStore.ts` is derived from `toolCalls[].subagent`.
+- Subagent state is nested inside a tool call: `ToolCallInfo.subagent: SubagentInfo` (`packages/yapi-agent-core/src/foundation`), rendered by short-circuiting `ToolCallView` to `ImperativeSubagentSlot`, which mounts the imperative `SubagentRenderer`/`AsyncSubagentRenderer` from `src/ui/chat/rendering/`. There is no independent `AgentRun` projection; `ChatAgentRunEntity` in `packages/yapi-react/src/store/chatProjectionStore.ts` is derived from `toolCalls[].subagent`.
 - Runtime correlation lives in `src/ui/chat/services/SubagentManager.ts` and `src/ui/chat/stream/streamSubagentLifecycle.ts` (`StreamSubagentCoordinator`: retry/hydrate timers, orphan handling); `ChatState` keeps reverse indexes (`ownerMessageBySubagentId/ByAgentId/ByToolId`).
-- The durable trace persists in `PIVI_MESSAGE_UI` entries plus the subagent's own JSONL (`subagentJsonl.ts`); background jobs run through `piBackgroundSubagentJobs.ts` with FIFO admission (`subagentConcurrencyLimiter.ts`) and a plugin-wide concurrency limit.
+- The durable trace persists in `YAPI_MESSAGE_UI` entries plus the subagent's own JSONL (`subagentJsonl.ts`); background jobs run through `piBackgroundSubagentJobs.ts` with FIFO admission (`subagentConcurrencyLimiter.ts`) and a plugin-wide concurrency limit.
 - There is no Agent Group summary ("3 agents 2 complete 1 running"), no expanded linear timeline, no inspector, and no Active Work Shelf near the composer. Structured parent reports arrive from spec 005.
 - Docs constraints: the transcript stays the only primary scroll container; expanded Activity grows within its measured virtual row or opens in an inspector; the shelf mirrors running state only, with the canonical trace attached to its transcript owner.
 
@@ -69,7 +69,7 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 
 Guidance for low-context agents:
 
-1. Read `src/ui/chat/AGENTS.md`, `src/ui/chat/rendering/AGENTS.md`, and `packages/pivi-react/AGENTS.md` first; subagent hydrate/orphan timers are subtle, do not refactor `streamSubagentLifecycle.ts` casually.
+1. Read `src/ui/chat/AGENTS.md`, `src/ui/chat/rendering/AGENTS.md`, and `packages/yapi-react/AGENTS.md` first; subagent hydrate/orphan timers are subtle, do not refactor `streamSubagentLifecycle.ts` casually.
 2. All timers/animation must use the owner window realm; background completion must set attention state even when the tab is inactive (existing behavior to preserve).
 3. Shelf and inspector are chrome surfaces, not transcript rows; the canonical trace stays attached to the owning message.
 4. Reuse spec 006's `ActivityRow` and status vocabulary; do not invent parallel status styling.
@@ -85,8 +85,8 @@ Guidance for low-context agents:
 ## Documentation sync
 
 - Numbered developer docs: `docs/11-chat-ui-evolution.md` (First-class Agent runs, Activity layer, Active Work Shelf sections) plus the subagent numbered doc.
-- Nearest local guidance: `src/ui/chat/AGENTS.md`, `src/ui/chat/rendering/AGENTS.md`, `packages/pivi-react/AGENTS.md`.
-- Parent/package guidance: `packages/pivi-agent-core/AGENTS.md` if run-model types land in core.
+- Nearest local guidance: `src/ui/chat/AGENTS.md`, `src/ui/chat/rendering/AGENTS.md`, `packages/yapi-react/AGENTS.md`.
+- Parent/package guidance: `packages/yapi-agent-core/AGENTS.md` if run-model types land in core.
 - Root guidance and roadmap: `AGENTS.md` glossary (AgentRun, Agent Group, Active Work Shelf) and architecture status.
 
 ## Progress and handoff
@@ -154,7 +154,7 @@ Guidance for low-context agents:
 ### 2026-07-16 — WS-06 final verification — Codex
 
 - Full verification passed: `npm run test:coverage -- --runInBand` completed 239 suites / 1,847 tests with 68.93% statements, 58.31% branches, 66.02% functions, and 70.39% lines. `npm run typecheck`, zero-warning `npm run lint`, and `npm run check:boundaries` also passed.
-- Production evidence: `npm run build` deployed the production artifacts; `npm run check:bundle-size` measured `main.js` at 3,071,792 bytes (2.93 MB), leaving 2,171,088 bytes (2.07 MB) below Obsidian's 5 MB cap. `obsidian plugin:reload id=pivi` and `obsidian dev:errors` passed with no captured errors.
+- Production evidence: `npm run build` deployed the production artifacts; `npm run check:bundle-size` measured `main.js` at 3,071,792 bytes (2.93 MB), leaving 2,171,088 bytes (2.07 MB) below Obsidian's 5 MB cap. `obsidian plugin:reload id=yapi` and `obsidian dev:errors` passed with no captured errors.
 - Interaction substitution: the user approved isolated synthetic tabs instead of reusing the original tabs. Deterministic lifecycle, projection, cross-tab shelf, deferred navigation, session compatibility, owner-realm, and virtual-scroll tests cover the manual matrix; the real Obsidian 20-Agent workload used a disposable tab/session and restored the original tab state byte-for-byte.
 - Documentation audit: durable conclusions are synchronized into `docs/06-subagents-streaming-and-rendering.md`, `docs/08-presentation-settings-and-inline-edit.md`, `docs/11-chat-ui-evolution.md`, root `AGENTS.md`, and the owning core/React/app/chat/rendering guidance. No remaining code or documentation criterion is open.
 - Next action: mark the spec completed, move it to `specs/archive/`, and update the index.

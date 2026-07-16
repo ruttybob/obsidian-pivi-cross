@@ -1,4 +1,4 @@
-import { createLegacySseTransport } from "@pivi/pivi-agent-core/mcp/legacySseTransport";
+import { createLegacySseTransport } from "@yapi/yapi-agent-core/mcp/legacySseTransport";
 
 describe("createLegacySseTransport", () => {
   it("is exported and constructs an SSE transport with url and options", () => {

@@ -2,10 +2,10 @@ import { get } from 'http';
 
 import {
   McpCallbackServer,
-} from '@pivi/pivi-agent-core/mcp/oauth/mcpCallbackServer';
+} from '@yapi/yapi-agent-core/mcp/oauth/mcpCallbackServer';
 import {
   OAUTH_CALLBACK_PATH,
-} from '@pivi/pivi-agent-core/mcp/oauth/mcpOAuthProvider';
+} from '@yapi/yapi-agent-core/mcp/oauth/mcpOAuthProvider';
 
 function requestCallback(
   port: number,

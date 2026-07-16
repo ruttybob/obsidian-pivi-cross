@@ -1,4 +1,4 @@
-import { SharedStorageService } from '@pivi/obsidian-host/storage/sharedStorageService';
+import { SharedStorageService } from '@yapi/obsidian-host/storage/sharedStorageService';
 
 function createMemoryAdapter() {
   const files = new Map<string, string>();
@@ -32,26 +32,26 @@ function createPlugin() {
 }
 
 describe('SharedStorageService tab manager state', () => {
-  it('writes tab manager state to .pivi for vault sync only', async () => {
+  it('writes tab manager state to .yapi for vault sync only', async () => {
     const { plugin, files } = createPlugin();
     const storage = new SharedStorageService(plugin as never);
     const state = {
       activeTabId: 'tab-1',
-      openTabs: [{ tabId: 'tab-1', sessionFile: '.pivi/sessions/a.jsonl' }],
+      openTabs: [{ tabId: 'tab-1', sessionFile: '.yapi/sessions/a.jsonl' }],
     };
 
     await storage.setTabManagerState(state);
 
-    expect(JSON.parse(files.get('.pivi/tab-manager-state.json') ?? '')).toEqual(state);
+    expect(JSON.parse(files.get('.yapi/tab-manager-state.json') ?? '')).toEqual(state);
     expect(plugin.saveData).not.toHaveBeenCalled();
   });
 
-  it('prefers .pivi tab manager state over legacy plugin data', async () => {
+  it('prefers .yapi tab manager state over legacy plugin data', async () => {
     const { plugin, files } = createPlugin();
     const storage = new SharedStorageService(plugin as never);
     const vaultState = {
       activeTabId: 'vault-tab',
-      openTabs: [{ tabId: 'vault-tab', sessionFile: '.pivi/sessions/vault.jsonl' }],
+      openTabs: [{ tabId: 'vault-tab', sessionFile: '.yapi/sessions/vault.jsonl' }],
     };
     plugin.loadData.mockResolvedValue({
       tabManagerState: {
@@ -59,12 +59,12 @@ describe('SharedStorageService tab manager state', () => {
         openTabs: [{ tabId: 'legacy-tab' }],
       },
     });
-    files.set('.pivi/tab-manager-state.json', JSON.stringify(vaultState));
+    files.set('.yapi/tab-manager-state.json', JSON.stringify(vaultState));
 
     await expect(storage.getTabManagerState()).resolves.toEqual(vaultState);
   });
 
-  it('migrates legacy plugin tab manager state into .pivi and clears data.json key', async () => {
+  it('migrates legacy plugin tab manager state into .yapi and clears data.json key', async () => {
     const { plugin, files } = createPlugin();
     const storage = new SharedStorageService(plugin as never);
     const legacyState = {
@@ -73,7 +73,7 @@ describe('SharedStorageService tab manager state', () => {
     };
     const pluginData: Record<string, unknown> = {
       tabManagerState: legacyState,
-      deletedSessionFiles: ['.pivi/sessions/old.jsonl'],
+      deletedSessionFiles: ['.yapi/sessions/old.jsonl'],
     };
     plugin.loadData.mockImplementation(async () => ({ ...pluginData }));
     plugin.saveData.mockImplementation(async (data: Record<string, unknown>) => {
@@ -82,10 +82,10 @@ describe('SharedStorageService tab manager state', () => {
     });
 
     await expect(storage.getTabManagerState()).resolves.toEqual(legacyState);
-    expect(JSON.parse(files.get('.pivi/tab-manager-state.json') ?? '')).toEqual(legacyState);
+    expect(JSON.parse(files.get('.yapi/tab-manager-state.json') ?? '')).toEqual(legacyState);
     expect(plugin.saveData).toHaveBeenCalled();
     const saved = plugin.saveData.mock.calls.at(-1)?.[0] as Record<string, unknown>;
     expect(saved).not.toHaveProperty('tabManagerState');
-    expect(saved.deletedSessionFiles).toEqual(['.pivi/sessions/old.jsonl']);
+    expect(saved.deletedSessionFiles).toEqual(['.yapi/sessions/old.jsonl']);
   });
 });

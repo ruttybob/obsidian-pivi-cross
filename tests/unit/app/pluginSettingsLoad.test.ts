@@ -1,12 +1,12 @@
 import {
   getPiAiCredentialSecretId,
   serializeProviderCredential,
-} from '@pivi/pivi-agent-core/auth/piProviderCredentials';
+} from '@yapi/yapi-agent-core/auth/piProviderCredentials';
 import {
   getPiAgentSettings,
   updatePiAgentSettings,
-} from '@pivi/pivi-agent-core/foundation/agentSettings';
-import { DEFAULT_PIVI_SETTINGS } from '@pivi/pivi-agent-core/foundation/settingsDefaults';
+} from '@yapi/yapi-agent-core/foundation/agentSettings';
+import { DEFAULT_YAPI_SETTINGS } from '@yapi/yapi-agent-core/foundation/settingsDefaults';
 
 import {
   migrateProviderSecretsToKeychain,
@@ -17,7 +17,7 @@ import { createMockApp } from '../../helpers/mockApp';
 describe('plugin settings provider credential migration', () => {
   it('eagerly moves legacy OAuth selections into the independent subscription namespace', () => {
     const app = createMockApp();
-    const settings = structuredClone(DEFAULT_PIVI_SETTINGS);
+    const settings = structuredClone(DEFAULT_YAPI_SETTINGS);
     updatePiAgentSettings(settings as unknown as Record<string, unknown>, {
       addedProviders: ['xai'],
       disabledProviders: ['xai'],
@@ -53,7 +53,7 @@ describe('plugin settings provider credential migration', () => {
 
   it('deduplicates legacy xAI models that converge on the Grok Build fallback', () => {
     const app = createMockApp();
-    const settings = structuredClone(DEFAULT_PIVI_SETTINGS);
+    const settings = structuredClone(DEFAULT_YAPI_SETTINGS);
     updatePiAgentSettings(settings as unknown as Record<string, unknown>, {
       addedProviders: ['xai'],
       visibleModels: ['xai/grok-3', 'xai/grok-4'],
@@ -74,7 +74,7 @@ describe('plugin settings provider credential migration', () => {
 
   it('preserves backing selections and adds subscription aliases when both identities exist', () => {
     const app = createMockApp();
-    const settings = structuredClone(DEFAULT_PIVI_SETTINGS);
+    const settings = structuredClone(DEFAULT_YAPI_SETTINGS);
     updatePiAgentSettings(settings as unknown as Record<string, unknown>, {
       addedProviders: ['xai', 'grok-build', 'anthropic', 'claude'],
       disabledProviders: ['xai', 'anthropic'],

@@ -4,9 +4,9 @@ import {
   ObsidianCliTransport,
   ObsidianVaultApi,
   systemProcessRunner,
-} from '@pivi/obsidian-host';
-import type { ObsidianToolsSettings } from '@pivi/pivi-agent-core/foundation';
-import type { ToolSpec } from '@pivi/pivi-agent-core/tools';
+} from '@yapi/obsidian-host';
+import type { ObsidianToolsSettings } from '@yapi/yapi-agent-core/foundation';
+import type { ToolSpec } from '@yapi/yapi-agent-core/tools';
 import type { App } from 'obsidian';
 
 import { createAttachmentTool } from './obsidian/attachment';

@@ -1,13 +1,13 @@
-import { nodeFetch } from "@pivi/obsidian-host/nodeFetch";
-import type { PiBaseToolProvider } from "@pivi/pivi-agent-core/engine/pi/buildPiToolRegistryCore";
-import { createPiAuxQueryRunner } from "@pivi/pivi-agent-core/engine/pi/piAuxQueryRunner";
-import { PiChatRuntime } from "@pivi/pivi-agent-core/engine/pi/piChatRuntime";
-import type { PiRuntimeHost } from "@pivi/pivi-agent-core/engine/pi/piRuntimeHost";
-import type { SubagentConcurrencyLimiter } from "@pivi/pivi-agent-core/engine/pi/subagentConcurrencyLimiter";
-import type { McpOAuthService, McpServerManager } from "@pivi/pivi-agent-core/mcp";
-import type { HttpClient } from "@pivi/pivi-agent-core/ports";
-import type { AuxQueryRunner } from "@pivi/pivi-agent-core/runtime/auxQueryRunner";
-import type { PiChatService } from "@pivi/pivi-agent-core/runtime/piChatService";
+import { nodeFetch } from "@yapi/obsidian-host/nodeFetch";
+import type { PiBaseToolProvider } from "@yapi/yapi-agent-core/engine/pi/buildPiToolRegistryCore";
+import { createPiAuxQueryRunner } from "@yapi/yapi-agent-core/engine/pi/piAuxQueryRunner";
+import { PiChatRuntime } from "@yapi/yapi-agent-core/engine/pi/piChatRuntime";
+import type { PiRuntimeHost } from "@yapi/yapi-agent-core/engine/pi/piRuntimeHost";
+import type { SubagentConcurrencyLimiter } from "@yapi/yapi-agent-core/engine/pi/subagentConcurrencyLimiter";
+import type { McpOAuthService, McpServerManager } from "@yapi/yapi-agent-core/mcp";
+import type { HttpClient } from "@yapi/yapi-agent-core/ports";
+import type { AuxQueryRunner } from "@yapi/yapi-agent-core/runtime/auxQueryRunner";
+import type { PiChatService } from "@yapi/yapi-agent-core/runtime/piChatService";
 
 /**
  * App-layer factories that construct concrete Pi engine services.

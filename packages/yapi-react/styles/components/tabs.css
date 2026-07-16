@@ -1,0 +1,542 @@
+.yapi-tab-bar-container {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-xs);
+}
+
+.yapi-tab-switcher {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(260px, 68vw);
+  min-width: 0;
+  transition: width var(--yapi-duration-deliberate) var(--yapi-ease-out);
+  will-change: width;
+}
+
+.yapi-tab-switcher.is-open {
+  width: min(380px, calc(100vw - 48px));
+}
+
+.yapi-container--header-mode .yapi-tab-switcher {
+  width: min(220px, 46vw);
+}
+
+.yapi-container--header-mode .yapi-tab-switcher.is-open {
+  width: min(320px, calc(100vw - 48px));
+}
+
+.yapi-tab-switcher-control {
+  position: relative;
+  z-index: 2110;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  width: 100%;
+  height: 28px;
+  border: 1px solid rgba(var(--yapi-host-mono-rgb-100), 0.08);
+  border-radius: var(--yapi-radius-pill);
+  box-shadow: var(--yapi-shadow-sm);
+  color: var(--yapi-host-text-normal);
+  background: var(--yapi-host-background-primary);
+  -webkit-backdrop-filter: var(--yapi-material-blur-md);
+  backdrop-filter: var(--yapi-material-blur-md);
+  transition:
+    border-color var(--yapi-duration-normal) var(--yapi-ease-out),
+    background var(--yapi-duration-normal) var(--yapi-ease-out),
+    box-shadow var(--yapi-duration-normal) var(--yapi-ease-out),
+    border-radius var(--yapi-duration-normal) var(--yapi-ease-out);
+}
+
+.yapi-container--header-mode .yapi-tab-switcher-control {
+  height: 26px;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.yapi-tab-switcher.is-open .yapi-tab-switcher-control {
+  border-color: rgba(var(--yapi-host-mono-rgb-100), 0.16);
+  box-shadow: var(--yapi-shadow-md);
+}
+
+.yapi-container--header-mode .yapi-tab-switcher.is-open .yapi-tab-switcher-control {
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+}
+
+.yapi-tab-switcher-trigger {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  height: 100%;
+  padding: 0 8px 0 10px;
+  font-size: var(--yapi-text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 0 var(--yapi-radius-pill) var(--yapi-radius-pill) 0;
+}
+
+.yapi-container--header-mode .yapi-tab-switcher-trigger {
+  border-radius: 0;
+}
+
+.yapi-tab-switcher-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition:
+    opacity var(--yapi-duration-normal) var(--yapi-ease-out),
+    transform var(--yapi-duration-normal) var(--yapi-ease-out);
+  opacity: 1;
+}
+
+.yapi-tab-switcher-title.is-scrolling-up {
+  opacity: 0;
+  transform: translateY(-70%);
+}
+
+.yapi-tab-switcher-title.is-scrolling-down {
+  opacity: 0;
+  transform: translateY(70%);
+}
+
+.yapi-tab-switcher-item-title {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 1.2em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--yapi-host-font-interface);
+  font-size: var(--yapi-host-font-ui-small);
+  font-weight: inherit;
+  line-height: 1.2;
+  letter-spacing: inherit;
+}
+
+.yapi-tab-switcher-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--yapi-radius-pill);
+  background: var(--yapi-host-border-hover);
+  opacity: 1;
+}
+
+.yapi-tab-switcher-dot.is-live,
+.yapi-tab-switcher-dot.is-unread {
+  opacity: 1;
+  background: var(--yapi-host-color-green);
+}
+
+.yapi-tab-switcher-dot.is-live {
+  box-shadow: 0 0 0 3px rgba(var(--yapi-host-color-green-rgb), 0.16);
+}
+
+.yapi-tab-switcher-chevron {
+  display: flex;
+  color: var(--yapi-host-text-faint);
+}
+
+.yapi-tab-switcher-chevron svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--yapi-duration-normal) var(--yapi-ease-in-out);
+}
+
+.yapi-tab-switcher.is-open .yapi-tab-switcher-chevron svg {
+  transform: rotate(180deg);
+}
+
+.yapi-container--header-mode .yapi-tab-switcher-chevron svg {
+  transform: rotate(180deg);
+}
+
+.yapi-container--header-mode .yapi-tab-switcher.is-open .yapi-tab-switcher-chevron svg {
+  transform: rotate(0deg);
+}
+
+.yapi-tab-switcher-new-chat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  width: 30px;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  line-height: 0;
+  border-inline-end: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-pill) 0 0 var(--yapi-radius-pill);
+  color: var(--yapi-host-text-faint);
+  cursor: pointer;
+  transition:
+    color var(--yapi-duration-fast) var(--yapi-ease-out),
+    background var(--yapi-duration-fast) var(--yapi-ease-out),
+    scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-container--header-mode .yapi-tab-switcher-new-chat {
+  border-inline-end: 0;
+  border-radius: 0;
+}
+
+.yapi-tab-switcher-new-chat > span,
+.yapi-tab-switcher-new-chat svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  line-height: 0;
+}
+
+.yapi-tab-switcher-menu {
+  position: absolute;
+  z-index: 2100;
+  inset-inline-end: 0;
+  bottom: 100%;
+  width: calc(100% - 30px);
+  max-height: 298px;
+  overflow-y: auto;
+  padding: var(--yapi-spacing-sm);
+  border: 1px solid rgba(var(--yapi-host-mono-rgb-100), 0.08);
+  border-radius: var(--yapi-radius-lg);
+  box-shadow: var(--yapi-shadow-lg);
+  background: var(--yapi-material-bg);
+  -webkit-backdrop-filter: var(--yapi-material-blur-md);
+  backdrop-filter: var(--yapi-material-blur-md);
+  animation: yapi-tab-menu-in var(--yapi-duration-normal) var(--yapi-ease-out);
+  transform-origin: bottom right;
+  will-change: opacity, transform;
+  pointer-events: auto;
+  transition: max-height var(--yapi-duration-normal) var(--yapi-ease-in-out);
+}
+
+.yapi-tab-switcher-menu.is-archived-revealed {
+  max-height: 298px;
+}
+
+.yapi-tab-switcher-menu.is-closing {
+  animation: yapi-tab-menu-flow-to-trigger var(--yapi-duration-deliberate) var(--yapi-ease-spring) forwards;
+  pointer-events: none;
+}
+
+.yapi-container--header-mode .yapi-tab-switcher-menu {
+  top: 100%;
+  bottom: auto;
+  width: 100%;
+  padding: 4px 0 0;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--yapi-host-background-primary);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transform-origin: top right;
+  animation-name: yapi-tab-menu-in-down;
+}
+
+.yapi-container--header-mode .yapi-tab-switcher-menu.is-closing {
+  animation-name: yapi-tab-menu-flow-to-trigger-down;
+}
+
+.yapi-tab-switcher-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  position: relative;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  block-size: 28px;
+  padding: 0 7px;
+  border-radius: var(--yapi-radius-md);
+  color: var(--yapi-host-text-normal);
+  font-size: var(--yapi-host-font-ui-small);
+  cursor: pointer;
+  transition:
+    opacity var(--yapi-duration-normal) var(--yapi-ease-out),
+    block-size var(--yapi-duration-normal) var(--yapi-ease-in-out),
+    scale var(--yapi-press-duration) var(--yapi-ease-out);
+  overflow: hidden;
+  will-change: opacity, block-size;
+}
+
+/* Continuous action mask: fully solid under the three icons, long soft fade
+   left into the title (gradient may be long; icons must never show title). */
+.yapi-tab-switcher-item::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset-block: 0;
+  inset-inline-end: 0;
+  /* 66px solid icon zone + ~40px fade into title */
+  width: 106px;
+  opacity: 0;
+  pointer-events: none;
+  /* Left: long fade over title. Right from ~38%: fully opaque under icons. */
+  background:
+    linear-gradient(
+      to right,
+      transparent 0%,
+      color-mix(in srgb, var(--yapi-host-background-hover) 22%, transparent) 14%,
+      color-mix(in srgb, var(--yapi-host-background-hover) 48%, transparent) 24%,
+      color-mix(in srgb, var(--yapi-host-background-hover) 78%, transparent) 32%,
+      var(--yapi-host-background-hover) 38%,
+      var(--yapi-host-background-hover) 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      color-mix(in srgb, var(--yapi-host-background-primary) 22%, transparent) 14%,
+      color-mix(in srgb, var(--yapi-host-background-primary) 48%, transparent) 24%,
+      color-mix(in srgb, var(--yapi-host-background-primary) 78%, transparent) 32%,
+      var(--yapi-host-background-primary) 38%,
+      var(--yapi-host-background-primary) 100%
+    );
+  transition: opacity var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-tab-switcher-item:focus-within::after {
+  opacity: 1;
+}
+
+.yapi-tab-switcher-item.is-exiting {
+  opacity: 0;
+  block-size: 0;
+  pointer-events: none;
+}
+
+.yapi-container--header-mode .yapi-tab-switcher-item {
+  border-radius: 0;
+}
+
+.yapi-tab-switcher-section-label {
+  display: none;
+  padding: 7px 7px 3px;
+  color: var(--yapi-host-text-faint);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.yapi-tab-switcher-item.is-archived {
+  display: none;
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-tab-switcher-menu.is-archived-revealed .yapi-tab-switcher-section-label,
+.yapi-tab-switcher-menu.is-archived-revealed .yapi-tab-switcher-item.is-archived {
+  display: grid;
+}
+
+.yapi-tab-switcher-menu.is-archived-revealed .yapi-tab-switcher-section-label {
+  display: block;
+}
+
+.yapi-tab-switcher-item.is-active {
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-tab-switcher .yapi-tab-switcher-title-input {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 1.2em;
+  min-height: 0;
+  max-height: 1.2em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: inherit;
+  font-family: var(--yapi-host-font-interface);
+  font-size: var(--yapi-host-font-ui-small);
+  font-weight: inherit;
+  font-style: inherit;
+  letter-spacing: inherit;
+  line-height: 1.2;
+  background: transparent;
+  vertical-align: middle;
+  overflow-x: auto;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.yapi-tab-switcher-item.is-editing::after {
+  opacity: 0;
+}
+
+
+.yapi-tab-switcher .yapi-tab-switcher-title-input:focus,
+.yapi-tab-switcher .yapi-tab-switcher-title-input:focus-visible {
+  border: 0;
+  box-shadow: none;
+  outline: none;
+  background: transparent;
+}
+
+.yapi-tab-switcher-action {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  color: var(--yapi-host-text-normal);
+  background: transparent;
+  pointer-events: none;
+  visibility: hidden;
+  border-radius: var(--yapi-radius-xs);
+  transition:
+    color var(--yapi-duration-fast) var(--yapi-ease-out),
+    background var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-tab-switcher-edit-title {
+  inset-inline-end: 48px;
+}
+
+.yapi-tab-switcher-archive {
+  inset-inline-end: 27px;
+}
+
+.yapi-tab-switcher-close {
+  inset-inline-end: 6px;
+}
+
+.yapi-tab-switcher-edit-title svg,
+.yapi-tab-switcher-archive svg,
+.yapi-tab-switcher-close svg {
+  width: 14px;
+  height: 14px;
+}
+
+.yapi-tab-switcher-item:focus-within .yapi-tab-switcher-edit-title,
+.yapi-tab-switcher-item:focus-within .yapi-tab-switcher-archive,
+.yapi-tab-switcher-item:focus-within .yapi-tab-switcher-close {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.yapi-tab-switcher-item.is-editing .yapi-tab-switcher-action {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-tab-switcher-control:hover {
+    border-color: rgba(var(--yapi-host-mono-rgb-100), 0.16);
+    box-shadow: var(--yapi-shadow-md);
+  }
+
+  .yapi-container--header-mode .yapi-tab-switcher-control:hover {
+    border-color: transparent;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .yapi-tab-switcher-new-chat:hover,
+  .yapi-tab-switcher-item:hover {
+    background: var(--yapi-host-background-hover);
+  }
+
+  .yapi-tab-switcher-new-chat:hover {
+    color: var(--yapi-host-text-normal);
+  }
+
+  .yapi-tab-switcher-item:hover::after {
+    opacity: 1;
+  }
+
+  .yapi-tab-switcher-item:hover .yapi-tab-switcher-edit-title,
+  .yapi-tab-switcher-item:hover .yapi-tab-switcher-archive,
+  .yapi-tab-switcher-item:hover .yapi-tab-switcher-close {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .yapi-tab-switcher-edit-title:hover,
+  .yapi-tab-switcher-archive:hover,
+  .yapi-tab-switcher-close:hover {
+    color: var(--yapi-host-text-normal);
+    background: var(--yapi-host-border-hover);
+  }
+}
+
+@keyframes yapi-tab-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes yapi-tab-menu-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.96, 0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes yapi-tab-menu-flow-to-trigger {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.74, 0.48);
+  }
+}
+
+@keyframes yapi-tab-menu-flow-to-trigger-down {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.76, 0.45);
+  }
+}
+
+.yapi-tab-content-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.yapi-tab-content {
+  position: relative; /* For scroll-to-bottom button positioning */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}

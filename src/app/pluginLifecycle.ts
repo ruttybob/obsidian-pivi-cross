@@ -1,20 +1,20 @@
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
 
-import type PiviPlugin from "@/main"
+import type YapiPlugin from "@/main"
 
-import { registerPiviCommands } from "./commandRegistration";
-import { registerPiviSettings } from "./settingsRegistration";
+import { registerYapiCommands } from "./commandRegistration";
+import { registerYapiSettings } from "./settingsRegistration";
 import { measureStartupPhase } from "./startupPerformance";
-import { findAllPiviViews } from "./viewAccess";
-import { registerPiviViews } from "./viewRegistration";
+import { findAllYapiViews } from "./viewAccess";
+import { registerYapiViews } from "./viewRegistration";
 
 const logger = new PluginLogger('PluginLifecycle');
 
-export async function initializePiviPlugin(plugin: PiviPlugin): Promise<void> {
+export async function initializeYapiPlugin(plugin: YapiPlugin): Promise<void> {
   await measureStartupPhase('settings', () => plugin.loadSettings());
-  registerPiviViews(plugin);
-  registerPiviCommands(plugin);
-  registerPiviSettings(plugin);
+  registerYapiViews(plugin);
+  registerYapiCommands(plugin);
+  registerYapiSettings(plugin);
 
   plugin.app.workspace.onLayoutReady(() => {
     void plugin.ensureWorkspaceServices().catch((error: unknown) => {
@@ -24,12 +24,12 @@ export async function initializePiviPlugin(plugin: PiviPlugin): Promise<void> {
 }
 
 export async function persistOpenTabStates(
-  plugin: PiviPlugin,
+  plugin: YapiPlugin,
 ): Promise<void> {
   // Ensures state is saved even if Obsidian quits without calling onClose().
   const persistOperations: Promise<void>[] = [];
   const errors: unknown[] = [];
-  for (const view of findAllPiviViews(plugin.app)) {
+  for (const view of findAllYapiViews(plugin.app)) {
     try {
       const operation = view.getChatHandle()?.maintenance.persistState();
       if (operation) {
@@ -50,6 +50,6 @@ export async function persistOpenTabStates(
     throw errors[0];
   }
   if (errors.length > 1) {
-    throw new AggregateError(errors, 'Failed to persist open Pivi tab states.');
+    throw new AggregateError(errors, 'Failed to persist open Yapi tab states.');
   }
 }

@@ -1,12 +1,12 @@
-import type { ChatMessage, ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
-import type { ToolUseResult } from '@pivi/pivi-agent-core/foundation/diff';
-import { extractDiffData } from '@pivi/pivi-agent-core/tools/diff';
+import type { ChatMessage, ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
+import type { ToolUseResult } from '@yapi/yapi-agent-core/foundation/diff';
+import { extractDiffData } from '@yapi/yapi-agent-core/tools/diff';
 import {
   TOOL_OBSIDIAN_EDIT,
   TOOL_OBSIDIAN_WRITE,
-} from '@pivi/pivi-agent-core/tools/obsidianToolNames';
-import type { SubagentLifecycleAdapter } from '@pivi/pivi-agent-core/tools/taskTypes';
-import { extractResolvedAnswers, extractResolvedAnswersFromResultText } from '@pivi/pivi-agent-core/tools/toolInput';
+} from '@yapi/yapi-agent-core/tools/obsidianToolNames';
+import type { SubagentLifecycleAdapter } from '@yapi/yapi-agent-core/tools/taskTypes';
+import { extractResolvedAnswers, extractResolvedAnswersFromResultText } from '@yapi/yapi-agent-core/tools/toolInput';
 import {
   isEditTool,
   isSubagentToolName,
@@ -14,7 +14,7 @@ import {
   TOOL_AGENT_OUTPUT,
   TOOL_APPLY_PATCH,
   TOOL_ASK_USER_QUESTION,
-} from '@pivi/pivi-agent-core/tools/toolNames';
+} from '@yapi/yapi-agent-core/tools/toolNames';
 
 import type { ChatState } from '../state/ChatState';
 import { resolveRegularToolResultStatus } from './StreamEventReducer';

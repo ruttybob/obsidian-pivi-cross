@@ -11,17 +11,17 @@ describe('ObsidianDeviceLocalExternalContextStore', () => {
     const store = new ObsidianDeviceLocalExternalContextStore(app);
 
     store.setExternalReadDirectories([' /outside/root ', '/outside/root']);
-    store.setSessionPaths('.pivi/sessions/a.jsonl', ['/outside/root']);
-    store.setTurnPaths('.pivi/sessions/a.jsonl', 'user-1', ['/outside/file']);
+    store.setSessionPaths('.yapi/sessions/a.jsonl', ['/outside/root']);
+    store.setTurnPaths('.yapi/sessions/a.jsonl', 'user-1', ['/outside/file']);
 
     expect(store.getExternalReadDirectories()).toEqual(['/outside/root']);
-    expect(store.getSessionPaths('.pivi/sessions/a.jsonl')).toEqual(['/outside/root']);
-    expect(store.getTurnPaths('.pivi/sessions/a.jsonl', 'user-1')).toEqual(['/outside/file']);
+    expect(store.getSessionPaths('.yapi/sessions/a.jsonl')).toEqual(['/outside/root']);
+    expect(store.getTurnPaths('.yapi/sessions/a.jsonl', 'user-1')).toEqual(['/outside/file']);
     expect(app.loadLocalStorage(DEVICE_LOCAL_EXTERNAL_CONTEXT_STORAGE_KEY)).toEqual({
       version: 1,
       externalReadDirectories: ['/outside/root'],
       sessions: {
-        '.pivi/sessions/a.jsonl': {
+        '.yapi/sessions/a.jsonl': {
           selectedPaths: ['/outside/root'],
           turns: { 'user-1': ['/outside/file'] },
         },

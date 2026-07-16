@@ -4,7 +4,7 @@ import { join } from 'node:path';
 const root = process.cwd();
 const productionRoots = [
   join(root, 'src/ui/chat'),
-  join(root, 'packages/pivi-react/src/chat'),
+  join(root, 'packages/yapi-react/src/chat'),
 ];
 
 function listTypeScriptFiles(directory: string): string[] {
@@ -30,7 +30,7 @@ describe('chat projection event plane', () => {
 
   it('keeps the coalescing queue private to the projection store', () => {
     const source = readFileSync(
-      join(root, 'packages/pivi-react/src/store/chatProjectionStore.ts'),
+      join(root, 'packages/yapi-react/src/store/chatProjectionStore.ts'),
       'utf8',
     );
 

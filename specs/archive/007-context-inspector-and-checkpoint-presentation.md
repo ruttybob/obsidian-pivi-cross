@@ -13,8 +13,8 @@ coordinator: "Codex"
 
 `docs/11-chat-ui-evolution.md` (step 7 plus the Context and memory direction section) calls for an estimate-based Context Inspector and checkpoint presentation. Verified current state:
 
-- The usage ring is `UsageMeter` in `packages/pivi-react/src/mount/composer/UsageMeter.tsx`, mounted from `ComposerChrome.tsx`. It shows a single arc for `contextTokens / contextWindow` via `calculateContextUsagePercentage` (`packages/pivi-agent-core/src/foundation/usage.ts`), a warning class above 80%, and an unknown-window warning state. There is no click handler and no expanded inspector anywhere in `packages/pivi-react`.
-- Estimation machinery already exists in `packages/pivi-agent-core/src/engine/pi/session/piContextCompaction.ts` (`estimateTextTokens`, `estimateAgentMessage(s)Tokens`, `PiContextTokenIndex`, `estimateActiveContextTokens`, `shouldAutoCompact`), but there is no envelope decomposition (system / recent turns / selected context / tool and Agent results / checkpoints / reserved output / compaction reserve / safety margin) and no approximation-marker convention in usage strings.
+- The usage ring is `UsageMeter` in `packages/yapi-react/src/mount/composer/UsageMeter.tsx`, mounted from `ComposerChrome.tsx`. It shows a single arc for `contextTokens / contextWindow` via `calculateContextUsagePercentage` (`packages/yapi-agent-core/src/foundation/usage.ts`), a warning class above 80%, and an unknown-window warning state. There is no click handler and no expanded inspector anywhere in `packages/yapi-react`.
+- Estimation machinery already exists in `packages/yapi-agent-core/src/engine/pi/session/piContextCompaction.ts` (`estimateTextTokens`, `estimateAgentMessage(s)Tokens`, `PiContextTokenIndex`, `estimateActiveContextTokens`, `shouldAutoCompact`), but there is no envelope decomposition (system / recent turns / selected context / tool and Agent results / checkpoints / reserved output / compaction reserve / safety margin) and no approximation-marker convention in usage strings.
 - Checkpoint presentation depends on spec 005's `Checkpoint` schema; the Memory chip shell lands in spec 006. This spec fills the chip's expansion and the ring's inspector.
 - Provider usage remains authoritative when present (docs/11 rule); `UsageInfo` is built from persisted assistant usage in `PiSessionStore.getUsage()` / `buildUsageInfo()`.
 
@@ -68,10 +68,10 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 
 Guidance for low-context agents:
 
-1. Data must reach React through existing port/store seams (`ChatUiStore` snapshot or `SettingsPorts`-style injection); `packages/pivi-react` must not import `engine/pi` (architecture check).
+1. Data must reach React through existing port/store seams (`ChatUiStore` snapshot or `SettingsPorts`-style injection); `packages/yapi-react` must not import `engine/pi` (architecture check).
 2. Estimated values always render with the approximation marker; never print an estimated number bare (docs/11 "avoid presenting false precision").
 3. The inspector is chrome near the composer, not a transcript element; do not add a scrollable card inside the transcript.
-4. Follow the same styles/i18n rules as spec 006 (manifest registration, `pivi-*` classes, 10-locale mirror, sentence case).
+4. Follow the same styles/i18n rules as spec 006 (manifest registration, `yapi-*` classes, 10-locale mirror, sentence case).
 
 ## Verification
 
@@ -83,8 +83,8 @@ Guidance for low-context agents:
 ## Documentation sync
 
 - Numbered developer docs: `docs/11-chat-ui-evolution.md` (Conservative context envelope, Context Inspector, Memory layer sections).
-- Nearest local guidance: `packages/pivi-react/AGENTS.md`, `packages/pivi-agent-core/AGENTS.md` (envelope ownership).
-- Parent/package guidance: `packages/pivi-agent-core/src/engine/pi/AGENTS.md` if compaction policy wiring changes.
+- Nearest local guidance: `packages/yapi-react/AGENTS.md`, `packages/yapi-agent-core/AGENTS.md` (envelope ownership).
+- Parent/package guidance: `packages/yapi-agent-core/src/engine/pi/AGENTS.md` if compaction policy wiring changes.
 - Root guidance and roadmap: `AGENTS.md` architecture status (context accounting claim).
 
 ## Progress and handoff
@@ -101,7 +101,7 @@ Guidance for low-context agents:
 
 - Changed: added a host-neutral `ContextEnvelope` model and pure calculator covering system, recent conversation, selected context, tool/Agent results, checkpoints, reserved output, compaction reserve, safety margin, usable input, and the conservative trigger. Added optional envelope/authoritative-total facts to `UsageInfo` without changing existing consumers.
 - Evidence: a 200K window yields the documented 16K/12K/8K reserves and 164K usable input; a 32K window scales reserves to 8K/3.2K/1.6K instead of producing negative capacity. A provider total replaces only the aggregate and leaves category sources estimated.
-- Verification: `npm run test -- --runInBand tests/unit/pivi-agent-core/contextEnvelope.test.ts` (5 tests); `npm run typecheck`; `npm run lint`.
+- Verification: `npm run test -- --runInBand tests/unit/yapi-agent-core/contextEnvelope.test.ts` (5 tests); `npm run typecheck`; `npm run lint`.
 - Remaining: WS-02 through WS-05.
 - Next action: route the envelope trigger into automatic/preflight compaction without weakening any existing trigger.
 
@@ -155,12 +155,12 @@ Guidance for low-context agents:
 
 - Evidence: the serial production build completed and deployed the configured plugin artifacts. The production `main.js` is 3,054,026 bytes (2.91 MB), leaving 2,188,854 bytes (2.09 MB) below the 5 MB cap; this resolves the coverage-artifact warning recorded above.
 - Evidence: `obsidian reload && obsidian dev:errors` completed with `No errors captured.` No tabs were created, closed, switched, or otherwise mutated, and no system-backup path was accessed.
-- Result: all acceptance criteria and workstreams are complete; durable behavior is synchronized to `docs/11-chat-ui-evolution.md`, the Pi engine `AGENTS.md`, and `packages/pivi-react/AGENTS.md`.
+- Result: all acceptance criteria and workstreams are complete; durable behavior is synchronized to `docs/11-chat-ui-evolution.md`, the Pi engine `AGENTS.md`, and `packages/yapi-react/AGENTS.md`.
 
 ### 2026-07-15 — Spec creation — coordinator
 
 - Changed: spec drafted from repository exploration (no code changes).
-- Evidence: no inspector exists in `packages/pivi-react`; estimator confirmed in `piContextCompaction.ts`; ring behavior confirmed in `UsageMeter.tsx`.
+- Evidence: no inspector exists in `packages/yapi-react`; estimator confirmed in `piContextCompaction.ts`; ring behavior confirmed in `UsageMeter.tsx`.
 - Remaining: all workstreams.
 - Blockers: WS-04 blocked until spec 005 WS-01/WS-03 and spec 006 WS-05 land; WS-01/WS-02 can start immediately.
 - Next action: claim WS-01.

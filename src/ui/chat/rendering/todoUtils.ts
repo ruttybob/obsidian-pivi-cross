@@ -1,4 +1,4 @@
-import type { TodoItem } from '@pivi/pivi-agent-core/tools/todo';
+import type { TodoItem } from '@yapi/yapi-agent-core/tools/todo';
 import { setIcon } from 'obsidian';
 
 export function getTodoStatusIcon(status: TodoItem['status']): string {
@@ -16,13 +16,13 @@ export function renderTodoItems(
   container.empty();
 
   for (const todo of todos) {
-    const item = container.createDiv({ cls: `pivi-todo-item pivi-todo-${todo.status}` });
+    const item = container.createDiv({ cls: `yapi-todo-item yapi-todo-${todo.status}` });
 
-    const icon = item.createSpan({ cls: 'pivi-todo-status-icon' });
+    const icon = item.createSpan({ cls: 'yapi-todo-status-icon' });
     icon.setAttribute('aria-hidden', 'true');
     setIcon(icon, getTodoStatusIcon(todo.status));
 
-    const text = item.createSpan({ cls: 'pivi-todo-text' });
+    const text = item.createSpan({ cls: 'yapi-todo-text' });
     text.setText(getTodoDisplayText(todo));
   }
 }

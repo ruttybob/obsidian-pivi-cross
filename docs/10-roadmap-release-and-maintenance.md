@@ -38,28 +38,28 @@ This matrix distinguishes reproducible repository evidence from live host checks
 
 | Scenario | Status | Evidence |
 |---|---|---|
-| 0.7.0 session provenance and external-path migration | Complete | `scripts/generate-pivi-070-session-fixture.mjs` checks out the immutable `0.7.0` writer at `f27ca3be149ecf4497f8d2e6ab8a236d14308c59`, verifies the three Pi dependencies at `0.80.6`, and deterministically reproduces `tag-generated-pivi-0.7.0-v3.jsonl` (1,957 bytes; SHA-256 `3c191e3440fc1a95859ddb6a07687a74a2b5cc383062c0fab3b0c53e357ef67b`). The fixture uses synthetic inputs. `piSessionTagGeneratedCompatibility.test.ts` proves HEAD migrates its absolute external paths into the device-local overlay, restores messages/title/MCP data, writes the sidecar marker, and is byte-idempotent on a second open. |
+| 0.7.0 session provenance and external-path migration | Complete | `scripts/generate-yapi-070-session-fixture.mjs` checks out the immutable `0.7.0` writer at `f27ca3be149ecf4497f8d2e6ab8a236d14308c59`, verifies the three Pi dependencies at `0.80.6`, and deterministically reproduces `tag-generated-yapi-0.7.0-v3.jsonl` (1,957 bytes; SHA-256 `3c191e3440fc1a95859ddb6a07687a74a2b5cc383062c0fab3b0c53e357ef67b`). The fixture uses synthetic inputs. `piSessionTagGeneratedCompatibility.test.ts` proves HEAD migrates its absolute external paths into the device-local overlay, restores messages/title/MCP data, writes the sidecar marker, and is byte-idempotent on a second open. |
 | Main window, pop-out window, and multi-view ownership | Complete | A live three-view layout spanned two owner realms and three React roots. Plugin reload, vault reload, and full app quit/relaunch each restored all three views without captured errors; the two temporary leaves were detached afterward. |
 | Inline edit | Complete | The live command mounted exactly one inline-edit modal and React root in an existing note; dispatching Escape through the owner window removed both, with no captured errors. |
 | Stored subagents / individual-card presentation | Complete | The development-only isolated 20-subagent fixture command exported a main-window trace with the expected two projected transcript messages, two mounted virtual rows, terminal Markdown renders, and no captured errors. Its disposable session was restored/cleaned by the workload contract; the fixed source fixture remained intact. |
 | Near-limit context indicator | Complete, deterministic | A focused `ChatShell` run injects 98% usage and verifies the warning state, one compact `used / limit (percentage)` host tooltip, a single non-interactive gauge, and the absence of a click-open dialog. No provider-backed turn was fabricated for this check. |
-| Hover Editor | Environment-limited | The community plugin is not installed in the configured vault. Pivi's owner-realm and view-lifecycle tests remain green, but the named third-party live integration still requires a vault with Hover Editor installed. |
+| Hover Editor | Environment-limited | The community plugin is not installed in the configured vault. Yapi's owner-realm and view-lifecycle tests remain green, but the named third-party live integration still requires a vault with Hover Editor installed. |
 | MCP OAuth | Environment-limited | The configured vault has no MCP servers or OAuth flow to authorize. Vault/store/service/UI OAuth success and unhappy-path tests pass, but a live redirect/login round trip still requires a configured test server and credentials. |
 
 At the time of this 2026-07-16 evidence capture, the same validation run passed 246 suites / 1,898 tests, typecheck, lint, architecture/spec/boundary and i18n dead-key checks, production build, bundle analysis, and the bundle-size gate. The production artifact produced by that run was 3,049,008 bytes; the concrete development recorder had zero production metafile contribution. These values are a dated release-candidate record, not current repository totals.
 
 ## Standard release route
 
-Pivi uses Conventional Commits and Release Please:
+Yapi uses Conventional Commits and Release Please:
 
 1. Merge conventional changes to `main`.
 2. Let `.github/workflows/release-please.yaml` open or update the release PR.
 3. Review generated version and `CHANGELOG.md` changes and the Obsidian metadata synchronized by `node scripts/sync-version.js`.
-   For the next release, ensure the generated notes call out that an absent Obsidian CLI preference now defaults to disabled and that users can re-enable it in Pivi settings.
+   For the next release, ensure the generated notes call out that an absent Obsidian CLI preference now defaults to disabled and that users can re-enable it in Yapi settings.
 4. Merge the release PR.
 5. Release Please creates the GitHub Release; the artifact job builds, attests, and uploads `main.js`, `manifest.json`, and `styles.css`.
 
-While Pivi is pre-1.0, `fix` normally produces a patch and `feat` a minor release. README badge updates come from `scripts/sync-version.js`; do not add generic Release Please README markers.
+While Yapi is pre-1.0, `fix` normally produces a patch and `feat` a minor release. README badge updates come from `scripts/sync-version.js`; do not add generic Release Please README markers.
 
 The Git tag and GitHub Release tag must equal `manifest.json.version` exactly and must not have a leading `v`.
 

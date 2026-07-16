@@ -59,13 +59,13 @@ describe('slash command dropdown matching', () => {
     appendHighlightedText(contiguous as unknown as HTMLElement, 'Open vault', 'vault');
     expect(contiguous.children.map((child) => [child.text, child.cls])).toEqual([
       ['Open ', undefined],
-      ['vault', 'pivi-slash-match'],
+      ['vault', 'yapi-slash-match'],
     ]);
 
     const fuzzy = new FakeElement();
     appendHighlightedText(fuzzy as unknown as HTMLElement, 'Obsidian', 'osd');
     expect(fuzzy.children.map((child) => child.text).join('')).toBe('Obsidian');
-    expect(fuzzy.children.filter((child) => child.cls === 'pivi-slash-match').map((child) => child.text)).toEqual([
+    expect(fuzzy.children.filter((child) => child.cls === 'yapi-slash-match').map((child) => child.text)).toEqual([
       'O',
       's',
       'd',

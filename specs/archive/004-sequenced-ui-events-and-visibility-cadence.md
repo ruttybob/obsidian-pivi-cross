@@ -33,7 +33,7 @@ Outcome: one production event plane with explicit ownership and ordering semanti
 
 In scope:
 
-- `packages/pivi-react/src/store/chatProjectionStore.ts` (event union, sequencing, cadence), `chatStreamReducer.ts` alignment, `src/ui/chat/` producers (`ChatState`, `StreamController`, `SessionController`), and `ActiveChatUiBridge` if surface-activity signals are needed.
+- `packages/yapi-react/src/store/chatProjectionStore.ts` (event union, sequencing, cadence), `chatStreamReducer.ts` alignment, `src/ui/chat/` producers (`ChatState`, `StreamController`, `SessionController`), and `ActiveChatUiBridge` if surface-activity signals are needed.
 - A small sequence allocator owned by the producer side (per open session), so ordering is defined before any future remote/cross-process transport.
 - Visibility signal sourcing from the owner window (`document.visibilityState` + workspace active-surface state), respecting the existing owner-window pattern.
 
@@ -64,7 +64,7 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 
 | ID | Deliverable | Agent | Status | Dependencies | Verification |
 |---|---|---|---|---|---|
-| WS-01 | Plane convergence decision + removal of the dead path (design note in this spec, then implementation) | Codex | Done | Spec 003 complete (subscribers stable) | Architecture/grep test: one ingestion entry point; `npm run test -- tests/pivi-react/chatUiStore.test.tsx` |
+| WS-01 | Plane convergence decision + removal of the dead path (design note in this spec, then implementation) | Codex | Done | Spec 003 complete (subscribers stable) | Architecture/grep test: one ingestion entry point; `npm run test -- tests/yapi-react/chatUiStore.test.tsx` |
 | WS-02 | Ownership/ordering metadata on all events + producer-side sequence allocator | Codex | Done | WS-01 | New unit tests for metadata presence and monotonicity |
 | WS-03 | Anomaly semantics: duplicate, late-after-terminal, missing-owner, out-of-order; `PluginLogger` diagnostics | Codex | Done | WS-02 | One test per anomaly case |
 | WS-04 | Visibility-aware cadence with the five preserved guarantees; synchronous flush points unchanged | Codex | Done | WS-02 | Cadence unit tests + flush-point regression (StreamController/SessionController suites) |
@@ -74,7 +74,7 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 Guidance for low-context agents:
 
 1. List every current flush call site before changing anything: search `flushProjection` and `projectionStore.flush` under `src/ui/chat/`. All of them must keep flushing synchronously.
-2. `packages/pivi-react` must stay free of Obsidian imports; visibility signals arrive through the owner window reference or an injected surface-activity callback, never via `require('obsidian')`.
+2. `packages/yapi-react` must stay free of Obsidian imports; visibility signals arrive through the owner window reference or an injected surface-activity callback, never via `require('obsidian')`.
 3. Do not silently swallow anomaly events; route diagnostics through the shared `PluginLogger` seam used by other fire-and-forget paths (root AGENTS.md quality item 4).
 4. Timers must use the owner window realm (existing pattern in `chatProjectionStore.ts`), never the global `window`, or pop-outs will break.
 
@@ -87,7 +87,7 @@ Guidance for low-context agents:
 ## Documentation sync
 
 - Numbered developer docs: `docs/11-chat-ui-evolution.md` (Sequenced UI event protocol and Visibility-aware projection cadence sections updated to implemented semantics).
-- Nearest local guidance: `packages/pivi-react/AGENTS.md` (store event contract), `src/ui/chat/AGENTS.md` (producer/sequencing ownership).
+- Nearest local guidance: `packages/yapi-react/AGENTS.md` (store event contract), `src/ui/chat/AGENTS.md` (producer/sequencing ownership).
 - Parent/package guidance: `src/ui/AGENTS.md` if the flush map changes.
 - Root guidance and roadmap: `AGENTS.md` architecture status paragraph.
 
@@ -146,7 +146,7 @@ Guidance for low-context agents:
 
 ### 2026-07-16 — WS-05/WS-06 owner-realm validation and traces — Codex
 
-- Changed: deployed the development bundle and ran the fixed 102,400-byte / 64-chunk workload with hidden visibility in the main renderer and in a disposable floating Pivi leaf. Both workloads used disposable unbound tabs, restored the prior active tab, and removed their synthetic state. Durable protocol/cadence conclusions were synchronized into `docs/11-chat-ui-evolution.md`, root `AGENTS.md`, and the nearest React/chat guidance.
+- Changed: deployed the development bundle and ran the fixed 102,400-byte / 64-chunk workload with hidden visibility in the main renderer and in a disposable floating Yapi leaf. Both workloads used disposable unbound tabs, restored the prior active tab, and removed their synthetic state. Durable protocol/cadence conclusions were synchronized into `docs/11-chat-ui-evolution.md`, root `AGENTS.md`, and the nearest React/chat guidance.
 - Evidence: main trace `2026-07-15T21-04-31-847Z-spec-004-hidden-main.json` and pop-out trace `2026-07-15T21-07-08-263Z-spec-004-hidden-popout.json` each recorded 5 synthetic projection commits (2 immediate, 2 hidden-timer, 1 explicit flush), 4 synthetic Markdown renders, and 0 long tasks. The corresponding visible spec 003 traces recorded 67 commits, 65 renders, and 1 workload long task. Each accepted trace identifies only its expected owner window; the pop-out workload completed 102,400 bytes / 64 chunks in 1,531.9 ms.
 - Problems recorded: macOS denied System Events assistive access, so no OS-level hiding was attempted further; the owner document's configurable visibility state plus real `visibilitychange` event exercised the exact scheduler input instead. A first CLI-created-window attempt routed later commands back to main and produced a mislabeled trace; recorder metadata exposed the mismatch, that trace was deleted, and the accepted run addressed the floating leaf/window directly. These proxies do not measure CPU time.
 - Cleanup: the temporary scenario file and rejected trace were removed; the disposable floating window was closed; floating-window count, synthetic DOM marker count, and captured Obsidian errors were all zero.
@@ -180,4 +180,4 @@ Projection cadence now distinguishes active visible surfaces (owner-window anima
 
 Deviations and issues were recorded rather than hidden: first-turn session identity remains nullable behind a required projection scope; raw `done`/`error` does not seal a run before final footer work; System Events assistive access was unavailable so the exact owner-document visibility input was exercised directly; a misrouted CLI pop-out trace was rejected and deleted; and final audit found/fixed mutable pending aliasing, cross-turn child-run drift, teardown races, and paging bypass of the event plane.
 
-Final verification passed 234 suites / 1,774 tests, global coverage 68.12% statements / 57.17% branches / 64.99% functions / 69.55% lines, typecheck, lint, all boundary/spec checks, production build, bundle budget, deployed-artifact identity, debug-marker cleanup, main/pop-out disposable runtime traces, production reload, and zero remaining synthetic/floating/temp artifacts. Durable conclusions are synchronized into `docs/11-chat-ui-evolution.md`, root `AGENTS.md`, `packages/pivi-react/AGENTS.md`, and `src/ui/chat/AGENTS.md`.
+Final verification passed 234 suites / 1,774 tests, global coverage 68.12% statements / 57.17% branches / 64.99% functions / 69.55% lines, typecheck, lint, all boundary/spec checks, production build, bundle budget, deployed-artifact identity, debug-marker cleanup, main/pop-out disposable runtime traces, production reload, and zero remaining synthetic/floating/temp artifacts. Durable conclusions are synchronized into `docs/11-chat-ui-evolution.md`, root `AGENTS.md`, `packages/yapi-react/AGENTS.md`, and `src/ui/chat/AGENTS.md`.

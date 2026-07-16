@@ -1,9 +1,9 @@
-import type { ActivityStatus } from '@pivi/pivi-agent-core/foundation';
+import type { ActivityStatus } from '@yapi/yapi-agent-core/foundation';
 import {
   type ActivityStatusPresentation,
   getActivityStatusCountPresentations,
   getActivityStatusPresentation,
-} from '@pivi/pivi-react/store';
+} from '@yapi/yapi-react/store';
 import { setIcon } from 'obsidian';
 
 import { t } from '@/app/i18n';
@@ -13,15 +13,15 @@ function renderActivityStatusIcon(
   presentation: ActivityStatusPresentation,
 ): void {
   if (presentation.icon.kind === 'dot') {
-    container.createSpan({ cls: 'pivi-status-icon-dot', attr: { 'aria-hidden': 'true' } });
+    container.createSpan({ cls: 'yapi-status-icon-dot', attr: { 'aria-hidden': 'true' } });
   } else if (presentation.icon.kind === 'working') {
     const workingIconEl = container.createSpan({
-      cls: 'pivi-working-icon',
+      cls: 'yapi-working-icon',
       attr: { 'aria-hidden': 'true' },
     });
     setIcon(workingIconEl, 'loader-circle');
   } else {
-    const iconEl = container.createSpan({ cls: 'pivi-activity-status-icon', attr: { 'aria-hidden': 'true' } });
+    const iconEl = container.createSpan({ cls: 'yapi-activity-status-icon', attr: { 'aria-hidden': 'true' } });
     setIcon(iconEl, presentation.icon.name);
   }
 }
@@ -38,7 +38,7 @@ export function renderActivityStatusContents(
   renderActivityStatusIcon(container, presentation);
 
   container.createSpan({
-    cls: 'pivi-activity-status-label',
+    cls: 'yapi-activity-status-label',
     text: presentation.label,
   });
   if (presentation.accessibleLabel) {
@@ -62,16 +62,16 @@ export function renderActivityStatusCountSummary(
   items.forEach((item, index) => {
     if (index > 0) {
       container.createSpan({
-        cls: 'pivi-tool-step-group-status-separator',
+        cls: 'yapi-tool-step-group-status-separator',
         text: '/',
         attr: { 'aria-hidden': 'true' },
       });
     }
     const badge = container.createSpan({
-      cls: `pivi-activity-status pivi-tool-status status-${item.status}`,
+      cls: `yapi-activity-status yapi-tool-status status-${item.status}`,
       attr: { 'aria-hidden': 'true' },
     });
     renderActivityStatusIcon(badge, item);
-    badge.createSpan({ cls: 'pivi-activity-status-label', text: item.countLabel });
+    badge.createSpan({ cls: 'yapi-activity-status-label', text: item.countLabel });
   });
 }

@@ -80,7 +80,7 @@ export class ExternalFileApi {
 
   private assertAllowed(normalizedPath: string): void {
     if (this.allowedDirectories.length === 0) {
-      throw new Error('No external directories are allowed. Add allowed directories in Pivi settings before using external read tools.');
+      throw new Error('No external directories are allowed. Add allowed directories in Yapi settings before using external read tools.');
     }
     if (this.allowedDirectories.some((directory) => isPathWithinDirectory(normalizedPath, directory, directory))) {
       return;

@@ -1,4 +1,4 @@
-import type { OpenSessionState } from '@pivi/pivi-agent-core/foundation';
+import type { OpenSessionState } from '@yapi/yapi-agent-core/foundation';
 
 import { SessionController } from '@/ui/chat/controllers/SessionController';
 import { ChatState } from '@/ui/chat/state/ChatState';
@@ -33,7 +33,7 @@ function createFixture(openSession?: Partial<OpenSessionState>) {
   const subagentManager = { orphanAllActive: jest.fn(), clear: jest.fn() };
   const agentService = createFakePiChatService({ sessionId: 'agent-sid' });
   agentService.getSessionStateUpdates = jest.fn(() => ({
-    sessionFile: '.pivi/sessions/agent.jsonl',
+    sessionFile: '.yapi/sessions/agent.jsonl',
   }));
   const ensureServiceForSession = jest.fn(async () => undefined);
   const callbacks = {
@@ -48,7 +48,7 @@ function createFixture(openSession?: Partial<OpenSessionState>) {
     createdAt: 0,
     updatedAt: 0,
     sessionId: 'conv-1',
-    sessionFile: '.pivi/sessions/test.jsonl',
+    sessionFile: '.yapi/sessions/test.jsonl',
     leafId: 'leaf-a',
     messages: [MSG],
     ...openSession,
@@ -403,7 +403,7 @@ describe('SessionController.save', () => {
 
     expect(sessions.createSession).toHaveBeenCalledWith({
       sessionId: 'agent-sid',
-      sessionFile: '.pivi/sessions/agent.jsonl',
+      sessionFile: '.yapi/sessions/agent.jsonl',
     });
     expect(state.currentOpenSessionId).toBe('new-conv');
     expect(sessions.updateSession).toHaveBeenCalledWith(

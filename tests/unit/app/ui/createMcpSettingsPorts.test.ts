@@ -1,6 +1,6 @@
-import type { ManagedMcpServer } from '@pivi/pivi-agent-core/mcp/types';
+import type { ManagedMcpServer } from '@yapi/yapi-agent-core/mcp/types';
 
-import type { PiviPluginWorkspace, PiviSettingsHost } from '@/app/hostContracts';
+import type { YapiPluginWorkspace, YapiSettingsHost } from '@/app/hostContracts';
 import { createMcpSettingsPort } from '@/app/ui/createMcpSettingsPorts';
 
 const DEEPWIKI_MCP_URL = 'https://mcp.deepwiki.com/mcp';
@@ -24,13 +24,13 @@ function createHarness(testResult: { success: boolean; tools: Array<{ name: stri
   const server = remoteServer();
   const host = {
     getAllViews: () => [],
-  } as unknown as PiviSettingsHost;
+  } as unknown as YapiSettingsHost;
   const workspace = {
     mcpServerTester: { testServer },
     mcpDiagnostics: { testConnection },
     mcpToolProvider: { getCachedTools, cacheTools },
     mcpOAuth: { authenticate, getAuthStatus },
-  } as unknown as PiviPluginWorkspace;
+  } as unknown as YapiPluginWorkspace;
 
   return {
     authenticate,

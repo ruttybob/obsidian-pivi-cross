@@ -13,10 +13,10 @@ coordinator: "Codex"
 
 `docs/11-chat-ui-evolution.md` (Visual language + step 6) defines Narrative / Activity / Memory layers with a shared status vocabulary. Verified current state and gaps:
 
-- Status vocabulary gap: docs require Queued / Running / Waiting / Completed / Failed / Cancelled / Orphaned. `ToolCallInfo.status` in `packages/pivi-agent-core/src/foundation/tools.ts` supports only `running | completed | error | blocked`; only subagents have `pending`/`orphaned` (`AsyncSubagentStatus`). No queued (hollow dot), waiting, or cancelled visuals exist anywhere (`ToolCallView.tsx`, `styles/components/toolcalls.css`).
+- Status vocabulary gap: docs require Queued / Running / Waiting / Completed / Failed / Cancelled / Orphaned. `ToolCallInfo.status` in `packages/yapi-agent-core/src/foundation/tools.ts` supports only `running | completed | error | blocked`; only subagents have `pending`/`orphaned` (`AsyncSubagentStatus`). No queued (hollow dot), waiting, or cancelled visuals exist anywhere (`ToolCallView.tsx`, `styles/components/toolcalls.css`).
 - Status labels are not localized per state: `chat.stream.statusLabel` interpolates the raw status string (`Status: {status}`), violating the icon+text+color-together rule.
-- The closest Activity-row primitive is the collapsed tool header (`.pivi-tool-header`: icon, name, summary, diff stats, status, chevron) and the imperative subagent header (`.pivi-subagent-header`). There is no elapsed-time column and no generic React Activity capsule.
-- Memory layer is minimal: `ContextCompactedView` in `packages/pivi-react/src/chat/messages/AssistantContentView.tsx` renders a bare `pivi-compact-boundary` label ("Session compacted") with no token estimate (`~86K → ~9K`), no expansion, and truncation/paging boundaries have no chip at all.
+- The closest Activity-row primitive is the collapsed tool header (`.yapi-tool-header`: icon, name, summary, diff stats, status, chevron) and the imperative subagent header (`.yapi-subagent-header`). There is no elapsed-time column and no generic React Activity capsule.
+- Memory layer is minimal: `ContextCompactedView` in `packages/yapi-react/src/chat/messages/AssistantContentView.tsx` renders a bare `yapi-compact-boundary` label ("Session compacted") with no token estimate (`~86K → ~9K`), no expansion, and truncation/paging boundaries have no chip at all.
 - Docs step 6 says "prototype without changing persistence", but queued/cancelled/waiting state must survive reload to render honestly. Resolution below: additive optional fields only, with old files mapping to today's statuses.
 
 ## Goal and success criteria
@@ -35,8 +35,8 @@ Outcome: one status vocabulary shared by tools and Agent runs, a collapsed Activ
 
 In scope:
 
-- Foundation status type + mapping (`packages/pivi-agent-core/src/foundation/tools.ts`, additive optional fields in `message_ui` only where reload honesty requires it).
-- React components/styles: `ToolCallView.tsx`, new `ActivityRow`, `AssistantContentView.tsx` (`ContextCompactedView`), new/updated CSS modules registered in `packages/pivi-react/styles/manifest.mjs` (build fails on unlisted files; zero `!important`; `pivi-*` classes only).
+- Foundation status type + mapping (`packages/yapi-agent-core/src/foundation/tools.ts`, additive optional fields in `message_ui` only where reload honesty requires it).
+- React components/styles: `ToolCallView.tsx`, new `ActivityRow`, `AssistantContentView.tsx` (`ContextCompactedView`), new/updated CSS modules registered in `packages/yapi-react/styles/manifest.mjs` (build fails on unlisted files; zero `!important`; `yapi-*` classes only).
 - Imperative subagent renderers (`src/ui/chat/rendering/SubagentRenderer.ts`, `AsyncSubagentRenderer.ts`) adopting the same class vocabulary and status mapping.
 - i18n keys in all locales; elapsed-time formatting helper.
 
@@ -56,7 +56,7 @@ Not in scope:
 | 2026-07-16 | Map legacy `pending` to the conservative pre-activity label queued, then switch to running on the first child event; do not present this as proof of FIFO admission | The limiter's true `queued` metadata is unavailable until after admission, while child output is direct evidence that execution started | WS-01, WS-02 |
 | 2026-07-16 | Preserve legacy success/error fields and add optional `activityStatus` to tool/Agent UI records; only explicit runtime facts may set cancelled or waiting | Existing message_ui overlays already round-trip additive fields, so old sessions stay compatible and failure copy is never parsed to invent lifecycle state | WS-01, WS-02 |
 | 2026-07-16 | Continuous motion is reserved for `running`; all other states are static, and reduced-motion keeps semantic color/icon feedback while stopping the running animation | Activity rows are high-frequency status UI; motion must communicate active work rather than decorate every transition | WS-02, WS-04, WS-06 |
-| 2026-07-16 | React and imperative adapters share the core status/view-model facts and the `pivi-activity-*` CSS contract, but each keeps its existing DOM owner | Mounting React inside the stored-subagent adapter would violate the explicit imperative-island boundary | WS-02, WS-03 |
+| 2026-07-16 | React and imperative adapters share the core status/view-model facts and the `yapi-activity-*` CSS contract, but each keeps its existing DOM owner | Mounting React inside the stored-subagent adapter would violate the explicit imperative-island boundary | WS-02, WS-03 |
 | 2026-07-16 | Remove the raw interpolated status key and localize canonical labels directly in all catalogs; orphaned also carries a localized recovery explanation | A visible icon alone or a raw protocol value is insufficient for accessible status communication | WS-02, WS-06 |
 | 2026-07-16 | Keep the live elapsed ticker in React-owned rows; imperative subagent rows recompute only on lifecycle updates | Legacy imperative render helpers return bare DOM without an unload handle, so recurring timers there would be unowned; terminal timestamps still render the exact frozen duration | WS-03, WS-04 |
 | 2026-07-16 | Carry before/after active-context estimates on new compaction chunks and recompute the post-compaction estimate at the exact JSONL entry on reopen | The checkpoint summary size is not the active context size; legacy UI blocks without both facts must remain label-only | WS-05 |
@@ -68,7 +68,7 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 | ID | Deliverable | Agent | Status | Dependencies | Verification |
 |---|---|---|---|---|---|
 | WS-01 | Shared status vocabulary + mapping from existing tool/subagent statuses; additive persistence fields with sanitizer coverage | Codex | Done | None | Mapping unit tests; session compat suites green |
-| WS-02 | `StatusIcon` per docs table + localized `chat.status.*` labels in all 10 locales; remove raw `statusLabel` interpolation | Codex | Done | WS-01 | `tests/pivi-react/ToolCallView.test.tsx` extended; `node scripts/check-i18n-dead-keys.mjs`; placeholder-parity test |
+| WS-02 | `StatusIcon` per docs table + localized `chat.status.*` labels in all 10 locales; remove raw `statusLabel` interpolation | Codex | Done | WS-01 | `tests/yapi-react/ToolCallView.test.tsx` extended; `node scripts/check-i18n-dead-keys.mjs`; placeholder-parity test |
 | WS-03 | `ActivityRow` component (icon/name/summary/elapsed) adopted by tool header and imperative subagent header | Codex | Done | WS-01 | Focused React/imperative suites green; final Obsidian pass remains in spec verification |
 | WS-04 | Elapsed-time ticker that only animates while running and respects `prefers-reduced-motion` and owner-window timers | Codex | Done | WS-03 | Owner-window registration/cleanup and terminal freeze test; open-handle audit clean |
 | WS-05 | Memory chip: token-transition compaction divider with approximation marker; shared chip family reserved for paging/recovery boundaries | Codex | Done | WS-01 | Runtime/mapper/projection/virtual-list tests green; final manual compaction check remains |
@@ -76,8 +76,8 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 
 Guidance for low-context agents:
 
-1. Read `packages/pivi-react/styles/AGENTS.md` before adding CSS: new files must be listed in `manifest.mjs`, use `pivi-*`/`--pivi-*` naming, `.is-*`/`.status-*` state modifiers, no `!important`, no `:has`.
-2. i18n workflow: add to `packages/pivi-react/src/i18n/locales/en.json` first, mirror the exact key tree with real translations in the other nine catalogs in the same commit (root AGENTS.md Coding Standard 10).
+1. Read `packages/yapi-react/styles/AGENTS.md` before adding CSS: new files must be listed in `manifest.mjs`, use `yapi-*`/`--yapi-*` naming, `.is-*`/`.status-*` state modifiers, no `!important`, no `:has`.
+2. i18n workflow: add to `packages/yapi-react/src/i18n/locales/en.json` first, mirror the exact key tree with real translations in the other nine catalogs in the same commit (root AGENTS.md Coding Standard 10).
 3. Imperative renderers get translated strings via `@/app/i18n`; never import app translator state into packages.
 4. Sentence case for all new UI copy (ESLint `obsidianmd/ui/sentence-case` must stay at 0 warnings).
 5. Do not add competing context indicators or new card borders; density and structure differentiate layers (docs/11 opening constraint).
@@ -91,7 +91,7 @@ Guidance for low-context agents:
 ## Documentation sync
 
 - Numbered developer docs: `docs/11-chat-ui-evolution.md` (Visual language and Status semantics sections marked implemented where true).
-- Nearest local guidance: `packages/pivi-react/AGENTS.md`, `packages/pivi-react/styles/AGENTS.md`, `packages/pivi-react/src/i18n/AGENTS.md`.
+- Nearest local guidance: `packages/yapi-react/AGENTS.md`, `packages/yapi-react/styles/AGENTS.md`, `packages/yapi-react/src/i18n/AGENTS.md`.
 - Parent/package guidance: `src/ui/chat/rendering/AGENTS.md` (renderer status mapping).
 - Root guidance and roadmap: `AGENTS.md` glossary if Activity row / Memory chip become canonical terms.
 
@@ -110,7 +110,7 @@ Guidance for low-context agents:
 
 - Changed: added the seven-state `ActivityStatus` vocabulary and pure legacy mapping helpers; added optional persisted `activityStatus` facts to tool and Agent UI records. The first child text/tool event now moves a pre-activity async Agent to running. Background abort emits an explicit cancelled activity chunk, and `spawn_agent` terminal details preserve the same fact while retaining legacy `status: error`.
 - Evidence: the status audit proved limiter `queued` metadata is terminal-only, `pending` can overlap real execution, cancellation was previously flattened to error, waiting has no source, and orphaned already round-trips. The implementation therefore does not infer cancelled/waiting and does not describe pre-activity as proven FIFO admission.
-- Verification: `npm run test -- --runInBand tests/unit/pivi-agent-core/activityStatus.test.ts tests/unit/features/chat/subagentManager.test.ts tests/unit/pi/runtime/piBackgroundSubagentJobs.test.ts tests/unit/pi/tools/createSubagentTool.test.ts tests/unit/pi/messageMapper.test.ts tests/unit/app/session/openSessionManager.test.ts` (6 suites / 65 tests); `npm run typecheck`; `npm run lint`.
+- Verification: `npm run test -- --runInBand tests/unit/yapi-agent-core/activityStatus.test.ts tests/unit/features/chat/subagentManager.test.ts tests/unit/pi/runtime/piBackgroundSubagentJobs.test.ts tests/unit/pi/tools/createSubagentTool.test.ts tests/unit/pi/messageMapper.test.ts tests/unit/app/session/openSessionManager.test.ts` (6 suites / 65 tests); `npm run typecheck`; `npm run lint`.
 - Remaining: WS-02 through WS-06.
 - Next action: implement the localized `StatusIcon`/Activity row presentation over the canonical mapping.
 
@@ -118,16 +118,16 @@ Guidance for low-context agents:
 
 - Changed: tool rows and step groups now render all seven canonical statuses with icon, localized visible text, semantic color, and polite atomic live regions. Only running renders the arc/spinner. Imperative tool/subagent headers consume the same canonical mapping and class vocabulary. Removed `chat.stream.statusLabel` raw protocol interpolation, localized all status and imperative Agent chrome across ten catalogs, and added an orphan recovery explanation.
 - Evidence: UI audit found the old individual tool row intentionally hid its running icon, imperative subagent chrome hard-coded English, touch hover/motion and monospace cleanup still pending, and React cannot own imperative subagent DOM. The implementation keeps ownership intact while sharing facts and CSS classes.
-- Verification: `npm run test -- --runInBand tests/pivi-react/ToolCallView.test.tsx tests/pivi-react/i18n.test.tsx tests/unit/features/chat/subagentActivity.test.ts tests/unit/ui/toolCallCss.test.ts` (3 suites / 51 tests); `npm run typecheck`; `npm run lint`; `npm run check:i18n-dead-keys`.
+- Verification: `npm run test -- --runInBand tests/yapi-react/ToolCallView.test.tsx tests/yapi-react/i18n.test.tsx tests/unit/features/chat/subagentActivity.test.ts tests/unit/ui/toolCallCss.test.ts` (3 suites / 51 tests); `npm run typecheck`; `npm run lint`; `npm run check:i18n-dead-keys`.
 - Remaining: WS-03 through WS-06.
 - Next action: extract the Activity row layout, add truthful elapsed timing, and remove redundant running animations.
 
 ### 2026-07-16 — WS-03/04 shared Activity row and elapsed time — Codex
 
-- Changed: extracted the React `ActivityRow`/status badge, adopted it in tool rows and step groups, and aligned imperative Agent headers to the same `pivi-activity-*` layout contract. Added additive start/completion timestamps at tool event boundaries, live elapsed time for running React rows, frozen terminal durations, and UI-font treatment for human names/summaries. Removed the decorative running-header gradient and gated hover affordances to fine pointers.
+- Changed: extracted the React `ActivityRow`/status badge, adopted it in tool rows and step groups, and aligned imperative Agent headers to the same `yapi-activity-*` layout contract. Added additive start/completion timestamps at tool event boundaries, live elapsed time for running React rows, frozen terminal durations, and UI-font treatment for human names/summaries. Removed the decorative running-header gradient and gated hover affordances to fine pointers.
 - Problem recorded: the first imperative elapsed implementation created recurring timers from legacy render helpers that return only a DOM element. `--detectOpenHandles` found 13 leaked intervals. The corrected imperative path updates elapsed text only when a lifecycle event arrives; the React path owns the only live interval and clears it on status change/unmount.
 - Evidence: the React timer test mounts into an iframe document, proves registration/cleanup against that row's `ownerWindow`, advances the running value, and proves the completed timestamp remains frozen. Subagent scrolling now also schedules through its content element's owner window.
-- Verification: `npm run test -- --runInBand tests/pivi-react/ToolCallView.test.tsx tests/pivi-react/chatStreamReducer.test.ts tests/unit/features/chat/subagentActivity.test.ts tests/unit/ui/toolCallCss.test.ts` (3 suites / 53 tests); `npm run test -- --runInBand --detectOpenHandles tests/unit/features/chat/subagentActivity.test.ts` (27 tests, no open handles); `npm run typecheck`; `npm run lint`; `npm run test -- --runInBand tests/unit/architecture` (2 suites / 90 tests); `npm run build:css`.
+- Verification: `npm run test -- --runInBand tests/yapi-react/ToolCallView.test.tsx tests/yapi-react/chatStreamReducer.test.ts tests/unit/features/chat/subagentActivity.test.ts tests/unit/ui/toolCallCss.test.ts` (3 suites / 53 tests); `npm run test -- --runInBand --detectOpenHandles tests/unit/features/chat/subagentActivity.test.ts` (27 tests, no open handles); `npm run typecheck`; `npm run lint`; `npm run test -- --runInBand tests/unit/architecture` (2 suites / 90 tests); `npm run build:css`.
 - Remaining: WS-05 and WS-06 plus final manual verification.
 - Next action: implement the Memory chip with honest compaction estimates and the shared paging-boundary family.
 
@@ -170,4 +170,4 @@ Final verification:
 - `npm run check:bundle-size` (serial confirmation): 3,034,238 bytes, 2,208,642 bytes below the 5 MB cap. One concurrent terminal stream printed a contradictory bundle failure; the serial command exited 0 against the actual on-disk bundle, so the conflicting parallel log was not treated as evidence.
 - `obsidian reload && obsidian dev:errors`: reload succeeded; `No errors captured.`
 
-Durable guidance synchronized in `docs/11-chat-ui-evolution.md`, root `AGENTS.md`, `packages/pivi-agent-core/AGENTS.md`, `packages/pivi-react/AGENTS.md`, `packages/pivi-react/styles/AGENTS.md`, and `src/ui/chat/rendering/AGENTS.md`.
+Durable guidance synchronized in `docs/11-chat-ui-evolution.md`, root `AGENTS.md`, `packages/yapi-agent-core/AGENTS.md`, `packages/yapi-react/AGENTS.md`, `packages/yapi-react/styles/AGENTS.md`, and `src/ui/chat/rendering/AGENTS.md`.

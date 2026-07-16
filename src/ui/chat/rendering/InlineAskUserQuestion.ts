@@ -1,4 +1,4 @@
-import type { AskUserQuestionItem, AskUserQuestionOption } from '@pivi/pivi-agent-core/foundation/tools';
+import type { AskUserQuestionItem, AskUserQuestionOption } from '@yapi/yapi-agent-core/foundation/tools';
 
 import { createInlineAskKeyDownHandler } from './inlineAskUserQuestionKeys';
 import {
@@ -57,9 +57,9 @@ export class InlineAskUserQuestion {
   }
 
   render(): void {
-    this.rootEl = this.containerEl.createDiv({ cls: 'pivi-ask-question-inline' });
+    this.rootEl = this.containerEl.createDiv({ cls: 'yapi-ask-question-inline' });
 
-    const titleEl = this.rootEl.createDiv({ cls: 'pivi-ask-inline-title' });
+    const titleEl = this.rootEl.createDiv({ cls: 'yapi-ask-inline-title' });
     titleEl.setText(this.config.title);
 
     if (this.config.headerEl) {
@@ -83,10 +83,10 @@ export class InlineAskUserQuestion {
     }
 
     if (!this.config.immediateSelect) {
-      this.tabBar = this.rootEl.createDiv({ cls: 'pivi-ask-tab-bar' });
+      this.tabBar = this.rootEl.createDiv({ cls: 'yapi-ask-tab-bar' });
       renderAskUserQuestionTabs(this);
     }
-    this.contentArea = this.rootEl.createDiv({ cls: 'pivi-ask-content' });
+    this.contentArea = this.rootEl.createDiv({ cls: 'yapi-ask-content' });
     renderTabContent(this);
 
     this.rootEl.setAttribute('tabindex', '0');

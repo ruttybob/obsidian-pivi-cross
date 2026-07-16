@@ -2,11 +2,11 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-import { createSystemAuthContextHost } from '@pivi/obsidian-host/authContextHost';
-import { ObsidianAuthContext } from '@pivi/pivi-agent-core/engine/pi/piProviderCredentialStore';
-import { asPiviPlugin, createMockPiviPluginStub } from '../../../helpers/mockPiviPlugin';
+import { createSystemAuthContextHost } from '@yapi/obsidian-host/authContextHost';
+import { ObsidianAuthContext } from '@yapi/yapi-agent-core/engine/pi/piProviderCredentialStore';
+import { asYapiPlugin, createMockYapiPluginStub } from '../../../helpers/mockYapiPlugin';
 
-const envKey = 'PIVI_SYSTEM_AUTH_CONTEXT_TEST_KEY';
+const envKey = 'YAPI_SYSTEM_AUTH_CONTEXT_TEST_KEY';
 
 describe('createSystemAuthContextHost', () => {
   let originalEnvValue: string | undefined;
@@ -16,7 +16,7 @@ describe('createSystemAuthContextHost', () => {
   beforeEach(() => {
     originalEnvValue = process.env[envKey];
     originalHome = process.env.HOME;
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-auth-context-host-'));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-auth-context-host-'));
   });
 
   afterEach(() => {
@@ -57,7 +57,7 @@ describe('createSystemAuthContextHost', () => {
     process.env[envKey] = 'external-env-value';
     process.env.HOME = tempDir;
 
-    const plugin = asPiviPlugin(createMockPiviPluginStub());
+    const plugin = asYapiPlugin(createMockYapiPluginStub());
     const ctx = new ObsidianAuthContext(plugin, createSystemAuthContextHost());
 
     await expect(ctx.env(envKey)).resolves.toBe('external-env-value');

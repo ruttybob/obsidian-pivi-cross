@@ -1,26 +1,26 @@
 #!/usr/bin/env node
 /**
  * CSS Build Script
- * Concatenates modular CSS files from @pivi/pivi-react into root styles.css
+ * Concatenates modular CSS files from @yapi/yapi-react into root styles.css
  */
 
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname, resolve, relative } from 'path';
 import { fileURLToPath } from 'url';
 
-import { styleModules } from '../packages/pivi-react/styles/manifest.mjs';
+import { styleModules } from '../packages/yapi-react/styles/manifest.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
-const STYLE_DIR = join(ROOT, 'packages', 'pivi-react', 'styles');
-const HOST_THEME_FILE = join(ROOT, 'packages', 'obsidian-host', 'styles', 'pivi-theme.css');
+const STYLE_DIR = join(ROOT, 'packages', 'yapi-react', 'styles');
+const HOST_THEME_FILE = join(ROOT, 'packages', 'obsidian-host', 'styles', 'yapi-theme.css');
 const OUTPUT = join(ROOT, 'styles.css');
 const isProduction = process.argv.includes('--production');
 
 export function minifyCss(css) {
   const preservedComments = [];
   const withPlaceholders = css.replace(/\/\*\s*@settings[\s\S]*?\*\//g, (comment) => {
-    const placeholder = `___PIVI_PRESERVED_COMMENT_${preservedComments.length}___`;
+    const placeholder = `___YAPI_PRESERVED_COMMENT_${preservedComments.length}___`;
     preservedComments.push(comment.trim());
     return placeholder;
   });
@@ -30,12 +30,12 @@ export function minifyCss(css) {
     .replace(/\s+/g, ' ')
     .replace(/\s*([{}:;,>+~])\s*/g, '$1')
     .trim()
-    .replace(/___PIVI_PRESERVED_COMMENT_(\d+)___/g, (_match, index) => preservedComments[Number(index)] ?? '');
+    .replace(/___YAPI_PRESERVED_COMMENT_(\d+)___/g, (_match, index) => preservedComments[Number(index)] ?? '');
 }
 
 function getModuleOrder() {
   if (!Array.isArray(styleModules) || styleModules.length === 0) {
-    console.error('No CSS modules found in packages/pivi-react/styles/manifest.mjs');
+    console.error('No CSS modules found in packages/yapi-react/styles/manifest.mjs');
     process.exit(1);
   }
 
@@ -79,7 +79,7 @@ function listCssFiles(dir, baseDir = dir) {
 function build() {
   const moduleOrder = getModuleOrder();
   const parts = [
-    '/* Pivi Plugin Styles */\n/* Built from package style modules */\n',
+    '/* Yapi Plugin Styles */\n/* Built from package style modules */\n',
     readFileSync(HOST_THEME_FILE, 'utf8'),
   ];
   const missingFiles = [];
@@ -111,7 +111,7 @@ function build() {
   let hasErrors = false;
 
   if (invalidImports.length > 0) {
-    console.error('Invalid entries in packages/pivi-react/styles/manifest.mjs:');
+    console.error('Invalid entries in packages/yapi-react/styles/manifest.mjs:');
     invalidImports.forEach((modulePath) => console.error(`  - ${modulePath}`));
     hasErrors = true;
   }
@@ -127,7 +127,7 @@ function build() {
   const unlistedFiles = allCssFiles.filter((file) => !importedSet.has(file));
 
   if (unlistedFiles.length > 0) {
-    console.error('Unlisted CSS files (not listed in packages/pivi-react/styles/manifest.mjs):');
+    console.error('Unlisted CSS files (not listed in packages/yapi-react/styles/manifest.mjs):');
     unlistedFiles.forEach((file) => console.error(`  - ${file}`));
     hasErrors = true;
   }

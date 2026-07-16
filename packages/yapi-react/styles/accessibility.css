@@ -1,0 +1,152 @@
+/* Accessibility - Focus Visible Styles */
+
+/* Shared focus ring; component geometry remains owned by each component. */
+.yapi-tool-header:focus-visible,
+.yapi-tool-step-group-header:focus-visible,
+.yapi-thinking-header:focus-visible,
+.yapi-subagent-header:focus-visible,
+.yapi-model-btn:focus-visible,
+.yapi-thinking-current:focus-visible,
+.yapi-external-context-btn:focus-visible,
+.yapi-mode-selector:focus-visible,
+.yapi-tab-switcher-trigger:focus-visible,
+.yapi-tab-switcher-new-chat:focus-visible,
+.yapi-tab-switcher-action:focus-visible,
+.yapi-settings-tab:focus-visible,
+.yapi-settings-action-btn:focus-visible,
+.yapi-settings-text-btn:focus-visible,
+.yapi-hotkey-item:focus-visible,
+.yapi-provider-header:focus-visible,
+.yapi-provider-add-trigger:focus-visible,
+.yapi-provider-add-option:focus-visible,
+.yapi-provider-disable-btn:focus-visible,
+.yapi-provider-remove-btn:focus-visible,
+.yapi-provider-test-btn:focus-visible,
+.yapi-auth-toggle-btn:focus-visible,
+.yapi-model-checkbox-wrapper:focus-visible,
+.yapi-skill-choice:focus-within {
+  outline: var(--yapi-focus-ring);
+  outline-offset: var(--yapi-focus-offset);
+}
+
+.yapi-tab-switcher-item:focus-visible {
+  outline: none;
+  background: var(--yapi-host-background-hover);
+  box-shadow:
+    inset 0 0 0 1px var(--yapi-host-border-hover),
+    inset 0 0 18px rgba(var(--yapi-host-mono-rgb-100), 0.10);
+}
+
+/* outline + offset only */
+.yapi-action-btn:focus-visible,
+.yapi-toggle-switch:focus-visible,
+.yapi-image-chip:focus-visible,
+.yapi-context-badge:focus-visible,
+.yapi-send-button:focus-visible,
+.yapi-context-badge-remove:focus-visible,
+.yapi-image-remove:focus-visible,
+.yapi-image-modal-close:focus-visible,
+.yapi-code-lang-label:focus-visible {
+  outline: var(--yapi-focus-ring);
+  outline-offset: var(--yapi-focus-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yapi-thinking,
+  .yapi-working-icon-arc,
+  .yapi-subagent-running-icon .yapi-subagent-icon-stroke,
+  .yapi-subagent-running-icon .yapi-subagent-icon-motion,
+  .yapi-subagent-running-icon--rocking-chair svg,
+  .yapi-subagent-running-icon--satellite-dish .yapi-subagent-signal,
+  .yapi-subagent-running-icon--heart-pulse .yapi-subagent-heart-shape,
+  .yapi-subagent-header::after,
+  .yapi-welcome-quote-char.yapi-quote-char-visible,
+  .yapi-tab-switcher-menu {
+    animation: none;
+  }
+
+  .yapi-collapsible-chevron svg,
+  .yapi-welcome-quote,
+  .yapi-welcome-quote-author,
+  .yapi-tab-switcher,
+  .yapi-tab-switcher-item,
+  .yapi-meter-fill,
+  .yapi-meter-fill-input,
+  .yapi-mention-dropdown,
+  .yapi-slash-dropdown {
+    transition: none;
+  }
+
+  .yapi-welcome-quote-char.yapi-quote-char-visible {
+    opacity: 1;
+  }
+
+  .yapi-tab-switcher-menu.is-closing {
+    opacity: 0;
+  }
+
+  .yapi-mention-dropdown,
+  .yapi-slash-dropdown,
+  .yapi-mention-dropdown.visible,
+  .yapi-slash-dropdown.visible {
+    transform: none;
+  }
+
+  .yapi-model-btn:active:not(:disabled),
+  .yapi-thinking-current:active:not(:disabled),
+  .yapi-external-context-btn:active:not(:disabled),
+  .yapi-mode-selector:active:not(:disabled),
+  .yapi-tab-switcher-item:active:not([aria-disabled='true']),
+  .yapi-slash-item:active:not([aria-disabled='true']),
+  .yapi-settings-action-btn:active:not(:disabled),
+  .yapi-settings-text-btn:active:not(:disabled),
+  .yapi-provider-header:active,
+  .yapi-hotkey-item:active:not(:disabled),
+  .yapi-skill-choice:active,
+  .yapi-send-button:active:not(:disabled),
+  .yapi-toggle:not(.yapi-toggle--disabled):active {
+    scale: 1;
+  }
+
+  .yapi-nav-btn:hover,
+  .yapi-message-image:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .yapi-tab-switcher-control,
+  .yapi-tab-switcher-menu,
+  .yapi-model-dropdown,
+  .yapi-thinking-options,
+  .yapi-external-context-dropdown,
+  .yapi-mention-dropdown,
+  .yapi-slash-dropdown,
+  .yapi-slash-detail,
+  .yapi-status-panel {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--yapi-host-background-primary);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .yapi-tab-switcher-control,
+  .yapi-tab-switcher-menu,
+  .yapi-model-dropdown,
+  .yapi-thinking-options,
+  .yapi-external-context-dropdown,
+  .yapi-mention-dropdown,
+  .yapi-slash-dropdown,
+  .yapi-slash-detail,
+  .yapi-status-panel {
+    border-color: var(--yapi-host-border-focus);
+    background: var(--yapi-host-background-primary);
+  }
+
+  .yapi-container--header-mode .yapi-tab-switcher-control,
+  .yapi-container--header-mode .yapi-tab-switcher.is-open .yapi-tab-switcher-control {
+    border-color: var(--yapi-host-border-focus);
+    background: var(--yapi-host-background-primary);
+  }
+}

@@ -1,8 +1,8 @@
-import { PiviSettingTabHost } from "@/app/ui/PiviSettingTabHost";
-import type PiviPlugin from "@/main"
+import { YapiSettingTabHost } from "@/app/ui/YapiSettingTabHost";
+import type YapiPlugin from "@/main"
 
-export function registerPiviSettings(plugin: PiviPlugin): void {
+export function registerYapiSettings(plugin: YapiPlugin): void {
   plugin.addSettingTab(
-    new PiviSettingTabHost(plugin.app, plugin, () => plugin.ensureWorkspaceServices()),
+    new YapiSettingTabHost(plugin.app, plugin, () => plugin.ensureWorkspaceServices()),
   );
 }

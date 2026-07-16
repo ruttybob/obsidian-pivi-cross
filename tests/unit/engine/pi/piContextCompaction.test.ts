@@ -14,8 +14,8 @@ import {
   shouldAutoCompact,
   stripCompactCommand,
   type PiContextCompactionEntry,
-} from '@pivi/pivi-agent-core/engine/pi/session/piContextCompaction';
-import type { Checkpoint } from '@pivi/pivi-agent-core/session/continuationSchemas';
+} from '@yapi/yapi-agent-core/engine/pi/session/piContextCompaction';
+import type { Checkpoint } from '@yapi/yapi-agent-core/session/continuationSchemas';
 
 function messageEntry(
   id: string,
@@ -219,7 +219,7 @@ None
 
     const entry = {
       ...compactionEntry('c2', buildCompactionSummary(renderCheckpoint(current!))),
-      details: { piviCheckpoint: current },
+      details: { yapiCheckpoint: current },
     } as PiContextCompactionEntry;
     expect(findLatestCheckpoint([compactionEntry('c1', 'legacy'), entry])).toEqual(current);
     expect(findLatestCheckpoint([compactionEntry('c1', 'legacy')])).toBeNull();

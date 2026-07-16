@@ -1,23 +1,23 @@
 /**
  * Plugin settings load/reconcile path extracted from the Obsidian Plugin shell.
  */
-import { isSecretStorageAvailable } from "@pivi/pivi-agent-core/auth/providerSecretStorage";
+import { isSecretStorageAvailable } from "@yapi/yapi-agent-core/auth/providerSecretStorage";
 import {
   migratePiProviderCredentialsToKeychain,
   migrateSplitSubscriptionOAuthCredentials,
-} from "@pivi/pivi-agent-core/engine/pi/piProviderCredentialStore";
-import { PiSettingsCoordinator } from "@pivi/pivi-agent-core/engine/pi/piSettingsCoordinator";
-import type { OpenSessionState, PiviSettings } from "@pivi/pivi-agent-core/foundation";
-import { getPiAgentSettings, updatePiAgentSettings } from "@pivi/pivi-agent-core/foundation/agentSettings";
-import { PluginLogger } from "@pivi/pivi-agent-core/foundation/pluginLogger";
-import { DEFAULT_PIVI_SETTINGS } from "@pivi/pivi-agent-core/foundation/settingsDefaults";
-import type { FileStore } from "@pivi/pivi-agent-core/ports";
-import type { SessionStore } from "@pivi/pivi-agent-core/session";
-import type { OpenSessionManager } from "@pivi/pivi-agent-core/session/openSessionManager";
+} from "@yapi/yapi-agent-core/engine/pi/piProviderCredentialStore";
+import { PiSettingsCoordinator } from "@yapi/yapi-agent-core/engine/pi/piSettingsCoordinator";
+import type { OpenSessionState, YapiSettings } from "@yapi/yapi-agent-core/foundation";
+import { getPiAgentSettings, updatePiAgentSettings } from "@yapi/yapi-agent-core/foundation/agentSettings";
+import { PluginLogger } from "@yapi/yapi-agent-core/foundation/pluginLogger";
+import { DEFAULT_YAPI_SETTINGS } from "@yapi/yapi-agent-core/foundation/settingsDefaults";
+import type { FileStore } from "@yapi/yapi-agent-core/ports";
+import type { SessionStore } from "@yapi/yapi-agent-core/session";
+import type { OpenSessionManager } from "@yapi/yapi-agent-core/session/openSessionManager";
 import {
   type DefaultVaultSkillsContext,
   ensureDefaultVaultSkills,
-} from "@pivi/pivi-agent-core/skills/vault/ensureDefaultVaultSkills";
+} from "@yapi/yapi-agent-core/skills/vault/ensureDefaultVaultSkills";
 import type { App } from "obsidian";
 
 import type { Locale } from "@/app/i18n";
@@ -30,7 +30,7 @@ const logger = new PluginLogger('PluginSettingsLoad');
 export interface PluginSettingsLoadContext {
   app: App;
   storage: {
-    initialize(): Promise<{ pivi: Partial<PiviSettings> }>;
+    initialize(): Promise<{ yapi: Partial<YapiSettings> }>;
     getAdapter(): FileStore;
   };
   sessionManager: OpenSessionManager;
@@ -38,9 +38,9 @@ export interface PluginSettingsLoadContext {
   hideDeletedSessionSummaries(): Promise<void>;
   persistSessionSummary(openSession: OpenSessionState): Promise<void>;
   saveSettings(): Promise<void>;
-  setSettings(settings: PiviSettings): void;
+  setSettings(settings: YapiSettings): void;
   setSessionStore(store: SessionStore | null): void;
-  getSettings(): PiviSettings;
+  getSettings(): YapiSettings;
   getSessions(): OpenSessionState[];
   setLastKnownTabManagerState(state: unknown): void;
   getStorage(): { getTabManagerState(): Promise<unknown> };
@@ -51,12 +51,12 @@ export interface PluginSettingsLoadContext {
 export async function loadPluginSettings(
   ctx: PluginSettingsLoadContext,
 ): Promise<void> {
-  const { pivi } = await ctx.storage.initialize();
+  const { yapi } = await ctx.storage.initialize();
   ctx.setLastKnownTabManagerState(await ctx.getStorage().getTabManagerState());
 
-  const settings: PiviSettings = {
-    ...DEFAULT_PIVI_SETTINGS,
-    ...pivi,
+  const settings: YapiSettings = {
+    ...DEFAULT_YAPI_SETTINGS,
+    ...yapi,
   };
   ctx.setSettings(settings);
 

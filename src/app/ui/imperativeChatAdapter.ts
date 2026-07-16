@@ -1,19 +1,19 @@
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
-import type { MessageViewportHandle } from '@pivi/pivi-react';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
+import type { MessageViewportHandle } from '@yapi/yapi-react';
 import {
   ActiveChatUiBridge,
   type ChatSurfaceActions,
   type SurfaceEnvironment,
   type WelcomeQuoteAdapter,
-} from '@pivi/pivi-react/mount';
-import type { ChatPerfRecorder } from '@pivi/pivi-react/store';
-import { type ChatTabActions, type ChatTabsSnapshot, ChatTabsStore } from '@pivi/pivi-react/store';
+} from '@yapi/yapi-react/mount';
+import type { ChatPerfRecorder } from '@yapi/yapi-react/store';
+import { type ChatTabActions, type ChatTabsSnapshot, ChatTabsStore } from '@yapi/yapi-react/store';
 import { Notice } from 'obsidian';
 
 import type {
-  PiviChatCompositionHost,
-  PiviChatHost,
-  PiviChatViewHandle,
+  YapiChatCompositionHost,
+  YapiChatHost,
+  YapiChatViewHandle,
 } from '@/app/hostContracts';
 import { t } from '@/app/i18n';
 import { createMessagePresentation } from '@/app/ui/imperativeChatMessagePresentation';
@@ -29,7 +29,7 @@ import {
 } from '@/ui/shared/utils/animationFrame';
 
 export interface ImperativeChatAdapterDeps {
-  plugin: PiviChatCompositionHost;
+  plugin: YapiChatCompositionHost;
   view: TabManagerViewHost;
   /** Owning view element used for RAF scheduling and tab-bar portal placement. */
   getContainerEl: () => HTMLElement;
@@ -59,7 +59,7 @@ export interface CreatedImperativeChatAdapter {
   getShellActions(): ChatTabActions;
   getSurfaceActions(): ChatSurfaceActions;
   getWelcomeQuoteAdapter(): WelcomeQuoteAdapter;
-  getViewHandle(): PiviChatViewHandle;
+  getViewHandle(): YapiChatViewHandle;
 }
 
 export function createImperativeChatAdapter(
@@ -86,7 +86,7 @@ export function createImperativeChatAdapter(
   let pendingTabBarUpdate: ScheduledAnimationFrame | null = null;
   let tabPersistenceSuspensions = 0;
   const messageViewports = new Map<TabId, MessageViewportHandle>();
-  const chatHost: PiviChatHost = { app: plugin.app };
+  const chatHost: YapiChatHost = { app: plugin.app };
 
   const getChatTabsSnapshot = (): ChatTabsSnapshot => ({
     items: tabManager?.getTabBarItems() ?? [],

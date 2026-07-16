@@ -1,4 +1,4 @@
-import { createPiAuthInteraction } from '@pivi/pivi-agent-core/engine/pi/piAuthInteraction';
+import { createPiAuthInteraction } from '@yapi/yapi-agent-core/engine/pi/piAuthInteraction';
 
 describe('createPiAuthInteraction', () => {
   it('cancels a manual-code prompt from the service signal even when pi-ai supplies its own signal', async () => {

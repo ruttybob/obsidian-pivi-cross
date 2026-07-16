@@ -1,7 +1,7 @@
-import { parseSlashCommandContent } from '@pivi/pivi-agent-core/skills/slashCommand';
+import { parseSlashCommandContent } from '@yapi/yapi-agent-core/skills/slashCommand';
 import { PiSlashCommandCatalog } from '@/app/workspace/PiSlashCommandCatalog';
-import type { FileStore } from "@pivi/pivi-agent-core/ports";
-import type PiviPlugin from "@/main";
+import type { FileStore } from "@yapi/yapi-agent-core/ports";
+import type YapiPlugin from "@/main";
 import { TAbstractFile } from "obsidian";
 
 describe("parseSlashCommandContent", () => {
@@ -39,7 +39,7 @@ Review: {{selected_text}}`;
 });
 
 describe("PiSlashCommandCatalog", () => {
-  let mockPlugin: jest.Mocked<PiviPlugin>;
+  let mockPlugin: jest.Mocked<YapiPlugin>;
   let mockAdapter: jest.Mocked<FileStore>;
   let catalog: PiSlashCommandCatalog;
 
@@ -51,13 +51,13 @@ describe("PiSlashCommandCatalog", () => {
           on: jest.fn(),
         },
       },
-    } as unknown as jest.Mocked<PiviPlugin>;
+    } as unknown as jest.Mocked<YapiPlugin>;
 
     mockAdapter = {
       ensureFolder: jest.fn().mockResolvedValue(undefined),
       listFiles: jest.fn(async (folder: string) => {
-        if (folder === ".pivi/commands") {
-          return [".pivi/commands/explain.md"];
+        if (folder === ".yapi/commands") {
+          return [".yapi/commands/explain.md"];
         }
         return [];
       }),
@@ -102,10 +102,10 @@ Explain this: {{selected_text}}`,
     await catalog.refresh();
     const entries = await catalog.listWorkspaceEntries();
 
-    expect(mockAdapter.ensureFolder).toHaveBeenCalledWith(".pivi/commands");
-    expect(mockAdapter.listFiles).toHaveBeenCalledWith(".pivi/templates");
-    expect(mockAdapter.listFiles).toHaveBeenCalledWith(".pivi/commands");
-    expect(mockAdapter.read).toHaveBeenCalledWith(".pivi/commands/explain.md");
+    expect(mockAdapter.ensureFolder).toHaveBeenCalledWith(".yapi/commands");
+    expect(mockAdapter.listFiles).toHaveBeenCalledWith(".yapi/templates");
+    expect(mockAdapter.listFiles).toHaveBeenCalledWith(".yapi/commands");
+    expect(mockAdapter.read).toHaveBeenCalledWith(".yapi/commands/explain.md");
 
     expect(entries).toHaveLength(1);
     expect(entries[0]).toEqual({
@@ -128,8 +128,8 @@ Explain this: {{selected_text}}`,
 
   it("loads legacy templates when no command file exists", async () => {
     mockAdapter.listFiles.mockImplementation(async (folder: string) => {
-      if (folder === ".pivi/templates") {
-        return [".pivi/templates/legacy.md"];
+      if (folder === ".yapi/templates") {
+        return [".yapi/templates/legacy.md"];
       }
       return [];
     });
@@ -234,7 +234,7 @@ Explain this: {{selected_text}}`,
 
     await catalog.saveWorkspaceEntry(newEntry);
     expect(mockAdapter.write).toHaveBeenCalledWith(
-      ".pivi/commands/critique.md",
+      ".yapi/commands/critique.md",
       expect.stringMatching(/description: Critique text[\s\S]*argument-hint: text[\s\S]*integration-key: generated-key/),
     );
   });
@@ -255,16 +255,16 @@ Explain this: {{selected_text}}`,
 
     await catalog.deleteWorkspaceEntry(entryToDelete);
     expect(mockAdapter.exists).toHaveBeenCalledWith(
-      ".pivi/commands/explain.md",
+      ".yapi/commands/explain.md",
     );
     expect(mockAdapter.exists).toHaveBeenCalledWith(
-      ".pivi/templates/explain.md",
+      ".yapi/templates/explain.md",
     );
     expect(mockAdapter.delete).toHaveBeenCalledWith(
-      ".pivi/commands/explain.md",
+      ".yapi/commands/explain.md",
     );
     expect(mockAdapter.delete).toHaveBeenCalledWith(
-      ".pivi/templates/explain.md",
+      ".yapi/templates/explain.md",
     );
   });
 });

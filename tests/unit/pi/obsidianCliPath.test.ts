@@ -1,4 +1,4 @@
-import { resolveObsidianCliBinary } from '@pivi/obsidian-host';
+import { resolveObsidianCliBinary } from '@yapi/obsidian-host';
 
 jest.mock('fs', () => ({
   accessSync: jest.fn(),

@@ -4,10 +4,10 @@ import * as path from 'path';
 
 import {
   encodeSessionCwd,
-  getPiviSessionDir,
+  getYapiSessionDir,
   toAbsoluteSessionPath,
   toVaultRelativePath,
-} from '@pivi/pivi-agent-core/session/sessionPaths';
+} from '@yapi/yapi-agent-core/session/sessionPaths';
 
 describe('sessionPaths', () => {
   it('encodes absolute vault paths for pi-compatible session directories', () => {
@@ -17,13 +17,13 @@ describe('sessionPaths', () => {
   });
 
   it('computes the vault-local session directory without creating it', () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-session-paths-'));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-session-paths-'));
     const vaultPath = path.join(tempRoot, 'Vault');
 
-    const sessionDir = getPiviSessionDir(vaultPath);
+    const sessionDir = getYapiSessionDir(vaultPath);
 
     expect(sessionDir).toBe(
-      path.join(vaultPath, '.pivi', 'sessions', encodeSessionCwd(vaultPath)),
+      path.join(vaultPath, '.yapi', 'sessions', encodeSessionCwd(vaultPath)),
     );
     expect(fs.existsSync(sessionDir)).toBe(false);
 
@@ -32,18 +32,18 @@ describe('sessionPaths', () => {
 
   it('converts an absolute session file under the vault to a forward-slash relative path', () => {
     const vaultPath = path.join('/tmp', 'vault');
-    const absoluteSession = path.join(vaultPath, '.pivi', 'sessions', 'session.jsonl');
+    const absoluteSession = path.join(vaultPath, '.yapi', 'sessions', 'session.jsonl');
 
     expect(toVaultRelativePath(vaultPath, absoluteSession)).toBe(
-      '.pivi/sessions/session.jsonl',
+      '.yapi/sessions/session.jsonl',
     );
   });
 
   it('resolves forward-slash vault-relative session files to absolute paths', () => {
     const vaultPath = path.join('/tmp', 'vault');
 
-    expect(toAbsoluteSessionPath(vaultPath, '.pivi/sessions/session.jsonl')).toBe(
-      path.join(vaultPath, '.pivi', 'sessions', 'session.jsonl'),
+    expect(toAbsoluteSessionPath(vaultPath, '.yapi/sessions/session.jsonl')).toBe(
+      path.join(vaultPath, '.yapi', 'sessions', 'session.jsonl'),
     );
   });
 });

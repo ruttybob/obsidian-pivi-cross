@@ -1,9 +1,9 @@
 import type { WorkspaceLeaf } from 'obsidian';
 
-import type { PiviChatView } from '@/app/hostContracts';
+import type { YapiChatView } from '@/app/hostContracts';
 
 export interface ActivateOpenSessionElsewhereOptions {
-  views: readonly PiviChatView[];
+  views: readonly YapiChatView[];
   currentLeaf: WorkspaceLeaf;
   openSessionId: string;
   revealLeaf: (leaf: WorkspaceLeaf) => Promise<void>;

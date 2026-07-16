@@ -1,5 +1,5 @@
-import { buildMcpInventoryLines } from '@pivi/pivi-agent-core/prompt/mcpInventory';
-import { buildRegisteredToolsSection } from '@pivi/pivi-agent-core/prompt/obsidianAgentTools';
+import { buildMcpInventoryLines } from '@yapi/yapi-agent-core/prompt/mcpInventory';
+import { buildRegisteredToolsSection } from '@yapi/yapi-agent-core/prompt/obsidianAgentTools';
 
 describe('MCP prompt inventory', () => {
   it('lists enabled servers and cached tool names without schemas', () => {

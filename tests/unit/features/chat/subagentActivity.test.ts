@@ -1,4 +1,4 @@
-import type { SubagentInfo, ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
+import type { SubagentInfo, ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
 import {
   createAsyncSubagentBlock,
   finalizeAsyncSubagent,
@@ -105,15 +105,15 @@ class FakeElement extends TestHTMLElement {
 
   set innerHTML(html: string) {
     this.children = [];
-    if (html.includes('pivi-working-icon')) {
+    if (html.includes('yapi-working-icon')) {
       const svg = new FakeElement();
-      svg.addClass('pivi-working-icon');
+      svg.addClass('yapi-working-icon');
       this.appendChild(svg);
     }
   }
 
   get innerHTML(): string {
-    return this.findByClass('pivi-working-icon') ? '<span class="pivi-working-icon"></span>' : '';
+    return this.findByClass('yapi-working-icon') ? '<span class="yapi-working-icon"></span>' : '';
   }
 
   addClass(cls: string): void {
@@ -293,8 +293,8 @@ function expectDirectToolRunKinds(
   expectedKinds: Array<'group' | 'single'>,
 ): void {
   expect(toolsContainer.children.map((child) => {
-    if (child.hasClass('pivi-tool-step-group')) return 'group';
-    if (child.hasClass('pivi-tool-call')) return 'single';
+    if (child.hasClass('yapi-tool-step-group')) return 'group';
+    if (child.hasClass('yapi-tool-call')) return 'single';
     return 'unknown';
   })).toEqual(expectedKinds);
 }
@@ -303,39 +303,39 @@ function expectSubagentHeaderShell(
   wrapperEl: FakeElement,
   expected: { agentName: string; taskDescription: string; statusText: string },
 ): void {
-  const headerEl = wrapperEl.findByClass('pivi-subagent-header');
+  const headerEl = wrapperEl.findByClass('yapi-subagent-header');
   expect(headerEl?.children.slice(0, 4).map(child => child.className)).toEqual([
-    expect.stringContaining('pivi-subagent-icon'),
-    expect.stringContaining('pivi-subagent-label'),
-    expect.stringContaining('pivi-subagent-step-summary'),
-    expect.stringContaining('pivi-subagent-status'),
+    expect.stringContaining('yapi-subagent-icon'),
+    expect.stringContaining('yapi-subagent-label'),
+    expect.stringContaining('yapi-subagent-step-summary'),
+    expect.stringContaining('yapi-subagent-status'),
   ]);
-  expect(wrapperEl.findByClass('pivi-activity-elapsed')).toBeNull();
-  expect(headerEl?.hasClass('pivi-activity-row')).toBe(false);
+  expect(wrapperEl.findByClass('yapi-activity-elapsed')).toBeNull();
+  expect(headerEl?.hasClass('yapi-activity-row')).toBe(false);
 
-  const labelEl = wrapperEl.findByClass('pivi-subagent-label');
+  const labelEl = wrapperEl.findByClass('yapi-subagent-label');
   expect(labelEl?.text).toBe(expected.agentName);
   expect(labelEl?.text).not.toContain('[');
   expect(labelEl?.text).not.toContain(expected.taskDescription);
 
-  expect(wrapperEl.findByClass('pivi-subagent-step-summary')?.text).toBe(expected.taskDescription);
+  expect(wrapperEl.findByClass('yapi-subagent-step-summary')?.text).toBe(expected.taskDescription);
 
-  const statusEl = wrapperEl.findByClass('pivi-subagent-status');
+  const statusEl = wrapperEl.findByClass('yapi-subagent-status');
   expect(statusEl?.text).toBe(expected.statusText);
   expect(statusEl?.getAttribute('aria-live')).toBe('polite');
-  expect(statusEl?.hasClass('pivi-activity-status')).toBe(false);
+  expect(statusEl?.hasClass('yapi-activity-status')).toBe(false);
 
-  const iconEl = wrapperEl.findByClass('pivi-subagent-icon');
+  const iconEl = wrapperEl.findByClass('yapi-subagent-icon');
   if (expected.statusText === 'Running') {
-    expect(iconEl?.hasClass('pivi-working-icon')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-completed-icon')).toBe(false);
+    expect(iconEl?.hasClass('yapi-working-icon')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-completed-icon')).toBe(false);
   } else {
-    expect(iconEl?.hasClass('pivi-subagent-completed-icon')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(false);
-    expect(iconEl?.hasClass('pivi-working-icon')).toBe(false);
+    expect(iconEl?.hasClass('yapi-subagent-completed-icon')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(false);
+    expect(iconEl?.hasClass('yapi-working-icon')).toBe(false);
   }
-  expect(iconEl?.findByClass('pivi-subagent-indicator-dot')).toBeNull();
+  expect(iconEl?.findByClass('yapi-subagent-indicator-dot')).toBeNull();
 }
 
 
@@ -347,9 +347,9 @@ describe('subagent activity rendering', () => {
       createRunningAsyncSubagent(),
     ) as unknown as FakeElement;
 
-    expect(wrapperEl.hasClass('pivi-subagent-card')).toBe(true);
+    expect(wrapperEl.hasClass('yapi-subagent-card')).toBe(true);
     expect(wrapperEl.hasClass('expanded')).toBe(false);
-    expect(wrapperEl.findByClass('pivi-subagent-content')?.hasClass('pivi-hidden')).toBe(true);
+    expect(wrapperEl.findByClass('yapi-subagent-content')?.hasClass('yapi-hidden')).toBe(true);
     expectSubagentHeaderShell(wrapperEl, {
       agentName: 'Austen',
       taskDescription: 'Review architecture',
@@ -369,7 +369,7 @@ describe('subagent activity rendering', () => {
       taskDescription: 'Review architecture',
       statusText: 'Running',
     });
-    expect(wrapperEl.findByClass('pivi-subagent-header')?.getAttribute('aria-label')).toContain('Running');
+    expect(wrapperEl.findByClass('yapi-subagent-header')?.getAttribute('aria-label')).toContain('Running');
   });
 
   it('shows Queued in header and status while async subagents are pending', () => {
@@ -388,7 +388,7 @@ describe('subagent activity rendering', () => {
       taskDescription: 'Review architecture',
       statusText: 'Queued',
     });
-    expect(wrapperEl.findByClass('pivi-subagent-header')?.getAttribute('aria-label')).toContain('Queued');
+    expect(wrapperEl.findByClass('yapi-subagent-header')?.getAttribute('aria-label')).toContain('Queued');
   });
 
   it('uses Queued in the initial async subagent header aria-label while pending', () => {
@@ -409,8 +409,8 @@ describe('subagent activity rendering', () => {
     expect(label).toContain('Queued');
 
     const contentEl = state.contentEl as unknown as FakeElement;
-    expect(contentEl.hasClass('pivi-hidden')).toBe(true);
-    expect(contentEl.findByClass('pivi-subagent-tools')).toBeNull();
+    expect(contentEl.hasClass('yapi-hidden')).toBe(true);
+    expect(contentEl.findByClass('yapi-subagent-tools')).toBeNull();
   });
 
   it('uses Running in the sync subagent header aria-label while running', () => {
@@ -449,7 +449,7 @@ describe('subagent activity rendering', () => {
       taskDescription: 'Scan repo',
       statusText: 'Running',
     });
-    expect(wrapperEl.findByClass('pivi-subagent-header')?.getAttribute('aria-label')).toContain('Running');
+    expect(wrapperEl.findByClass('yapi-subagent-header')?.getAttribute('aria-label')).toContain('Running');
   });
 
   it('keeps the profile icon without running animation when a sync subagent finishes', () => {
@@ -473,32 +473,32 @@ describe('subagent activity rendering', () => {
       taskDescription: 'Read long file',
       statusText: 'Completed',
     });
-    const iconEl = wrapperEl.findByClass('pivi-subagent-icon');
-    expect(iconEl?.hasClass('pivi-subagent-profile-icon--compass')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon--compass')).toBe(false);
-    expect(wrapperEl.findByClass('pivi-subagent-status')?.hasClass('status-completed')).toBe(true);
+    const iconEl = wrapperEl.findByClass('yapi-subagent-icon');
+    expect(iconEl?.hasClass('yapi-subagent-profile-icon--compass')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon--compass')).toBe(false);
+    expect(wrapperEl.findByClass('yapi-subagent-status')?.hasClass('status-completed')).toBe(true);
   });
 
   it('keeps the same named profile icon across running and completed states', () => {
-    const iconEl = new FakeElement({ cls: 'pivi-subagent-icon' });
+    const iconEl = new FakeElement({ cls: 'yapi-subagent-icon' });
     const info = {
       ...createRunningAsyncSubagent(),
       writerName: 'Woolf',
     };
 
     applySubagentHeaderIcon(iconEl as unknown as HTMLElement, info);
-    expect(iconEl.hasClass('pivi-subagent-profile-icon--waves')).toBe(true);
-    expect(iconEl.hasClass('pivi-subagent-running-icon--waves')).toBe(true);
+    expect(iconEl.hasClass('yapi-subagent-profile-icon--waves')).toBe(true);
+    expect(iconEl.hasClass('yapi-subagent-running-icon--waves')).toBe(true);
 
     applySubagentHeaderIcon(iconEl as unknown as HTMLElement, {
       ...info,
       asyncStatus: 'completed',
       status: 'completed',
     });
-    expect(iconEl.hasClass('pivi-subagent-profile-icon--waves')).toBe(true);
-    expect(iconEl.hasClass('pivi-subagent-completed-icon')).toBe(true);
-    expect(iconEl.hasClass('pivi-subagent-running-icon')).toBe(false);
-    expect(iconEl.hasClass('pivi-subagent-running-icon--waves')).toBe(false);
+    expect(iconEl.hasClass('yapi-subagent-profile-icon--waves')).toBe(true);
+    expect(iconEl.hasClass('yapi-subagent-completed-icon')).toBe(true);
+    expect(iconEl.hasClass('yapi-subagent-running-icon')).toBe(false);
+    expect(iconEl.hasClass('yapi-subagent-running-icon--waves')).toBe(false);
   });
 
   it('keeps the async subagent profile icon when a live task completes', () => {
@@ -512,11 +512,11 @@ describe('subagent activity rendering', () => {
 
     finalizeAsyncSubagent(state, 'Done', false);
 
-    const iconEl = (state.wrapperEl as unknown as FakeElement).findByClass('pivi-subagent-icon');
-    expect(iconEl?.hasClass('pivi-subagent-profile-icon--rocking-chair')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-completed-icon')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(false);
-    expect(iconEl?.hasClass('pivi-working-icon')).toBe(false);
+    const iconEl = (state.wrapperEl as unknown as FakeElement).findByClass('yapi-subagent-icon');
+    expect(iconEl?.hasClass('yapi-subagent-profile-icon--rocking-chair')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-completed-icon')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(false);
+    expect(iconEl?.hasClass('yapi-working-icon')).toBe(false);
   });
 
   it('uses the waves running icon for Woolf subagents', () => {
@@ -529,9 +529,9 @@ describe('subagent activity rendering', () => {
       },
     ) as unknown as FakeElement;
 
-    const iconEl = wrapperEl.findByClass('pivi-subagent-icon');
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon--waves')).toBe(true);
+    const iconEl = wrapperEl.findByClass('yapi-subagent-icon');
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon--waves')).toBe(true);
   });
 
   it('uses the flame running icon for Baldwin subagents even with a suffix', () => {
@@ -544,9 +544,9 @@ describe('subagent activity rendering', () => {
       },
     ) as unknown as FakeElement;
 
-    const iconEl = wrapperEl.findByClass('pivi-subagent-icon');
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon--flame')).toBe(true);
+    const iconEl = wrapperEl.findByClass('yapi-subagent-icon');
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon--flame')).toBe(true);
   });
 
   it('uses the satellite-dish running icon for Le Guin subagents with a suffix', () => {
@@ -559,9 +559,9 @@ describe('subagent activity rendering', () => {
       },
     ) as unknown as FakeElement;
 
-    const iconEl = wrapperEl.findByClass('pivi-subagent-icon');
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon--satellite-dish')).toBe(true);
+    const iconEl = wrapperEl.findByClass('yapi-subagent-icon');
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon--satellite-dish')).toBe(true);
   });
 
   it.each([
@@ -579,21 +579,21 @@ describe('subagent activity rendering', () => {
       },
     ) as unknown as FakeElement;
 
-    const iconEl = wrapperEl.findByClass('pivi-subagent-icon');
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(true);
-    expect(iconEl?.hasClass(`pivi-subagent-running-icon--${iconName}`)).toBe(true);
+    const iconEl = wrapperEl.findByClass('yapi-subagent-icon');
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(true);
+    expect(iconEl?.hasClass(`yapi-subagent-running-icon--${iconName}`)).toBe(true);
   });
 
   it('keeps the assigned profile icon but clears its motion on failure', () => {
-    const iconEl = new FakeElement({ cls: 'pivi-subagent-icon' });
+    const iconEl = new FakeElement({ cls: 'yapi-subagent-icon' });
     applySubagentHeaderIcon(iconEl as unknown as HTMLElement, {
       ...createRunningAsyncSubagent(),
       writerName: 'Woolf',
     });
 
-    expect(iconEl.hasClass('pivi-working-icon')).toBe(true);
-    expect(iconEl.hasClass('pivi-subagent-running-icon')).toBe(true);
-    expect(iconEl.hasClass('pivi-subagent-running-icon--waves')).toBe(true);
+    expect(iconEl.hasClass('yapi-working-icon')).toBe(true);
+    expect(iconEl.hasClass('yapi-subagent-running-icon')).toBe(true);
+    expect(iconEl.hasClass('yapi-subagent-running-icon--waves')).toBe(true);
 
     applySubagentHeaderIcon(iconEl as unknown as HTMLElement, {
       ...createRunningAsyncSubagent(),
@@ -602,12 +602,12 @@ describe('subagent activity rendering', () => {
       writerName: 'Woolf',
     });
 
-    expect(iconEl.hasClass('pivi-working-icon')).toBe(false);
-    expect(iconEl.hasClass('pivi-subagent-running-icon')).toBe(false);
-    expect(iconEl.hasClass('pivi-subagent-running-icon--waves')).toBe(false);
-    expect(iconEl.hasClass('pivi-subagent-completed-icon')).toBe(true);
-    expect(iconEl.hasClass('pivi-subagent-profile-icon--waves')).toBe(true);
-    expect(iconEl.findByClass('pivi-subagent-indicator-dot')).toBeNull();
+    expect(iconEl.hasClass('yapi-working-icon')).toBe(false);
+    expect(iconEl.hasClass('yapi-subagent-running-icon')).toBe(false);
+    expect(iconEl.hasClass('yapi-subagent-running-icon--waves')).toBe(false);
+    expect(iconEl.hasClass('yapi-subagent-completed-icon')).toBe(true);
+    expect(iconEl.hasClass('yapi-subagent-profile-icon--waves')).toBe(true);
+    expect(iconEl.findByClass('yapi-subagent-indicator-dot')).toBeNull();
   });
 
   it('renders a collapsible chevron on the subagent header when collapsed', () => {
@@ -617,10 +617,10 @@ describe('subagent activity rendering', () => {
       createRunningAsyncSubagent(),
     ) as unknown as FakeElement;
 
-    const headerEl = wrapperEl.findByClass('pivi-subagent-header');
-    expect(headerEl?.findByClass('pivi-collapsible-chevron')).not.toBeNull();
+    const headerEl = wrapperEl.findByClass('yapi-subagent-header');
+    expect(headerEl?.findByClass('yapi-collapsible-chevron')).not.toBeNull();
     expect(headerEl?.getAttribute('aria-expanded')).toBe('false');
-    expect(wrapperEl.findByClass('pivi-subagent-content')?.hasClass('pivi-hidden')).toBe(true);
+    expect(wrapperEl.findByClass('yapi-subagent-content')?.hasClass('yapi-hidden')).toBe(true);
   });
 
   it('renders stored sync subagents with the same compact activity shell', () => {
@@ -639,9 +639,9 @@ describe('subagent activity rendering', () => {
       },
     ) as unknown as FakeElement;
 
-    expect(wrapperEl.hasClass('pivi-subagent-card')).toBe(true);
-    expect(wrapperEl.findByClass('pivi-subagent-content')?.hasClass('pivi-hidden')).toBe(true);
-    expect(wrapperEl.findByClass('pivi-subagent-status')?.hasClass('status-completed')).toBe(true);
+    expect(wrapperEl.hasClass('yapi-subagent-card')).toBe(true);
+    expect(wrapperEl.findByClass('yapi-subagent-content')?.hasClass('yapi-hidden')).toBe(true);
+    expect(wrapperEl.findByClass('yapi-subagent-status')?.hasClass('status-completed')).toBe(true);
   });
 
   it('does not emit the hidden legacy async progress DOM', () => {
@@ -654,7 +654,7 @@ describe('subagent activity rendering', () => {
     );
     const wrapperEl = state.wrapperEl as unknown as FakeElement;
 
-    expect(wrapperEl.findByClass('pivi-subagent-progress')).toBeNull();
+    expect(wrapperEl.findByClass('yapi-subagent-progress')).toBeNull();
     expectSubagentHeaderShell(wrapperEl, {
       agentName: 'Austen',
       taskDescription: 'Review architecture',
@@ -671,23 +671,23 @@ describe('subagent activity rendering', () => {
       { writerName: 'Woolf' },
     );
     const wrapperEl = state.wrapperEl as unknown as FakeElement;
-    const iconEl = wrapperEl.findByClass('pivi-subagent-icon');
+    const iconEl = wrapperEl.findByClass('yapi-subagent-icon');
 
     expect(wrapperEl.hasClass('queued')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(false);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(false);
 
     updateAsyncSubagentRunning(state, 'agent-1');
     expect(wrapperEl.hasClass('queued')).toBe(false);
     expect(wrapperEl.hasClass('running')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(true);
 
     finalizeAsyncSubagent(state, 'Done', false);
     expect(wrapperEl.hasClass('running')).toBe(false);
     expect(wrapperEl.hasClass('queued')).toBe(false);
     expect(wrapperEl.hasClass('waiting')).toBe(false);
     expect(wrapperEl.hasClass('completed')).toBe(true);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(false);
-    expect(iconEl?.hasClass('pivi-subagent-profile-icon--waves')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(false);
+    expect(iconEl?.hasClass('yapi-subagent-profile-icon--waves')).toBe(true);
   });
 
   it('clears running motion on every live terminal path', () => {
@@ -718,13 +718,13 @@ describe('subagent activity rendering', () => {
       testCase.finish(state);
 
       const wrapperEl = state.wrapperEl as unknown as FakeElement;
-      const iconEl = wrapperEl.findByClass('pivi-subagent-icon');
+      const iconEl = wrapperEl.findByClass('yapi-subagent-icon');
       expect(wrapperEl.hasClass('running')).toBe(false);
       expect(wrapperEl.hasClass('queued')).toBe(false);
       expect(wrapperEl.hasClass('waiting')).toBe(false);
       expect(wrapperEl.hasClass(testCase.status)).toBe(true);
-      expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(false);
-      expect(iconEl?.hasClass('pivi-subagent-profile-icon--waves')).toBe(true);
+      expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(false);
+      expect(iconEl?.hasClass('yapi-subagent-profile-icon--waves')).toBe(true);
     }
   });
 
@@ -737,17 +737,17 @@ describe('subagent activity rendering', () => {
       { writerName: 'Woolf' },
     );
     const wrapperEl = state.wrapperEl as unknown as FakeElement;
-    const iconEl = wrapperEl.findByClass('pivi-subagent-icon');
+    const iconEl = wrapperEl.findByClass('yapi-subagent-icon');
     expect(wrapperEl.hasClass('running')).toBe(true);
     expect(wrapperEl.hasClass('is-running')).toBe(false);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(true);
 
     finalizeSubagentBlock(state, 'Done', false);
     expect(wrapperEl.hasClass('running')).toBe(false);
     expect(wrapperEl.hasClass('completed')).toBe(true);
     expect(wrapperEl.hasClass('is-running')).toBe(false);
-    expect(iconEl?.hasClass('pivi-subagent-running-icon')).toBe(false);
-    expect(iconEl?.hasClass('pivi-subagent-profile-icon--waves')).toBe(true);
+    expect(iconEl?.hasClass('yapi-subagent-running-icon')).toBe(false);
+    expect(iconEl?.hasClass('yapi-subagent-profile-icon--waves')).toBe(true);
   });
 
   it('hides agent report protocol blocks from live sync results', () => {
@@ -761,19 +761,19 @@ describe('subagent activity rendering', () => {
     finalizeSubagentBlock(state, [
       'The repository is clean.',
       '',
-      '```pivi-agent-report',
+      '```yapi-agent-report',
       '{"version":1,"objective":"Inspect","outcome":"completed"}',
       '```',
     ].join('\n'), false);
 
     expect((state.wrapperEl as unknown as FakeElement)
-      .findByClass('pivi-subagent-result-output')).toBeNull();
+      .findByClass('yapi-subagent-result-output')).toBeNull();
     (state.headerEl as unknown as FakeElement).click();
 
     const result = (state.wrapperEl as unknown as FakeElement)
-      .findByClass('pivi-subagent-result-output')?.textContent;
+      .findByClass('yapi-subagent-result-output')?.textContent;
     expect(result).toBe('The repository is clean.');
-    expect(result).not.toContain('pivi-agent-report');
+    expect(result).not.toContain('yapi-agent-report');
     expect(result).not.toContain('"version"');
   });
 
@@ -788,17 +788,17 @@ describe('subagent activity rendering', () => {
         result: [
           'Review finished.',
           '',
-          '```pivi-agent-report',
+          '```yapi-agent-report',
           '{"version":1,"objective":"Review","outcome":"completed"}',
           '```',
         ].join('\n'),
       },
     ) as unknown as FakeElement;
 
-    (wrapperEl.findByClass('pivi-subagent-header') as FakeElement).click();
-    const result = wrapperEl.findByClass('pivi-subagent-result-output')?.textContent;
+    (wrapperEl.findByClass('yapi-subagent-header') as FakeElement).click();
+    const result = wrapperEl.findByClass('yapi-subagent-result-output')?.textContent;
     expect(result).toBe('Review finished.');
-    expect(result).not.toContain('pivi-agent-report');
+    expect(result).not.toContain('yapi-agent-report');
     expect(result).not.toContain('"version"');
   });
 
@@ -816,18 +816,18 @@ describe('subagent activity rendering', () => {
     (state.headerEl as unknown as FakeElement).click();
     const toolsContainer = state.toolsContainerEl as unknown as FakeElement;
 
-    const groups = toolsContainer.findAllByClass('pivi-tool-step-group');
+    const groups = toolsContainer.findAllByClass('yapi-tool-step-group');
     expect(groups).toHaveLength(1);
     const [group] = groups;
     expect(group).toBeDefined();
     if (!group) throw new Error('Expected the aggregated tool step group');
-    expect(group.findByClass('pivi-tool-step-group-count')?.text).toBe('2 steps');
-    expect(group.findByClass('pivi-tool-step-group-summary')?.text).toBe('Read');
-    expect(group.findByClass('pivi-tool-step-group-header')?.getAttribute('aria-label'))
+    expect(group.findByClass('yapi-tool-step-group-count')?.text).toBe('2 steps');
+    expect(group.findByClass('yapi-tool-step-group-summary')?.text).toBe('Read');
+    expect(group.findByClass('yapi-tool-step-group-header')?.getAttribute('aria-label'))
       .toContain('2 steps, Read');
-    expect(group.findByClass('pivi-tool-step-group-header')?.getAttribute('aria-label'))
+    expect(group.findByClass('yapi-tool-step-group-header')?.getAttribute('aria-label'))
       .not.toContain('b.md');
-    expect(toolsContainer.findAllByClass('pivi-subagent-tool-item')).toHaveLength(0);
+    expect(toolsContainer.findAllByClass('yapi-subagent-tool-item')).toHaveLength(0);
   });
 
   it('filters hidden sync calls and separates contiguous groups around standalone rows', () => {
@@ -875,10 +875,10 @@ describe('subagent activity rendering', () => {
       'single',
       'group',
     ]);
-    expect(toolsContainer.findAllByClass('pivi-tool-step-group')).toHaveLength(2);
-    expect(toolsContainer.findAllByClass('pivi-tool-step-group-count').map((element) => element.text))
+    expect(toolsContainer.findAllByClass('yapi-tool-step-group')).toHaveLength(2);
+    expect(toolsContainer.findAllByClass('yapi-tool-step-group-count').map((element) => element.text))
       .toEqual(['2 steps', '2 steps']);
-    expect(toolsContainer.findAllByClass('pivi-tool-call')).toHaveLength(8);
+    expect(toolsContainer.findAllByClass('yapi-tool-call')).toHaveLength(8);
     expect(toolsContainer.textContent).not.toContain('TaskOutput');
     expect(toolsContainer.textContent).not.toContain('custom_tool_call_output');
     expect(toolsContainer.textContent).not.toContain('write_stdin');
@@ -906,8 +906,8 @@ describe('subagent activity rendering', () => {
     const toolsContainer = state.toolsContainerEl as unknown as FakeElement;
 
     expectDirectToolRunKinds(toolsContainer, ['group']);
-    expect(toolsContainer.findAllByClass('pivi-tool-call')).toHaveLength(1);
-    expect(toolsContainer.findByClass('pivi-tool-step-group-count')?.text).toContain('1');
+    expect(toolsContainer.findAllByClass('yapi-tool-call')).toHaveLength(1);
+    expect(toolsContainer.findByClass('yapi-tool-step-group-count')?.text).toContain('1');
   });
 
   it('renders stored async subagent tool calls as one N steps group after expanding', () => {
@@ -926,20 +926,20 @@ describe('subagent activity rendering', () => {
       },
     ) as unknown as FakeElement;
 
-    const headerEl = wrapperEl.findByClass('pivi-subagent-header') as FakeElement;
-    expect(wrapperEl.findByClass('pivi-subagent-tools')).toBeNull();
+    const headerEl = wrapperEl.findByClass('yapi-subagent-header') as FakeElement;
+    expect(wrapperEl.findByClass('yapi-subagent-tools')).toBeNull();
 
     headerEl.click();
 
-    const toolsContainer = wrapperEl.findByClass('pivi-subagent-tools') as FakeElement;
+    const toolsContainer = wrapperEl.findByClass('yapi-subagent-tools') as FakeElement;
     expect(toolsContainer).not.toBeNull();
-    const groups = toolsContainer.findAllByClass('pivi-tool-step-group');
+    const groups = toolsContainer.findAllByClass('yapi-tool-step-group');
     expect(groups).toHaveLength(1);
     const [group] = groups;
     expect(group).toBeDefined();
     if (!group) throw new Error('Expected the expanded tool step group');
-    expect(group.findByClass('pivi-tool-step-group-count')?.text).toBe('2 steps');
-    expect(toolsContainer.findAllByClass('pivi-subagent-tool-item')).toHaveLength(0);
+    expect(group.findByClass('yapi-tool-step-group-count')?.text).toBe('2 steps');
+    expect(toolsContainer.findAllByClass('yapi-subagent-tool-item')).toHaveLength(0);
   });
 
   it('filters and groups mixed stored async subagent calls after expanding', () => {
@@ -969,14 +969,14 @@ describe('subagent activity rendering', () => {
       },
     ) as unknown as FakeElement;
 
-    const headerEl = wrapperEl.findByClass('pivi-subagent-header') as FakeElement;
+    const headerEl = wrapperEl.findByClass('yapi-subagent-header') as FakeElement;
     headerEl.click();
 
-    const toolsContainer = wrapperEl.findByClass('pivi-subagent-tools') as FakeElement;
+    const toolsContainer = wrapperEl.findByClass('yapi-subagent-tools') as FakeElement;
     expectDirectToolRunKinds(toolsContainer, ['group', 'single', 'single', 'group']);
-    expect(toolsContainer.findAllByClass('pivi-tool-step-group-count').map((element) => element.text))
+    expect(toolsContainer.findAllByClass('yapi-tool-step-group-count').map((element) => element.text))
       .toEqual(['2 steps', '2 steps']);
-    expect(toolsContainer.findAllByClass('pivi-tool-call')).toHaveLength(6);
+    expect(toolsContainer.findAllByClass('yapi-tool-call')).toHaveLength(6);
     expect(toolsContainer.textContent).not.toContain('TaskOutput');
     expect(toolsContainer.textContent).not.toContain('custom_tool_call_output');
     expect(toolsContainer.textContent).not.toContain('write_stdin');
@@ -1001,14 +1001,14 @@ describe('subagent activity rendering', () => {
       },
     ) as unknown as FakeElement;
 
-    const toolsContainer = wrapperEl.findByClass('pivi-subagent-tools') as FakeElement;
-    const groups = toolsContainer.findAllByClass('pivi-tool-step-group');
+    const toolsContainer = wrapperEl.findByClass('yapi-subagent-tools') as FakeElement;
+    const groups = toolsContainer.findAllByClass('yapi-tool-step-group');
     expect(groups).toHaveLength(1);
     const [group] = groups;
     expect(group).toBeDefined();
     if (!group) throw new Error('Expected the stored tool step group');
-    expect(group.findByClass('pivi-tool-step-group-count')?.text).toBe('2 steps');
-    expect(toolsContainer.findAllByClass('pivi-subagent-tool-item')).toHaveLength(0);
+    expect(group.findByClass('yapi-tool-step-group-count')?.text).toBe('2 steps');
+    expect(toolsContainer.findAllByClass('yapi-subagent-tool-item')).toHaveLength(0);
   });
 });
 describe('mounted stored subagent updates', () => {

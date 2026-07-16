@@ -1,4 +1,4 @@
-import { applyNodeFetchDefaultHeaders } from '@pivi/obsidian-host/nodeFetch';
+import { applyNodeFetchDefaultHeaders } from '@yapi/obsidian-host/nodeFetch';
 
 describe('nodeFetch', () => {
   it('adds default headers for Node HTTP requests', () => {
@@ -6,7 +6,7 @@ describe('nodeFetch', () => {
 
     applyNodeFetchDefaultHeaders(headers);
 
-    expect(headers.get('user-agent')).toContain('Pivi');
+    expect(headers.get('user-agent')).toContain('YaPi');
     expect(headers.get('accept')).toBe('*/*');
   });
 

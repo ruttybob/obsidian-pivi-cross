@@ -1,27 +1,27 @@
-import { createSystemAuthContextHost } from "@pivi/obsidian-host/authContextHost";
-import { isOfficialObsidianCliEnabled } from "@pivi/obsidian-host/cli/officialObsidianCli";
-import { inspectExternalDirectory } from "@pivi/obsidian-host/externalFileApi";
-import { nodeFetch } from "@pivi/obsidian-host/nodeFetch";
-import { systemExternalOpener } from "@pivi/obsidian-host/openExternalUrl";
-import { getVaultPath } from "@pivi/obsidian-host/path";
-import { createFileProviderLegacyAuthStore } from "@pivi/obsidian-host/providerLegacyAuthStore";
-import { systemProcessRunner } from "@pivi/obsidian-host/systemProcessRunner";
+import { createSystemAuthContextHost } from "@yapi/obsidian-host/authContextHost";
+import { isOfficialObsidianCliEnabled } from "@yapi/obsidian-host/cli/officialObsidianCli";
+import { inspectExternalDirectory } from "@yapi/obsidian-host/externalFileApi";
+import { nodeFetch } from "@yapi/obsidian-host/nodeFetch";
+import { systemExternalOpener } from "@yapi/obsidian-host/openExternalUrl";
+import { getVaultPath } from "@yapi/obsidian-host/path";
+import { createFileProviderLegacyAuthStore } from "@yapi/obsidian-host/providerLegacyAuthStore";
+import { systemProcessRunner } from "@yapi/obsidian-host/systemProcessRunner";
 import {
   createObsidianTools,
   getObsidianToolsSettingsFromBag,
-} from "@pivi/obsidian-tools";
-import { credentialToApiKey } from "@pivi/pivi-agent-core/auth/piProviderCredentials";
-import type { PiBaseToolProvider } from "@pivi/pivi-agent-core/engine/pi/buildPiToolRegistryCore";
-import { createCodexImageGenerator } from "@pivi/pivi-agent-core/engine/pi/codexImageGenerator";
-import { configurePiAiModels } from "@pivi/pivi-agent-core/engine/pi/piAiModels";
+} from "@yapi/obsidian-tools";
+import { credentialToApiKey } from "@yapi/yapi-agent-core/auth/piProviderCredentials";
+import type { PiBaseToolProvider } from "@yapi/yapi-agent-core/engine/pi/buildPiToolRegistryCore";
+import { createCodexImageGenerator } from "@yapi/yapi-agent-core/engine/pi/codexImageGenerator";
+import { configurePiAiModels } from "@yapi/yapi-agent-core/engine/pi/piAiModels";
 import {
   createObsidianCredentialStore,
   ObsidianAuthContext,
   type ObsidianCredentialStore,
-} from "@pivi/pivi-agent-core/engine/pi/piProviderCredentialStore";
-import { ProviderOAuthService } from "@pivi/pivi-agent-core/engine/pi/piProviderOAuthService";
-import { registerBundledPiOAuthFlows } from "@pivi/pivi-agent-core/engine/pi/registerBundledPiOAuthFlows";
-import { SubagentConcurrencyLimiter } from "@pivi/pivi-agent-core/engine/pi/subagentConcurrencyLimiter";
+} from "@yapi/yapi-agent-core/engine/pi/piProviderCredentialStore";
+import { ProviderOAuthService } from "@yapi/yapi-agent-core/engine/pi/piProviderOAuthService";
+import { registerBundledPiOAuthFlows } from "@yapi/yapi-agent-core/engine/pi/registerBundledPiOAuthFlows";
+import { SubagentConcurrencyLimiter } from "@yapi/yapi-agent-core/engine/pi/subagentConcurrencyLimiter";
 import {
   type AppModelReadinessProvider,
   getCustomProvidersFromBag,
@@ -29,20 +29,20 @@ import {
   getWebSearchToolsSettingsFromBag,
   parseEnvironmentVariables,
   WEB_PROVIDER_IDS,
-} from "@pivi/pivi-agent-core/foundation";
-import { McpServerManager } from "@pivi/pivi-agent-core/mcp/mcpServerManager";
-import { McpStorage } from "@pivi/pivi-agent-core/mcp/mcpStorage";
-import { McpOAuthService } from "@pivi/pivi-agent-core/mcp/oauth/mcpOAuthService";
+} from "@yapi/yapi-agent-core/foundation";
+import { McpServerManager } from "@yapi/yapi-agent-core/mcp/mcpServerManager";
+import { McpStorage } from "@yapi/yapi-agent-core/mcp/mcpStorage";
+import { McpOAuthService } from "@yapi/yapi-agent-core/mcp/oauth/mcpOAuthService";
 import type {
   AppMcpDiagnostics,
   AppMcpServerProbeProvider,
   AppMcpServerTester,
   AppMcpStorage,
   AppMcpToolProvider,
-} from "@pivi/pivi-agent-core/mcp/ports";
-import { ensureDefaultWorkspaceCommands } from "@pivi/pivi-agent-core/skills/commands/defaultWorkspaceCommands";
-import type { SlashCommandCatalog } from "@pivi/pivi-agent-core/skills/commands/slashCommandCatalog";
-import type { AppSkillProvider } from "@pivi/pivi-agent-core/skills/skillProvider";
+} from "@yapi/yapi-agent-core/mcp/ports";
+import { ensureDefaultWorkspaceCommands } from "@yapi/yapi-agent-core/skills/commands/defaultWorkspaceCommands";
+import type { SlashCommandCatalog } from "@yapi/yapi-agent-core/skills/commands/slashCommandCatalog";
+import type { AppSkillProvider } from "@yapi/yapi-agent-core/skills/skillProvider";
 import {
   createWebFetchTool,
   createWebSearchCredentialStore,
@@ -50,7 +50,7 @@ import {
   isObsidianAgentTool,
   TOOL_OBSIDIAN_GENERATE_IMAGE,
   type WebSearchCredentialStore,
-} from "@pivi/pivi-agent-core/tools";
+} from "@yapi/yapi-agent-core/tools";
 
 import {
   type ChatRuntimeServiceFactories,
@@ -58,7 +58,7 @@ import {
 } from "./createChatRuntimeServices";
 import { obsidianCustomProviderHttpRequest } from "./obsidianHttpRequest";
 import { PiSlashCommandCatalog } from "./PiSlashCommandCatalog";
-import type { PiviWorkspaceHost, WorkspaceInitContext } from "./serviceContracts";
+import type { WorkspaceInitContext,YapiWorkspaceHost } from "./serviceContracts";
 import {
   PiMcpDiagnostics,
   PiMcpServerProbeProvider,
@@ -136,7 +136,7 @@ export async function createPiWorkspaceServices(
     {
       openAuthUrl: (url) => systemExternalOpener.openExternalUrl(url),
     },
-    createFileProviderLegacyAuthStore(vaultPath ? `${vaultPath}/.pivi/auth.json` : null),
+    createFileProviderLegacyAuthStore(vaultPath ? `${vaultPath}/.yapi/auth.json` : null),
   );
   const mcpToolProvider = new PiMcpToolProvider(mcpServerManager, mcpOAuth);
   const mcpDiagnostics = new PiMcpDiagnostics(mcpOAuth);
@@ -210,7 +210,7 @@ export async function createPiWorkspaceServices(
 }
 
 function createObsidianBaseToolProvider(
-  host: PiviWorkspaceHost,
+  host: YapiWorkspaceHost,
   providerOAuth: ProviderOAuthService,
   webSearchCredentialStore: WebSearchCredentialStore | null,
 ): PiBaseToolProvider {

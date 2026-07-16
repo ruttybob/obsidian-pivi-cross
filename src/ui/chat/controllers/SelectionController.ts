@@ -1,4 +1,4 @@
-import type { EditorSelectionContext } from '@pivi/pivi-agent-core/context/editor';
+import type { EditorSelectionContext } from '@yapi/yapi-agent-core/context/editor';
 import type { App } from 'obsidian';
 import { MarkdownView } from 'obsidian';
 
@@ -17,7 +17,7 @@ import { updateContextRowHasContent } from './contextRowVisibility';
 
 const SELECTION_POLL_INTERVAL = 250;
 const INPUT_HANDOFF_GRACE_MS = 1500;
-const HIGHLIGHT_KEY = 'pivi-selection';
+const HIGHLIGHT_KEY = 'yapi-selection';
 
 export class SelectionController {
   private app: App;
@@ -360,9 +360,9 @@ export class SelectionController {
         count: this.storedSelection.lineCount,
         lines,
       });
-      this.indicatorEl.removeClass('pivi-hidden');
+      this.indicatorEl.removeClass('yapi-hidden');
     } else {
-      this.indicatorEl.addClass('pivi-hidden');
+      this.indicatorEl.addClass('yapi-hidden');
     }
     this.updateContextRowVisibility();
   }

@@ -6,8 +6,8 @@ import {
   formatSelectionRangeAttribute,
   normalizeEditorSelection,
   parseInlineContextToken,
-} from '@pivi/pivi-agent-core/context/inlineContext';
-import type { InlineContextReference } from '@pivi/pivi-agent-core/context/inlineContext';
+} from '@yapi/yapi-agent-core/context/inlineContext';
+import type { InlineContextReference } from '@yapi/yapi-agent-core/context/inlineContext';
 
 describe('normalizeEditorSelection', () => {
   it('swaps reversed selections', () => {
@@ -125,7 +125,7 @@ describe('inline context tokens', () => {
 
   it('round-trips inline context tokens', () => {
     const token = createInlineContextToken(context);
-    expect(token).toMatch(/^@\[pivi-inline-context:/);
+    expect(token).toMatch(/^@\[yapi-inline-context:/);
     expect(parseInlineContextToken(token)).toEqual(context);
   });
 

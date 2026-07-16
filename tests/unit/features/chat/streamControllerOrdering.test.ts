@@ -1,4 +1,4 @@
-import type { StreamChunk } from '@pivi/pivi-agent-core/foundation';
+import type { StreamChunk } from '@yapi/yapi-agent-core/foundation';
 
 import { StreamController } from '@/ui/chat/controllers/StreamController';
 import { SubagentManager } from '@/ui/chat/services/SubagentManager';

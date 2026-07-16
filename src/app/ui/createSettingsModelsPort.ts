@@ -3,12 +3,12 @@ import {
   getPiAiCredentialSecretId,
   INTERACTIVE_OAUTH_PROVIDER_IDS,
   SUBSCRIPTION_OAUTH_PROVIDER_IDS,
-} from '@pivi/pivi-agent-core/auth/piProviderCredentials';
-import { SUPPORTED_PI_PROVIDER_IDS } from '@pivi/pivi-agent-core/auth/piProviderValidation';
-import { getProviderEnvVarNames } from '@pivi/pivi-agent-core/auth/providerEnvVars';
-import { deriveProviderReadinessStatus } from '@pivi/pivi-agent-core/auth/providerReadiness';
-import { isSecretStorageAvailable, MIN_OBSIDIAN_VERSION_FOR_KEYCHAIN } from '@pivi/pivi-agent-core/auth/providerSecretStorage';
-import { getPiAgentSettings, updatePiAgentSettings } from '@pivi/pivi-agent-core/foundation/agentSettings';
+} from '@yapi/yapi-agent-core/auth/piProviderCredentials';
+import { SUPPORTED_PI_PROVIDER_IDS } from '@yapi/yapi-agent-core/auth/piProviderValidation';
+import { getProviderEnvVarNames } from '@yapi/yapi-agent-core/auth/providerEnvVars';
+import { deriveProviderReadinessStatus } from '@yapi/yapi-agent-core/auth/providerReadiness';
+import { isSecretStorageAvailable, MIN_OBSIDIAN_VERSION_FOR_KEYCHAIN } from '@yapi/yapi-agent-core/auth/providerSecretStorage';
+import { getPiAgentSettings, updatePiAgentSettings } from '@yapi/yapi-agent-core/foundation/agentSettings';
 import {
   ALL_CUSTOM_PROVIDER_KINDS,
   createDefaultCustomProviderConfig,
@@ -17,27 +17,27 @@ import {
   getCustomProviderKindDisplayName,
   getCustomProvidersFromBag,
   isLocalCustomProviderKind,
-} from '@pivi/pivi-agent-core/foundation/customProviders';
+} from '@yapi/yapi-agent-core/foundation/customProviders';
 import {
   getLogoSlugForCustomProviderKind,
   getProviderDisplayName,
   getProviderLogoSlug,
-} from '@pivi/pivi-agent-core/foundation/providerLogos';
-import type { SettingsModelsPort } from '@pivi/pivi-react/ports';
+} from '@yapi/yapi-agent-core/foundation/providerLogos';
+import type { SettingsModelsPort } from '@yapi/yapi-react/ports';
 
 import type {
-  PiviPluginWorkspace,
-  PiviSettingsHost,
-  PiviUiFacades,
+  YapiPluginWorkspace,
+  YapiSettingsHost,
+  YapiUiFacades,
 } from '@/app/hostContracts';
 import { t as appT } from '@/app/i18n';
 
 import { removeEnvVar } from './createUiPortHelpers';
 
 export function createSettingsModelsPort(
-  host: PiviSettingsHost,
-  uiFacades: PiviUiFacades,
-  workspace: PiviPluginWorkspace,
+  host: YapiSettingsHost,
+  uiFacades: YapiUiFacades,
+  workspace: YapiPluginWorkspace,
 ): SettingsModelsPort {
   return {
     codexProviderId: CODEX_OAUTH_PROVIDER_ID,

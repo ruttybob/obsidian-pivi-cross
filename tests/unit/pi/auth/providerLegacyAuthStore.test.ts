@@ -2,13 +2,13 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-import { createFileProviderLegacyAuthStore } from '@pivi/obsidian-host/providerLegacyAuthStore';
+import { createFileProviderLegacyAuthStore } from '@yapi/obsidian-host/providerLegacyAuthStore';
 
 describe('createFileProviderLegacyAuthStore', () => {
   let tempDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-legacy-auth-store-'));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-legacy-auth-store-'));
   });
 
   afterEach(() => {

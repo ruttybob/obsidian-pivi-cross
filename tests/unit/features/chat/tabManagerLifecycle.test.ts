@@ -1,9 +1,9 @@
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
 import { TabManager } from '@/ui/chat/tabs/TabManager';
 import type { ForkContext } from '@/ui/chat/tabs/tabFork';
 import type { TabData, TabManagerCallbacks } from '@/ui/chat/tabs/types';
 import { createFakeChatPorts } from '../../../helpers/createFakeChatPorts';
-import { asPiviPlugin, createMockPiviPluginStub } from '../../../helpers/mockPiviPlugin';
+import { asYapiPlugin, createMockYapiPluginStub } from '../../../helpers/mockYapiPlugin';
 
 const tabMocks = jest.requireMock('@/ui/chat/tabs/Tab');
 
@@ -74,7 +74,7 @@ function makeManager(
   callbacks?: TabManagerCallbacks,
   activateOpenSessionElsewhere: (openSessionId: string) => Promise<boolean> = () => Promise.resolve(false),
 ) {
-  const plugin = createMockPiviPluginStub();
+  const plugin = createMockYapiPluginStub();
   const ports = createFakeChatPorts({
     sessions: {
       getOpenSession: jest.fn(async (id: string) => ({
@@ -121,7 +121,7 @@ function makeManager(
   const view = {} as never;
   return {
     manager: new TabManager(
-      asPiviPlugin(plugin),
+      asYapiPlugin(plugin),
       {} as HTMLElement,
       view,
       callbacks,
@@ -243,7 +243,7 @@ describe('TabManager lifecycle guards', () => {
     });
 
     const restored = new TabManager(
-      asPiviPlugin(plugin),
+      asYapiPlugin(plugin),
       {} as HTMLElement,
       {} as never,
       {},

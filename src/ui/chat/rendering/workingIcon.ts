@@ -1,5 +1,5 @@
 /** Lightweight running indicator (CSS/SVG only, no deps). */
-export const WORKING_ICON_CLASS = 'pivi-working-icon';
+export const WORKING_ICON_CLASS = 'yapi-working-icon';
 
 export function appendWorkingIcon(el: HTMLElement): void {
   el.empty();
@@ -18,7 +18,7 @@ export function appendWorkingIcon(el: HTMLElement): void {
   });
 
   svg.createSvg('circle', {
-    cls: 'pivi-working-icon-track',
+    cls: 'yapi-working-icon-track',
     attr: {
       cx: '8',
       cy: '8',
@@ -30,7 +30,7 @@ export function appendWorkingIcon(el: HTMLElement): void {
   });
 
   svg.createSvg('path', {
-    cls: 'pivi-working-icon-arc',
+    cls: 'yapi-working-icon-arc',
     attr: {
       d: 'M8 2a6 6 0 0 1 6 6',
       stroke: 'currentColor',

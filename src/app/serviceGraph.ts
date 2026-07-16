@@ -1,29 +1,29 @@
 import {
   SharedStorageService,
-} from "@pivi/obsidian-host";
-import { PiSessionStore } from "@pivi/pivi-agent-core/engine/pi/session/piSessionStore";
-import type { FileStore } from "@pivi/pivi-agent-core/ports";
+} from "@yapi/obsidian-host";
+import { PiSessionStore } from "@yapi/yapi-agent-core/engine/pi/session/piSessionStore";
+import type { FileStore } from "@yapi/yapi-agent-core/ports";
 import type {
   DeviceLocalExternalContextStore,
   SessionStore,
-} from "@pivi/pivi-agent-core/session";
-import { assertBundledReactRuntime } from "@pivi/pivi-react";
+} from "@yapi/yapi-agent-core/session";
+import { assertBundledReactRuntime } from "@yapi/yapi-react";
 
 import type { ObsidianDeviceLocalExternalContextStore } from "@/app/deviceLocalExternalContextStore";
 import { t } from "@/app/i18n";
-import { createPiviSettingsCodec } from "@/app/settings/piviSettingsCodec";
+import { createYapiSettingsCodec } from "@/app/settings/yapiSettingsCodec";
 import { createPiWorkspaceServices, type PiWorkspaceServices } from "@/app/workspace/PiWorkspaceServices"
-import type PiviPlugin from "@/main"
+import type YapiPlugin from "@/main"
 
-export interface PiviServiceGraph {
+export interface YapiServiceGraph {
   piWorkspace: PiWorkspaceServices;
 }
 
 export function createSharedStorage(
-  plugin: PiviPlugin,
+  plugin: YapiPlugin,
   externalContexts: ObsidianDeviceLocalExternalContextStore,
 ): SharedStorageService {
-  return new SharedStorageService(plugin, createPiviSettingsCodec(externalContexts), {
+  return new SharedStorageService(plugin, createYapiSettingsCodec(externalContexts), {
     failedSaveTabLayout: t("host.failedSaveTabLayout"),
     failedSaveDeletedSessions: t("host.failedSaveDeletedSessions"),
   });
@@ -38,8 +38,8 @@ export function createSessionStore(
 }
 
 export async function createPluginServiceGraph(
-  plugin: PiviPlugin,
-): Promise<PiviServiceGraph> {
+  plugin: YapiPlugin,
+): Promise<YapiServiceGraph> {
   assertBundledReactRuntime();
   const vaultAdapter = plugin.storage.getAdapter();
   const piWorkspace = await createPiWorkspaceServices({

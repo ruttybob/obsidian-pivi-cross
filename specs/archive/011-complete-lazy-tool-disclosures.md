@@ -11,7 +11,7 @@ coordinator: "Codex"
 
 ## Context
 
-Pivi virtualizes transcript message rows and remeasures dynamic content, but expanded tool bodies still impose presentation-only line, field, path, task, query, character, Markdown, and diff caps. Stored React tools already mount content on first expansion, while synchronous subagents and their imperative nested tools still build hidden content eagerly. At the transcript end, TanStack Virtual's end anchoring also moves a disclosure header when its row grows. This work makes expanded content complete, lazy, height-bounded, and visually anchored without weakening message virtualization or session/tool boundaries.
+Yapi virtualizes transcript message rows and remeasures dynamic content, but expanded tool bodies still impose presentation-only line, field, path, task, query, character, Markdown, and diff caps. Stored React tools already mount content on first expansion, while synchronous subagents and their imperative nested tools still build hidden content eagerly. At the transcript end, TanStack Virtual's end anchoring also moves a disclosure header when its row grows. This work makes expanded content complete, lazy, height-bounded, and visually anchored without weakening message virtualization or session/tool boundaries.
 
 ## Goal and success criteria
 
@@ -46,7 +46,7 @@ Not in scope:
 | 2026-07-16 | Frequent disclosure toggles are immediate and do not animate height or position. | Direct response avoids measurement churn and pointer displacement. | WS-01 |
 | 2026-07-16 | Internal scroll completion never changes disclosure state; native scroll chaining hands continued movement to the transcript. | The card should shrink from view with its parent viewport, reaching title height before leaving, rather than disappearing through an automatic click. | WS-01 |
 | 2026-07-16 | Top-level disclosure bodies own the internal scrollbar; nested steps inside a subagent use `overflow: hidden` as the sticky clip containing block; tool titles stack flush at `top: 0` without measured offset variables. | Prevent child titles from crossing parent titles in geometry and eliminate header-stack padding gaps. | WS-01 |
-| 2026-07-16 | Top-level card headers are layout-fixed at the card top (`overflow: hidden` wrappers); nested stickies live inside the body scrollport with measured `--pivi-tool-step-group-sticky-top`. | Prevent subagent headers detaching from their card frame and enable Tool to stick under Steps in three-level cards. | WS-01 |
+| 2026-07-16 | Top-level card headers are layout-fixed at the card top (`overflow: hidden` wrappers); nested stickies live inside the body scrollport with measured `--yapi-tool-step-group-sticky-top`. | Prevent subagent headers detaching from their card frame and enable Tool to stick under Steps in three-level cards. | WS-01 |
 
 ## Workstreams
 
@@ -59,8 +59,8 @@ Not in scope:
 ## Verification
 
 ```bash
-npm run test -- --runInBand tests/pivi-react/MessageList.test.tsx tests/pivi-react/ToolCallView.test.tsx
-npm run test -- --runInBand tests/unit/features/chat/subagentActivity.test.ts tests/pivi-react/ImperativeToolCallRenderer.test.ts
+npm run test -- --runInBand tests/yapi-react/MessageList.test.tsx tests/yapi-react/ToolCallView.test.tsx
+npm run test -- --runInBand tests/unit/features/chat/subagentActivity.test.ts tests/yapi-react/ImperativeToolCallRenderer.test.ts
 npm run test -- --runInBand tests/unit/ui/toolStepGroupStyles.test.ts tests/unit/ui/subagentShellStyles.test.ts
 npm run typecheck
 npm run lint -- --quiet
@@ -72,13 +72,13 @@ obsidian reload
 obsidian dev:errors
 ```
 
-Live acceptance uses the active sidebar's measured `.pivi-messages.clientHeight`: every top-level expanded content area's client height must remain at or below one third, long content must scroll internally, and the activated header top must drift by no more than one pixel after body settlement.
+Live acceptance uses the active sidebar's measured `.yapi-messages.clientHeight`: every top-level expanded content area's client height must remain at or below one third, long content must scroll internally, and the activated header top must drift by no more than one pixel after body settlement.
 
 ## Documentation sync
 
 - Numbered developer docs: `docs/06-subagents-streaming-and-rendering.md`, `docs/11-chat-ui-evolution.md`.
-- Nearest local guidance: `src/ui/chat/rendering/AGENTS.md`, `packages/pivi-react/styles/AGENTS.md`.
-- Parent/package guidance: `packages/pivi-react/AGENTS.md`, `src/ui/chat/AGENTS.md` if the adapter context changes its map.
+- Nearest local guidance: `src/ui/chat/rendering/AGENTS.md`, `packages/yapi-react/styles/AGENTS.md`.
+- Parent/package guidance: `packages/yapi-react/AGENTS.md`, `src/ui/chat/AGENTS.md` if the adapter context changes its map.
 - Root guidance and roadmap: `AGENTS.md` quality snapshot and `docs/10-roadmap-release-and-maintenance.md` verification record when counts/artifact sizes change.
 
 ## Progress and handoff

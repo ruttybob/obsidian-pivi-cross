@@ -1,6 +1,6 @@
-import type { StreamChunk } from '@pivi/pivi-agent-core/foundation';
-import type { ChatSettingsPort } from '@pivi/pivi-agent-core/runtime/chatPorts';
-import type { PiChatService } from '@pivi/pivi-agent-core/runtime/piChatService';
+import type { StreamChunk } from '@yapi/yapi-agent-core/foundation';
+import type { ChatSettingsPort } from '@yapi/yapi-agent-core/runtime/chatPorts';
+import type { PiChatService } from '@yapi/yapi-agent-core/runtime/piChatService';
 
 import type { SubagentManager } from '../services/SubagentManager';
 import type { ChatState } from '../state/ChatState';

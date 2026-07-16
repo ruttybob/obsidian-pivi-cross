@@ -1,0 +1,180 @@
+/* MCP Server Settings */
+.yapi-mcp-container {
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-mcp-add-option-icon {
+  display: flex;
+  align-items: center;
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-mcp-add-option-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.yapi-mcp-empty {
+  padding: var(--yapi-spacing-lg);
+  text-align: center;
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-text-base);
+  background: var(--yapi-host-background-secondary);
+  border-radius: var(--yapi-radius-sm);
+}
+
+.yapi-mcp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-mcp-card {
+  overflow: hidden;
+  background: var(--yapi-host-background-primary);
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-md);
+  transition: border-color var(--yapi-duration-normal) var(--yapi-ease-out), box-shadow var(--yapi-duration-normal) var(--yapi-ease-out);
+}
+
+.yapi-mcp-card:hover,
+.yapi-mcp-card[open] {
+  border-color: var(--yapi-host-interactive-accent);
+}
+
+.yapi-mcp-card:hover {
+  box-shadow: 0 2px 8px var(--yapi-shadow, rgba(0, 0, 0, 0.05));
+}
+
+.yapi-mcp-card-disabled {
+  opacity: 0.6;
+}
+
+.yapi-mcp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  color: var(--yapi-host-text-normal);
+  font-weight: var(--yapi-host-font-semibold);
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  background: var(--yapi-host-background-secondary);
+  transition: background var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-mcp-card-header::-webkit-details-marker {
+  display: none;
+}
+
+.yapi-mcp-card-header:hover {
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-mcp-card-title-row {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.yapi-mcp-card-body {
+  padding: var(--yapi-spacing-lg);
+  border-top: 1px solid var(--yapi-host-border);
+}
+
+.yapi-mcp-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.yapi-mcp-status-enabled {
+  background: var(--yapi-host-color-green);
+}
+
+.yapi-mcp-status-disabled {
+  background: var(--yapi-host-text-muted);
+}
+
+.yapi-mcp-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.yapi-mcp-type-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--yapi-host-border);
+  border-radius: var(--yapi-radius-xs);
+  color: var(--yapi-host-text-muted);
+  text-transform: uppercase;
+}
+
+.yapi-mcp-context-saving-badge {
+  font-size: var(--yapi-text-xs);
+  padding: 2px 6px;
+  background: var(--yapi-host-interactive-accent);
+  color: var(--yapi-host-text-on-accent);
+  border-radius: var(--yapi-radius-xs);
+  font-weight: 600;
+}
+
+.yapi-mcp-preview {
+  margin: 0 0 12px;
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.yapi-mcp-tool-count {
+  flex-shrink: 0;
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-smaller);
+  white-space: nowrap;
+}
+
+.yapi-mcp-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yapi-spacing-sm);
+  margin-bottom: var(--yapi-spacing-md);
+}
+
+.yapi-mcp-tool-inventory-title {
+  margin: 12px 0 8px;
+  font-weight: var(--yapi-host-font-medium);
+}
+
+.yapi-mcp-tool-inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.yapi-mcp-tool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  background: var(--yapi-host-background-secondary);
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+}
+
+.yapi-mcp-tool-name {
+  color: var(--yapi-host-text-normal);
+  font-size: var(--yapi-host-font-ui-small);
+  font-weight: var(--yapi-host-font-medium);
+  overflow-wrap: anywhere;
+}
+
+.yapi-mcp-tool-description {
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-smaller);
+  line-height: 1.3;
+}

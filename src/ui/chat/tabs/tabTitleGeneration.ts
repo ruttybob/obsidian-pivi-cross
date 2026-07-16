@@ -1,4 +1,4 @@
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 
 import { ensureTitleGenerationService } from "./tabAgentContext";
 import type { TabData } from "./types";

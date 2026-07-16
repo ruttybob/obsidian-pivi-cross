@@ -7,7 +7,7 @@ import {
   normalizePathForComparison,
   normalizePathForFilesystem,
   translateMsysPath,
-} from '@pivi/obsidian-host/path';
+} from '@yapi/obsidian-host/path';
 
 function withPlatform<T>(platform: NodeJS.Platform, fn: () => T): T {
   const descriptor = Object.getOwnPropertyDescriptor(process, 'platform');
@@ -82,7 +82,7 @@ describe('path utils', () => {
     let directory: string;
 
     beforeEach(() => {
-      root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-path-test-'));
+      root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-path-test-'));
       directory = path.join(root, 'vault');
       fs.mkdirSync(path.join(directory, 'notes'), { recursive: true });
       fs.mkdirSync(path.join(root, 'vault-sibling'), { recursive: true });

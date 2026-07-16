@@ -79,8 +79,8 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 ## Documentation sync
 
 - Numbered developer docs: `docs/10-roadmap-release-and-maintenance.md`, `docs/11-chat-ui-evolution.md`.
-- Nearest local guidance: `src/ui/chat/AGENTS.md`, `packages/pivi-react/AGENTS.md`, and `tests/AGENTS.md` only where module ownership or verification guidance changes.
-- Parent/package guidance: `packages/pivi-agent-core/AGENTS.md` if the continuation-schema public surface changes.
+- Nearest local guidance: `src/ui/chat/AGENTS.md`, `packages/yapi-react/AGENTS.md`, and `tests/AGENTS.md` only where module ownership or verification guidance changes.
+- Parent/package guidance: `packages/yapi-agent-core/AGENTS.md` if the continuation-schema public surface changes.
 - Root guidance and roadmap: `AGENTS.md` and `docs/10-roadmap-release-and-maintenance.md`.
 
 ## Progress and handoff
@@ -95,7 +95,7 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 
 ### 2026-07-16 — /root/ws03_projection — WS-03
 
-- Changed: Extracted pure AgentRun derivation into `packages/pivi-react/src/store/agentRunProjection.ts`; the projection store retains event ordering, ownership/anomaly gates, identity reconciliation, publication, and subscriptions. The public store subpath exports the domain function directly from its owner.
+- Changed: Extracted pure AgentRun derivation into `packages/yapi-react/src/store/agentRunProjection.ts`; the projection store retains event ordering, ownership/anomaly gates, identity reconciliation, publication, and subscriptions. The public store subpath exports the domain function directly from its owner.
 - Evidence: 32 focused Jest tests passed; typecheck, lint, and `git diff --check` passed.
 - Remaining: Documentation sync and repository-wide verification.
 - Blockers: None.
@@ -136,7 +136,7 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 ### 2026-07-16 — /root — WS-05 release-candidate evidence
 
 - Changed: Corrected steps 7 and 8 in `docs/11`, refreshed the root quality snapshot, and added a release evidence matrix to `docs/10`.
-- Live evidence: Three Pivi views across two owner realms survived plugin reload, vault reload, and full app quit/relaunch with zero captured errors; temporary leaves were removed. Inline edit mounted one modal/root and Escape removed both. The isolated development 20-Agent workload exported a clean trace and restored its disposable session. A focused 98% Context Inspector test verified warning, budget breakdown, estimates, and dismissal.
+- Live evidence: Three Yapi views across two owner realms survived plugin reload, vault reload, and full app quit/relaunch with zero captured errors; temporary leaves were removed. Inline edit mounted one modal/root and Escape removed both. The isolated development 20-Agent workload exported a clean trace and restored its disposable session. A focused 98% Context Inspector test verified warning, budget breakdown, estimates, and dismissal.
 - Explicit limitations: Hover Editor is not installed in the configured vault, and no MCP OAuth server is configured. Those named third-party live rows remain environment-limited; the relevant owner-realm, lifecycle, and OAuth contract tests pass.
 - Remaining: Final production rebuild, deployment, reload, and repository-wide gates.
 - Blockers: None.
@@ -146,7 +146,7 @@ Use `Pending`, `Claimed`, `In progress`, `Blocked`, or `Done` for workstream sta
 
 - Full verification passed: 243 Jest suites / 1,859 tests; 68.96% statements, 58.35% branches, 66.04% functions, and 70.42% lines. Typecheck, zero-warning lint, boundaries (including architecture, package guidance, specs, and i18n dead keys), generator syntax, deterministic fixture reproduction, and `git diff --check` passed.
 - Production evidence: `npm run build`, `npm run check:bundle-size`, and `npm run analyze:bundle` passed. `main.js` is 3,071,059 bytes with 2,171,821 bytes of headroom; local and deployed SHA-256 values match. The concrete development recorder contributes zero metafile inputs and development command/trace markers have zero production bundle hits; only the 323-byte disabled controller contract remains.
-- Live evidence: Final production plugin reload mounted the remaining Pivi view and captured no Obsidian errors.
+- Live evidence: Final production plugin reload mounted the remaining Yapi view and captured no Obsidian errors.
 - Documentation audit: Durable ownership, test topology, fixture provenance, completion markers, release evidence, current metrics, and scoped limitations are synchronized into the numbered handbook and layered guidance.
 - Remaining: None.
 - Blockers: None.

@@ -1,7 +1,7 @@
 import {
   TOOL_OBSIDIAN_GENERATE_IMAGE,
   type ToolSpec,
-} from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/tools';
 
 import type { ObsidianToolDeps } from './deps';
 
@@ -28,7 +28,7 @@ function extensionForFormat(format: OutputFormat): string {
 }
 
 function defaultFilename(format: OutputFormat): string {
-  return `pivi-generated-${new Date().toISOString().replace(/[:.]/g, '-')}.${extensionForFormat(format)}`;
+  return `yapi-generated-${new Date().toISOString().replace(/[:.]/g, '-')}.${extensionForFormat(format)}`;
 }
 
 function base64ToArrayBuffer(data: string): ArrayBuffer {
@@ -59,7 +59,7 @@ export function createGenerateImageTool(deps: ObsidianToolDeps): ToolSpec {
         prompt: { type: 'string', description: 'Image generation prompt' },
         model: { type: 'string', description: 'Codex routing model, default gpt-5.6-sol' },
         outputFormat: { type: 'string', enum: ['png', 'jpeg', 'webp'], description: 'Image format, default png' },
-        filename: { type: 'string', description: 'Preferred attachment filename. Defaults to a timestamped Pivi filename.' },
+        filename: { type: 'string', description: 'Preferred attachment filename. Defaults to a timestamped Yapi filename.' },
         sourcePath: { type: 'string', description: 'Vault note path used for Obsidian attachment placement and markdown link generation' },
         insertInto: { type: 'string', description: 'Vault note path to insert the generated image embed into' },
         insertMode: { type: 'string', enum: ['none', 'append', 'prepend', 'replace_string'], description: 'How to insert the image embed into insertInto/sourcePath/current note. Default none.' },

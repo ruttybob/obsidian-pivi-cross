@@ -1,14 +1,14 @@
 export function updateContextRowHasContent(contextRowEl: HTMLElement): void {
-  const editorIndicator = contextRowEl.querySelector('.pivi-selection-indicator');
-  const browserIndicator = contextRowEl.querySelector('.pivi-browser-selection-indicator');
-  const canvasIndicator = contextRowEl.querySelector('.pivi-canvas-indicator');
-  const fileIndicator = contextRowEl.querySelector('.pivi-file-indicator');
-  const imagePreview = contextRowEl.querySelector('.pivi-image-preview');
-  const hasEditorSelection = !!editorIndicator && !editorIndicator.hasClass('pivi-hidden');
-  const hasBrowserSelection = !!browserIndicator && !browserIndicator.hasClass('pivi-hidden');
-  const hasCanvasSelection = !!canvasIndicator && !canvasIndicator.hasClass('pivi-hidden');
-  const hasFileChips = !!fileIndicator && fileIndicator.hasClass('pivi-visible-flex');
-  const hasImageChips = !!imagePreview && imagePreview.hasClass('pivi-visible-flex');
+  const editorIndicator = contextRowEl.querySelector('.yapi-selection-indicator');
+  const browserIndicator = contextRowEl.querySelector('.yapi-browser-selection-indicator');
+  const canvasIndicator = contextRowEl.querySelector('.yapi-canvas-indicator');
+  const fileIndicator = contextRowEl.querySelector('.yapi-file-indicator');
+  const imagePreview = contextRowEl.querySelector('.yapi-image-preview');
+  const hasEditorSelection = !!editorIndicator && !editorIndicator.hasClass('yapi-hidden');
+  const hasBrowserSelection = !!browserIndicator && !browserIndicator.hasClass('yapi-hidden');
+  const hasCanvasSelection = !!canvasIndicator && !canvasIndicator.hasClass('yapi-hidden');
+  const hasFileChips = !!fileIndicator && fileIndicator.hasClass('yapi-visible-flex');
+  const hasImageChips = !!imagePreview && imagePreview.hasClass('yapi-visible-flex');
 
   contextRowEl.classList.toggle(
     'has-content',

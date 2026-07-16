@@ -1,18 +1,18 @@
-import type { PiviSettings } from '@pivi/pivi-agent-core/foundation';
-import type { FileStore } from '@pivi/pivi-agent-core/ports';
-import type { SlashCatalogEntry } from '@pivi/pivi-agent-core/skills/commands/slashCommandEntry';
+import type { YapiSettings } from '@yapi/yapi-agent-core/foundation';
+import type { FileStore } from '@yapi/yapi-agent-core/ports';
+import type { SlashCatalogEntry } from '@yapi/yapi-agent-core/skills/commands/slashCommandEntry';
 import type { App, EventRef } from 'obsidian';
 
 /** Obsidian lifecycle capabilities required while constructing app-owned services. */
-export interface PiviWorkspaceHost {
+export interface YapiWorkspaceHost {
   app: App;
-  settings: PiviSettings;
+  settings: YapiSettings;
   registerEvent(eventRef: EventRef): void;
   saveSettings(): Promise<void>;
   reconcileWorkspaceCommandEntries(entries: readonly SlashCatalogEntry[]): void;
 }
 
 export interface WorkspaceInitContext {
-  host: PiviWorkspaceHost;
+  host: YapiWorkspaceHost;
   vaultAdapter: FileStore;
 }

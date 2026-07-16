@@ -1,18 +1,18 @@
 /**
  * Narrow UI-facing host contracts. Product UI depends on these shapes — not on
- * concrete PiviViewHost or workspace implementation modules.
+ * concrete YapiViewHost or workspace implementation modules.
  */
-import type { AgentHostContext } from "@pivi/obsidian-host/bootstrap/hostContext";
-import type { SharedAppStorage } from "@pivi/obsidian-host/bootstrap/storage";
-import type { AppTabManagerState } from "@pivi/obsidian-host/bootstrap/types";
-import type { ProviderCredential } from "@pivi/pivi-agent-core/auth/piProviderCredentials";
-import type { ProviderOAuthProgress } from "@pivi/pivi-agent-core/auth/providerOAuthProgress";
-import type { PiviSettings } from "@pivi/pivi-agent-core/foundation";
-import type { ChatUIConfig, ChatUIOption } from "@pivi/pivi-agent-core/foundation/chatUi";
+import type { AgentHostContext } from "@yapi/obsidian-host/bootstrap/hostContext";
+import type { SharedAppStorage } from "@yapi/obsidian-host/bootstrap/storage";
+import type { AppTabManagerState } from "@yapi/obsidian-host/bootstrap/types";
+import type { ProviderCredential } from "@yapi/yapi-agent-core/auth/piProviderCredentials";
+import type { ProviderOAuthProgress } from "@yapi/yapi-agent-core/auth/providerOAuthProgress";
+import type { YapiSettings } from "@yapi/yapi-agent-core/foundation";
+import type { ChatUIConfig, ChatUIOption } from "@yapi/yapi-agent-core/foundation/chatUi";
 import type {
   AppModelReadinessProvider,
-} from "@pivi/pivi-agent-core/foundation/modelReadiness";
-import type { EnvironmentScope, WebProviderId } from "@pivi/pivi-agent-core/foundation/settings";
+} from "@yapi/yapi-agent-core/foundation/modelReadiness";
+import type { EnvironmentScope, WebProviderId } from "@yapi/yapi-agent-core/foundation/settings";
 import type {
   AppMcpDiagnostics,
   AppMcpOAuth,
@@ -20,12 +20,12 @@ import type {
   AppMcpServerTester,
   AppMcpStorage,
   AppMcpToolProvider,
-} from "@pivi/pivi-agent-core/mcp/ports";
-import type { ManagedMcpServer } from "@pivi/pivi-agent-core/mcp/types";
-import type { HttpClient, ProcessRunner } from "@pivi/pivi-agent-core/ports";
-import type { SlashCommandCatalog } from "@pivi/pivi-agent-core/skills/commands/slashCommandCatalog";
-import type { SlashCatalogEntry } from "@pivi/pivi-agent-core/skills/commands/slashCommandEntry";
-import type { AppSkillProvider } from "@pivi/pivi-agent-core/skills/skillProvider";
+} from "@yapi/yapi-agent-core/mcp/ports";
+import type { ManagedMcpServer } from "@yapi/yapi-agent-core/mcp/types";
+import type { HttpClient, ProcessRunner } from "@yapi/yapi-agent-core/ports";
+import type { SlashCommandCatalog } from "@yapi/yapi-agent-core/skills/commands/slashCommandCatalog";
+import type { SlashCatalogEntry } from "@yapi/yapi-agent-core/skills/commands/slashCommandEntry";
+import type { AppSkillProvider } from "@yapi/yapi-agent-core/skills/skillProvider";
 import type {
   App,
   Editor,
@@ -41,7 +41,7 @@ import type {
 } from "@/app/noteToolbarIntegration";
 
 
-export interface PiviChatViewCommandState {
+export interface YapiChatViewCommandState {
   mounted: boolean;
   canCreateTab: boolean;
   canStartNewSession: boolean;
@@ -49,8 +49,8 @@ export interface PiviChatViewCommandState {
 }
 
 /** User-command capabilities. No tab, controller, runtime, or DOM graph escapes. */
-export interface PiviChatViewCommands {
-  getState(): PiviChatViewCommandState;
+export interface YapiChatViewCommands {
+  getState(): YapiChatViewCommandState;
   createTab(): Promise<boolean>;
   startNewSession(): Promise<boolean>;
   closeActiveTab(): Promise<boolean>;
@@ -62,7 +62,7 @@ export interface PiviChatViewCommands {
 }
 
 /** App-owned maintenance operations over all tabs in one mounted view. */
-export interface PiviChatViewMaintenance {
+export interface YapiChatViewMaintenance {
   persistState(): Promise<void>;
   resetSession(openSessionId: string): Promise<void>;
   getBoundSessionFiles(): string[];
@@ -83,7 +83,7 @@ export interface PiviChatViewMaintenance {
 }
 
 /** Development-only deterministic workload controls, absent from production bundles. */
-export interface PiviChatDevelopmentCommands {
+export interface YapiChatDevelopmentCommands {
   run20SubagentsWorkload(hooks: {
     afterRender(result: { subagents: number; messages: number }): Promise<void>;
   }): Promise<{
@@ -110,35 +110,35 @@ export interface PiviChatDevelopmentCommands {
 }
 
 /** Stable semantic boundary between the app shell and chat product runtime. */
-export interface PiviChatViewHandle {
-  commands: PiviChatViewCommands;
-  maintenance: PiviChatViewMaintenance;
-  development?: PiviChatDevelopmentCommands;
+export interface YapiChatViewHandle {
+  commands: YapiChatViewCommands;
+  maintenance: YapiChatViewMaintenance;
+  development?: YapiChatDevelopmentCommands;
 }
 
 /**
  * Minimal chat view surface. Host contracts depend on this — not on concrete
- * `PiviViewHost` from product UI (breaks the type-level app ↔ ui cycle).
+ * `YapiViewHost` from product UI (breaks the type-level app ↔ ui cycle).
  */
-export interface PiviChatView {
+export interface YapiChatView {
   leaf: WorkspaceLeaf;
-  getChatHandle(): PiviChatViewHandle | null;
+  getChatHandle(): YapiChatViewHandle | null;
 }
 
-export interface PiviMcpAvailabilitySummary {
+export interface YapiMcpAvailabilitySummary {
   totalCount: number;
   enabledCount: number;
   alwaysActiveCount: number;
   contextSavingCount: number;
 }
 
-export interface PiviMcpServerManager {
+export interface YapiMcpServerManager {
   getServers(): ManagedMcpServer[];
   getContextSavingServers(): ManagedMcpServer[];
-  getAvailabilitySummary(): PiviMcpAvailabilitySummary;
+  getAvailabilitySummary(): YapiMcpAvailabilitySummary;
 }
 
-export interface PiviProviderCredentialStore {
+export interface YapiProviderCredentialStore {
   readSync(providerId: string): ProviderCredential | undefined;
   modify(
     providerId: string,
@@ -147,7 +147,7 @@ export interface PiviProviderCredentialStore {
   delete(providerId: string): Promise<void>;
 }
 
-export interface PiviProviderOAuth {
+export interface YapiProviderOAuth {
   hasCodexAuth(): boolean;
   hasProviderOAuth(providerId: string): boolean;
   loginProviderOAuth(
@@ -158,13 +158,13 @@ export interface PiviProviderOAuth {
   logoutProviderOAuth(providerId: string): Promise<void>;
 }
 
-export interface PiviWebSearchCredentialStore {
+export interface YapiWebSearchCredentialStore {
   readSync(providerId: WebProviderId): string | undefined;
   writeSync(providerId: WebProviderId, apiKey: string): void;
   clearSync(providerId: WebProviderId): void;
 }
 
-export interface PiviUiFacades {
+export interface YapiUiFacades {
   /** Chat toolbar/settings model-selector configuration. */
   readonly chatUIConfig: ChatUIConfig;
 
@@ -192,9 +192,9 @@ export interface PiviUiFacades {
 }
 
 /** Workspace services exposed to chat/settings UI by the Obsidian plugin shell. */
-export interface PiviPluginWorkspace {
+export interface YapiPluginWorkspace {
   mcpStorage: AppMcpStorage;
-  mcpServerManager: PiviMcpServerManager;
+  mcpServerManager: YapiMcpServerManager;
   mcpToolProvider: AppMcpToolProvider;
   mcpDiagnostics: AppMcpDiagnostics;
   mcpServerProbeProvider: AppMcpServerProbeProvider;
@@ -202,9 +202,9 @@ export interface PiviPluginWorkspace {
   modelReadinessProvider: AppModelReadinessProvider;
   skillProvider: AppSkillProvider;
   mcpOAuth: AppMcpOAuth | null;
-  providerOAuth?: PiviProviderOAuth;
-  credentialStore?: PiviProviderCredentialStore | null;
-  webSearchCredentialStore?: PiviWebSearchCredentialStore | null;
+  providerOAuth?: YapiProviderOAuth;
+  credentialStore?: YapiProviderCredentialStore | null;
+  webSearchCredentialStore?: YapiWebSearchCredentialStore | null;
   slashCommandCatalog: SlashCommandCatalog;
 }
 
@@ -213,24 +213,24 @@ export interface PiviPluginWorkspace {
  * Wide composition fields (workspace, storage, HTTP, process) stay off this
  * surface so chat UI cannot depend on them — use ChatPorts / SettingsPorts.
  */
-export interface PiviHostCore {
+export interface YapiHostCore {
   app: App;
-  settings: PiviSettings;
+  settings: YapiSettings;
 
   saveSettings(): Promise<void>;
   getAgentHostContext(): AgentHostContext;
   getVaultPath(): string | null;
-  getUiFacades(): PiviUiFacades;
+  getUiFacades(): YapiUiFacades;
 }
 
 /** Chat-runtime host. Every other capability must arrive through `ChatPorts`. */
-export interface PiviChatHost {
+export interface YapiChatHost {
   app: App;
 }
 
 /** Composition-only chat capabilities; never pass this contract into `src/ui`. */
-export interface PiviChatCompositionHost extends PiviHostCore {
-  getAllViews(): PiviChatView[];
+export interface YapiChatCompositionHost extends YapiHostCore {
+  getAllViews(): YapiChatView[];
   loadTabManagerState(): Promise<AppTabManagerState | null>;
   persistTabManagerState(state: AppTabManagerState): Promise<void>;
 }
@@ -239,17 +239,17 @@ export interface PiviChatCompositionHost extends PiviHostCore {
  * Settings/composition host: environment, model refresh, and wide capabilities
  * used by `createUiPorts` / main (not by `src/ui` chat code).
  */
-export interface PiviSettingsHost extends PiviHostCore {
+export interface YapiSettingsHost extends YapiHostCore {
   storage: SharedAppStorage;
   httpClient: HttpClient;
   processRunner: ProcessRunner;
-  getAllViews(): PiviChatView[];
+  getAllViews(): YapiChatView[];
   refreshVaultSkills(): Promise<void>;
   /** Opens Style Settings, or its community-plugin page when unavailable. */
   openStyleSettings(): Promise<boolean>;
   /** Checks for Note Toolbar's installed manifest without requiring it to be enabled. */
   isNoteToolbarInstalled(): Promise<boolean>;
-  /** Configures the Pivi command in Note Toolbar's selected-text toolbar. */
+  /** Configures the Yapi command in Note Toolbar's selected-text toolbar. */
   setupNoteToolbarIntegration(
     itemStyle: NoteToolbarItemStyle,
   ): Promise<NoteToolbarSetupResult>;
@@ -275,13 +275,13 @@ export interface PiviSettingsHost extends PiviHostCore {
 
 /**
  * Full plugin host surface (chat + settings). Implemented by the Obsidian
- * Plugin class. `settings` is Pivi-typed and overrides Plugin's looser field.
+ * Plugin class. `settings` is Yapi-typed and overrides Plugin's looser field.
  */
-export interface PiviPluginHost
+export interface YapiPluginHost
   extends Omit<Plugin, "settings">,
-    PiviChatCompositionHost,
-    PiviSettingsHost {
-  settings: PiviSettings;
+    YapiChatCompositionHost,
+    YapiSettingsHost {
+  settings: YapiSettings;
 }
 
-export type { PiviPluginHost as default, PiviPluginHost as PiviPlugin };
+export type { YapiPluginHost as default, YapiPluginHost as YapiPlugin };

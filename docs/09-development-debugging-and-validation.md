@@ -40,10 +40,10 @@ npm run test -- -t "test name"
 | Tabs and restore | `tests/unit/features/chat/tabManagerLifecycle.test.ts`, `sessionControllerLifecycle.test.ts`, `sessionSwitch.test.ts` |
 | External context privacy | `tests/unit/features/chat/tabExternalContext.test.ts`, `tests/unit/app/deviceLocalExternalContextStore.test.ts`, Pi session-store tests |
 | Subagents | `tests/unit/pi/tools/createSubagentTool.test.ts`, `piBackgroundSubagentJobs.test.ts`, `subagentConcurrencyLimiter.test.ts` |
-| React chat/settings | `tests/pivi-react/ChatShell.test.tsx`, `AssistantContentView.test.tsx`, `activityPresentation.test.ts`, `chatUiStore.test.tsx`, `SettingsUi.test.tsx`, `PiviSettingTabHost.test.ts` |
-| Owner-realm DOM | `tests/pivi-react/OwnerRealmDom.test.ts`, `DefaultVaultSkillsPrompt.test.ts`, `tests/unit/app/ui/createStreamingMarkdownContentAdapter.test.ts` |
-| Tools and MCP | Relevant suites under `tests/unit/engine/tools/`, `tests/unit/pi/tools/`, `tests/unit/pi/mcp/`, plus `tests/unit/pi/piMcpBridge.test.ts` and `tests/pivi-react/McpToolsSection.test.tsx` |
-| Inline edit | `tests/unit/pi/runtime/queryBackedInlineEditService.test.ts` and `tests/pivi-react/InlineEdit.test.tsx` |
+| React chat/settings | `tests/yapi-react/ChatShell.test.tsx`, `AssistantContentView.test.tsx`, `activityPresentation.test.ts`, `chatUiStore.test.tsx`, `SettingsUi.test.tsx`, `YapiSettingTabHost.test.ts` |
+| Owner-realm DOM | `tests/yapi-react/OwnerRealmDom.test.ts`, `DefaultVaultSkillsPrompt.test.ts`, `tests/unit/app/ui/createStreamingMarkdownContentAdapter.test.ts` |
+| Tools and MCP | Relevant suites under `tests/unit/engine/tools/`, `tests/unit/pi/tools/`, `tests/unit/pi/mcp/`, plus `tests/unit/pi/piMcpBridge.test.ts` and `tests/yapi-react/McpToolsSection.test.tsx` |
+| Inline edit | `tests/unit/pi/runtime/queryBackedInlineEditService.test.ts` and `tests/yapi-react/InlineEdit.test.tsx` |
 
 Use `rg --files tests | rg <feature>` to locate the current exact filename; test names move as ownership is refined.
 
@@ -53,7 +53,7 @@ For user-visible UI or runtime work:
 
 ```bash
 npm run build
-obsidian plugin:reload id=pivi
+obsidian plugin:reload id=yapi
 obsidian dev:errors
 ```
 
@@ -63,7 +63,7 @@ Useful symptom routes:
 
 | Symptom | Inspect first |
 |---|---|
-| Surface does not open or retries indefinitely | registration order, workspace single-flight generation, `PiviViewHost` guards |
+| Surface does not open or retries indefinitely | registration order, workspace single-flight generation, `YapiViewHost` guards |
 | First send fails but blank tab worked | lazy `tabRuntime` creation, model readiness, session binding |
 | Wrong content in history/provider request | `ChatTurnRequest`, prompt preparation, API-only transforms |
 | External paths appear in synced data | device-local store, settings codec, `message_ui` sanitizer |

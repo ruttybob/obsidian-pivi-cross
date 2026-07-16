@@ -71,7 +71,7 @@ describe('architecture boundary scripts', () => {
     'plugin?.saveSettings();',
     "plugin['getAllViews']();",
   ])('rejects src/ui plugin capability bypasses: %s', (source) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/ui'), { recursive: true });
       writeFileSync(join(fixtureRoot, 'src/ui/fixture.ts'), source);
@@ -92,7 +92,7 @@ describe('architecture boundary scripts', () => {
     "export { getUiFacades } from '@/app/workspace';",
     "export { getUiFacades as workspace } from '@/app/workspace';",
   ])('rejects src/ui re-exports of plugin capability bypasses: %s', (source) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/ui'), { recursive: true });
       writeFileSync(join(fixtureRoot, 'src/ui/fixture.ts'), source);
@@ -110,7 +110,7 @@ describe('architecture boundary scripts', () => {
   });
 
   it('allows facade calls inside app composition', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/app/ui'), { recursive: true });
       writeFileSync(
@@ -130,10 +130,10 @@ describe('architecture boundary scripts', () => {
     ['src/app/ui', 'src does not reference the retired React package identity'],
     ['packages/example/src', 'packages do not reference the retired React package identity'],
   ])('rejects the retired React package name from %s', (fixtureDir, ruleName) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, fixtureDir), { recursive: true });
-      const retiredPackageName = ['@pivi/obsidian', 'ui'].join('-');
+      const retiredPackageName = ['@yapi/obsidian', 'ui'].join('-');
       writeFileSync(
         join(fixtureRoot, fixtureDir, 'fixture.ts'),
         `import { mountChatView } from '${retiredPackageName}/mount';`,
@@ -149,19 +149,19 @@ describe('architecture boundary scripts', () => {
   });
 
   it('allows React surface mounts only inside src/app/ui', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/app/feature'), { recursive: true });
       writeFileSync(
         join(fixtureRoot, 'src/app/feature/fixture.ts'),
-        "import { mountChatView } from '@pivi/pivi-react/mount';",
+        "import { mountChatView } from '@yapi/yapi-react/mount';",
       );
 
       const result = runArchitectureCheck(fixtureRoot);
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[only src/app/ui mounts @pivi/pivi-react surfaces]',
+        '[only src/app/ui mounts @yapi/yapi-react surfaces]',
       );
     } finally {
       rmSync(fixtureRoot, { recursive: true, force: true });
@@ -171,22 +171,22 @@ describe('architecture boundary scripts', () => {
   it.each([
     [
       'runtime barrel',
-      "import type { ChatPorts } from '@pivi/pivi-agent-core/runtime';",
+      "import type { ChatPorts } from '@yapi/yapi-agent-core/runtime';",
     ],
     [
       'chatPorts leaf',
-      "import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';",
+      "import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';",
     ],
     [
       'core root namespace',
-      "import type { runtime } from '@pivi/pivi-agent-core'; type Leaked = runtime.ChatPorts;",
+      "import type { runtime } from '@yapi/yapi-agent-core'; type Leaked = runtime.ChatPorts;",
     ],
   ])('rejects ChatPorts-capable imports from the React package via %s', (_label, source) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src'), { recursive: true });
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/src/fixture.ts'),
+        join(fixtureRoot, 'packages/yapi-react/src/fixture.ts'),
         source,
       );
 
@@ -194,21 +194,21 @@ describe('architecture boundary scripts', () => {
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[@pivi/pivi-react stays presentation-only and product-neutral]',
+        '[@yapi/yapi-react stays presentation-only and product-neutral]',
       );
-      expect(result.stderr).toContain('packages/pivi-react/src/fixture.ts:1');
+      expect(result.stderr).toContain('packages/yapi-react/src/fixture.ts:1');
     } finally {
       rmSync(fixtureRoot, { recursive: true, force: true });
     }
   });
 
   it('allows non-chat runtime contracts needed by React presentation adapters', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src'), { recursive: true });
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/src/fixture.ts'),
-        "import type { AuxQueryRunner } from '@pivi/pivi-agent-core/runtime/auxQueryRunner';",
+        join(fixtureRoot, 'packages/yapi-react/src/fixture.ts'),
+        "import type { AuxQueryRunner } from '@yapi/yapi-agent-core/runtime/auxQueryRunner';",
       );
 
       const result = runArchitectureCheck(fixtureRoot);
@@ -230,7 +230,7 @@ describe('architecture boundary scripts', () => {
     "import { TabManager } from '@/ui/chat/tabs/TabManager';",
     "import type { TabData } from '@/ui/chat/tabs/types';",
   ])('rejects app-side chat aggregate inspection: %s', (source) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/app'), { recursive: true });
       writeFileSync(join(fixtureRoot, 'src/app/fixture.ts'), source);
@@ -245,7 +245,7 @@ describe('architecture boundary scripts', () => {
   });
 
   it('allows chat aggregate access inside the imperative adapter boundary', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/app/ui'), { recursive: true });
       writeFileSync(
@@ -262,7 +262,7 @@ describe('architecture boundary scripts', () => {
   });
 
   it('allows unrelated app state and DOM properties', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/app'), { recursive: true });
       writeFileSync(
@@ -279,16 +279,16 @@ describe('architecture boundary scripts', () => {
   });
 
   it.each([
-    "import { ChatUiStore } from '@pivi/pivi-react';",
-    "import type { ChatUiSnapshot } from '@pivi/pivi-react';",
-    "import { parseMessageMentions } from '@pivi/pivi-react/mentions';",
-    "import { recalculateUsageForModel } from '@pivi/pivi-react/usage';",
-    "import { mountChatView } from '@pivi/pivi-react/mount';",
-    "import type { ChatPresentationPort } from '@pivi/pivi-react/ports';",
-    "void import('@pivi/pivi-react');",
-    "require('@pivi/pivi-react/internal');",
+    "import { ChatUiStore } from '@yapi/yapi-react';",
+    "import type { ChatUiSnapshot } from '@yapi/yapi-react';",
+    "import { parseMessageMentions } from '@yapi/yapi-react/mentions';",
+    "import { recalculateUsageForModel } from '@yapi/yapi-react/usage';",
+    "import { mountChatView } from '@yapi/yapi-react/mount';",
+    "import type { ChatPresentationPort } from '@yapi/yapi-react/ports';",
+    "void import('@yapi/yapi-react');",
+    "require('@yapi/yapi-react/internal');",
   ])('rejects non-presentation React package edges from src/ui: %s', (source) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/ui'), { recursive: true });
       writeFileSync(join(fixtureRoot, 'src/ui/fixture.ts'), source);
@@ -297,7 +297,7 @@ describe('architecture boundary scripts', () => {
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[src/ui uses only approved @pivi/pivi-react presentation subpaths]',
+        '[src/ui uses only approved @yapi/yapi-react presentation subpaths]',
       );
     } finally {
       rmSync(fixtureRoot, { recursive: true, force: true });
@@ -305,11 +305,11 @@ describe('architecture boundary scripts', () => {
   });
 
   it.each([
-    '@pivi/pivi-react/store',
-    '@pivi/pivi-react/inline-edit',
-    '@pivi/pivi-react/context-badges',
+    '@yapi/yapi-react/store',
+    '@yapi/yapi-react/inline-edit',
+    '@yapi/yapi-react/context-badges',
   ])('allows the approved React presentation subpath: %s', (moduleName) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/ui'), { recursive: true });
       writeFileSync(
@@ -326,20 +326,20 @@ describe('architecture boundary scripts', () => {
   });
 
   it('rejects a relative-path bypass into the React package', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/ui'), { recursive: true });
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src'), { recursive: true });
       writeFileSync(
         join(fixtureRoot, 'src/ui/fixture.ts'),
-        "import '../../packages/pivi-react/src/index';",
+        "import '../../packages/yapi-react/src/index';",
       );
 
       const result = runArchitectureCheck(fixtureRoot);
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[src/ui uses only approved @pivi/pivi-react presentation subpaths]',
+        '[src/ui uses only approved @yapi/yapi-react presentation subpaths]',
       );
     } finally {
       rmSync(fixtureRoot, { recursive: true, force: true });
@@ -347,15 +347,15 @@ describe('architecture boundary scripts', () => {
   });
 
   it.each([
-    ['packages/obsidian-host/src', '@pivi/obsidian-host stays host-only'],
-    ['packages/obsidian-tools/src', '@pivi/obsidian-tools does not import raw Pi SDKs'],
+    ['packages/obsidian-host/src', '@yapi/obsidian-host stays host-only'],
+    ['packages/obsidian-tools/src', '@yapi/obsidian-tools does not import raw Pi SDKs'],
   ])('rejects React presentation imports from %s', (fixtureDir, ruleName) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, fixtureDir), { recursive: true });
       writeFileSync(
         join(fixtureRoot, fixtureDir, 'fixture.ts'),
-        "import { ChatShell } from '@pivi/pivi-react';",
+        "import { ChatShell } from '@yapi/yapi-react';",
       );
 
       const result = runArchitectureCheck(fixtureRoot);
@@ -368,11 +368,11 @@ describe('architecture boundary scripts', () => {
   });
 
   it('rejects direct Obsidian imports from the React presentation package', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src'), { recursive: true });
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/src/fixture.ts'),
+        join(fixtureRoot, 'packages/yapi-react/src/fixture.ts'),
         "import { setIcon } from 'obsidian';",
       );
 
@@ -380,7 +380,7 @@ describe('architecture boundary scripts', () => {
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[@pivi/pivi-react stays presentation-only and product-neutral]',
+        '[@yapi/yapi-react stays presentation-only and product-neutral]',
       );
     } finally {
       rmSync(fixtureRoot, { recursive: true, force: true });
@@ -390,9 +390,9 @@ describe('architecture boundary scripts', () => {
   it.each([
     "import { createPluginServiceGraph } from '@/app/serviceGraph';",
     "import '../app/serviceGraph';",
-    "import { PiviChatHost } from '@/app/hostContracts';",
+    "import { YapiChatHost } from '@/app/hostContracts';",
   ])('rejects unapproved src/ui to app imports: %s', (source) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/ui'), { recursive: true });
       mkdirSync(join(fixtureRoot, 'src/app'), { recursive: true });
@@ -411,9 +411,9 @@ describe('architecture boundary scripts', () => {
   it.each([
     "import { t } from '@/app/i18n';",
     "import { getVaultPath } from '@/app/hostPlatform';",
-    "import type { PiviChatHost } from '@/app/hostContracts';",
+    "import type { YapiChatHost } from '@/app/hostContracts';",
   ])('allows the approved src/ui to app seam: %s', (source) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/ui'), { recursive: true });
       writeFileSync(join(fixtureRoot, 'src/ui/fixture.ts'), source);
@@ -427,7 +427,7 @@ describe('architecture boundary scripts', () => {
   });
 
   it('rejects tests that reach product src through relative paths', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'tests/unit'), { recursive: true });
       mkdirSync(join(fixtureRoot, 'src'), { recursive: true });
@@ -446,7 +446,7 @@ describe('architecture boundary scripts', () => {
   });
 
   it('allows tests to use the configured product alias', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'tests/unit'), { recursive: true });
       writeFileSync(
@@ -463,13 +463,13 @@ describe('architecture boundary scripts', () => {
   });
 
   it('rejects the retired React identity from package manifests', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'packages/example'), { recursive: true });
-      const retiredPackageName = ['@pivi/obsidian', 'ui'].join('-');
+      const retiredPackageName = ['@yapi/obsidian', 'ui'].join('-');
       writeFileSync(
         join(fixtureRoot, 'packages/example/package.json'),
-        JSON.stringify({ dependencies: { [retiredPackageName]: '*' }, name: '@pivi/example' }),
+        JSON.stringify({ dependencies: { [retiredPackageName]: '*' }, name: '@yapi/example' }),
       );
 
       const result = runArchitectureCheck(fixtureRoot);
@@ -483,12 +483,12 @@ describe('architecture boundary scripts', () => {
     }
   });
 
-  it('rejects direct host theme variables from pivi-react CSS', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+  it('rejects direct host theme variables from yapi-react CSS', () => {
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/styles'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/styles'), { recursive: true });
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/styles/fixture.css'),
+        join(fixtureRoot, 'packages/yapi-react/styles/fixture.css'),
         '.link { color: var(--new-obsidian-token); }',
       );
 
@@ -496,9 +496,9 @@ describe('architecture boundary scripts', () => {
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[@pivi/pivi-react CSS uses only --pivi-* or locally defined variables]',
+        '[@yapi/yapi-react CSS uses only --yapi-* or locally defined variables]',
       );
-      expect(result.stderr).toContain('packages/pivi-react/styles/fixture.css:1');
+      expect(result.stderr).toContain('packages/yapi-react/styles/fixture.css:1');
     } finally {
       rmSync(fixtureRoot, { force: true, recursive: true });
     }
@@ -508,48 +508,48 @@ describe('architecture boundary scripts', () => {
     [
       'JSX className',
       '<div className="setting-item-control" />;',
-      '@pivi/pivi-react JSX uses product-owned CSS classes',
+      '@yapi/yapi-react JSX uses product-owned CSS classes',
     ],
     [
       'host terminology in a class',
-      '<div className="pivi-vault-folder" />;',
-      '@pivi/pivi-react JSX uses product-owned CSS classes',
+      '<div className="yapi-vault-folder" />;',
+      '@yapi/yapi-react JSX uses product-owned CSS classes',
     ],
     [
       'DOM setAttribute',
-      "element.setAttribute('class', 'modal-container pivi-shell');",
-      '@pivi/pivi-react DOM adapters use product-owned CSS classes',
+      "element.setAttribute('class', 'modal-container yapi-shell');",
+      '@yapi/yapi-react DOM adapters use product-owned CSS classes',
     ],
     [
       'DOM classList',
       "element.classList.add('checkbox-container');",
-      '@pivi/pivi-react DOM adapters use product-owned CSS classes',
+      '@yapi/yapi-react DOM adapters use product-owned CSS classes',
     ],
     [
       'JSX template literal',
-      '<div className={`pivi-shell modal-container ${active ? "is-active" : ""}`} />;',
-      '@pivi/pivi-react JSX uses product-owned CSS classes',
+      '<div className={`yapi-shell modal-container ${active ? "is-active" : ""}`} />;',
+      '@yapi/yapi-react JSX uses product-owned CSS classes',
     ],
     [
       'JSX concatenated literal',
       "<div className={'modal-' + 'container'} />;",
-      '@pivi/pivi-react JSX uses product-owned CSS classes',
+      '@yapi/yapi-react JSX uses product-owned CSS classes',
     ],
     [
       'DOM className assignment',
       "element.className = 'modal-content';",
-      '@pivi/pivi-react DOM adapters use product-owned CSS classes',
+      '@yapi/yapi-react DOM adapters use product-owned CSS classes',
     ],
     [
       'DOM className append',
-      'element.className += ` mod-muted ${active ? "pivi-active" : ""}`;',
-      '@pivi/pivi-react DOM adapters use product-owned CSS classes',
+      'element.className += ` mod-muted ${active ? "yapi-active" : ""}`;',
+      '@yapi/yapi-react DOM adapters use product-owned CSS classes',
     ],
-  ])('rejects Obsidian DOM classes from pivi-react %s', (_label, source, ruleName) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+  ])('rejects Obsidian DOM classes from yapi-react %s', (_label, source, ruleName) => {
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src'), { recursive: true });
-      writeFileSync(join(fixtureRoot, 'packages/pivi-react/src/fixture.tsx'), source);
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src'), { recursive: true });
+      writeFileSync(join(fixtureRoot, 'packages/yapi-react/src/fixture.tsx'), source);
 
       const result = runArchitectureCheck(fixtureRoot);
 
@@ -561,23 +561,23 @@ describe('architecture boundary scripts', () => {
   });
 
   it.each([
-    '.setting-item-heading .pivi-control { color: red; }',
+    '.setting-item-heading .yapi-control { color: red; }',
     '.modal, .modal-bg { display: none; }',
     '.theme-dark .svg-icon { color: white; }',
     '.modal-close-button, .mod-muted { opacity: 0.5; }',
     '@media (width > 600px) { .modal-title { display: block; } }',
     '[class~="mod-warning"] { color: red; }',
-  ])('rejects Obsidian class selectors from pivi-react CSS: %s', (source) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+  ])('rejects Obsidian class selectors from yapi-react CSS: %s', (source) => {
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/styles'), { recursive: true });
-      writeFileSync(join(fixtureRoot, 'packages/pivi-react/styles/fixture.css'), source);
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/styles'), { recursive: true });
+      writeFileSync(join(fixtureRoot, 'packages/yapi-react/styles/fixture.css'), source);
 
       const result = runArchitectureCheck(fixtureRoot);
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[@pivi/pivi-react CSS selectors use product-owned classes]',
+        '[@yapi/yapi-react CSS selectors use product-owned classes]',
       );
     } finally {
       rmSync(fixtureRoot, { force: true, recursive: true });
@@ -585,18 +585,18 @@ describe('architecture boundary scripts', () => {
   });
 
   it('allows product-owned modal names, unrelated file names, dialog roles, and app adapters', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src/image-modal'), { recursive: true });
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/styles'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src/image-modal'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/styles'), { recursive: true });
       mkdirSync(join(fixtureRoot, 'src/app/ui'), { recursive: true });
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/src/image-modal/fixture.tsx'),
-        '<div className="pivi-modal pivi-modal-layer" role="dialog" />;',
+        join(fixtureRoot, 'packages/yapi-react/src/image-modal/fixture.tsx'),
+        '<div className="yapi-modal yapi-modal-layer" role="dialog" />;',
       );
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/styles/fixture.css'),
-        '.pivi-modal, .image-modal { display: block; }',
+        join(fixtureRoot, 'packages/yapi-react/styles/fixture.css'),
+        '.yapi-modal, .image-modal { display: block; }',
       );
       writeFileSync(
         join(fixtureRoot, 'src/app/ui/fixture.ts'),
@@ -617,17 +617,17 @@ describe('architecture boundary scripts', () => {
     'export interface SettingsPort { keychainAvailable: boolean; }',
     'export type SecretStorageStatus = "ready" | "missing";',
     'export type { VaultStatus } from "./host-types";',
-  ])('rejects host-specific public identifiers from pivi-react ports: %s', (source) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+  ])('rejects host-specific public identifiers from yapi-react ports: %s', (source) => {
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src/ports'), { recursive: true });
-      writeFileSync(join(fixtureRoot, 'packages/pivi-react/src/ports/fixture.ts'), source);
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src/ports'), { recursive: true });
+      writeFileSync(join(fixtureRoot, 'packages/yapi-react/src/ports/fixture.ts'), source);
 
       const result = runArchitectureCheck(fixtureRoot);
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[@pivi/pivi-react public ports use host-neutral identifiers]',
+        '[@yapi/yapi-react public ports use host-neutral identifiers]',
       );
     } finally {
       rmSync(fixtureRoot, { force: true, recursive: true });
@@ -635,12 +635,12 @@ describe('architecture boundary scripts', () => {
   });
 
   it('allows workspace terminology in ports and host implementation names outside the port seam', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src/ports'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src/ports'), { recursive: true });
       mkdirSync(join(fixtureRoot, 'src/app/ui'), { recursive: true });
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/src/ports/fixture.ts'),
+        join(fixtureRoot, 'packages/yapi-react/src/ports/fixture.ts'),
         'export interface SettingsPort { workspaceName: string; secureStorageAvailable: boolean; }',
       );
       writeFileSync(
@@ -656,16 +656,16 @@ describe('architecture boundary scripts', () => {
     }
   });
 
-  it('rejects host-specific pivi-react locale key names', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+  it('rejects host-specific yapi-react locale key names', () => {
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       const locale = createPortableLocaleFixture();
       Object.assign(locale.settings, {
         secret_storage_notice: 'Host-specific catalog copy remains allowed.',
       });
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src/i18n/locales'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src/i18n/locales'), { recursive: true });
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/src/i18n/locales/en.json'),
+        join(fixtureRoot, 'packages/yapi-react/src/i18n/locales/en.json'),
         JSON.stringify(locale),
       );
 
@@ -673,7 +673,7 @@ describe('architecture boundary scripts', () => {
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[@pivi/pivi-react locale keys use host-neutral terminology]',
+        '[@yapi/yapi-react locale keys use host-neutral terminology]',
       );
     } finally {
       rmSync(fixtureRoot, { force: true, recursive: true });
@@ -685,8 +685,8 @@ describe('architecture boundary scripts', () => {
     ['hard-coded legacy term', 'Stored in the keychain {secureStorageName}.'],
     ['hard-coded API term', 'Stored in SecretStorage {secureStorageName}.'],
     ['hard-coded workspace term', 'Commands for the vault {workspaceName}.'],
-  ])('rejects non-parameterized pivi-react locale copy: %s', (_label, replacement) => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+  ])('rejects non-parameterized yapi-react locale copy: %s', (_label, replacement) => {
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       const locale = createPortableLocaleFixture();
       if (_label === 'hard-coded workspace term') {
@@ -694,9 +694,9 @@ describe('architecture boundary scripts', () => {
       } else {
         locale.settings.modelsTab.intro = replacement;
       }
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src/i18n/locales'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src/i18n/locales'), { recursive: true });
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/src/i18n/locales/en.json'),
+        join(fixtureRoot, 'packages/yapi-react/src/i18n/locales/en.json'),
         JSON.stringify(locale),
       );
 
@@ -704,7 +704,7 @@ describe('architecture boundary scripts', () => {
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        '[@pivi/pivi-react locale copy parameterizes host terminology]',
+        '[@yapi/yapi-react locale copy parameterizes host terminology]',
       );
     } finally {
       rmSync(fixtureRoot, { force: true, recursive: true });
@@ -712,15 +712,15 @@ describe('architecture boundary scripts', () => {
   });
 
   it('allows parameterized locale copy and host descriptor values', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       const locale = createPortableLocaleFixture();
       Object.assign(locale.settings, {
         noteToolbar: { desc: 'Configure this Obsidian integration in the app adapter.' },
       });
-      mkdirSync(join(fixtureRoot, 'packages/pivi-react/src/i18n/locales'), { recursive: true });
+      mkdirSync(join(fixtureRoot, 'packages/yapi-react/src/i18n/locales'), { recursive: true });
       writeFileSync(
-        join(fixtureRoot, 'packages/pivi-react/src/i18n/locales/en.json'),
+        join(fixtureRoot, 'packages/yapi-react/src/i18n/locales/en.json'),
         JSON.stringify(locale),
       );
 
@@ -733,7 +733,7 @@ describe('architecture boundary scripts', () => {
   });
 
   it('rejects workspace package imports that bypass declared exports', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'packages/presentation/src'), { recursive: true });
       mkdirSync(join(fixtureRoot, 'src/app'), { recursive: true });
@@ -741,25 +741,25 @@ describe('architecture boundary scripts', () => {
         join(fixtureRoot, 'packages/presentation/package.json'),
         JSON.stringify({
           exports: { '.': './src/index.ts', './store': './src/store.ts' },
-          name: '@pivi/presentation',
+          name: '@yapi/presentation',
         }),
       );
       writeFileSync(
         join(fixtureRoot, 'src/app/fixture.ts'),
-        "import { internal } from '@pivi/presentation/internal';",
+        "import { internal } from '@yapi/presentation/internal';",
       );
 
       const result = runArchitectureCheck(fixtureRoot);
 
       expect(result.status).toBe(1);
-      expect(result.stderr).toContain('[@pivi imports use declared package exports]');
+      expect(result.stderr).toContain('[@yapi imports use declared package exports]');
     } finally {
       rmSync(fixtureRoot, { recursive: true, force: true });
     }
   });
 
   it('rejects nested imports not included in an explicit engine export list', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'packages/core/src'), { recursive: true });
       mkdirSync(join(fixtureRoot, 'src/app'), { recursive: true });
@@ -772,19 +772,19 @@ describe('architecture boundary scripts', () => {
             './engine/pi': './src/engine/pi/index.ts',
             './engine/pi/public': './src/engine/pi/public.ts',
           },
-          name: '@pivi/core',
+          name: '@yapi/core',
         }),
       );
       writeFileSync(
         join(fixtureRoot, 'src/app/fixture.ts'),
-        "import { internal } from '@pivi/core/engine/pi/internal';",
+        "import { internal } from '@yapi/core/engine/pi/internal';",
       );
 
       const result = runArchitectureCheck(fixtureRoot);
 
       expect(result.status).toBe(1);
-      expect(result.stderr).toContain('[@pivi imports use declared package exports]');
-      expect(result.stderr).toContain('@pivi/core/engine/pi/internal');
+      expect(result.stderr).toContain('[@yapi imports use declared package exports]');
+      expect(result.stderr).toContain('@yapi/core/engine/pi/internal');
     } finally {
       rmSync(fixtureRoot, { recursive: true, force: true });
     }
@@ -795,7 +795,7 @@ describe('architecture boundary scripts', () => {
       '--input-type=module',
       '--eval',
       `try {
-        import.meta.resolve('@pivi/pivi-agent-core/engine/pi/piChatRuntimeUsage');
+        import.meta.resolve('@yapi/yapi-agent-core/engine/pi/piChatRuntimeUsage');
         process.exitCode = 2;
       } catch (error) {
         if (error.code !== 'ERR_PACKAGE_PATH_NOT_EXPORTED') throw error;
@@ -809,7 +809,7 @@ describe('architecture boundary scripts', () => {
   });
 
   it('rejects circular value imports while allowing type-only dependency edges', () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'pivi-boundary-'));
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'yapi-boundary-'));
     try {
       mkdirSync(join(fixtureRoot, 'src/app'), { recursive: true });
       writeFileSync(

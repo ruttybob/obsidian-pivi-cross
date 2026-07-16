@@ -1,4 +1,4 @@
-import type { BrowserSelectionContext } from '@pivi/pivi-agent-core/context/browser';
+import type { BrowserSelectionContext } from '@yapi/yapi-agent-core/context/browser';
 import type { App, ItemView } from 'obsidian';
 
 import { t } from '@/app/i18n';
@@ -257,9 +257,9 @@ export class BrowserSelectionController {
       const lines = t(lineCount === 1 ? 'common.line' : 'common.lines');
       this.indicatorEl.textContent = t('chat.selection.linesSelected', { count: lineCount, lines });
       this.indicatorEl.setAttribute('title', this.buildIndicatorTitle());
-      this.indicatorEl.removeClass('pivi-hidden');
+      this.indicatorEl.removeClass('yapi-hidden');
     } else {
-      this.indicatorEl.addClass('pivi-hidden');
+      this.indicatorEl.addClass('yapi-hidden');
       this.indicatorEl.textContent = '';
       this.indicatorEl.removeAttribute('title');
     }

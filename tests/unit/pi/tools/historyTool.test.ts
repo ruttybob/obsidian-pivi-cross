@@ -1,4 +1,4 @@
-import { createHistoryTool, type ObsidianToolDeps } from '@pivi/obsidian-tools';
+import { createHistoryTool, type ObsidianToolDeps } from '@yapi/obsidian-tools';
 
 type CliRun = jest.Mock<Promise<string>, [{ vaultName: string; args: string[] }]>;
 

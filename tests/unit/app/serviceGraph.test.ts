@@ -1,7 +1,7 @@
 const assertBundledReactRuntime = jest.fn();
 const createPiWorkspaceServices = jest.fn();
 
-jest.mock('@pivi/pivi-react', () => ({ assertBundledReactRuntime }));
+jest.mock('@yapi/yapi-react', () => ({ assertBundledReactRuntime }));
 jest.mock('@/app/i18n', () => ({ t: (key: string) => key }));
 jest.mock('@/app/workspace/PiWorkspaceServices', () => ({ createPiWorkspaceServices }));
 

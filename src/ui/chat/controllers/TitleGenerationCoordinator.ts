@@ -1,11 +1,11 @@
-import { resolveUserMessageDisplayText } from '@pivi/pivi-agent-core/context/context';
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
-import type { TitleGenerationService } from '@pivi/pivi-agent-core/runtime/auxTypes';
+import { resolveUserMessageDisplayText } from '@yapi/yapi-agent-core/context/context';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
+import type { TitleGenerationService } from '@yapi/yapi-agent-core/runtime/auxTypes';
 import type {
   ChatPorts,
   ChatSettingsPort,
-} from '@pivi/pivi-agent-core/runtime/chatPorts';
-import type { PiChatService } from '@pivi/pivi-agent-core/runtime/piChatService';
+} from '@yapi/yapi-agent-core/runtime/chatPorts';
+import type { PiChatService } from '@yapi/yapi-agent-core/runtime/piChatService';
 
 import type { ChatState } from '../state/ChatState';
 import type { SessionController } from './SessionController';

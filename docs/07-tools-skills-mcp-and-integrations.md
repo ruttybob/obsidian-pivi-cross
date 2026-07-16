@@ -2,14 +2,14 @@
 
 [Back to the developer handbook](README.md)
 
-Pivi tools implement the host-neutral `ToolSpec` protocol. Concrete Obsidian execution belongs to `@pivi/obsidian-tools`; Pi SDK adaptation belongs to the Pi engine. A capability is registered only when its settings, credentials, platform support, and runtime dependencies are available.
+Yapi tools implement the host-neutral `ToolSpec` protocol. Concrete Obsidian execution belongs to `@yapi/obsidian-tools`; Pi SDK adaptation belongs to the Pi engine. A capability is registered only when its settings, credentials, platform support, and runtime dependencies are available.
 
 ## Registration architecture
 
 ```mermaid
 flowchart TD
   Settings["Projected settings and credentials"] -- "gate" --> Registry["Tool registry"]
-  Obsidian["@pivi/obsidian-tools"] -- "returns ToolSpec" --> Registry
+  Obsidian["@yapi/obsidian-tools"] -- "returns ToolSpec" --> Registry
   Web["Web provider queue"] -- "returns ToolSpec" --> Registry
   MCP["Vault MCP bridge"] -- "exposes proxy tool" --> Registry
   Skills["Vault skill loader"] -- "exposes skill tool" --> Registry
@@ -35,7 +35,7 @@ Settings saves refresh the affected registries and open-runtime prompts. Disable
 
 Large-note reads start with `obsidian_read` in stats mode, then use `obsidian_markdown_structure` and bounded line ranges instead of loading an entire note into context.
 
-Prefer Obsidian's public in-process API for vault, metadata, file-manager, and workspace behavior. Use the official CLI only for capabilities the public API does not expose or for explicitly configured integrations; the CLI integration is disabled when its setting is absent. Pivi implements vault text search by scanning because Obsidian has no public vault-wide full-text search API. Base lookup by file/path uses direct vault and metadata-cache resolution, and an unresolved-links-only graph request reads `MetadataCache.unresolvedLinks` without enumerating vault files.
+Prefer Obsidian's public in-process API for vault, metadata, file-manager, and workspace behavior. Use the official CLI only for capabilities the public API does not expose or for explicitly configured integrations; the CLI integration is disabled when its setting is absent. Yapi implements vault text search by scanning because Obsidian has no public vault-wide full-text search API. Base lookup by file/path uses direct vault and metadata-cache resolution, and an unresolved-links-only graph request reads `MetadataCache.unresolvedLinks` without enumerating vault files.
 
 ## External access and process execution
 
@@ -43,7 +43,7 @@ External reads require `allowExternalRead` and at least one allowed directory fr
 
 `obsidian_bash` requires `allowBash`, accepts one allowlisted single-line command, and rejects shell-control syntax before calling the host process runner. `obsidian_command` and `obsidian_eval` require their individual gates plus the official Obsidian CLI. Do not broaden one capability because another is enabled.
 
-Pivi is a desktop-only plugin with optional filesystem, process, and environment-backed integrations. Direct filesystem access is confined to explicit external roots, vault-local Pivi data, provider compatibility stores, and configured Skills/CLI paths. Process execution occurs only for an enabled CLI-backed capability, an allowlisted Bash command, user-configured MCP stdio, Skills distribution tooling, or opening an external authentication URL. Environment values are read at those integration boundaries for provider credentials, MCP authentication/stdio variables, CLI discovery, and Skills tooling; Pivi does not collect or transmit machine identity to its author.
+Yapi is a desktop-only plugin with optional filesystem, process, and environment-backed integrations. Direct filesystem access is confined to explicit external roots, vault-local Yapi data, provider compatibility stores, and configured Skills/CLI paths. Process execution occurs only for an enabled CLI-backed capability, an allowlisted Bash command, user-configured MCP stdio, Skills distribution tooling, or opening an external authentication URL. Environment values are read at those integration boundaries for provider credentials, MCP authentication/stdio variables, CLI discovery, and Skills tooling; Yapi does not collect or transmit machine identity to its author.
 
 Vault-wide enumeration remains operation-driven: full-text search, tag and graph analysis, Base listing, and mention discovery inspect the paths required for the requested result. Direct Base lookup and unresolved-links-only graph lookup use indexed host data instead. Clipboard writes happen only after an explicit copy action; MCP import never invokes the clipboard-read API.
 
@@ -61,13 +61,13 @@ When available, `/generate-image` appears as a built-in tool mention. The visibl
 
 ## Skills
 
-Vault skills live under `.pivi/skills/`. The `skill` tool loads their instructions for an agent turn. A first vault load may offer the `kepano/obsidian-skills` bundle, but installation and updates require explicit user confirmation. This repository does not track runtime vault skills.
+Vault skills live under `.yapi/skills/`. The `skill` tool loads their instructions for an agent turn. A first vault load may offer the `kepano/obsidian-skills` bundle, but installation and updates require explicit user confirmation. This repository does not track runtime vault skills.
 
 Skill listing or installation may invoke the configured external distribution tooling. Keep remote activity explicit and do not introduce a global or cross-vault skill directory.
 
 ## Vault-local MCP
 
-MCP configuration lives only in `.pivi/mcp.json`; OAuth material lives under `.pivi/mcp-oauth/`. Pivi does not read or write host-global MCP configuration.
+MCP configuration lives only in `.yapi/mcp.json`; OAuth material lives under `.yapi/mcp-oauth/`. Yapi does not read or write host-global MCP configuration.
 
 The Pi registry exposes one proxy tool named `mcp` rather than one top-level Pi tool per server tool. The proxy searches and calls enabled vault servers. Settings own server/tool availability. `/server` and `/server/tool` composer tokens are optional emphasis: enabled servers are already available, and prompt finalization changes only the provider prompt.
 
@@ -79,10 +79,10 @@ MCP settings save/reload invalidates slash caches, authenticates or diagnoses as
 
 ## Note Toolbar
 
-Pivi can add the current Markdown editor selection or a custom Pivi command to Note Toolbar. The stable selection command ID is:
+Yapi can add the current Markdown editor selection or a custom Yapi command to Note Toolbar. The stable selection command ID is:
 
 ```text
-pivi:add-selection-to-chat-input
+yapi:add-selection-to-chat-input
 ```
 
 Automatic command-item setup currently requires:
@@ -92,29 +92,29 @@ Automatic command-item setup currently requires:
 - the official Obsidian CLI enabled;
 - a Note Toolbar assigned to the Selected text display location.
 
-Pivi detects the installed manifest before enabling setup. It never installs Note Toolbar automatically and never rewrites Note Toolbar's `data.json`. If the plugin is installed but disabled, Pivi asks the official CLI to enable it when available; otherwise it opens the community-plugin page. New command items go through Note Toolbar's official CLI so that plugin remains responsible for UUIDs, defaults, migrations, and refresh.
+Yapi detects the installed manifest before enabling setup. It never installs Note Toolbar automatically and never rewrites Note Toolbar's `data.json`. If the plugin is installed but disabled, Yapi asks the official CLI to enable it when available; otherwise it opens the community-plugin page. New command items go through Note Toolbar's official CLI so that plugin remains responsible for UUIDs, defaults, migrations, and refresh.
 
-Pivi can add `message-square-plus` with a visible `Pivi` label or as icon-only. Setup is idempotent for a matching command/style. For an existing item, Pivi first uses Note Toolbar's runtime item API to synchronize its icon, label, and tooltip. If that API is unavailable and the style differs, Pivi opens the relevant item or plugin settings for manual adjustment; it still does not rewrite configuration directly.
+Yapi can add `message-square-plus` with a visible `Yapi` label or as icon-only. Setup is idempotent for a matching command/style. For an existing item, Yapi first uses Note Toolbar's runtime item API to synchronize its icon, label, and tooltip. If that API is unavailable and the style differs, Yapi opens the relevant item or plugin settings for manual adjustment; it still does not rewrite configuration directly.
 
-Without automatic setup, add a Command item manually in the toolbar assigned to Selected text, choose **Pivi: Add selection to chat input**, and use `message-square-plus`. Custom slash-command cards can similarly save and add their stable icon-only commands.
+Without automatic setup, add a Command item manually in the toolbar assigned to Selected text, choose **Yapi: Add selection to chat input**, and use `message-square-plus`. Custom slash-command cards can similarly save and add their stable icon-only commands.
 
 Troubleshooting:
 
 - If setup opens Note Toolbar settings, assign a Selected text toolbar and retry.
 - If it opens the community-plugin page, install, enable, or update Note Toolbar.
 - If it requests manual configuration, enable the official CLI or add the item manually.
-- If the command exists, Pivi intentionally avoids creating a duplicate.
+- If the command exists, Yapi intentionally avoids creating a duplicate.
 
 The attached selection payload and editor-mode limits are documented in [Input panel and context](04-input-panel-and-context.md).
 
 ## Recovery and safety
 
-Pivi does not add per-edit permission prompts. Mutating tools must preserve explicit failure signals. Deletes use Obsidian trash behavior. `obsidian_history` can restore a retained snapshot when the CLI and a matching history entry exist, but recovery is not guaranteed for every mutation.
+Yapi does not add per-edit permission prompts. Mutating tools must preserve explicit failure signals. Deletes use Obsidian trash behavior. `obsidian_history` can restore a retained snapshot when the CLI and a matching history entry exist, but recovery is not guaranteed for every mutation.
 
 When adding a tool:
 
 1. Define the smallest host-neutral `ToolSpec` and validate external input at execution boundaries.
-2. Put Obsidian execution in `@pivi/obsidian-tools` and Pi adaptation in the engine.
+2. Put Obsidian execution in `@yapi/obsidian-tools` and Pi adaptation in the engine.
 3. Define registration prerequisites and settings refresh behavior.
 4. Document mutation, privacy, credentials, network, and recovery semantics.
 5. Add focused implementation, registry, prompt, and failure-path tests.

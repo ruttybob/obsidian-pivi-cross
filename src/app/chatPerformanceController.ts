@@ -1,4 +1,4 @@
-import type { ChatPerfRecorder } from '@pivi/pivi-react/store';
+import type { ChatPerfRecorder } from '@yapi/yapi-react/store';
 
 export interface ChatPerfController extends ChatPerfRecorder {
   start(scenario: string, ownerWindow: Window): void;

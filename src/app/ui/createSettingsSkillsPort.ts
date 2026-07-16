@@ -2,19 +2,19 @@ import {
   DEFAULT_VAULT_SKILLS_REPO_URL,
   DEFAULT_VAULT_SKILLS_SLUG,
   isDefaultVaultSkillFolder,
-} from '@pivi/pivi-agent-core/skills/vault/defaultVaultSkills';
-import { fetchDefaultVaultSkillsRemoteSha } from '@pivi/pivi-agent-core/skills/vault/fetchDefaultVaultSkillsRemoteSha';
-import { notifyVaultSkillsChanged } from '@pivi/pivi-agent-core/skills/vault/notifyVaultSkillsChanged';
-import { VaultSkillsService } from '@pivi/pivi-agent-core/skills/vault/vaultSkillsService';
-import type { SettingsComplexPorts } from '@pivi/pivi-react/ports';
+} from '@yapi/yapi-agent-core/skills/vault/defaultVaultSkills';
+import { fetchDefaultVaultSkillsRemoteSha } from '@yapi/yapi-agent-core/skills/vault/fetchDefaultVaultSkillsRemoteSha';
+import { notifyVaultSkillsChanged } from '@yapi/yapi-agent-core/skills/vault/notifyVaultSkillsChanged';
+import { VaultSkillsService } from '@yapi/yapi-agent-core/skills/vault/vaultSkillsService';
+import type { SettingsComplexPorts } from '@yapi/yapi-react/ports';
 
-import type { PiviSettingsHost } from '@/app/hostContracts';
+import type { YapiSettingsHost } from '@/app/hostContracts';
 import { getLocale, t } from '@/app/i18n';
 
 import { obsidianPresentationPlatform } from './obsidianPresentationPlatform';
 
 export function createSettingsSkillsPort(
-  host: PiviSettingsHost,
+  host: YapiSettingsHost,
 ): SettingsComplexPorts['skills'] {
   const getService = () => {
     const vaultPath = host.getVaultPath();

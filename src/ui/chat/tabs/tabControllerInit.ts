@@ -1,10 +1,10 @@
-import type { SubagentInfo } from '@pivi/pivi-agent-core/foundation';
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { SubagentInfo } from '@yapi/yapi-agent-core/foundation';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 import type { Component } from 'obsidian';
 import { MarkdownView, Notice } from 'obsidian';
 
-import type { PiviChatHost } from '@/app/hostContracts';
+import type { YapiChatHost } from '@/app/hostContracts';
 import { t } from '@/app/i18n';
 
 import { resolveComposerWorkspaceCommand } from '../composer/ComposerWorkspaceCommand';
@@ -40,7 +40,7 @@ function shouldPersistAsyncSubagentState(subagent: SubagentInfo): boolean {
 /** Wire per-tab controllers after DOM and base tab state exist. */
 export function initializeTabControllers(
   tab: TabData,
-  plugin: PiviChatHost,
+  plugin: YapiChatHost,
   component: Component,
   ports: ChatPorts,
   forkRequestCallback?: (forkContext: ForkContext) => Promise<void>,

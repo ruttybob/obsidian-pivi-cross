@@ -14,27 +14,27 @@ export function buildTabDOM(
   app: App,
 ): TabDOMElements {
   const messagesWrapperEl = contentEl.createDiv({
-    cls: "pivi-messages-wrapper",
+    cls: "yapi-messages-wrapper",
   });
-  const welcomePortalEl = messagesWrapperEl.createDiv({ cls: "pivi-react-welcome-slot" });
-  const messagesEl = messagesWrapperEl.createDiv({ cls: "pivi-messages" });
-  const messagesPortalEl = messagesEl.createDiv({ cls: "pivi-react-messages-slot" });
-  const navigationPortalEl = messagesWrapperEl.createDiv({ cls: "pivi-react-navigation-slot" });
+  const welcomePortalEl = messagesWrapperEl.createDiv({ cls: "yapi-react-welcome-slot" });
+  const messagesEl = messagesWrapperEl.createDiv({ cls: "yapi-messages" });
+  const messagesPortalEl = messagesEl.createDiv({ cls: "yapi-react-messages-slot" });
+  const navigationPortalEl = messagesWrapperEl.createDiv({ cls: "yapi-react-navigation-slot" });
   const statusPanelContainerEl = messagesWrapperEl.createDiv({
-    cls: "pivi-status-panel-container",
+    cls: "yapi-status-panel-container",
   });
-  const todoPortalEl = statusPanelContainerEl.createDiv({ cls: "pivi-react-todo-slot" });
+  const todoPortalEl = statusPanelContainerEl.createDiv({ cls: "yapi-react-todo-slot" });
   const messagesBottomControlsEl = messagesWrapperEl.createDiv({
-    cls: "pivi-messages-bottom-controls",
+    cls: "yapi-messages-bottom-controls",
   });
-  const inputContainerEl = contentEl.createDiv({ cls: "pivi-input-container" });
+  const inputContainerEl = contentEl.createDiv({ cls: "yapi-input-container" });
   const queuePortalEl = inputContainerEl.createDiv({
-    cls: "pivi-react-queue-slot",
+    cls: "yapi-react-queue-slot",
   });
   const inputWrapper = inputContainerEl.createDiv({
-    cls: "pivi-input-wrapper",
+    cls: "yapi-input-wrapper",
   });
-  const contextRowEl = inputWrapper.createDiv({ cls: "pivi-context-row" });
+  const contextRowEl = inputWrapper.createDiv({ cls: "yapi-context-row" });
   const richInput = new RichChatInput(inputWrapper, {
     placeholder: t("chat.composer.placeholder"),
     app,
@@ -44,7 +44,7 @@ export function buildTabDOM(
     }),
   });
   richInput.el.setAttr("dir", "auto");
-  const composerPortalEl = inputWrapper.createDiv({ cls: "pivi-react-composer-slot" });
+  const composerPortalEl = inputWrapper.createDiv({ cls: "yapi-react-composer-slot" });
 
   return {
     contentEl,

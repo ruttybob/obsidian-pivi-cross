@@ -1,15 +1,15 @@
-import { fetchCustomProviderModels } from "@pivi/pivi-agent-core/engine/pi/installPiCustomProviders";
-import { syncCustomPiProviders } from "@pivi/pivi-agent-core/engine/pi/piAiModels";
-import { piChatUIConfig } from "@pivi/pivi-agent-core/engine/pi/piChatUiConfig";
-import { getPiAiModelsForProvider } from "@pivi/pivi-agent-core/engine/pi/piModelRegistry";
-import { PiSettingsCoordinator } from "@pivi/pivi-agent-core/engine/pi/piSettingsCoordinator";
-import { updatePiAgentSettings } from "@pivi/pivi-agent-core/foundation/agentSettings";
+import { fetchCustomProviderModels } from "@yapi/yapi-agent-core/engine/pi/installPiCustomProviders";
+import { syncCustomPiProviders } from "@yapi/yapi-agent-core/engine/pi/piAiModels";
+import { piChatUIConfig } from "@yapi/yapi-agent-core/engine/pi/piChatUiConfig";
+import { getPiAiModelsForProvider } from "@yapi/yapi-agent-core/engine/pi/piModelRegistry";
+import { PiSettingsCoordinator } from "@yapi/yapi-agent-core/engine/pi/piSettingsCoordinator";
+import { updatePiAgentSettings } from "@yapi/yapi-agent-core/foundation/agentSettings";
 import {
   getCustomProviderById,
   getCustomProvidersFromBag,
-} from "@pivi/pivi-agent-core/foundation/customProviders";
+} from "@yapi/yapi-agent-core/foundation/customProviders";
 
-import type { PiviUiFacades } from "@/app/hostContracts";
+import type { YapiUiFacades } from "@/app/hostContracts";
 
 import { obsidianCustomProviderHttpRequest } from "./obsidianHttpRequest";
 
@@ -19,7 +19,7 @@ import { obsidianCustomProviderHttpRequest } from "./obsidianHttpRequest";
  */
 export function createPiUiFacades(
   getCredentialApiKey?: (providerId: string) => string | undefined,
-): PiviUiFacades {
+): YapiUiFacades {
   return {
     chatUIConfig: piChatUIConfig,
     getSettingsSnapshot(settings) {

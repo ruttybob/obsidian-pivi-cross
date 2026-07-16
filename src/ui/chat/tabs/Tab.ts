@@ -1,8 +1,8 @@
-import type { OpenSessionState } from '@pivi/pivi-agent-core/foundation';
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
-import type { ChatPerfRecorder } from '@pivi/pivi-react/store';
+import type { OpenSessionState } from '@yapi/yapi-agent-core/foundation';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
+import type { ChatPerfRecorder } from '@yapi/yapi-react/store';
 
-import type { PiviChatHost } from "@/app/hostContracts";
+import type { YapiChatHost } from "@/app/hostContracts";
 
 import { SubagentManager } from "../services/SubagentManager";
 import { ChatState } from '../state/ChatState';
@@ -24,7 +24,7 @@ import type { TabData, TabId } from "./types";
 import { generateTabId } from "./types";
 
 export interface TabCreateOptions {
-  plugin: PiviChatHost;
+  plugin: YapiChatHost;
   ports: ChatPorts;
 
   containerEl: HTMLElement;
@@ -83,7 +83,7 @@ export function createTab(options: TabCreateOptions): TabData {
   const id = tabId ?? generateTabId();
 
   const contentEl = containerEl.createDiv({
-    cls: "pivi-tab-content pivi-hidden",
+    cls: "yapi-tab-content yapi-hidden",
   });
 
   let tab!: TabData;
@@ -168,7 +168,7 @@ export interface InitializeTabUIOptions {
  */
 export function initializeTabUI(
   tab: TabData,
-  plugin: PiviChatHost,
+  plugin: YapiChatHost,
   options: InitializeTabUIOptions,
 ): void {
   const { dom, state } = tab;
@@ -177,15 +177,15 @@ export function initializeTabUI(
   initializeContextManagers(tab, plugin, ports);
 
   dom.selectionIndicatorEl = dom.contextRowEl.createDiv({
-    cls: "pivi-selection-indicator pivi-hidden",
+    cls: "yapi-selection-indicator yapi-hidden",
   });
 
   dom.browserIndicatorEl = dom.contextRowEl.createDiv({
-    cls: "pivi-browser-selection-indicator pivi-hidden",
+    cls: "yapi-browser-selection-indicator yapi-hidden",
   });
 
   dom.canvasIndicatorEl = dom.contextRowEl.createDiv({
-    cls: "pivi-canvas-indicator pivi-hidden",
+    cls: "yapi-canvas-indicator yapi-hidden",
   });
 
   const catalogInfo = options.getSlashCatalogConfig?.() ?? null;
@@ -210,7 +210,7 @@ export function initializeTabUI(
  * Activates a tab (shows it and starts services).
  */
 export function activateTab(tab: TabData): void {
-  tab.dom.contentEl.removeClass("pivi-hidden");
+  tab.dom.contentEl.removeClass("yapi-hidden");
   tab.controllers.browserSelectionController?.start();
   tab.controllers.canvasSelectionController?.start();
   tab.state.navigationVisible = tab.dom.messagesEl.scrollHeight > tab.dom.messagesEl.clientHeight + 50;
@@ -220,7 +220,7 @@ export function activateTab(tab: TabData): void {
  * Deactivates a tab (hides it and stops services).
  */
 export function deactivateTab(tab: TabData): void {
-  tab.dom.contentEl.addClass("pivi-hidden");
+  tab.dom.contentEl.addClass("yapi-hidden");
   tab.controllers.browserSelectionController?.stop();
   tab.controllers.canvasSelectionController?.stop();
 }

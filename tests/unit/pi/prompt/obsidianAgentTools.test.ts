@@ -1,6 +1,6 @@
 import {
   buildRegisteredToolsSection,
-} from '@pivi/pivi-agent-core/prompt';
+} from '@yapi/yapi-agent-core/prompt';
 import {
   OBSIDIAN_AGENT_TOOLS,
   OBSIDIAN_OPTIONAL_TOOLS,
@@ -23,7 +23,7 @@ import {
   TOOL_OBSIDIAN_SEARCH,
   TOOL_OBSIDIAN_TAGS,
   TOOL_SPAWN_AGENT,
-} from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/tools';
 
 function buildSection(overrides: Partial<Parameters<typeof buildRegisteredToolsSection>[0]> = {}): string {
   return buildRegisteredToolsSection({
@@ -159,7 +159,7 @@ describe('obsidian registered tool prompt section', () => {
 
     expect(section).toContain('Obsidian CLI is not available for this turn');
     expect(section).toContain('If the user’s request cannot be completed without a CLI-only tool/action');
-    expect(section).toContain('ask the user to enable Pivi’s Obsidian CLI setting and Obsidian Settings → General → Command line interface');
+    expect(section).toContain('ask the user to enable Yapi’s Obsidian CLI setting and Obsidian Settings → General → Command line interface');
     expect(section).toContain('no CLI fallback is available');
     expect(section).toContain('`format?` ignored because API-only results are JSON');
     expect(section).toContain('API-only for this turn, with no CLI fallback');

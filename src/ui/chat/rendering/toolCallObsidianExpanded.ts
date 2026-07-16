@@ -1,4 +1,4 @@
-import type { ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
+import type { ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
 import {
   TOOL_OBSIDIAN_ATTACHMENT,
   TOOL_OBSIDIAN_COMMAND,
@@ -18,12 +18,12 @@ import {
   TOOL_OBSIDIAN_SEARCH,
   TOOL_OBSIDIAN_TASKS,
   TOOL_OBSIDIAN_WRITE,
-} from '@pivi/pivi-agent-core/tools/obsidianToolNames';
-import { TOOL_APPLY_PATCH, TOOL_BASH, TOOL_WEB_SEARCH } from '@pivi/pivi-agent-core/tools/toolNames';
+} from '@yapi/yapi-agent-core/tools/obsidianToolNames';
+import { TOOL_APPLY_PATCH, TOOL_BASH, TOOL_WEB_SEARCH } from '@yapi/yapi-agent-core/tools/toolNames';
 import {
   getToolPresentationDescriptor,
   parseObsidianSearchHits,
-} from '@pivi/pivi-agent-core/tools/toolPresentation';
+} from '@yapi/yapi-agent-core/tools/toolPresentation';
 
 import { isObsidianToolCompactResult } from './obsidianToolResultPresentation';
 import {
@@ -106,7 +106,7 @@ export function renderObsidianListExpanded(
 
   const path = typeof input.path === 'string' && input.path.trim() ? input.path.trim() : 'Vault root';
   if (entries.length === 0) {
-    container.createDiv({ cls: 'pivi-tool-empty', text: `${path} is empty` });
+    container.createDiv({ cls: 'yapi-tool-empty', text: `${path} is empty` });
     return;
   }
 
@@ -129,8 +129,8 @@ export function renderObsidianReadExpanded(
 ): void {
   const target = inputString(input, 'path') || inputString(input, 'file');
   if (target) {
-    const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
-    const lineEl = linesEl.createDiv({ cls: 'pivi-tool-line pivi-tool-line-path hoverable' });
+    const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
+    const lineEl = linesEl.createDiv({ cls: 'yapi-tool-line yapi-tool-line-path hoverable' });
     appendVaultPath(lineEl, target, target, !options.external && target.endsWith('.md'));
   }
   renderLinesExpanded(container, result);
@@ -248,9 +248,9 @@ export function renderObsidianMarkdownStructureExpanded(
     lines.push('truncated: true', `totalHeadings: ${structure.totalHeadings}`);
   }
 
-  const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
+  const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
   for (const line of lines) {
-    linesEl.createDiv({ cls: 'pivi-tool-line pivi-tool-line-wrap', text: line });
+    linesEl.createDiv({ cls: 'yapi-tool-line yapi-tool-line-wrap', text: line });
   }
 }
 
@@ -340,14 +340,14 @@ export function renderObsidianTasksExpanded(container: HTMLElement, result: stri
   const action = inputString(input, 'action');
   const tasks = parseJsonArray(result);
   if (tasks && tasks.length > 0) {
-    const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
+    const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
     for (const task of tasks) {
       const record = task && typeof task === 'object' && !Array.isArray(task) ? task as Record<string, unknown> : null;
       const path = record ? stringField(record, 'path') : '';
       const line = record ? stringField(record, 'line') : '';
       const text = record ? stringField(record, 'text') || stringField(record, 'task') || formatToolDisplayValue(record) : formatToolDisplayValue(task);
       const prefix = path ? `${path}${line ? `:${line}` : ''}` : action || 'task';
-      linesEl.createDiv({ cls: 'pivi-tool-line pivi-tool-line-wrap', text: `${prefix} — ${text}` });
+      linesEl.createDiv({ cls: 'yapi-tool-line yapi-tool-line-wrap', text: `${prefix} — ${text}` });
     }
     return;
   }
@@ -390,7 +390,7 @@ export function renderObsidianGenerateImageExpanded(
 ): void {
   const resourcePath = typeof details?.resourcePath === 'string' ? details.resourcePath : undefined;
   if (resourcePath) {
-    const previewEl = container.createDiv({ cls: 'pivi-tool-image-preview' });
+    const previewEl = container.createDiv({ cls: 'yapi-tool-image-preview' });
     const imageEl = previewEl.createEl('img', { attr: { src: resourcePath, alt: 'Generated image preview' } });
     imageEl.setAttribute('loading', 'lazy');
   }
@@ -482,18 +482,18 @@ export function syncObsidianToolHeader(toolEl: HTMLElement, toolCall: ToolCallIn
     return;
   }
 
-  toolEl.addClass('pivi-tool-call-obsidian');
+  toolEl.addClass('yapi-tool-call-obsidian');
 
-  const nameEl = toolEl.querySelector('.pivi-tool-name');
+  const nameEl = toolEl.querySelector('.yapi-tool-name');
   if (nameEl) {
     nameEl.setText(getToolName(toolCall.name, toolCall.input, toolCall.result));
   }
 
-  const summaryEl = toolEl.querySelector('.pivi-tool-summary');
+  const summaryEl = toolEl.querySelector('.yapi-tool-summary');
   if (summaryEl) {
     summaryEl.setText(getToolSummary(toolCall.name, toolCall.input, toolCall.result));
   }
 
   const compact = isObsidianToolCompactResult(toolCall.name, toolCall.result);
-  toolEl.toggleClass('pivi-tool-call-compact', compact);
+  toolEl.toggleClass('yapi-tool-call-compact', compact);
 }

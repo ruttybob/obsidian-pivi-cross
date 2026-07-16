@@ -1,5 +1,5 @@
 /**
- * Pivi - File Link Utilities
+ * Yapi - File Link Utilities
  *
  * Detects Obsidian wikilinks [[path/to/file]] in rendered content and makes
  * them clickable to open the file in Obsidian.
@@ -194,7 +194,7 @@ function createWikilink(
   displayText: string
 ): HTMLElement {
   const link = ownerDocument.win.createEl('a');
-  link.className = 'pivi-file-link internal-link';
+  link.className = 'yapi-file-link internal-link';
   link.textContent = displayText;
   link.setAttribute('data-href', linkTarget);
   link.setAttribute('href', linkTarget);
@@ -292,7 +292,7 @@ function repairRenderedInternalLink(app: App, link: HTMLAnchorElement): void {
   const linkPath = extractLinkPathFromTarget(linkTarget);
   if (!linkPath || !fileExistsInVault(app, linkPath)) return;
 
-  link.classList.add('pivi-file-link');
+  link.classList.add('yapi-file-link');
   link.classList.add('internal-link');
   link.setAttribute('data-href', linkTarget);
   link.setAttribute('href', linkTarget);
@@ -306,7 +306,7 @@ function repairRenderedEmbed(app: App, embedEl: HTMLElement): void {
   const linkPath = extractLinkPathFromTarget(linkTarget);
   if (!linkPath || !fileExistsInVault(app, linkPath)) return;
 
-  embedEl.addClass('pivi-clickable-embed');
+  embedEl.addClass('yapi-clickable-embed');
   embedEl.setAttribute('data-href', linkTarget);
   embedEl.setAttribute('role', 'link');
   embedEl.setAttribute('tabindex', '0');
@@ -318,7 +318,7 @@ function repairRenderedEmbed(app: App, embedEl: HTMLElement): void {
 /**
  * Registers a delegated click handler for file links on a container.
  * Should be called once on the messages container.
- * Handles both our custom .pivi-file-link and Obsidian's .internal-link.
+ * Handles both our custom .yapi-file-link and Obsidian's .internal-link.
  */
 export function registerFileLinkHandler(
   app: App,
@@ -329,7 +329,7 @@ export function registerFileLinkHandler(
     const target = event.target as HTMLElement;
     // Handle both our links and Obsidian's internal links
     const link = target.closest<HTMLElement>(
-      '.pivi-file-link, .internal-link, .pivi-clickable-embed'
+      '.yapi-file-link, .internal-link, .yapi-clickable-embed'
     );
 
     if (link) {
@@ -344,7 +344,7 @@ export function registerFileLinkHandler(
     }
 
     const target = event.target as HTMLElement;
-    const link = target.closest<HTMLElement>('.pivi-clickable-embed');
+    const link = target.closest<HTMLElement>('.yapi-clickable-embed');
     if (link) {
       event.preventDefault();
       openLinkTarget(app, readLinkTargetFromElement(link));
@@ -406,7 +406,7 @@ function shouldSkipTextNode(parent: HTMLElement): boolean {
     return true;
   }
 
-  return !!parent.closest('pre, code, a, .pivi-file-link, .internal-link, .pivi-clickable-embed');
+  return !!parent.closest('pre, code, a, .yapi-file-link, .internal-link, .yapi-clickable-embed');
 }
 
 function collectTextNodesWithLinks(container: HTMLElement): Text[] {

@@ -2,7 +2,7 @@ import { TFile, TFolder } from 'obsidian';
 
 import {
   parseWikilinkMentionAtIndex,
-} from '@pivi/pivi-agent-core/context/mentions';
+} from '@yapi/yapi-agent-core/context/mentions';
 
 import {
   getVaultFileAliases,

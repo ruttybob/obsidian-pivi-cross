@@ -1,5 +1,5 @@
 import { SessionController } from '@/ui/chat/controllers/SessionController';
-import type { OpenSessionState } from '@pivi/pivi-agent-core/foundation';
+import type { OpenSessionState } from '@yapi/yapi-agent-core/foundation';
 import { ChatState } from '@/ui/chat/state/ChatState';
 import { createFakeChatPorts } from '../../../helpers/createFakeChatPorts';
 
@@ -23,7 +23,7 @@ function createController(openSession?: Partial<OpenSessionState>) {
     createdAt: 0,
     updatedAt: 0,
     sessionId: 'conv-1',
-    sessionFile: '.pivi/sessions/test.jsonl',
+    sessionFile: '.yapi/sessions/test.jsonl',
     leafId: 'leaf-a',
     messages: [{ id: 'm1', role: 'user', content: 'hi', timestamp: 0 }],
     ...openSession,

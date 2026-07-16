@@ -4,14 +4,14 @@ import { fileURLToPath } from 'url';
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const piAiEnvApiKeysShim = path.join(
   rootDir,
-  'packages/pivi-agent-core/src/engine/pi/shims/piAiEnvApiKeys.ts',
+  'packages/yapi-agent-core/src/engine/pi/shims/piAiEnvApiKeys.ts',
 );
 const piAiCompatShim = path.join(
   rootDir,
-  'packages/pivi-agent-core/src/engine/pi/shims/piAiCompat.ts',
+  'packages/yapi-agent-core/src/engine/pi/shims/piAiCompat.ts',
 );
 
-/** pi-ai compat pulls every upstream provider; Pivi only needs its supported provider set. */
+/** pi-ai compat pulls every upstream provider; Yapi only needs its supported provider set. */
 export const shimPiAiCompat = {
   name: 'shim-pi-ai-compat',
   setup(build) {

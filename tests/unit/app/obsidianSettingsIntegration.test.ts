@@ -2,9 +2,9 @@ import {
   TOOL_OBSIDIAN_BASH,
   TOOL_OBSIDIAN_READ,
   TOOL_OBSIDIAN_TASKS,
-} from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/tools';
 
-import type { PiviSettingsHost } from '@/app/hostContracts';
+import type { YapiSettingsHost } from '@/app/hostContracts';
 import { setLocale } from '@/app/i18n';
 import {
   createObsidianToolRows,
@@ -45,7 +45,7 @@ describe('Obsidian settings integration adapter', () => {
     const setupNoteToolbarIntegration = jest.fn(async () => ({
       status: 'installed' as const,
     }));
-    const host = { openStyleSettings, setupNoteToolbarIntegration } as unknown as PiviSettingsHost;
+    const host = { openStyleSettings, setupNoteToolbarIntegration } as unknown as YapiSettingsHost;
     const sections = listObsidianIntegrationSections(true);
 
     await expect(runObsidianIntegrationAction(
@@ -60,7 +60,7 @@ describe('Obsidian settings integration adapter', () => {
     await expect(runObsidianIntegrationAction(
       host,
       sections[1]!.actions[0]!.id,
-    )).resolves.toEqual({ feedback: { kind: 'success', message: 'Added Pivi to the selected-text toolbar.' } });
+    )).resolves.toEqual({ feedback: { kind: 'success', message: 'Added Yapi to the selected-text toolbar.' } });
     expect(setupNoteToolbarIntegration).toHaveBeenCalledWith('label-and-icon');
   });
 
@@ -76,7 +76,7 @@ describe('Obsidian settings integration adapter', () => {
 
   it('rejects action ids that were not supplied by the host adapter', async () => {
     await expect(runObsidianIntegrationAction(
-      {} as PiviSettingsHost,
+      {} as YapiSettingsHost,
       'other-host:unknown',
     )).rejects.toThrow('Unknown Obsidian integration action');
   });

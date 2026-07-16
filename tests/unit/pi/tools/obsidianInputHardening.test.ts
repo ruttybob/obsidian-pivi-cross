@@ -1,22 +1,22 @@
-import { createAttachmentTool } from '@pivi/obsidian-tools';
-import { createBaseTool } from '@pivi/obsidian-tools';
-import { createDailyTool } from '@pivi/obsidian-tools';
-import { createDeletePathTool } from '@pivi/obsidian-tools';
-import { createEditNoteTool } from '@pivi/obsidian-tools';
-import { createGraphTool } from '@pivi/obsidian-tools';
-import { createMarkdownStructureTool } from '@pivi/obsidian-tools';
-import { createMkdirTool } from '@pivi/obsidian-tools';
-import { createMovePathTool } from '@pivi/obsidian-tools';
-import { createNoteInfoTool } from '@pivi/obsidian-tools';
-import { createOpenPathTool } from '@pivi/obsidian-tools';
-import { createPropertiesTool } from '@pivi/obsidian-tools';
-import { createReadExternalTool } from '@pivi/obsidian-tools';
-import { createReadNoteTool } from '@pivi/obsidian-tools';
-import { createSearchTool } from '@pivi/obsidian-tools';
-import { createTagsTool } from '@pivi/obsidian-tools';
-import { createTasksTool } from '@pivi/obsidian-tools';
-import { createWriteNoteTool } from '@pivi/obsidian-tools';
-import type { ObsidianToolDeps } from '@pivi/obsidian-tools';
+import { createAttachmentTool } from '@yapi/obsidian-tools';
+import { createBaseTool } from '@yapi/obsidian-tools';
+import { createDailyTool } from '@yapi/obsidian-tools';
+import { createDeletePathTool } from '@yapi/obsidian-tools';
+import { createEditNoteTool } from '@yapi/obsidian-tools';
+import { createGraphTool } from '@yapi/obsidian-tools';
+import { createMarkdownStructureTool } from '@yapi/obsidian-tools';
+import { createMkdirTool } from '@yapi/obsidian-tools';
+import { createMovePathTool } from '@yapi/obsidian-tools';
+import { createNoteInfoTool } from '@yapi/obsidian-tools';
+import { createOpenPathTool } from '@yapi/obsidian-tools';
+import { createPropertiesTool } from '@yapi/obsidian-tools';
+import { createReadExternalTool } from '@yapi/obsidian-tools';
+import { createReadNoteTool } from '@yapi/obsidian-tools';
+import { createSearchTool } from '@yapi/obsidian-tools';
+import { createTagsTool } from '@yapi/obsidian-tools';
+import { createTasksTool } from '@yapi/obsidian-tools';
+import { createWriteNoteTool } from '@yapi/obsidian-tools';
+import type { ObsidianToolDeps } from '@yapi/obsidian-tools';
 
 function makeDeps(overrides: Partial<ObsidianToolDeps> = {}): ObsidianToolDeps {
   return {

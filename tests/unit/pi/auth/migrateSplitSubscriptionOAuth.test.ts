@@ -5,8 +5,8 @@ import {
   XAI_PROVIDER_ID,
   getPiAiCredentialSecretId,
   serializeProviderCredential,
-} from '@pivi/pivi-agent-core/auth/piProviderCredentials';
-import { migrateSplitSubscriptionOAuthCredentials } from '@pivi/pivi-agent-core/engine/pi/piProviderCredentialStore';
+} from '@yapi/yapi-agent-core/auth/piProviderCredentials';
+import { migrateSplitSubscriptionOAuthCredentials } from '@yapi/yapi-agent-core/engine/pi/piProviderCredentialStore';
 import { createMockApp } from '../../../helpers/mockApp';
 
 describe('migrateSplitSubscriptionOAuthCredentials', () => {

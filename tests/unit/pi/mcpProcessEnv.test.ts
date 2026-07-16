@@ -1,8 +1,8 @@
 import {
   buildMcpStdioEnv,
   resolveMcpBearerToken,
-} from '@pivi/pivi-agent-core/mcp/mcpProcessEnv';
-import type { ManagedMcpServer } from '@pivi/pivi-agent-core/mcp/types';
+} from '@yapi/yapi-agent-core/mcp/mcpProcessEnv';
+import type { ManagedMcpServer } from '@yapi/yapi-agent-core/mcp/types';
 
 function bearerServer(overrides: Partial<ManagedMcpServer> = {}): ManagedMcpServer {
   return {

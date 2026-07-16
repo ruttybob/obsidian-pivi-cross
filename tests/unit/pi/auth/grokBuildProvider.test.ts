@@ -2,7 +2,7 @@ import {
   GROK_BUILD_BASE_URL,
   GROK_BUILD_MODELS,
   sanitizeGrokBuildPayload,
-} from '@pivi/pivi-agent-core/engine/pi/grokBuildProvider';
+} from '@yapi/yapi-agent-core/engine/pi/grokBuildProvider';
 
 describe('Grok Build subscription provider', () => {
   it('defines Composer 2.5 on the Grok inference proxy with required headers', () => {

@@ -2,7 +2,7 @@ import {
   createWebSearchTool,
   type WebSearchFetch,
   type WebSearchToolDeps,
-} from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/tools';
 
 type FetchMock = jest.Mock<Response, [string, RequestInit?]>;
 

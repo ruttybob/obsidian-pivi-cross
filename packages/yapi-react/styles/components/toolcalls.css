@@ -1,0 +1,573 @@
+/* Collapsible tool step groups (stored + streaming) */
+.yapi-tool-step-group {
+  margin: 2px 0;
+}
+
+.yapi-tool-step-group.expanded,
+.yapi-tool-call.expanded {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: var(--yapi-expanded-content-max-height, min(320px, 33vh));
+  overflow: hidden;
+}
+
+/*
+ * React renders tool headers as buttons, while the imperative subagent adapter
+ * renders equivalent div[role=button] headers. Keep one layout contract for
+ * both owners and scope it tightly enough to reset host button chrome.
+ */
+.yapi-container .yapi-tool-step-group-header,
+.yapi-container .yapi-tool-header {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.2;
+  text-align: start;
+  min-height: 0;
+  height: auto;
+  cursor: pointer;
+}
+
+.yapi-container .yapi-tool-step-group-header {
+  gap: 5px;
+  padding: 2px 0;
+  min-width: 0;
+}
+
+.yapi-tool-step-group.expanded > .yapi-tool-step-group-header {
+  flex: 0 0 auto;
+  z-index: 7;
+  background: var(--yapi-host-background-primary);
+}
+
+.yapi-tool-call.expanded:not(.yapi-tool-call-in-step-group) > .yapi-tool-header {
+  flex: 0 0 auto;
+  z-index: 5;
+  background: var(--yapi-host-background-primary);
+}
+
+.yapi-tool-step-group.expanded > .yapi-tool-step-group-steps,
+.yapi-tool-call.expanded > .yapi-tool-content {
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+.yapi-subagent-content .yapi-tool-step-group.expanded,
+.yapi-subagent-content .yapi-tool-call.expanded,
+.yapi-tool-step-group-steps .yapi-tool-call.expanded {
+  display: block;
+  max-height: none;
+  overflow: visible;
+}
+
+.yapi-subagent-content .yapi-tool-call.expanded > .yapi-tool-content,
+.yapi-tool-step-group-steps .yapi-tool-call.expanded > .yapi-tool-content {
+  overflow: visible;
+  scrollbar-gutter: auto;
+}
+
+.yapi-subagent-content .yapi-tool-step-group.expanded > .yapi-tool-step-group-steps {
+  overflow: visible;
+  scrollbar-gutter: auto;
+}
+
+.yapi-subagent-content .yapi-tool-step-group.expanded > .yapi-tool-step-group-header {
+  position: sticky;
+  top: 0;
+  z-index: 7;
+  background: var(--yapi-host-background-primary);
+}
+
+.yapi-tool-step-group.expanded
+  > .yapi-tool-step-group-steps
+  > .yapi-tool-step-item
+  > .yapi-tool-call.expanded
+  > .yapi-tool-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--yapi-host-background-primary);
+}
+
+.yapi-subagent-content .yapi-tool-step-group.expanded
+  > .yapi-tool-step-group-steps
+  > .yapi-tool-step-item
+  > .yapi-tool-call.expanded
+  > .yapi-tool-header {
+  position: sticky;
+  top: var(--yapi-tool-step-group-sticky-top, 18px);
+  z-index: 5;
+  background: var(--yapi-host-background-primary);
+}
+
+.yapi-subagent-content .yapi-tool-call.expanded:not(.yapi-tool-call-in-step-group) > .yapi-tool-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--yapi-host-background-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-tool-step-group-header:hover {
+    opacity: 0.85;
+  }
+}
+
+.yapi-tool-step-group-count {
+  flex-shrink: 0;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-xs);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-tool-step-group-summary {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-tool-step-group-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.yapi-tool-step-group-status .yapi-tool-status {
+  margin-left: 0;
+}
+
+.yapi-tool-step-group-status-separator {
+  color: var(--yapi-host-text-faint);
+  font-size: var(--yapi-text-xs);
+}
+
+.yapi-tool-step-group-steps {
+  box-sizing: border-box;
+  padding-block: 0 4px;
+  padding-inline: 8px 0;
+}
+
+.yapi-tool-step-item {
+  margin-block: 0;
+}
+
+.yapi-tool-call-in-step-group {
+  margin: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.yapi-container .yapi-tool-call-in-step-group .yapi-tool-header {
+  padding: 2px 4px;
+  gap: var(--yapi-spacing-xs);
+}
+
+.yapi-tool-call-in-step-group .yapi-tool-name {
+  font-size: var(--yapi-text-sm);
+}
+
+.yapi-tool-call-in-step-group .yapi-tool-summary {
+  font-size: var(--yapi-text-sm);
+}
+
+.yapi-tool-call {
+  margin: 4px 0;
+}
+
+.yapi-tool-call + .yapi-tool-call {
+  margin-top: 0;
+}
+
+.yapi-activity-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.yapi-activity-name,
+.yapi-activity-summary,
+.yapi-activity-status-label,
+.yapi-activity-elapsed {
+  font-family: var(--yapi-host-font-interface);
+}
+
+.yapi-activity-elapsed {
+  flex: 0 0 auto;
+  color: var(--yapi-host-text-faint);
+  font-size: var(--yapi-text-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+.yapi-tool-call-compact:not(.expanded) .yapi-tool-content {
+  display: none;
+}
+
+.yapi-tool-call-compact.expanded .yapi-tool-content {
+  display: block;
+}
+
+.yapi-container .yapi-tool-header {
+  gap: 6px;
+  padding: 3px 8px 3px 4px;
+  overflow: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-tool-header:hover {
+    background: rgba(var(--yapi-host-mono-rgb-100), 0.03);
+  }
+}
+
+.yapi-tool-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  --icon-size: 16px;
+  color: var(--yapi-host-text-accent);
+  line-height: 0;
+}
+
+.yapi-tool-icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.yapi-tool-icon--small {
+  width: 14px;
+  height: 14px;
+  flex-basis: 14px;
+  --icon-size: 14px;
+}
+
+.yapi-tool-icon--small svg {
+  width: 14px;
+  height: 14px;
+}
+
+.yapi-tool-name {
+  font-family: var(--yapi-host-font-interface);
+  font-size: var(--yapi-text-base);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--yapi-host-text-normal);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.yapi-tool-summary {
+  font-family: var(--yapi-host-font-interface);
+  font-size: var(--yapi-text-base);
+  line-height: 1.2;
+  color: var(--yapi-host-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.yapi-tool-summary:empty {
+  display: none;
+}
+
+.yapi-tool-call-bash.expanded .yapi-tool-summary {
+  display: none;
+}
+
+.yapi-tool-bash-command {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  line-height: 1.4;
+  color: var(--yapi-host-text-normal);
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 2px 0 4px;
+}
+
+.yapi-tool-current {
+  font-family: var(--yapi-host-font-interface);
+  font-size: var(--yapi-text-base);
+  line-height: 1.2;
+  color: var(--yapi-host-text-muted);
+  white-space: nowrap;
+}
+
+.yapi-tool-current:empty {
+  display: none;
+}
+
+.yapi-tool-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+  --icon-size: 14px;
+  line-height: 0;
+}
+
+.yapi-tool-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+.yapi-tool-status.status-running {
+  color: var(--yapi-host-text-accent);
+}
+
+.yapi-tool-status.status-queued,
+.yapi-tool-status.status-waiting,
+.yapi-tool-status.status-orphaned {
+  color: var(--yapi-host-color-orange);
+}
+
+.yapi-tool-status.status-completed {
+  color: var(--yapi-host-color-green);
+}
+
+.yapi-tool-status.status-failed,
+.yapi-tool-status.status-cancelled,
+.yapi-tool-status.status-error {
+  color: var(--yapi-host-color-red);
+}
+
+.yapi-tool-status.status-blocked {
+  color: var(--yapi-host-color-orange);
+}
+
+.yapi-status-icon-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border: 1.5px solid currentColor;
+  border-radius: var(--yapi-radius-pill);
+}
+
+.yapi-activity-status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.yapi-activity-status-label {
+  font-family: var(--yapi-host-font-interface);
+  font-size: var(--yapi-text-xs);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Tool call content - border style (like thinking block) */
+.yapi-tool-content {
+  box-sizing: border-box;
+  padding: 2px 0;
+  padding-inline-start: var(--yapi-spacing-md);
+  margin-inline-start: 13px;
+  border-inline-start: 2px solid var(--yapi-host-border);
+  margin-inline-end: var(--yapi-spacing-sm);
+  margin-block-end: 6px;
+}
+
+/* Tool content variants that render inline widgets instead of bordered results */
+.yapi-tool-content-todo,
+.yapi-tool-content-ask {
+  border-inline-start: none;
+  margin-inline-start: 0;
+  padding-inline-start: 0;
+}
+
+/* Expanded content: per-line rendering */
+.yapi-tool-lines {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  line-height: 1.4;
+  overflow-x: auto;
+}
+
+.yapi-tool-raw-text {
+  margin: 0;
+  color: var(--yapi-host-text-muted);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.yapi-tool-line {
+  padding: 1px 0;
+  color: var(--yapi-host-text-muted);
+  white-space: pre;
+}
+
+.yapi-tool-line-path {
+  white-space: normal;
+}
+
+.yapi-tool-path-link,
+.yapi-tool-path-text {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  overflow-wrap: anywhere;
+}
+
+.yapi-tool-line-wrap {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.yapi-tool-image-preview {
+  margin: 4px 0 8px;
+}
+
+.yapi-tool-image-preview img {
+  display: block;
+  max-width: min(100%, 360px);
+  max-height: 360px;
+  border-radius: var(--yapi-radius-md);
+  border: 1px solid var(--yapi-host-border);
+  object-fit: contain;
+}
+
+/* Hover highlight for file search results */
+.yapi-tool-line.hoverable:hover {
+  background: var(--yapi-host-background-hover);
+}
+
+/* ToolSearch expanded: icon + tool name rows */
+.yapi-tool-search-item {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-xs);
+  padding: 2px 0;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-tool-search-icon {
+  color: var(--yapi-host-text-faint);
+}
+
+/* Web search links */
+.yapi-tool-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 3px 0;
+  color: var(--yapi-host-text-muted);
+  text-decoration: none;
+  cursor: pointer;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  line-height: 1.4;
+}
+
+.yapi-tool-link:hover {
+  color: var(--yapi-host-text-accent);
+}
+
+.yapi-tool-link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  margin-top: 2px;
+  --icon-size: 12px;
+  color: var(--yapi-host-text-faint);
+}
+
+.yapi-tool-link-icon svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+}
+
+.yapi-tool-link-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Web search summary section */
+.yapi-tool-web-summary {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-muted);
+  padding-top: var(--yapi-spacing-xs);
+  border-top: 1px solid var(--yapi-host-border);
+  margin-top: var(--yapi-spacing-xs);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Empty state for file search */
+.yapi-tool-empty {
+  color: var(--yapi-host-text-faint);
+  font-style: italic;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  padding: 4px 0;
+}
+
+.yapi-tool-result-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.yapi-tool-result-text {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-muted);
+  line-height: 1.4;
+  white-space: pre-wrap;
+  overflow: hidden;
+  flex: 1;
+}
+
+.yapi-tool-result-item {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.yapi-tool-patch-section + .yapi-tool-patch-section {
+  margin-top: 10px;
+}
+
+.yapi-tool-result-item:last-child {
+  margin-bottom: 0;
+}

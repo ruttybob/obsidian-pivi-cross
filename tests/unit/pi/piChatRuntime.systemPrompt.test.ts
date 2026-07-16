@@ -183,7 +183,7 @@ const mockAuxRunner = {
 let mockCapturedSubagentToolProvider: (() => unknown[]) | undefined;
 let mockCapturedSubagentChunkSink: ((chunk: StreamChunk) => void) | undefined;
 
-jest.mock('@pivi/pivi-agent-core/engine/pi/piAuxQueryRunner', () => ({
+jest.mock('@yapi/yapi-agent-core/engine/pi/piAuxQueryRunner', () => ({
   createPiAuxQueryRunner: jest.fn((_plugin, options) => {
     mockCapturedSubagentChunkSink = options?.onSubagentChunk;
     mockCapturedSubagentToolProvider = options?.getTools;
@@ -192,23 +192,23 @@ jest.mock('@pivi/pivi-agent-core/engine/pi/piAuxQueryRunner', () => ({
 }));
 
 import type { AgentMessage } from '@earendil-works/pi-agent-core';
-import type { McpTransportFetch } from '@pivi/pivi-agent-core/mcp/ports';
-import type { HttpClient } from '@pivi/pivi-agent-core/ports';
-import type { StreamChunk, UsageInfo } from '@pivi/pivi-agent-core/foundation';
-import * as piAiModelRegistry from '@pivi/pivi-agent-core/engine/pi/piAiModels';
-import { PiChatRuntime } from '@pivi/pivi-agent-core/engine/pi/piChatRuntime';
+import type { McpTransportFetch } from '@yapi/yapi-agent-core/mcp/ports';
+import type { HttpClient } from '@yapi/yapi-agent-core/ports';
+import type { StreamChunk, UsageInfo } from '@yapi/yapi-agent-core/foundation';
+import * as piAiModelRegistry from '@yapi/yapi-agent-core/engine/pi/piAiModels';
+import { PiChatRuntime } from '@yapi/yapi-agent-core/engine/pi/piChatRuntime';
 import {
   buildEstimatedUsageInfo,
   buildUsageInfoFromAgentMessage,
-} from '../../../packages/pivi-agent-core/src/engine/pi/piChatRuntimeUsage';
+} from '../../../packages/yapi-agent-core/src/engine/pi/piChatRuntimeUsage';
 import {
   type PiCachedModel,
   PI_AI_MODELS_CACHE,
-} from '@pivi/pivi-agent-core/engine/pi/piModelRegistry';
-import type { PiBaseToolProvider } from '@pivi/pivi-agent-core/engine/pi/buildPiToolRegistryCore';
-import { SessionTreeStore } from '@pivi/pivi-agent-core/engine/pi/session/sessionTreeStore';
-import { PIVI_MESSAGE_UI } from '@pivi/pivi-agent-core/session';
-import { TOOL_OBSIDIAN_READ_EXTERNAL, TOOL_SPAWN_AGENT, type ToolSpec } from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/engine/pi/piModelRegistry';
+import type { PiBaseToolProvider } from '@yapi/yapi-agent-core/engine/pi/buildPiToolRegistryCore';
+import { SessionTreeStore } from '@yapi/yapi-agent-core/engine/pi/session/sessionTreeStore';
+import { YAPI_MESSAGE_UI } from '@yapi/yapi-agent-core/session';
+import { TOOL_OBSIDIAN_READ_EXTERNAL, TOOL_SPAWN_AGENT, type ToolSpec } from '@yapi/yapi-agent-core/tools';
 
 function expectDefined<T>(value: T | undefined): asserts value is T {
   expect(value).toBeDefined();
@@ -338,7 +338,7 @@ describe('PiChatRuntime system prompt', () => {
     expect(mockAgentInstances).toHaveLength(1);
     const agent = mockAgentInstances[0];
     expectDefined(agent);
-    expect(agent.initialState.systemPrompt).toContain('You are **Pivi**');
+    expect(agent.initialState.systemPrompt).toContain('You are **Yapi**');
     expect(agent.initialState.systemPrompt).not.toContain('## Custom Instructions');
     expect(agent.initialState.systemPrompt).toContain('Vault absolute path: /test/vault');
     expect(agent.options).not.toHaveProperty('getApiKey');
@@ -457,7 +457,7 @@ describe('PiChatRuntime system prompt', () => {
     const plugin = createMockPlugin();
     const runtime = createRuntime(plugin);
 
-    runtime.syncSession({ sessionFile: '.pivi/sessions/a.jsonl', leafId: 'entry-1' });
+    runtime.syncSession({ sessionFile: '.yapi/sessions/a.jsonl', leafId: 'entry-1' });
 
     const updates = runtime.getSessionStateUpdates();
 
@@ -473,7 +473,7 @@ describe('PiChatRuntime system prompt', () => {
     const plugin = createMockPlugin();
     const runtime = createRuntime(plugin);
 
-    runtime.syncSession({ sessionFile: '.pivi/sessions/legacy.jsonl' });
+    runtime.syncSession({ sessionFile: '.yapi/sessions/legacy.jsonl' });
 
     const updates = runtime.getSessionStateUpdates();
 
@@ -515,7 +515,7 @@ describe('PiChatRuntime system prompt', () => {
     expect(mockAgentInstances[0].prompt).toHaveBeenCalledWith('Review the selected code in detail.');
     const sessionFile = runtime.getSessionStateUpdates().sessionFile;
     const messageUi = SessionTreeStore.open('/test/vault', sessionFile ?? '').getEntries().find((entry) => (
-      entry.type === 'custom' && entry.customType === PIVI_MESSAGE_UI
+      entry.type === 'custom' && entry.customType === YAPI_MESSAGE_UI
     ));
     expect(messageUi).toEqual(expect.objectContaining({
       data: expect.objectContaining({ displayContent: '/review' }),
@@ -692,7 +692,7 @@ describe('PiChatRuntime system prompt', () => {
     const sessionFile = runtime.getSessionStateUpdates().sessionFile;
     const entries = SessionTreeStore.open('/test/vault', sessionFile ?? '').getEntries();
     const messageUi = entries.find((entry) => (
-      entry.type === 'custom' && entry.customType === PIVI_MESSAGE_UI
+      entry.type === 'custom' && entry.customType === YAPI_MESSAGE_UI
     ));
     expect(messageUi).toBeDefined();
     expect(JSON.stringify(messageUi)).not.toContain('externalContextPaths');
@@ -1163,11 +1163,11 @@ None
     const plugin = createMockPlugin({ vaultPath: null });
     const runtime = createRuntime(plugin);
 
-    runtime.syncSession({ sessionFile: '.pivi/sessions/missing.jsonl' });
+    runtime.syncSession({ sessionFile: '.yapi/sessions/missing.jsonl' });
 
     expect(runtime.getSessionStateUpdates()).toEqual({
       sessionId: null,
-      sessionFile: '.pivi/sessions/missing.jsonl',
+      sessionFile: '.yapi/sessions/missing.jsonl',
       agentState: undefined,
     });
   });

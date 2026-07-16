@@ -9,8 +9,8 @@ describe('frozen Pi session fixture compatibility', () => {
       import { SessionManager } from '@earendil-works/pi-coding-agent';
 
       const fixtures = path.join(process.cwd(), 'tests', 'fixtures', 'sessions');
-      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-session-fixtures-'));
-      const sessionDir = path.join(root, '.pivi', 'sessions');
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-session-fixtures-'));
+      const sessionDir = path.join(root, '.yapi', 'sessions');
       fs.mkdirSync(sessionDir, { recursive: true });
 
       const openTwice = (fixtureName) => {
@@ -70,7 +70,7 @@ describe('frozen Pi session fixture compatibility', () => {
         const compactions = mixed.entries.filter((entry) => entry.type === 'compaction');
         if (compactions.length !== 2
           || compactions[0].details !== undefined
-          || compactions[1].details?.piviCheckpoint?.schemaVersion !== 1) {
+          || compactions[1].details?.yapiCheckpoint?.schemaVersion !== 1) {
           throw new Error('mixed checkpoint details were not preserved');
         }
         const mixedContext = JSON.stringify(mixed.context);

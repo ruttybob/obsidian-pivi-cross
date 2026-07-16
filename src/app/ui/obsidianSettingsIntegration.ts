@@ -22,14 +22,14 @@ import {
   TOOL_OBSIDIAN_TAGS,
   TOOL_OBSIDIAN_TASKS,
   TOOL_OBSIDIAN_WRITE,
-} from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/tools';
 import type {
   SettingsFeedbackMessage,
   SettingsHostIntegrationSection,
   SettingsToolRow,
-} from '@pivi/pivi-react/ports';
+} from '@yapi/yapi-react/ports';
 
-import type { PiviSettingsHost } from '@/app/hostContracts';
+import type { YapiSettingsHost } from '@/app/hostContracts';
 import { isOfficialObsidianCliEnabled } from '@/app/hostPlatform';
 import { t, type TranslationKey } from '@/app/i18n';
 import type { NoteToolbarSetupResult } from '@/app/noteToolbarIntegration';
@@ -166,7 +166,7 @@ export function describeNoteToolbarResult(result: NoteToolbarSetupResult): Setti
 }
 
 export async function runObsidianIntegrationAction(
-  host: PiviSettingsHost,
+  host: YapiSettingsHost,
   actionId: string,
 ): Promise<{ readonly feedback?: SettingsFeedbackMessage }> {
   if (actionId === STYLE_SETTINGS_ACTION) {

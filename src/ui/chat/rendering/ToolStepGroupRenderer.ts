@@ -1,11 +1,11 @@
 import {
   resolveToolActivityStatus,
   type ToolCallInfo,
-} from '@pivi/pivi-agent-core/foundation';
+} from '@yapi/yapi-agent-core/foundation';
 import {
   isToolPresentationGroupable,
   shouldPresentToolCall,
-} from '@pivi/pivi-agent-core/tools/toolPresentation';
+} from '@yapi/yapi-agent-core/tools/toolPresentation';
 
 import { t } from '@/app/i18n';
 
@@ -81,11 +81,11 @@ function mountStepRow(
   toolCallElements?: Map<string, HTMLElement>,
 ): HTMLElement {
   requireGroupable(toolCall);
-  const stepWrap = state.stepsEl.createDiv({ cls: 'pivi-tool-step-item' });
+  const stepWrap = state.stepsEl.createDiv({ cls: 'yapi-tool-step-item' });
   stepWrap.dataset.toolId = toolCall.id;
   const toolEl = renderStoredToolCall(stepWrap, toolCall, state.renderOptions);
-  toolEl.addClass('pivi-tool-call-in-step-group');
-  toolEl.addClass('pivi-tool-call-compact');
+  toolEl.addClass('yapi-tool-call-in-step-group');
+  toolEl.addClass('yapi-tool-call-compact');
   state.toolIds.push(toolCall.id);
   state.toolCallsById.set(toolCall.id, toolCall);
   toolCallElements?.set(toolCall.id, toolEl);
@@ -104,15 +104,15 @@ export function createToolStepGroup(
   toolCalls.forEach(requireGroupable);
 
   const groupEl = parentEl.createDiv({ cls: TOOL_STEP_GROUP_CLASS });
-  groupEl.addClass('pivi-collapsible');
+  groupEl.addClass('yapi-collapsible');
 
   const headerEl = groupEl.createDiv({ cls: TOOL_STEP_GROUP_HEADER_CLASS });
 
-  const countEl = headerEl.createSpan({ cls: 'pivi-tool-step-group-count' });
-  const summaryEl = headerEl.createSpan({ cls: 'pivi-tool-step-group-summary' });
-  const statusEl = headerEl.createSpan({ cls: 'pivi-tool-step-group-status' });
+  const countEl = headerEl.createSpan({ cls: 'yapi-tool-step-group-count' });
+  const summaryEl = headerEl.createSpan({ cls: 'yapi-tool-step-group-summary' });
+  const statusEl = headerEl.createSpan({ cls: 'yapi-tool-step-group-status' });
 
-  const stepsEl = groupEl.createDiv({ cls: 'pivi-tool-step-group-steps pivi-hidden' });
+  const stepsEl = groupEl.createDiv({ cls: 'yapi-tool-step-group-steps yapi-hidden' });
 
   const collapsibleState = { isExpanded: false };
   let state: ToolStepGroupState | null = null;

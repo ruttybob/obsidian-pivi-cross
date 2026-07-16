@@ -1,0 +1,492 @@
+/* Messages wrapper (for scroll-to-bottom button positioning) */
+.yapi-messages-wrapper {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.yapi-messages-wrapper::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  inset-inline: 0;
+  inset-block-end: 0;
+  height: 64px;
+  background: linear-gradient(to bottom, transparent, var(--yapi-host-background-primary));
+}
+
+.yapi-messages-bottom-controls {
+  position: absolute;
+  z-index: 40;
+  pointer-events: none;
+  inset-inline: 12px;
+  inset-block-end: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.yapi-messages-bottom-controls:empty {
+  display: none;
+}
+
+.yapi-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0 84px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.yapi-react-messages-slot,
+.yapi-message-list {
+  width: 100%;
+}
+
+.yapi-message-virtual-row {
+  display: flex;
+  flex-direction: column;
+  padding-block-end: var(--yapi-spacing-sm);
+}
+
+.yapi-message-virtual-row > .yapi-message {
+  flex: 0 0 auto;
+}
+
+.yapi-streaming-markdown-tail {
+  white-space: pre-wrap;
+}
+
+.yapi-messages>:not(.yapi-hidden)+:not(.yapi-hidden) {
+  margin-block-start: var(--yapi-spacing-sm);
+}
+
+/* Focusable messages panel for vim-style navigation */
+.yapi-messages-focusable:focus {
+  outline: none;
+}
+
+.yapi-react-welcome-slot {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+}
+
+.yapi-react-welcome-slot:empty {
+  display: none;
+}
+
+.yapi-react-welcome-slot .yapi-welcome {
+  width: 100%;
+}
+
+.yapi-welcome-quote-adapter {
+  position: absolute;
+  inset: 0;
+}
+
+/* Welcome message */
+.yapi-welcome {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+/* Decorative author quotes behind the welcome greeting */
+.yapi-welcome-quote-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.yapi-welcome-quote {
+  position: absolute;
+  width: clamp(132px, 38%, 300px);
+  color: var(--yapi-host-text-muted);
+  font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  font-style: italic;
+  opacity: 0;
+  text-align: left;
+  transition: opacity 1.5s var(--yapi-ease-in-out);
+}
+
+.yapi-welcome-quote.yapi-quote-visible {
+  opacity: 0.14;
+}
+
+.yapi-welcome-quote-text {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.yapi-welcome-quote-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.yapi-welcome-quote-char {
+  display: inline-block;
+  opacity: 0;
+  white-space: pre;
+}
+
+.yapi-welcome-quote-char.yapi-quote-char-visible {
+  animation: yapi-quote-ink-in 240ms ease-out forwards;
+}
+
+.yapi-welcome-quote-author {
+  margin-top: 10px;
+  font-size: var(--yapi-text-body);
+  font-style: normal;
+  opacity: 0;
+  transition: opacity 0.8s var(--yapi-ease-in-out);
+}
+
+.yapi-welcome-quote-author.yapi-quote-author-visible {
+  opacity: 0.7;
+}
+
+.yapi-welcome-greeting {
+  position: relative;
+  z-index: 1;
+  font-family: 'Copernicus', 'Tiempos Headline', 'Tiempos', Georgia, 'Times New Roman', serif;
+  font-size: var(--yapi-welcome-font-size, 28px);
+  font-weight: 300;
+  color: var(--yapi-host-text-muted);
+  letter-spacing: -0.02em;
+}
+
+.yapi-message {
+  position: relative;
+  padding: 10px 14px;
+  border-radius: var(--yapi-radius-md);
+  max-width: 95%;
+  word-wrap: break-word;
+}
+
+.yapi-message-user {
+  position: relative;
+  background: transparent;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  padding-block: var(--yapi-spacing-xs);
+  margin-bottom: var(--yapi-spacing-md);
+}
+
+/* Text selection in user messages - visible highlight */
+.yapi-message-user ::selection {
+  background: rgba(255, 255, 255, 0.35);
+  color: inherit;
+}
+
+.yapi-message-assistant {
+  background: transparent;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  border-end-start-radius: 4px;
+  text-align: start;
+}
+
+.yapi-message-assistant.yapi-message-assistant-tool-only {
+  padding-block: 2px;
+}
+
+.yapi-messages>.yapi-message-assistant.yapi-message-assistant-tool-only+.yapi-message-assistant.yapi-message-assistant-tool-only {
+  margin-block-start: 0;
+}
+
+.yapi-message-content {
+  font-family: inherit;
+  font-size: var(--yapi-text-chat-body);
+  line-height: var(--yapi-chat-line-height, 1.4);
+  user-select: text;
+  -webkit-user-select: text;
+  unicode-bidi: plaintext; /* Proper BiDi text handling for mixed RTL/LTR */
+}
+
+.yapi-interrupted {
+  color: #d45d5d;
+}
+
+.yapi-interrupted-hint {
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-text-block {
+  position: relative;
+  margin: 0;
+}
+
+.yapi-text-block:empty {
+  display: none;
+}
+
+.yapi-message-assistant .yapi-text-block p:empty {
+  display: none;
+  margin: 0;
+}
+
+.yapi-text-block+.yapi-tool-call {
+  margin-top: 6px;
+}
+
+.yapi-tool-call+.yapi-text-block {
+  margin-top: 6px;
+}
+
+.yapi-message-assistant .yapi-message-content p {
+  margin: 0 0 4px 0;
+}
+
+.yapi-message-assistant .yapi-message-content p:last-child {
+  margin-bottom: 0;
+}
+
+.yapi-message-content p:last-child {
+  margin-bottom: 0;
+}
+
+.yapi-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.yapi-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.yapi-messages::-webkit-scrollbar-thumb {
+  background: var(--yapi-host-border);
+  border-radius: var(--yapi-radius-xs);
+}
+
+.yapi-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--yapi-host-border-hover);
+}
+
+/* Response duration footer - styled as another line of content */
+.yapi-response-footer {
+  margin-top: var(--yapi-spacing-sm);
+}
+
+/* Shared metadata typography for live agent status and completed response duration. */
+.yapi-response-meta {
+  font-family: inherit;
+  font-size: var(--yapi-text-sm);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.yapi-baked-duration {
+  color: var(--yapi-host-text-muted);
+}
+
+/* Message action buttons */
+.yapi-message-actions {
+  display: flex;
+  gap: var(--yapi-spacing-xs);
+  opacity: 0.45;
+  transition: opacity var(--yapi-duration-fast) var(--yapi-ease-out);
+  z-index: 1;
+}
+
+.yapi-user-msg-actions {
+  position: absolute;
+  inset-inline-end: 12px;
+  bottom: -20px;
+  justify-content: flex-end;
+}
+
+.yapi-assistant-msg-actions {
+  justify-content: flex-end;
+  margin-top: var(--yapi-spacing-xs);
+}
+
+.yapi-message-actions:focus-within {
+  opacity: 1;
+}
+
+.yapi-message-action-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  height: 16px;
+  min-width: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yapi-host-text-faint);
+  transition: color var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-message-action-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.yapi-message-action-btn:focus-visible {
+  color: var(--yapi-host-text-normal);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-message:hover .yapi-message-actions {
+    opacity: 1;
+  }
+
+  .yapi-message-action-btn:hover {
+    color: var(--yapi-host-text-normal);
+  }
+}
+
+.yapi-message-action-btn:focus-visible {
+  outline: 2px solid var(--yapi-host-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--yapi-radius-xs);
+}
+
+.yapi-message-action-btn.copied {
+  color: var(--yapi-host-text-accent);
+  font-size: var(--yapi-text-xs);
+  font-family: var(--yapi-host-font-monospace);
+}
+
+.yapi-message-jump-target {
+  animation: yapi-message-jump-highlight 1.2s ease-out;
+}
+
+@keyframes yapi-message-jump-highlight {
+  0% {
+    background: rgba(var(--yapi-host-interactive-accent-rgb), 0.18);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+/* Memory boundaries */
+.yapi-memory-root {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  margin: 12px 0;
+}
+
+.yapi-memory-boundary {
+  position: absolute;
+  top: 12px;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: var(--yapi-host-border);
+}
+
+.yapi-memory-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 2px 8px;
+  border-radius: var(--yapi-radius-full);
+  background: var(--yapi-host-background-secondary);
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-text-xs);
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.yapi-memory-chip-button {
+  font: inherit;
+  border: 0;
+  cursor: pointer;
+}
+
+.yapi-memory-chip-button:hover {
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-memory-chip-button:focus-visible {
+  outline: var(--yapi-focus-ring);
+  outline-offset: 2px;
+}
+
+.yapi-memory-chip-transition {
+  font-family: var(--yapi-font-monospace);
+  color: var(--yapi-host-text-faint);
+}
+
+.yapi-checkpoint-panel {
+  justify-self: stretch;
+  margin-top: var(--yapi-spacing-sm);
+  padding: var(--yapi-spacing-sm) var(--yapi-spacing-md);
+  color: var(--yapi-host-text-normal);
+  background: var(--yapi-host-background-secondary);
+  border-left: 2px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-xs);
+  font-size: var(--yapi-text-sm);
+}
+
+.yapi-checkpoint-summary {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.yapi-checkpoint-details,
+.yapi-checkpoint-meta {
+  display: grid;
+  gap: var(--yapi-spacing-sm);
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-checkpoint-section h4,
+.yapi-checkpoint-section ul {
+  margin: 0;
+}
+
+.yapi-checkpoint-section h4,
+.yapi-checkpoint-meta dt {
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-text-xs);
+  font-weight: 600;
+}
+
+.yapi-checkpoint-section ul {
+  padding-left: 1.25em;
+}
+
+.yapi-checkpoint-meta {
+  margin-bottom: 0;
+}
+
+.yapi-checkpoint-meta > div {
+  display: grid;
+  grid-template-columns: minmax(90px, auto) minmax(0, 1fr);
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-checkpoint-meta dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--yapi-font-monospace);
+  font-size: var(--yapi-text-xs);
+}

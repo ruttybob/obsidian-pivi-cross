@@ -1,5 +1,5 @@
 {
-  "name": "@pivi/obsidian-host",
+  "name": "@yapi/obsidian-host",
   "private": true,
   "type": "module",
   "exports": {
@@ -17,12 +17,12 @@
     "./openExternalUrl": "./src/openExternalUrl.ts",
     "./path": "./src/path.ts",
     "./providerLegacyAuthStore": "./src/providerLegacyAuthStore.ts",
-    "./settings/piviSettingsStorage": "./src/settings/piviSettingsStorage.ts",
+    "./settings/yapiSettingsStorage": "./src/settings/yapiSettingsStorage.ts",
     "./storage/sharedStorageService": "./src/storage/sharedStorageService.ts",
     "./systemProcessRunner": "./src/systemProcessRunner.ts"
   },
   "dependencies": {
-    "@pivi/pivi-agent-core": "*"
+    "@yapi/yapi-agent-core": "*"
   },
   "peerDependencies": {
     "obsidian": ">=1.12.0"

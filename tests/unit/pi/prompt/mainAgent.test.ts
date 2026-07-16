@@ -1,7 +1,7 @@
 import {
   buildSystemPrompt,
   computeSystemPromptKey,
-} from '@pivi/pivi-agent-core/prompt';
+} from '@yapi/yapi-agent-core/prompt';
 
 describe('mainAgent system prompt', () => {
   describe('buildSystemPrompt', () => {
@@ -10,9 +10,9 @@ describe('mainAgent system prompt', () => {
       expect(prompt).not.toContain('## Custom Instructions');
     });
 
-    it('includes Pivi identity and path conventions', () => {
+    it('includes Yapi identity and path conventions', () => {
       const prompt = buildSystemPrompt();
-      expect(prompt).toContain('You are **Pivi**');
+      expect(prompt).toContain('You are **Yapi**');
       expect(prompt).toContain('Knowledge Status');
       expect(prompt).toContain('## Response Language');
       expect(prompt).toContain('same language as the user');

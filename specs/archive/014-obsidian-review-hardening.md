@@ -11,7 +11,7 @@ coordinator: "/root"
 
 ## Context
 
-Obsidian review reported direct DOM construction, missing 1.13 settings search definitions, and broad desktop capabilities. Pivi intentionally retains its desktop-only filesystem, process, MCP, session, and clipboard features, but can use the public owner-realm DOM helpers, index its React settings surface, and avoid unnecessary automatic process/clipboard/vault access.
+Obsidian review reported direct DOM construction, missing 1.13 settings search definitions, and broad desktop capabilities. Yapi intentionally retains its desktop-only filesystem, process, MCP, session, and clipboard features, but can use the public owner-realm DOM helpers, index its React settings surface, and avoid unnecessary automatic process/clipboard/vault access.
 
 ## Goal and success criteria
 
@@ -56,7 +56,7 @@ Not in scope:
 - `npm run lint`
 - Focused Jest suites for settings, inline edit, MCP, tools settings, and vault API.
 - `npm run build`
-- `obsidian plugin:reload id=pivi`
+- `obsidian plugin:reload id=yapi`
 - `obsidian dev:errors`
 
 ## Documentation sync
@@ -81,17 +81,17 @@ Not in scope:
 - Changed: Made missing CLI configuration default to disabled; limited app and runtime MCP prefetch to enabled remote servers; replaced ambient clipboard reads with an explicit localized JSON paste/confirm editor; resolved Base files through direct path/metadata lookup; and skipped vault enumeration for unresolved-only graph requests. Updated security and package guidance.
 - Evidence: Six focused Jest suites passed (83 tests); focused ESLint passed; `npm run check:boundaries` passed, including locale parity/dead-key and spec checks; source typecheck passed.
 - Remaining: Root full lint/build/deploy/runtime verification and WS-01 completion.
-- Blockers: Full test typecheck currently reaches a concurrent WS-01 test typing error at `tests/pivi-react/PiviSettingTabHost.test.ts:98` (`definition.render` possibly undefined); no WS-02 blocker remains.
+- Blockers: Full test typecheck currently reaches a concurrent WS-01 test typing error at `tests/yapi-react/YapiSettingTabHost.test.ts:98` (`definition.render` possibly undefined); no WS-02 blocker remains.
 - Next action: Coordinator completes WS-01, reruns the full verification matrix, deploys, and inspects Obsidian runtime errors.
 
 ### 2026-07-17 — /root — DOM, settings, and closeout
 
 - Changed: Replaced production DOM construction with owner-realm Obsidian helpers; moved the default-Skills prompt into app presentation; split inline-edit widget/container options; added the localized Obsidian 1.13 setting definition with a 1.12 fallback; enabled both review lint rules; synchronized the presentation and package guidance.
-- Evidence: `npm run check:boundaries`, `npm run typecheck`, and `npm run lint` passed. Full Jest passed 255 suites / 1952 tests. `npm run build` deployed production artifacts. `obsidian plugin:reload id=pivi` succeeded and `obsidian dev:errors` reported `No errors captured.` Production source scans found no raw `createElement*` / `createDocumentFragment` calls and no `navigator.clipboard.readText` call. Obsidian 1.13.2 live validation opened Pivi through the declarative settings result, mounted one React root, confirmed the definition row computed to `display: block`, zero padding, and no top border, matched the localized `工具` alias after switching to Simplified Chinese, and restored English afterward without captured errors.
+- Evidence: `npm run check:boundaries`, `npm run typecheck`, and `npm run lint` passed. Full Jest passed 255 suites / 1952 tests. `npm run build` deployed production artifacts. `obsidian plugin:reload id=yapi` succeeded and `obsidian dev:errors` reported `No errors captured.` Production source scans found no raw `createElement*` / `createDocumentFragment` calls and no `navigator.clipboard.readText` call. Obsidian 1.13.2 live validation opened Yapi through the declarative settings result, mounted one React root, confirmed the definition row computed to `display: block`, zero padding, and no top border, matched the localized `工具` alias after switching to Simplified Chinese, and restored English afterward without captured errors.
 - Remaining: None.
 - Blockers: None.
 - Next action: Archive the completed spec with this change.
 
 ## Completion summary
 
-Pivi retains its explicit desktop integrations while reducing ambient authority: CLI defaults off, stdio MCP is lazy, MCP JSON import requires user paste/confirmation, and avoidable Vault enumeration is removed. Production UI now uses popout-safe Obsidian DOM helpers, host-neutral core no longer constructs prompt DOM, inline edit receives an owner-realm container factory, and the existing React settings surface participates in Obsidian 1.13 search without dropping 1.12 support. The full verification and live Obsidian reload completed without runtime errors.
+Yapi retains its explicit desktop integrations while reducing ambient authority: CLI defaults off, stdio MCP is lazy, MCP JSON import requires user paste/confirmation, and avoidable Vault enumeration is removed. Production UI now uses popout-safe Obsidian DOM helpers, host-neutral core no longer constructs prompt DOM, inline edit receives an owner-realm container factory, and the existing React settings surface participates in Obsidian 1.13 search without dropping 1.12 support. The full verification and live Obsidian reload completed without runtime errors.

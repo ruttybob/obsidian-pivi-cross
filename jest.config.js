@@ -12,10 +12,10 @@ const baseConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@test/(.*)$': '<rootDir>/tests/$1',
-    '^@pivi/pivi-agent-core/engine/pi/registerBundledPiOAuthFlows$':
-      '<rootDir>/tests/__mocks__/registerPiviBundledOAuthFlowLoaders.ts',
-    '^@pivi/([^/]+)$': '<rootDir>/packages/$1/src/index.ts',
-    '^@pivi/([^/]+)/(.*)$': '<rootDir>/packages/$1/src/$2',
+    '^@yapi/yapi-agent-core/engine/pi/registerBundledPiOAuthFlows$':
+      '<rootDir>/tests/__mocks__/registerYapiBundledOAuthFlowLoaders.ts',
+    '^@yapi/([^/]+)$': '<rootDir>/packages/$1/src/index.ts',
+    '^@yapi/([^/]+)/(.*)$': '<rootDir>/packages/$1/src/$2',
     '^obsidian$': '<rootDir>/tests/__mocks__/obsidian.ts',
     '^@earendil-works/pi-agent-core$': '<rootDir>/tests/__mocks__/@earendil-works/pi-agent-core.ts',
     '^@earendil-works/pi-ai/dist/(.*)$': '<rootDir>/node_modules/@earendil-works/pi-ai/dist/$1',
@@ -42,15 +42,15 @@ module.exports = {
     },
     {
       ...baseConfig,
-      displayName: 'pivi-react',
+      displayName: 'yapi-react',
       testEnvironment: 'jsdom',
       setupFilesAfterEnv: [
         '<rootDir>/tests/setupWindow.ts',
         '<rootDir>/tests/setupObsidianUi.ts',
       ],
       testMatch: [
-        '<rootDir>/tests/pivi-react/**/*.test.ts',
-        '<rootDir>/tests/pivi-react/**/*.test.tsx',
+        '<rootDir>/tests/yapi-react/**/*.test.ts',
+        '<rootDir>/tests/yapi-react/**/*.test.tsx',
       ],
     },
   ],

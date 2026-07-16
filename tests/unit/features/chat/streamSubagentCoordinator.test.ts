@@ -1,5 +1,5 @@
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
-import type { TaskResultInterpreter } from '@pivi/pivi-agent-core/tools';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
+import type { TaskResultInterpreter } from '@yapi/yapi-agent-core/tools';
 
 import { SubagentManager } from '@/ui/chat/services/SubagentManager';
 import { StreamSubagentCoordinator } from '@/ui/chat/stream/streamSubagentLifecycle';

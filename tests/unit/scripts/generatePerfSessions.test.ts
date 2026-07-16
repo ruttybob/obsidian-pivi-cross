@@ -51,8 +51,8 @@ function expectLinearSession(entries: FixtureEntry[], vaultPath: string) {
 }
 
 describe('generate-perf-sessions', () => {
-  const vaultPath = mkdtempSync(join(tmpdir(), 'pivi-perf-sessions-'));
-  const sessionsDirectory = join(vaultPath, '.pivi', 'sessions');
+  const vaultPath = mkdtempSync(join(tmpdir(), 'yapi-perf-sessions-'));
+  const sessionsDirectory = join(vaultPath, '.yapi', 'sessions');
 
   afterAll(() => {
     rmSync(vaultPath, { recursive: true, force: true });
@@ -87,7 +87,7 @@ describe('generate-perf-sessions', () => {
     expect(Buffer.byteLength(markdownText ?? '', 'utf8')).toBe(100 * 1024);
 
     const agentOverlay = subagents.entries.find(
-      (entry) => entry.customType === 'pivi/message-ui',
+      (entry) => entry.customType === 'yapi/message-ui',
     );
     expect(agentOverlay?.data?.contentBlocks).toHaveLength(21);
     expect(agentOverlay?.data?.toolCalls).toHaveLength(20);

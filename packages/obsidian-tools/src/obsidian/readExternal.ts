@@ -2,7 +2,7 @@ import {
   textResult,
   TOOL_OBSIDIAN_READ_EXTERNAL,
   type ToolSpec,
-} from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/tools';
 
 import type { ObsidianToolDeps } from './deps';
 import {
@@ -66,7 +66,7 @@ export function createReadExternalTool(deps: ObsidianToolDeps): ToolSpec {
       const isRangeRead = startLine !== undefined || endLine !== undefined;
       if (fileStat.size > MAX_EXTERNAL_READ_BYTES && (isRangeRead || maxChars >= fileStat.size)) {
         throw new Error(
-          `External file is ${fileStat.size} bytes, which exceeds the hard safety limit of ${MAX_EXTERNAL_READ_BYTES} bytes. Narrow the file outside Pivi before reading it.`,
+          `External file is ${fileStat.size} bytes, which exceeds the hard safety limit of ${MAX_EXTERNAL_READ_BYTES} bytes. Narrow the file outside Yapi before reading it.`,
         );
       }
       if (!isRangeRead && fileStat.size > maxChars) {

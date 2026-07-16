@@ -1,9 +1,9 @@
-import type { ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
+import type { ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
 import {
   TOOL_OBSIDIAN_READ,
   TOOL_OBSIDIAN_READ_EXTERNAL,
-} from '@pivi/pivi-agent-core/tools/obsidianToolNames';
-import { TOOL_READ } from '@pivi/pivi-agent-core/tools/toolNames';
+} from '@yapi/yapi-agent-core/tools/obsidianToolNames';
+import { TOOL_READ } from '@yapi/yapi-agent-core/tools/toolNames';
 
 export interface MarkdownReadPreview {
   markdown: string;

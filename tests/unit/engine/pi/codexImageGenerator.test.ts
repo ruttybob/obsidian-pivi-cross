@@ -1,4 +1,4 @@
-import { createCodexImageGenerator } from '@pivi/pivi-agent-core/engine/pi/codexImageGenerator';
+import { createCodexImageGenerator } from '@yapi/yapi-agent-core/engine/pi/codexImageGenerator';
 
 function jwtWithAccount(accountId: string): string {
   const payload = {
@@ -39,7 +39,7 @@ describe('createCodexImageGenerator', () => {
       headers: expect.objectContaining({
         authorization: expect.stringContaining('Bearer '),
         'chatgpt-account-id': 'acct-1',
-        originator: 'pivi',
+        originator: 'yapi',
         accept: 'text/event-stream',
       }),
     }));

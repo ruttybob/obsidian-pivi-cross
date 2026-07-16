@@ -4,7 +4,7 @@ import type {
   ContextBadgeToken,
   ContextBadgeTone,
   ContextBadgeViewModel,
-} from '@pivi/pivi-react/context-badges';
+} from '@yapi/yapi-react/context-badges';
 
 export type {
   ContextBadgeIcon,

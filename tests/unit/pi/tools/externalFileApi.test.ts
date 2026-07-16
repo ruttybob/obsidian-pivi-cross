@@ -2,14 +2,14 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-import { ExternalFileApi } from '@pivi/obsidian-host';
+import { ExternalFileApi } from '@yapi/obsidian-host';
 
 describe('ExternalFileApi', () => {
   let api: ExternalFileApi;
   let tempDir: string;
 
   beforeEach(async () => {
-    tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'pivi-external-'));
+    tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'yapi-external-'));
     api = new ExternalFileApi([tempDir]);
   });
 
@@ -58,7 +58,7 @@ describe('ExternalFileApi', () => {
     });
 
     it('throws when path is outside allowed directories', async () => {
-      const otherDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'pivi-external-other-'));
+      const otherDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'yapi-external-other-'));
       const filePath = path.join(otherDir, 'file.txt');
       await fs.promises.writeFile(filePath, 'nope', 'utf8');
 

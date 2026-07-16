@@ -1,28 +1,28 @@
 import { randomUUID } from 'node:crypto';
 
-import type { SlashCommand } from "@pivi/pivi-agent-core/foundation";
-import { PluginLogger } from "@pivi/pivi-agent-core/foundation/pluginLogger";
-import type { FileStore } from "@pivi/pivi-agent-core/ports";
+import type { SlashCommand } from "@yapi/yapi-agent-core/foundation";
+import { PluginLogger } from "@yapi/yapi-agent-core/foundation/pluginLogger";
+import type { FileStore } from "@yapi/yapi-agent-core/ports";
 import type {
   SlashCommandCatalog,
   SlashCommandDropdownConfig,
-} from "@pivi/pivi-agent-core/skills/commands/slashCommandCatalog";
-import type { SlashCatalogEntry } from "@pivi/pivi-agent-core/skills/commands/slashCommandEntry";
+} from "@yapi/yapi-agent-core/skills/commands/slashCommandCatalog";
+import type { SlashCatalogEntry } from "@yapi/yapi-agent-core/skills/commands/slashCommandEntry";
 import {
   COMPACT_COMMAND_ID,
   GENERATE_IMAGE_TOOL_ID,
-} from "@pivi/pivi-agent-core/skills/commands/slashCommandIds";
+} from "@yapi/yapi-agent-core/skills/commands/slashCommandIds";
 import {
   parseSlashCommandContent,
   serializeSlashCommandMarkdown,
-} from "@pivi/pivi-agent-core/skills/slashCommand";
-import { TOOL_OBSIDIAN_GENERATE_IMAGE } from "@pivi/pivi-agent-core/tools/obsidianToolNames";
+} from "@yapi/yapi-agent-core/skills/slashCommand";
+import { TOOL_OBSIDIAN_GENERATE_IMAGE } from "@yapi/yapi-agent-core/tools/obsidianToolNames";
 import type { TAbstractFile } from "obsidian";
 
-import type { PiviWorkspaceHost } from "./serviceContracts";
+import type { YapiWorkspaceHost } from "./serviceContracts";
 
-const COMMANDS_DIR = ".pivi/commands";
-const LEGACY_TEMPLATES_DIR = ".pivi/templates";
+const COMMANDS_DIR = ".yapi/commands";
+const LEGACY_TEMPLATES_DIR = ".yapi/templates";
 const logger = new PluginLogger('PiSlashCommandCatalog');
 
 export interface PiSlashCommandCatalogOptions {
@@ -37,7 +37,7 @@ export class PiSlashCommandCatalog implements SlashCommandCatalog {
   private isWatching = false;
 
   constructor(
-    private readonly plugin: PiviWorkspaceHost,
+    private readonly plugin: YapiWorkspaceHost,
     private readonly adapter: FileStore,
     private readonly options: PiSlashCommandCatalogOptions = {},
   ) {

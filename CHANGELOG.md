@@ -14,7 +14,7 @@
 
 * **obsidian:** address community review feedback ([1cc9d31](https://github.com/shuuul/obsidian-pivi/commit/1cc9d319652efa16804137ff82718e6dc2eb1a14))
 
-**Upgrade note:** Installations that never saved an Obsidian CLI preference now keep the integration disabled. Re-enable it in Pivi settings to restore CLI-backed history, tasks, daily-note, Base-query, command, and evaluation features.
+**Upgrade note:** Installations that never saved an Obsidian CLI preference now keep the integration disabled. Re-enable it in Yapi settings to restore CLI-backed history, tasks, daily-note, Base-query, command, and evaluation features.
 
 ## [0.10.0](https://github.com/shuuul/obsidian-pivi/compare/0.9.0...0.10.0) (2026-07-16)
 
@@ -157,7 +157,7 @@
 
 * **ai:** support max thinking level ([1ad2895](https://github.com/shuuul/obsidian-pivi/commit/1ad2895ff42947577aa25cbdccf457e1815e8b41))
 * **chat:** add editable synced tab titles ([46d30e6](https://github.com/shuuul/obsidian-pivi/commit/46d30e67c7b853f07e5f472cef4d5f191044af11)), closes [#36](https://github.com/shuuul/obsidian-pivi/issues/36)
-* prepare next Pivi release ([d029e64](https://github.com/shuuul/obsidian-pivi/commit/d029e6461fada75509d8e064e150c3703fe39e03))
+* prepare next Yapi release ([d029e64](https://github.com/shuuul/obsidian-pivi/commit/d029e6461fada75509d8e064e150c3703fe39e03))
 
 ## [0.5.0](https://github.com/shuuul/obsidian-pivi/compare/0.4.0...0.5.0) (2026-07-09)
 
@@ -356,7 +356,7 @@
 
 ### Features
 
-* **plugin:** rename Obsius to Pivi ([2d94230](https://github.com/shuuul/obsidian-pivi/commit/2d9423034e8b424c3619588b6c8fd5d3b38940b2))
+* **plugin:** rename Obsius to Yapi ([2d94230](https://github.com/shuuul/obsidian-pivi/commit/2d9423034e8b424c3619588b6c8fd5d3b38940b2))
 
 
 ### Bug Fixes
@@ -366,7 +366,7 @@
 
 ### BREAKING CHANGES
 
-* **plugin:** the plugin id and package metadata are now Pivi (`pivi`) instead of Obsius.
+* **plugin:** the plugin id and package metadata are now Yapi (`yapi`) instead of Obsius.
 
 ## [0.2.4](https://github.com/shuuul/obsidian-pivi/compare/v0.2.3...v0.2.4) (2026-06-25)
 
@@ -394,7 +394,7 @@
 * **chat:** use Obsidian image embed resolution ([91955c4](https://github.com/shuuul/obsidian-pivi/commit/91955c4a9109bc7604c0b63db094ddb1a9d48631))
 * **settings:** show Codex models after OAuth ([b078d26](https://github.com/shuuul/obsidian-pivi/commit/b078d26e003889d7abd9568fcd1d3a5e0786cbfe))
 * **settings:** simplify model readiness controls ([47c4629](https://github.com/shuuul/obsidian-pivi/commit/47c46290309a203b561842d3b91fcff5048390e1))
-* **skills:** keep CLI metadata under .pivi ([54e41e7](https://github.com/shuuul/obsidian-pivi/commit/54e41e7ea525f1254bc495d0fd027da95c6a4d94))
+* **skills:** keep CLI metadata under .yapi ([54e41e7](https://github.com/shuuul/obsidian-pivi/commit/54e41e7ea525f1254bc495d0fd027da95c6a4d94))
 
 ## [0.2.2](https://github.com/shuuul/obsidian-pivi/compare/v0.2.1...v0.2.2) (2026-06-24)
 

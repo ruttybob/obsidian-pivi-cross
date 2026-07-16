@@ -1,12 +1,12 @@
 import type { EditorView } from '@codemirror/view';
-import type { AuxQueryRunner } from '@pivi/pivi-agent-core/runtime';
+import type { AuxQueryRunner } from '@yapi/yapi-agent-core/runtime';
 import {
   hideInlineEditWidget,
   type InlineEditContext,
   type InlineEditDecision,
   installInlineEditWidgetExtension,
   showInlineEditWidget,
-} from '@pivi/pivi-react/inline-edit';
+} from '@yapi/yapi-react/inline-edit';
 import type { Editor } from 'obsidian';
 import { type MarkdownView,Notice } from 'obsidian';
 
@@ -54,7 +54,7 @@ export class InlineEditModal {
     this.positions = this.getPositions(editorView);
     if (!this.positions) return Promise.resolve({ decision: 'reject' });
     setActiveInlineEditModal(this);
-    this.editorView.dom.classList.add('pivi-inline-edit-modal');
+    this.editorView.dom.classList.add('yapi-inline-edit-modal');
     if (this.editContext.mode === 'selection' && this.positions.from !== this.positions.to) {
       showSelectionHighlight(this.editorView, this.positions.from, this.positions.to);
     }
@@ -135,7 +135,7 @@ export class InlineEditModal {
     this.disposed = true;
     if (activeInlineEditModal === this) setActiveInlineEditModal(null);
     if (this.editorView) {
-      this.editorView.dom.classList.remove('pivi-inline-edit-modal');
+      this.editorView.dom.classList.remove('yapi-inline-edit-modal');
       this.editorView.dispatch({ effects: hideInlineEditWidget.of(null) });
       hideSelectionHighlight(this.editorView);
     }

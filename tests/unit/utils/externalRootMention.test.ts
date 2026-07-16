@@ -1,4 +1,4 @@
-import { resolveExternalRootMentionAtIndex } from '@pivi/pivi-agent-core/context/mentions';
+import { resolveExternalRootMentionAtIndex } from '@yapi/yapi-agent-core/context/mentions';
 
 describe('resolveExternalRootMentionAtIndex', () => {
   const entries = [

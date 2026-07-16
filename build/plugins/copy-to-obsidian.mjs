@@ -32,7 +32,7 @@ export function createCopyToObsidianPlugin({
   bundlePath = path.join(rootDir, 'main.js'),
 } = {}) {
   const pluginPath = obsidianVault && existsSync(obsidianVault)
-    ? path.join(obsidianVault, '.obsidian', 'plugins', 'pivi')
+    ? path.join(obsidianVault, '.obsidian', 'plugins', 'yapi')
     : null;
 
   return {

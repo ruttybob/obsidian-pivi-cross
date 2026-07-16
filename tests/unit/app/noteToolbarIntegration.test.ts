@@ -9,7 +9,7 @@ const CONFIG_DIR = ".config";
 const MANIFEST_PATH = `${CONFIG_DIR}/plugins/note-toolbar/manifest.json`;
 const DATA_PATH = `${CONFIG_DIR}/plugins/note-toolbar/data.json`;
 const ENABLED_PATH = `${CONFIG_DIR}/community-plugins.json`;
-const COMMAND_ID = "pivi:add-selection-to-chat-input";
+const COMMAND_ID = "yapi:add-selection-to-chat-input";
 const TOOLBAR_ID = "a1111111-1111-4111-8111-111111111111";
 
 function createToolbarConfig(items: unknown[] = []) {
@@ -43,9 +43,9 @@ function createHarness(options?: {
     );
   }
   if (options?.enabled ?? true) {
-    files.set(ENABLED_PATH, JSON.stringify(["pivi", "note-toolbar"]));
+    files.set(ENABLED_PATH, JSON.stringify(["yapi", "note-toolbar"]));
   } else {
-    files.set(ENABLED_PATH, JSON.stringify(["pivi"]));
+    files.set(ENABLED_PATH, JSON.stringify(["yapi"]));
   }
   if (options?.config !== null) {
     files.set(DATA_PATH, JSON.stringify(options?.config ?? createToolbarConfig()));
@@ -53,7 +53,7 @@ function createHarness(options?: {
 
   const runCli = jest.fn(async (args: string[]): Promise<string> => {
     if (args[0] === "plugin:enable") {
-      files.set(ENABLED_PATH, JSON.stringify(["pivi", "note-toolbar"]));
+      files.set(ENABLED_PATH, JSON.stringify(["yapi", "note-toolbar"]));
       return "Enabled note-toolbar";
     }
     if (args[0] === "note-toolbar:add-command") {
@@ -91,7 +91,7 @@ function createHarness(options?: {
     commandId: COMMAND_ID,
     configDir: CONFIG_DIR,
     itemStyle: options?.itemStyle ?? "label-and-icon",
-    itemTooltip: "Add selection to Pivi input",
+    itemTooltip: "Add selection to Yapi input",
     openUri,
     runCli,
   };
@@ -99,7 +99,7 @@ function createHarness(options?: {
 }
 
 describe("Note Toolbar integration", () => {
-  it("adds the Pivi command through Note Toolbar's CLI and verifies it", async () => {
+  it("adds the Yapi command through Note Toolbar's CLI and verifies it", async () => {
     const { deps, runCli } = createHarness();
 
     await expect(setupNoteToolbarIntegration(deps)).resolves.toEqual({
@@ -109,9 +109,9 @@ describe("Note Toolbar integration", () => {
       "note-toolbar:add-command",
       `to=${TOOLBAR_ID}`,
       `command=${COMMAND_ID}`,
-      "label=Pivi",
+      "label=Yapi",
       "icon=message-square-plus",
-      "tooltip=Add selection to Pivi input",
+      "tooltip=Add selection to Yapi input",
       "focus",
     ]);
   });
@@ -127,23 +127,23 @@ describe("Note Toolbar integration", () => {
       `to=${TOOLBAR_ID}`,
       `command=${COMMAND_ID}`,
       "icon=message-square-plus",
-      "tooltip=Add selection to Pivi input",
+      "tooltip=Add selection to Yapi input",
       "focus",
     ]);
   });
 
   it('adds and verifies a workspace command with its own command id and icon', async () => {
     const { deps, files } = createHarness({ itemStyle: 'icon-only' });
-    deps.commandId = 'pivi:workspace-command-polish-key';
+    deps.commandId = 'yapi:workspace-command-polish-key';
     deps.itemIcon = 'sparkles';
-    deps.itemTooltip = 'Run /polish in a new Pivi session';
+    deps.itemTooltip = 'Run /polish in a new Yapi session';
 
     await expect(setupNoteToolbarIntegration(deps)).resolves.toEqual({ status: 'installed' });
     const config = JSON.parse(files.get(DATA_PATH) ?? '{}') as ReturnType<typeof createToolbarConfig>;
     expect(config.toolbars[0]?.items).toContainEqual(expect.objectContaining({
       icon: 'sparkles',
       label: '',
-      linkAttr: { type: 'command', commandId: 'pivi:workspace-command-polish-key' },
+      linkAttr: { type: 'command', commandId: 'yapi:workspace-command-polish-key' },
     }));
   });
 
@@ -151,7 +151,7 @@ describe("Note Toolbar integration", () => {
     const config = createToolbarConfig([
       {
         icon: "message-square-plus",
-        label: "Pivi",
+        label: "YaPi",
         linkAttr: { type: "command", commandId: COMMAND_ID },
       },
     ]);
@@ -177,7 +177,7 @@ describe("Note Toolbar integration", () => {
     const setLabel = jest.fn(async () => undefined);
     const setTooltip = jest.fn(async () => undefined);
     deps.itemIcon = 'sparkles';
-    deps.itemTooltip = 'Run /polish in a new Pivi session';
+    deps.itemTooltip = 'Run /polish in a new Yapi session';
     deps.getItemApi = id => id === itemId ? {
       getIcon: () => 'message-square-plus',
       getLabel: () => 'Old label',
@@ -192,7 +192,7 @@ describe("Note Toolbar integration", () => {
     });
     expect(setIcon).toHaveBeenCalledWith('sparkles');
     expect(setLabel).toHaveBeenCalledWith('');
-    expect(setTooltip).toHaveBeenCalledWith('Run /polish in a new Pivi session');
+    expect(setTooltip).toHaveBeenCalledWith('Run /polish in a new Yapi session');
     expect(runCli).not.toHaveBeenCalled();
   });
 
@@ -202,7 +202,7 @@ describe("Note Toolbar integration", () => {
       {
         uuid: itemId,
         icon: "message-square-plus",
-        label: "Pivi",
+        label: "YaPi",
         linkAttr: { type: "command", commandId: COMMAND_ID },
       },
     ]);
@@ -225,7 +225,7 @@ describe("Note Toolbar integration", () => {
       {
         uuid: "b2222222-2222-4222-8222-222222222222",
         icon: "message-square-plus",
-        label: "Pivi",
+        label: "YaPi",
         linkAttr: { type: "command", commandId: COMMAND_ID },
       },
     ]);

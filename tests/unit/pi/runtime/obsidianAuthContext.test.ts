@@ -1,10 +1,10 @@
-import { ObsidianAuthContext } from '@pivi/pivi-agent-core/engine/pi/piProviderCredentialStore';
-import { createMockPiviPluginStub, asPiviPlugin } from '../../../helpers/mockPiviPlugin';
+import { ObsidianAuthContext } from '@yapi/yapi-agent-core/engine/pi/piProviderCredentialStore';
+import { createMockYapiPluginStub, asYapiPlugin } from '../../../helpers/mockYapiPlugin';
 
 describe('ObsidianAuthContext.env', () => {
   it('prefers pi agent environment over shared and injected process env', async () => {
-    const plugin = asPiviPlugin(
-      createMockPiviPluginStub({
+    const plugin = asYapiPlugin(
+      createMockYapiPluginStub({
         settings: {
           sharedEnvironmentVariables: 'MY_VAR=shared',
           agentSettings: {
@@ -23,8 +23,8 @@ describe('ObsidianAuthContext.env', () => {
   });
 
   it('falls back to shared environment when pi agent env omits the key', async () => {
-    const plugin = asPiviPlugin(
-      createMockPiviPluginStub({
+    const plugin = asYapiPlugin(
+      createMockYapiPluginStub({
         settings: {
           sharedEnvironmentVariables: 'SHARED_ONLY=from-shared',
           agentSettings: {
@@ -43,7 +43,7 @@ describe('ObsidianAuthContext.env', () => {
   });
 
   it('uses injected getEnvironmentVariable when pi and shared lack the key', async () => {
-    const plugin = asPiviPlugin(createMockPiviPluginStub());
+    const plugin = asYapiPlugin(createMockYapiPluginStub());
     const getEnvironmentVariable = jest.fn((name: string) =>
       name === 'INJECTED_KEY' ? 'from-injection' : undefined,
     );
@@ -54,7 +54,7 @@ describe('ObsidianAuthContext.env', () => {
   });
 
   it('returns undefined when the key is absent at every layer', async () => {
-    const plugin = asPiviPlugin(createMockPiviPluginStub());
+    const plugin = asYapiPlugin(createMockYapiPluginStub());
     const getEnvironmentVariable = jest.fn().mockReturnValue(undefined);
     const ctx = new ObsidianAuthContext(plugin, { getEnvironmentVariable });
 
@@ -64,7 +64,7 @@ describe('ObsidianAuthContext.env', () => {
 
 describe('ObsidianAuthContext.fileExists', () => {
   it('expands ~/ using injected getHomeDirectory before calling fileExists', async () => {
-    const plugin = asPiviPlugin(createMockPiviPluginStub());
+    const plugin = asYapiPlugin(createMockYapiPluginStub());
     const fileExists = jest.fn((path: string) => path === '/mock-home/.config/creds');
     const getHomeDirectory = jest.fn().mockReturnValue('/mock-home');
     const ctx = new ObsidianAuthContext(plugin, { fileExists, getHomeDirectory });
@@ -76,7 +76,7 @@ describe('ObsidianAuthContext.fileExists', () => {
   });
 
   it('passes absolute paths through without home expansion', async () => {
-    const plugin = asPiviPlugin(createMockPiviPluginStub());
+    const plugin = asYapiPlugin(createMockYapiPluginStub());
     const fileExists = jest.fn().mockReturnValue(true);
     const getHomeDirectory = jest.fn();
     const ctx = new ObsidianAuthContext(plugin, { fileExists, getHomeDirectory });
@@ -88,7 +88,7 @@ describe('ObsidianAuthContext.fileExists', () => {
   });
 
   it('resolves false when fileExists throws', async () => {
-    const plugin = asPiviPlugin(createMockPiviPluginStub());
+    const plugin = asYapiPlugin(createMockYapiPluginStub());
     const fileExists = jest.fn(() => {
       throw new Error('fs unavailable');
     });
@@ -101,7 +101,7 @@ describe('ObsidianAuthContext.fileExists', () => {
   });
 
   it('resolves false for empty expanded path without calling fileExists', async () => {
-    const plugin = asPiviPlugin(createMockPiviPluginStub());
+    const plugin = asYapiPlugin(createMockYapiPluginStub());
     const fileExists = jest.fn();
     const ctx = new ObsidianAuthContext(plugin, {
       getHomeDirectory: () => '',

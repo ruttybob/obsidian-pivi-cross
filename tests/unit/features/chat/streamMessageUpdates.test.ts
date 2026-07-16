@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
 import { hasPendingAsyncSubagent } from '@/ui/chat/rendering/messageRendererActions';
 import {
   mergeStreamingToolUseInput,

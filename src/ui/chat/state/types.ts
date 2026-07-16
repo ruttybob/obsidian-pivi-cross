@@ -1,16 +1,16 @@
 import type { EditorView } from '@codemirror/view';
-import type { BrowserSelectionContext } from '@pivi/pivi-agent-core/context/browser';
-import type { CanvasSelectionContext } from '@pivi/pivi-agent-core/context/canvas';
-import type { EditorSelectionContext } from '@pivi/pivi-agent-core/context/editor';
+import type { BrowserSelectionContext } from '@yapi/yapi-agent-core/context/browser';
+import type { CanvasSelectionContext } from '@yapi/yapi-agent-core/context/canvas';
+import type { EditorSelectionContext } from '@yapi/yapi-agent-core/context/editor';
 import type {
   ChatMessage,
   ImageAttachment,
   SubagentInfo,
   ToolCallInfo,
   UsageInfo,
-} from '@pivi/pivi-agent-core/foundation';
-import type { ChatTurnRequest, PiTurnOptions } from '@pivi/pivi-agent-core/runtime';
-import type { TodoItem, TodoVisualizationModel } from '@pivi/pivi-agent-core/tools';
+} from '@yapi/yapi-agent-core/foundation';
+import type { ChatTurnRequest, PiTurnOptions } from '@yapi/yapi-agent-core/runtime';
+import type { TodoItem, TodoVisualizationModel } from '@yapi/yapi-agent-core/tools';
 
 /** Queued message waiting to be sent after current streaming completes. */
 export interface QueuedMessage {

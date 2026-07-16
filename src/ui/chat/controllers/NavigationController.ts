@@ -1,4 +1,4 @@
-import type { KeyboardNavigationSettings } from '@pivi/pivi-agent-core/foundation';
+import type { KeyboardNavigationSettings } from '@yapi/yapi-agent-core/foundation';
 
 import {
   cancelScheduledAnimationFrame,
@@ -50,7 +50,7 @@ export class NavigationController {
 
     // Make messages panel focusable (focus style handled in CSS)
     messagesEl.setAttribute('tabindex', '0');
-    messagesEl.addClass('pivi-messages-focusable');
+    messagesEl.addClass('yapi-messages-focusable');
 
     // Attach event listeners
     messagesEl.addEventListener('keydown', this.boundMessagesKeydown);
@@ -77,7 +77,7 @@ export class NavigationController {
     // Element cleanup - may already be destroyed during view teardown
     const messagesEl = this.deps.getMessagesEl();
     messagesEl?.removeEventListener('keydown', this.boundMessagesKeydown);
-    messagesEl?.removeClass('pivi-messages-focusable');
+    messagesEl?.removeClass('yapi-messages-focusable');
 
     const inputEl = this.deps.getInputEl();
     inputEl?.removeEventListener('keydown', this.boundInputKeydown as EventListener, { capture: true });

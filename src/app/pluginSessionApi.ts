@@ -2,13 +2,13 @@
  * Session CRUD and lifecycle helpers used by the plugin shell.
  * Keeps session orchestration out of the thin Obsidian Plugin class body.
  */
-import type { AppTabManagerState } from "@pivi/obsidian-host/bootstrap/types";
-import type { OpenSessionState, SessionSummary } from "@pivi/pivi-agent-core/foundation";
-import { PluginLogger } from "@pivi/pivi-agent-core/foundation/pluginLogger";
-import type { SessionMessagePage, SessionStore } from "@pivi/pivi-agent-core/session";
-import type { OpenSessionManager } from "@pivi/pivi-agent-core/session/openSessionManager";
+import type { AppTabManagerState } from "@yapi/obsidian-host/bootstrap/types";
+import type { OpenSessionState, SessionSummary } from "@yapi/yapi-agent-core/foundation";
+import { PluginLogger } from "@yapi/yapi-agent-core/foundation/pluginLogger";
+import type { SessionMessagePage, SessionStore } from "@yapi/yapi-agent-core/session";
+import type { OpenSessionManager } from "@yapi/yapi-agent-core/session/openSessionManager";
 
-import type { PiviChatView } from "./hostContracts";
+import type { YapiChatView } from "./hostContracts";
 
 const logger = new PluginLogger('PluginSessionApi');
 
@@ -21,7 +21,7 @@ export interface PluginSessionContext {
     getTabManagerState(): Promise<AppTabManagerState | null>;
   };
   getSessionList(): SessionSummary[];
-  getAllViews(): PiviChatView[];
+  getAllViews(): YapiChatView[];
   setSessions(sessions: OpenSessionState[]): void;
   getSessions(): OpenSessionState[];
 }

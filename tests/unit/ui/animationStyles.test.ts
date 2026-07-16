@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-const stylesRoot = join(process.cwd(), 'packages/pivi-react/styles');
+const stylesRoot = join(process.cwd(), 'packages/yapi-react/styles');
 const manifestPath = join(stylesRoot, 'manifest.mjs');
 const animationPath = join(stylesRoot, 'base/animations.css');
 const mentionBadgePath = join(stylesRoot, 'components/mention-badges.css');
@@ -29,19 +29,19 @@ describe('product animation styles', () => {
 
     expect(animationNames.length).toBeGreaterThan(0);
     for (const animationName of animationNames) {
-      expect(animationName).toMatch(/^pivi-/);
+      expect(animationName).toMatch(/^yapi-/);
       expect(allStyles.match(new RegExp(`\\b${animationName}\\b`, 'g'))?.length).toBeGreaterThan(1);
     }
   });
 
   it('uses smaller slash-token icons without changing the shared badge box', () => {
     const styles = readFileSync(mentionBadgePath, 'utf8');
-    expect(styles).toContain('.pivi-context-badge-kind-skill .pivi-context-badge-icon svg');
-    expect(styles).toContain('.pivi-context-badge-kind-mcp .pivi-context-badge-icon svg');
-    expect(styles).toMatch(/\.pivi-context-badge--inline \{[\s\S]*?min-height: 18px;/);
-    expect(styles).toMatch(/pivi-context-badge--inline\.pivi-context-badge-kind-skill[\s\S]*?width: 10px;/);
-    expect(styles).toMatch(/\.pivi-context-badge--inline \{[\s\S]*?background: var\(--pivi-host-background-primary\);/);
-    expect(styles).toMatch(/\.pivi-context-badge--inline \{[\s\S]*?border-color: var\(--pivi-host-border\);/);
+    expect(styles).toContain('.yapi-context-badge-kind-skill .yapi-context-badge-icon svg');
+    expect(styles).toContain('.yapi-context-badge-kind-mcp .yapi-context-badge-icon svg');
+    expect(styles).toMatch(/\.yapi-context-badge--inline \{[\s\S]*?min-height: 18px;/);
+    expect(styles).toMatch(/yapi-context-badge--inline\.yapi-context-badge-kind-skill[\s\S]*?width: 10px;/);
+    expect(styles).toMatch(/\.yapi-context-badge--inline \{[\s\S]*?background: var\(--yapi-host-background-primary\);/);
+    expect(styles).toMatch(/\.yapi-context-badge--inline \{[\s\S]*?border-color: var\(--yapi-host-border\);/);
   });
 
   it('uses interruptible discrete transitions for mention and slash dropups', () => {
@@ -49,11 +49,11 @@ describe('product animation styles', () => {
     const mentionStyles = readFileSync(mentionDropdownPath, 'utf8');
     const slashStyles = readFileSync(slashDropdownPath, 'utf8');
 
-    expect(animationStyles).not.toContain('pivi-panel-dropup-in');
+    expect(animationStyles).not.toContain('yapi-panel-dropup-in');
     for (const styles of [mentionStyles, slashStyles]) {
       expect(styles).toContain('transition-behavior: allow-discrete');
       expect(styles).toContain('@starting-style');
-      expect(styles).toMatch(/display var\(--pivi-duration-fast\) allow-discrete/);
+      expect(styles).toMatch(/display var\(--yapi-duration-fast\) allow-discrete/);
     }
   });
 
@@ -62,8 +62,8 @@ describe('product animation styles', () => {
     const accessibilityStyles = readFileSync(accessibilityPath, 'utf8');
 
     expect(manifest.trim()).toMatch(/'accessibility\.css',\s*\];$/);
-    expect(accessibilityStyles).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.pivi-send-button:active:not\(:disabled\)/);
-    expect(accessibilityStyles).toMatch(/@media \(prefers-reduced-transparency: reduce\)[\s\S]*?\.pivi-mention-dropdown/);
-    expect(accessibilityStyles).toMatch(/@media \(prefers-contrast: more\)[\s\S]*?\.pivi-status-panel/);
+    expect(accessibilityStyles).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.yapi-send-button:active:not\(:disabled\)/);
+    expect(accessibilityStyles).toMatch(/@media \(prefers-reduced-transparency: reduce\)[\s\S]*?\.yapi-mention-dropdown/);
+    expect(accessibilityStyles).toMatch(/@media \(prefers-contrast: more\)[\s\S]*?\.yapi-status-panel/);
   });
 });

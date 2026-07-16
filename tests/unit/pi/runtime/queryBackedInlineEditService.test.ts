@@ -1,5 +1,5 @@
-import { QueryBackedInlineEditService } from '@pivi/pivi-agent-core/runtime/queryBackedInlineEditService';
-import type { AuxQueryRunner } from '@pivi/pivi-agent-core/runtime/auxQueryRunner';
+import { QueryBackedInlineEditService } from '@yapi/yapi-agent-core/runtime/queryBackedInlineEditService';
+import type { AuxQueryRunner } from '@yapi/yapi-agent-core/runtime/auxQueryRunner';
 
 function createRunner(response: string): AuxQueryRunner & { query: jest.Mock; reset: jest.Mock } {
   return {
@@ -24,7 +24,7 @@ describe('QueryBackedInlineEditService', () => {
     expect(runner.query).toHaveBeenCalledWith(
       expect.objectContaining({
         abortController: expect.any(AbortController),
-        systemPrompt: expect.stringContaining('You are **Pivi**'),
+        systemPrompt: expect.stringContaining('You are **Yapi**'),
       }),
       expect.stringContaining('<editor_selection path="notes/example.md">\nold text\n</editor_selection>'),
     );

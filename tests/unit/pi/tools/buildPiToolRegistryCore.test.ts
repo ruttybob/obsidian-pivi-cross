@@ -1,8 +1,8 @@
-import type { PiSubagentQueryRunner } from '@pivi/pivi-agent-core/engine/pi/createSubagentTool';
-import type { PiMcpBridge } from '@pivi/pivi-agent-core/mcp';
-import type { RegisteredToolSummary } from '@pivi/pivi-agent-core/prompt';
-import { TOOL_SKILL, TOOL_SPAWN_AGENT, type ToolSpec } from '@pivi/pivi-agent-core/tools';
-import { buildPiToolRegistryCore } from '@pivi/pivi-agent-core/engine/pi/buildPiToolRegistryCore';
+import type { PiSubagentQueryRunner } from '@yapi/yapi-agent-core/engine/pi/createSubagentTool';
+import type { PiMcpBridge } from '@yapi/yapi-agent-core/mcp';
+import type { RegisteredToolSummary } from '@yapi/yapi-agent-core/prompt';
+import { TOOL_SKILL, TOOL_SPAWN_AGENT, type ToolSpec } from '@yapi/yapi-agent-core/tools';
+import { buildPiToolRegistryCore } from '@yapi/yapi-agent-core/engine/pi/buildPiToolRegistryCore';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
@@ -38,11 +38,11 @@ function createFakeMcpBridge(toolSpecs: ToolSpec[]): PiMcpBridge {
 }
 
 function seedVaultContext(vaultPath: string): void {
-  fs.mkdirSync(path.join(vaultPath, '.pivi', 'skills', 'demo-skill'), { recursive: true });
+  fs.mkdirSync(path.join(vaultPath, '.yapi', 'skills', 'demo-skill'), { recursive: true });
   fs.writeFileSync(path.join(vaultPath, 'AGENTS.md'), 'Always cite sources.', 'utf-8');
-  fs.writeFileSync(path.join(vaultPath, '.pivi', 'SYSTEM.md'), 'Vault-wide system rules.', 'utf-8');
+  fs.writeFileSync(path.join(vaultPath, '.yapi', 'SYSTEM.md'), 'Vault-wide system rules.', 'utf-8');
   fs.writeFileSync(
-    path.join(vaultPath, '.pivi', 'skills', 'demo-skill', 'SKILL.md'),
+    path.join(vaultPath, '.yapi', 'skills', 'demo-skill', 'SKILL.md'),
     `---
 name: demo-skill
 description: Demo skill for registry
@@ -65,7 +65,7 @@ describe('buildPiToolRegistryCore', () => {
   };
 
   beforeEach(() => {
-    vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-registry-core-'));
+    vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-registry-core-'));
     seedVaultContext(vaultPath);
   });
 

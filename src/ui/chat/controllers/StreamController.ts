@@ -1,15 +1,15 @@
-import type { ChatMessage, StreamChunk, SubagentInfo } from '@pivi/pivi-agent-core/foundation';
-import type { ToolUseResult } from '@pivi/pivi-agent-core/foundation/diff';
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
-import type { ChatSettingsPort } from '@pivi/pivi-agent-core/runtime/chatPorts';
-import type { PiChatService } from '@pivi/pivi-agent-core/runtime/piChatService';
-import { extractToolResultContent } from '@pivi/pivi-agent-core/tools/toolResultContent';
+import type { ChatMessage, StreamChunk, SubagentInfo } from '@yapi/yapi-agent-core/foundation';
+import type { ToolUseResult } from '@yapi/yapi-agent-core/foundation/diff';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
+import type { ChatSettingsPort } from '@yapi/yapi-agent-core/runtime/chatPorts';
+import type { PiChatService } from '@yapi/yapi-agent-core/runtime/piChatService';
+import { extractToolResultContent } from '@yapi/yapi-agent-core/tools/toolResultContent';
 import {
   type ChatProjectionMessageChange,
   getChatProjectionBlockId,
-} from '@pivi/pivi-react/store';
+} from '@yapi/yapi-react/store';
 
-import type { PiviChatHost } from '@/app/hostContracts';
+import type { YapiChatHost } from '@/app/hostContracts';
 import { StreamSubagentCoordinator } from '@/ui/chat/stream/streamSubagentLifecycle';
 import {
   hideThinkingIndicator as hideStreamThinkingIndicator,
@@ -91,7 +91,7 @@ function childRunIdForChunk(chunk: StreamChunk): string | null {
 }
 
 export interface StreamControllerDeps {
-  plugin: PiviChatHost;
+  plugin: YapiChatHost;
   settings: ChatSettingsPort;
   state: ChatState;
   renderer: MessageRenderer;

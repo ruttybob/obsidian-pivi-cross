@@ -1,12 +1,12 @@
-import { supportsMcpOAuth } from '@pivi/pivi-agent-core/mcp/types';
-import type { SettingsComplexPorts } from '@pivi/pivi-react/ports';
+import { supportsMcpOAuth } from '@yapi/yapi-agent-core/mcp/types';
+import type { SettingsComplexPorts } from '@yapi/yapi-react/ports';
 
-import type { PiviPluginWorkspace, PiviSettingsHost } from '@/app/hostContracts';
+import type { YapiPluginWorkspace, YapiSettingsHost } from '@/app/hostContracts';
 
 type SettingsMcpPort = SettingsComplexPorts['mcp'];
 
 /** Warm MCP tool lists and slash caches after config changes without blocking settings UI. */
-function warmMcpCaches(host: PiviSettingsHost, workspace: PiviPluginWorkspace): void {
+function warmMcpCaches(host: YapiSettingsHost, workspace: YapiPluginWorkspace): void {
   void (async () => {
     try {
       await workspace.mcpToolProvider.prefetchEnabledServers?.();
@@ -20,8 +20,8 @@ function warmMcpCaches(host: PiviSettingsHost, workspace: PiviPluginWorkspace): 
 }
 
 async function reloadMcpAcrossViews(
-  host: PiviSettingsHost,
-  workspace: PiviPluginWorkspace,
+  host: YapiSettingsHost,
+  workspace: YapiPluginWorkspace,
 ): Promise<void> {
   workspace.mcpToolProvider.invalidateAll?.();
   for (const view of host.getAllViews()) {
@@ -33,8 +33,8 @@ async function reloadMcpAcrossViews(
 }
 
 export function createMcpSettingsPort(
-  host: PiviSettingsHost,
-  workspace: PiviPluginWorkspace,
+  host: YapiSettingsHost,
+  workspace: YapiPluginWorkspace,
 ): SettingsMcpPort {
   return {
     load: () => workspace.mcpStorage.load(),

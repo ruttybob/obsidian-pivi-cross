@@ -1,6 +1,6 @@
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 
-import type { PiviChatHost } from "@/app/hostContracts";
+import type { YapiChatHost } from "@/app/hostContracts";
 
 import { FileContextManager } from "../ui/FileContext";
 import { ImageContextManager } from "../ui/ImageContext";
@@ -10,7 +10,7 @@ import type { TabData } from "./types";
 
 export function initializeContextManagers(
   tab: TabData,
-  plugin: PiviChatHost,
+  plugin: YapiChatHost,
   ports: ChatPorts,
 ): void {
   const { dom } = tab;

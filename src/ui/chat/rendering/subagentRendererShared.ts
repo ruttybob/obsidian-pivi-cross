@@ -2,12 +2,12 @@ import {
   type ActivityStatus,
   resolveSubagentActivityStatus,
   type SubagentInfo,
-} from '@pivi/pivi-agent-core/foundation';
-import { stripAgentReportBlocksFromText } from '@pivi/pivi-agent-core/session';
+} from '@yapi/yapi-agent-core/foundation';
+import { stripAgentReportBlocksFromText } from '@yapi/yapi-agent-core/session';
 import {
   type ActivityStatusPresentation,
   getActivityStatusPresentation,
-} from '@pivi/pivi-react/store';
+} from '@yapi/yapi-react/store';
 
 import { t } from '@/app/i18n';
 
@@ -44,7 +44,7 @@ export interface CreateSubagentBlockOptions {
 
 export type SubagentDisplayStatus = ActivityStatus;
 
-const MARKDOWN_RENDER_GENERATION_ATTR = 'piviMarkdownRenderGeneration';
+const MARKDOWN_RENDER_GENERATION_ATTR = 'yapiMarkdownRenderGeneration';
 
 interface UpdateSubagentHeaderDisplayOptions {
   headerEl: HTMLElement;
@@ -122,22 +122,22 @@ export function createSubagentShell(options: CreateSubagentShellOptions): Subage
   } = options;
 
   const wrapperEl = parentEl.createDiv({
-    cls: ['pivi-subagent-list', 'pivi-subagent-card', ...extraWrapperClasses].join(' '),
+    cls: ['yapi-subagent-list', 'yapi-subagent-card', ...extraWrapperClasses].join(' '),
   });
   if (dataset) {
     wrapperEl.dataset[dataset.key] = dataset.value;
   }
 
-  const headerEl = wrapperEl.createDiv({ cls: 'pivi-subagent-header' });
+  const headerEl = wrapperEl.createDiv({ cls: 'yapi-subagent-header' });
   headerEl.setAttribute('aria-expanded', initiallyExpanded ? 'true' : 'false');
 
-  const iconEl = headerEl.createDiv({ cls: 'pivi-subagent-icon' });
+  const iconEl = headerEl.createDiv({ cls: 'yapi-subagent-icon' });
   iconEl.setAttribute('aria-hidden', 'true');
   applySubagentHeaderIcon(iconEl, info);
 
-  const labelEl = headerEl.createDiv({ cls: 'pivi-subagent-label' });
-  const summaryEl = headerEl.createDiv({ cls: 'pivi-subagent-step-summary' });
-  const statusEl = headerEl.createDiv({ cls: 'pivi-subagent-status' });
+  const labelEl = headerEl.createDiv({ cls: 'yapi-subagent-label' });
+  const summaryEl = headerEl.createDiv({ cls: 'yapi-subagent-step-summary' });
+  const statusEl = headerEl.createDiv({ cls: 'yapi-subagent-status' });
 
   updateSubagentHeaderDisplay({
     headerEl,
@@ -148,7 +148,7 @@ export function createSubagentShell(options: CreateSubagentShellOptions): Subage
     ariaLabelPrefix,
   });
 
-  const contentEl = wrapperEl.createDiv({ cls: 'pivi-subagent-content' });
+  const contentEl = wrapperEl.createDiv({ cls: 'yapi-subagent-content' });
 
   return { wrapperEl, contentEl, headerEl, labelEl, summaryEl, statusEl };
 }
@@ -182,7 +182,7 @@ export function renderSubagentStatus(
 ): ActivityStatusPresentation {
   const displayStatus = getSubagentDisplayStatus(info);
   const presentation = getActivityStatusPresentation(displayStatus, t);
-  statusEl.className = 'pivi-subagent-status';
+  statusEl.className = 'yapi-subagent-status';
   statusEl.addClass(`status-${displayStatus}`);
   statusEl.empty();
   statusEl.setAttribute('aria-atomic', 'true');
@@ -206,7 +206,7 @@ export function updateSubagentHeaderDisplay(options: UpdateSubagentHeaderDisplay
     ariaLabelPrefix,
   } = options;
   labelEl?.setText(formatSubagentAgentName(info.id, info.writerName));
-  const iconEl = headerEl.querySelector<HTMLElement>('.pivi-subagent-icon');
+  const iconEl = headerEl.querySelector<HTMLElement>('.yapi-subagent-icon');
   if (iconEl) applySubagentHeaderIcon(iconEl, info);
   const statusPresentation = renderSubagentStatus(statusEl, info);
   headerEl.setAttribute(
@@ -252,14 +252,14 @@ export function createSection(
   bodyClass?: string,
   options: CreateSectionOptions = {},
 ): SubagentSection {
-  const wrapperEl = parentEl.createDiv({ cls: 'pivi-subagent-section' });
+  const wrapperEl = parentEl.createDiv({ cls: 'yapi-subagent-section' });
 
-  const headerEl = wrapperEl.createDiv({ cls: 'pivi-subagent-section-header' });
+  const headerEl = wrapperEl.createDiv({ cls: 'yapi-subagent-section-header' });
 
-  const titleEl = headerEl.createDiv({ cls: 'pivi-subagent-section-title' });
+  const titleEl = headerEl.createDiv({ cls: 'yapi-subagent-section-title' });
   titleEl.setText(title);
 
-  const bodyEl = wrapperEl.createDiv({ cls: 'pivi-subagent-section-body' });
+  const bodyEl = wrapperEl.createDiv({ cls: 'yapi-subagent-section-body' });
   if (bodyClass) bodyEl.addClass(bodyClass);
 
   const state = { isExpanded: options.initiallyExpanded ?? true };
@@ -287,7 +287,7 @@ export function setPromptText(
 ): void {
   const generation = nextMarkdownRenderGeneration(promptBodyEl);
   promptBodyEl.empty();
-  const textEl = promptBodyEl.createDiv({ cls: 'pivi-subagent-prompt-text' });
+  const textEl = promptBodyEl.createDiv({ cls: 'yapi-subagent-prompt-text' });
   const text = prompt || t('chat.activity.noPrompt');
   renderSubagentMarkdownWithFallback({
     generationEl: promptBodyEl,

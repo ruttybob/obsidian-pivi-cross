@@ -1,11 +1,11 @@
 import { SecretStorage } from "obsidian";
 
-import type { ManagedMcpServer } from "@pivi/pivi-agent-core/mcp/types";
+import type { ManagedMcpServer } from "@yapi/yapi-agent-core/mcp/types";
 import {
   McpStorage,
-  PIVI_MCP_CONFIG_PATH,
-} from "@pivi/pivi-agent-core/mcp/mcpStorage";
-import type { FileStore } from "@pivi/pivi-agent-core/ports";
+  YAPI_MCP_CONFIG_PATH,
+} from "@yapi/yapi-agent-core/mcp/mcpStorage";
+import type { FileStore } from "@yapi/yapi-agent-core/ports";
 
 class MemoryVaultAdapter {
   private readonly files = new Map<string, string>();
@@ -66,9 +66,9 @@ describe("McpStorage", () => {
       }),
     ]);
 
-    const raw = adapter.readSync(PIVI_MCP_CONFIG_PATH);
+    const raw = adapter.readSync(YAPI_MCP_CONFIG_PATH);
     expect(raw).not.toContain("bearer-secret");
-    expect(JSON.parse(raw)._pivi.servers.remote.bearerToken).toBeUndefined();
+    expect(JSON.parse(raw)._yapi.servers.remote.bearerToken).toBeUndefined();
 
     const loaded = await storage.load();
     const [server] = loaded;
@@ -96,11 +96,11 @@ describe("McpStorage", () => {
       }),
     ]);
 
-    const raw = adapter.readSync(PIVI_MCP_CONFIG_PATH);
+    const raw = adapter.readSync(YAPI_MCP_CONFIG_PATH);
     expect(raw).toContain("client-id");
     expect(raw).not.toContain("client-secret");
     expect(
-      JSON.parse(raw)._pivi.servers.remote.oauth.clientSecret,
+      JSON.parse(raw)._yapi.servers.remote.oauth.clientSecret,
     ).toBeUndefined();
 
     const loaded = await storage.load();
@@ -115,12 +115,12 @@ describe("McpStorage", () => {
 
   it("migrates legacy plaintext MCP secrets out of mcp.json on load", async () => {
     const adapter = new MemoryVaultAdapter({
-      [PIVI_MCP_CONFIG_PATH]: `${JSON.stringify(
+      [YAPI_MCP_CONFIG_PATH]: `${JSON.stringify(
         {
           mcpServers: {
             remote: { type: "http", url: "https://mcp.example.com" },
           },
-          _pivi: {
+          _yapi: {
             servers: {
               remote: {
                 auth: "oauth",
@@ -151,7 +151,7 @@ describe("McpStorage", () => {
     expect(server.oauth).toMatchObject({
       clientSecret: "legacy-client-secret",
     });
-    const raw = adapter.readSync(PIVI_MCP_CONFIG_PATH);
+    const raw = adapter.readSync(YAPI_MCP_CONFIG_PATH);
     expect(raw).not.toContain("legacy-client-secret");
     expect(raw).not.toContain("legacy-bearer-secret");
   });

@@ -1,4 +1,4 @@
-# @pivi/obsidian-tools
+# @yapi/obsidian-tools
 
 ## Purpose
 
@@ -7,13 +7,13 @@ Concrete Obsidian-native tool specifications and execution helpers for note sear
 ## Allowed dependencies
 
 - Obsidian public API for in-process tool behavior.
-- `@pivi/pivi-agent-core/foundation`, `@pivi/pivi-agent-core/ports`, `@pivi/pivi-agent-core/tools`, and `@pivi/obsidian-host` contracts/adapters.
-- External filesystem, process, and CLI access only through `@pivi/obsidian-host` adapters where the Obsidian public API cannot satisfy a capability.
+- `@yapi/yapi-agent-core/foundation`, `@yapi/yapi-agent-core/ports`, `@yapi/yapi-agent-core/tools`, and `@yapi/obsidian-host` contracts/adapters.
+- External filesystem, process, and CLI access only through `@yapi/obsidian-host` adapters where the Obsidian public API cannot satisfy a capability.
 
 ## Forbidden dependencies
 
 - Raw Pi SDK packages (external Pi SDK packages).
-- `@pivi/pivi-react` imports.
+- `@yapi/yapi-react` imports.
 - Pi runtime construction or Agent lifecycle imports.
 
 ## Public API
@@ -25,7 +25,7 @@ Concrete Obsidian-native tool specifications and execution helpers for note sear
 - `obsidian_base` resolves a requested Base directly for view inspection, while its list action remains an explicit vault inventory operation. `obsidian_graph` enumerates files only for orphan/deadend analysis; unresolved-only analysis uses cached link metadata.
 - `obsidian_command` / `obsidian_eval` additionally require their settings gates and CLI availability. Image generation requires an injected generator.
 - `obsidian_bash` registers only when the Bash tool toggle is enabled, runs allowlisted one-line commands, and rejects shell control syntax before invoking the injected process runner.
-- Exported through `@pivi/obsidian-tools`.
+- Exported through `@yapi/obsidian-tools`.
 
 ## See also
 

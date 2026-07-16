@@ -1,6 +1,8 @@
 import jestPlugin from "eslint-plugin-jest";
 import noOnlyTests from "eslint-plugin-no-only-tests";
 import obsidianmd from "eslint-plugin-obsidianmd";
+import { DEFAULT_ACRONYMS } from "eslint-plugin-obsidianmd/dist/lib/rules/ui/acronyms.js";
+import { DEFAULT_BRANDS } from "eslint-plugin-obsidianmd/dist/lib/rules/ui/brands.js";
 import reactHooks from "eslint-plugin-react-hooks";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import { defineConfig } from "eslint/config";
@@ -10,7 +12,7 @@ import { fileURLToPath } from "node:url";
 const jestRecommended = jestPlugin.configs["flat/recommended"];
 const tsconfigRootDir = dirname(fileURLToPath(import.meta.url));
 
-const piviObsidianRuleOverrides = {
+const yapiObsidianRuleOverrides = {
   "obsidianmd/commands/no-command-in-command-id": "error",
   "obsidianmd/commands/no-command-in-command-name": "error",
   "obsidianmd/commands/no-default-hotkeys": "error",
@@ -41,8 +43,22 @@ const piviObsidianRuleOverrides = {
   "obsidianmd/ui/sentence-case": [
     "warn",
     {
-      ignoreWords: ["Pivi", "Pi", "WSL", "ChatGPT", "Codex", "stdio", "OpenAI"],
-      ignoreRegex: ["\\.(?:pi)/"],
+      ignoreWords: ["YaPi", "Pi", "WSL", "ChatGPT", "Codex", "stdio", "OpenAI"],
+      brands: [...DEFAULT_BRANDS, "YaPi", "Pi", "OpenAI"],
+      acronyms: [
+        ...DEFAULT_ACRONYMS,
+        "TOML",
+        "WSL",
+        "MCP",
+        "OAuth",
+        "SSE",
+        "HTTP",
+        "API",
+        "URL",
+        "JSON",
+        "CLI",
+      ],
+      ignoreRegex: ["\\.(?:pi)/", "\\.yapi/"],
       enforceCamelCaseLower: true,
     },
   ],
@@ -64,7 +80,7 @@ const piPackageBoundaryRule = [
           "@earendil-works/pi-coding-agent/*",
         ],
         message:
-          "Raw Pi SDK imports belong in @pivi/pivi-agent-core/engine/pi. App and UI code should depend on Pivi-owned package APIs instead.",
+          "Raw Pi SDK imports belong in @yapi/yapi-agent-core/engine/pi. App and UI code should depend on Yapi-owned package APIs instead.",
       },
     ],
   },
@@ -73,7 +89,7 @@ const piPackageBoundaryRule = [
 const rawPiSdkRestriction = {
   group: ["@earendil-works/*"],
   message:
-    "Raw Pi SDK imports belong in @pivi/pivi-agent-core/engine/pi. Depend on Pivi-owned package APIs instead.",
+    "Raw Pi SDK imports belong in @yapi/yapi-agent-core/engine/pi. Depend on Yapi-owned package APIs instead.",
 };
 
 const obsidianHostRestriction = {
@@ -89,7 +105,7 @@ const electronRestriction = {
 };
 
 const obsidianReactRestriction = {
-  group: ["@pivi/pivi-react", "@pivi/pivi-react/*"],
+  group: ["@yapi/yapi-react", "@yapi/yapi-react/*"],
   message:
     "Host and tool packages must not depend on React presentation.",
 };
@@ -164,7 +180,7 @@ export default defineConfig([
   {
     files: ["src/**/*.{ts,tsx}"],
     rules: {
-      ...piviObsidianRuleOverrides,
+      ...yapiObsidianRuleOverrides,
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/require-await": "warn",
       "@typescript-eslint/no-base-to-string": "warn",
@@ -185,7 +201,7 @@ export default defineConfig([
   {
     files: [
       "src/**/*.{ts,tsx}",
-      "packages/pivi-react/src/**/*.{ts,tsx}",
+      "packages/yapi-react/src/**/*.{ts,tsx}",
     ],
     plugins: {
       "react-hooks": reactHooks,
@@ -208,8 +224,8 @@ export default defineConfig([
         rawPiSdkRestriction,
         {
           group: [
-            "@pivi/pivi-agent-core/engine/pi",
-            "@pivi/pivi-agent-core/engine/pi/*",
+            "@yapi/yapi-agent-core/engine/pi",
+            "@yapi/yapi-agent-core/engine/pi/*",
           ],
           message:
             "Host contracts must stay structural and must not name concrete Pi engine implementation types.",
@@ -229,8 +245,8 @@ export default defineConfig([
         rawPiSdkRestriction,
         {
           group: [
-            "@pivi/pivi-agent-core/engine/pi",
-            "@pivi/pivi-agent-core/engine/pi/*",
+            "@yapi/yapi-agent-core/engine/pi",
+            "@yapi/yapi-agent-core/engine/pi/*",
           ],
           message:
             "Product UI must not import Pi engine implementations. Use injected PiChatService, AuxQueryRunner, and feature ports instead.",
@@ -241,18 +257,18 @@ export default defineConfig([
             "Product UI must not import app workspace modules. Use injected ChatPorts or an approved hostPlatform adapter.",
         },
         {
-          group: ["@pivi/obsidian-host", "@pivi/obsidian-host/*"],
+          group: ["@yapi/obsidian-host", "@yapi/obsidian-host/*"],
           message:
-            "Product UI must not import @pivi/obsidian-host directly. Use @/app/hostPlatform and host contracts instead.",
+            "Product UI must not import @yapi/obsidian-host directly. Use @/app/hostPlatform and host contracts instead.",
         },
         {
-          group: ["@pivi/obsidian-tools", "@pivi/obsidian-tools/*"],
+          group: ["@yapi/obsidian-tools", "@yapi/obsidian-tools/*"],
           message:
             "Product UI must not import concrete Obsidian tool implementations.",
         },
         {
           regex:
-            "^@pivi/pivi-react(?:$|/(?!(?:store|inline-edit|context-badges)$))",
+            "^@yapi/yapi-react(?:$|/(?!(?:store|inline-edit|context-badges)$))",
           message:
             "Product UI may import React presentation only through the exact store, inline-edit, or context-badges subpath.",
         },
@@ -277,20 +293,20 @@ export default defineConfig([
       "@typescript-eslint/no-restricted-imports": packageBoundaryRule([
         {
           group: [
-            "@pivi/pivi-react/mount",
-            "@pivi/pivi-react/mount/*",
+            "@yapi/yapi-react/mount",
+            "@yapi/yapi-react/mount/*",
           ],
           message:
-            "Only src/app/ui may mount @pivi/pivi-react surfaces.",
+            "Only src/app/ui may mount @yapi/yapi-react surfaces.",
         },
         {
           group: [
-            "@pivi/pivi-react/ports",
-            "@pivi/pivi-react/ports/*",
+            "@yapi/yapi-react/ports",
+            "@yapi/yapi-react/ports/*",
           ],
           allowTypeImports: true,
           message:
-            "Only src/app/ui may implement @pivi/pivi-react ports. Chat/runtime code may import port types only.",
+            "Only src/app/ui may implement @yapi/yapi-react ports. Chat/runtime code may import port types only.",
         },
       ]),
     },
@@ -321,7 +337,7 @@ export default defineConfig([
     },
   },
   {
-    files: ["packages/pivi-react/src/**/*.{ts,tsx}"],
+    files: ["packages/yapi-react/src/**/*.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-restricted-imports": packageBoundaryRule([
         rawPiSdkRestriction,
@@ -329,37 +345,37 @@ export default defineConfig([
         electronRestriction,
         {
           group: [
-            "@pivi/pivi-agent-core/engine/pi",
-            "@pivi/pivi-agent-core/engine/pi/*",
+            "@yapi/yapi-agent-core/engine/pi",
+            "@yapi/yapi-agent-core/engine/pi/*",
           ],
           message:
-            "@pivi/pivi-react must not import Pi engine implementations. Use host-neutral contracts and display models.",
+            "@yapi/yapi-react must not import Pi engine implementations. Use host-neutral contracts and display models.",
         },
         {
-          group: ["@pivi/obsidian-host", "@pivi/obsidian-host/*"],
+          group: ["@yapi/obsidian-host", "@yapi/obsidian-host/*"],
           message:
-            "@pivi/pivi-react must not import concrete host adapters. Receive feature-specific ports from app composition.",
+            "@yapi/yapi-react must not import concrete host adapters. Receive feature-specific ports from app composition.",
         },
         {
-          group: ["@pivi/obsidian-tools", "@pivi/obsidian-tools/*"],
+          group: ["@yapi/obsidian-tools", "@yapi/obsidian-tools/*"],
           message:
-            "@pivi/pivi-react must not import concrete Obsidian tools. Consume host-neutral tool display models.",
+            "@yapi/yapi-react must not import concrete Obsidian tools. Consume host-neutral tool display models.",
         },
         {
           group: ["@", "@/*", "src", "src/*"],
           message:
-            "@pivi/pivi-react must not import product src code.",
+            "@yapi/yapi-react must not import product src code.",
         },
         {
           group: ["node:*", "fs", "fs/*", "path", "path/*"],
           message:
-            "@pivi/pivi-react must stay renderer-safe and must not depend on Node-only APIs.",
+            "@yapi/yapi-react must stay renderer-safe and must not depend on Node-only APIs.",
         },
       ]),
     },
   },
   {
-    files: ["packages/pivi-agent-core/src/foundation/**/*.{ts,tsx}"],
+    files: ["packages/yapi-agent-core/src/foundation/**/*.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-restricted-imports": packageBoundaryRule([
         obsidianHostRestriction,
@@ -373,13 +389,13 @@ export default defineConfig([
         {
           group: ["@", "@/*", "src", "src/*"],
           message:
-            "@pivi/pivi-agent-core/foundation must not import product src code.",
+            "@yapi/yapi-agent-core/foundation must not import product src code.",
         },
       ]),
     },
   },
   {
-    files: ["packages/pivi-agent-core/src/tools/**/*.{ts,tsx}"],
+    files: ["packages/yapi-agent-core/src/tools/**/*.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-restricted-imports": packageBoundaryRule([
         obsidianHostRestriction,
@@ -388,72 +404,72 @@ export default defineConfig([
         {
           group: ["@", "@/*", "src", "src/*"],
           message:
-            "@pivi/pivi-agent-core/tools must not import product src code.",
+            "@yapi/yapi-agent-core/tools must not import product src code.",
         },
       ]),
     },
   },
   {
-    files: ["packages/pivi-agent-core/src/**/*.{ts,tsx}"],
+    files: ["packages/yapi-agent-core/src/**/*.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-restricted-imports": packageBoundaryRule([
         obsidianHostRestriction,
         electronRestriction,
         {
-          group: ["@pivi/obsidian-host", "@pivi/obsidian-host/*"],
+          group: ["@yapi/obsidian-host", "@yapi/obsidian-host/*"],
           message:
-            "@pivi/pivi-agent-core must not depend on concrete host adapters. Inject host ports from the app layer.",
+            "@yapi/yapi-agent-core must not depend on concrete host adapters. Inject host ports from the app layer.",
         },
         {
-          group: ["@pivi/obsidian-tools", "@pivi/obsidian-tools/*"],
+          group: ["@yapi/obsidian-tools", "@yapi/obsidian-tools/*"],
           message:
-            "@pivi/pivi-agent-core must not depend on concrete host tools. Inject generic ToolSpec providers.",
+            "@yapi/yapi-agent-core must not depend on concrete host tools. Inject generic ToolSpec providers.",
         },
         rawPiSdkRestriction,
         {
-          group: ["@pivi/pivi-agent-core", "@pivi/pivi-agent-core/*"],
+          group: ["@yapi/yapi-agent-core", "@yapi/yapi-agent-core/*"],
           message:
-            "Use relative imports within @pivi/pivi-agent-core. Package subpaths are for cross-package consumers only.",
+            "Use relative imports within @yapi/yapi-agent-core. Package subpaths are for cross-package consumers only.",
         },
         {
           group: ["@", "@/*", "src", "src/*"],
           message:
-            "@pivi/pivi-agent-core must not import product app or UI code.",
+            "@yapi/yapi-agent-core must not import product app or UI code.",
         },
       ]),
     },
   },
   {
-    files: ["packages/pivi-agent-core/src/engine/pi/**/*.{ts,tsx}"],
+    files: ["packages/yapi-agent-core/src/engine/pi/**/*.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-restricted-imports": packageBoundaryRule([
         obsidianHostRestriction,
         electronRestriction,
         {
-          group: ["@pivi/obsidian-host", "@pivi/obsidian-host/*"],
+          group: ["@yapi/obsidian-host", "@yapi/obsidian-host/*"],
           message:
-            "@pivi/pivi-agent-core/engine/pi must not depend on concrete host adapters. Inject host ports from the app layer.",
+            "@yapi/yapi-agent-core/engine/pi must not depend on concrete host adapters. Inject host ports from the app layer.",
         },
         {
-          group: ["@pivi/obsidian-tools", "@pivi/obsidian-tools/*"],
+          group: ["@yapi/obsidian-tools", "@yapi/obsidian-tools/*"],
           message:
-            "@pivi/pivi-agent-core/engine/pi must not depend on concrete host tools. Inject generic ToolSpec providers.",
+            "@yapi/yapi-agent-core/engine/pi must not depend on concrete host tools. Inject generic ToolSpec providers.",
         },
         {
-          group: ["@pivi/pivi-agent-core", "@pivi/pivi-agent-core/*"],
+          group: ["@yapi/yapi-agent-core", "@yapi/yapi-agent-core/*"],
           message:
-            "Use relative imports within @pivi/pivi-agent-core. Package subpaths are for cross-package consumers only.",
+            "Use relative imports within @yapi/yapi-agent-core. Package subpaths are for cross-package consumers only.",
         },
         {
           group: ["@", "@/*", "src", "src/*"],
           message:
-            "@pivi/pivi-agent-core/engine/pi must not import product app or UI code.",
+            "@yapi/yapi-agent-core/engine/pi must not import product app or UI code.",
         },
       ]),
     },
   },
   {
-    files: ["packages/pivi-agent-core/src/session/**/*.{ts,tsx}"],
+    files: ["packages/yapi-agent-core/src/session/**/*.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-restricted-imports": packageBoundaryRule([
         rawPiSdkRestriction,

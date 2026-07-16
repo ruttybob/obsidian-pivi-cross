@@ -13,7 +13,7 @@ import {
   setAgentEnvironmentVariables,
   setEnvironmentVariablesForScope,
   setSharedEnvironmentVariables,
-} from '@pivi/pivi-agent-core/foundation/settingsAgentEnvironment';
+} from '@yapi/yapi-agent-core/foundation/settingsAgentEnvironment';
 
 function settingsBag(
   overrides: Record<string, unknown> = {},

@@ -1,0 +1,279 @@
+/* External Context Selector — trigger matches pre-React toolbar (compact btn + count). */
+.yapi-external-context-selector {
+  position: relative;
+  z-index: 30;
+}
+
+.yapi-external-context-selector:focus-within {
+  z-index: 3000;
+}
+
+.yapi-external-context-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-xs);
+  padding: 4px 8px;
+  border-radius: var(--yapi-radius-xs);
+  cursor: pointer;
+  color: var(--yapi-host-text-muted);
+  font-family: inherit;
+  font-size: var(--yapi-text-sm);
+  white-space: nowrap;
+  appearance: none;
+  border: 0;
+  background: var(--yapi-host-background-primary);
+  box-shadow: none;
+  min-height: 0;
+  height: auto;
+  margin: 0;
+  line-height: 1.2;
+  transition: scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-external-context-btn.active {
+  color: var(--yapi-brand);
+}
+
+.yapi-external-context-icon,
+.yapi-external-context-icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.yapi-external-context-count {
+  color: var(--yapi-brand);
+  font-size: var(--yapi-text-xs);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.yapi-external-context-count.has-unavailable {
+  color: var(--yapi-error);
+}
+
+.yapi-external-context-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: max-content;
+  max-width: var(--yapi-external-context-max-width, calc(100vw - 20px));
+  padding: var(--yapi-spacing-xs);
+  background: var(--yapi-material-bg-secondary);
+  -webkit-backdrop-filter: var(--yapi-material-blur-lg);
+  backdrop-filter: var(--yapi-material-blur-lg);
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  box-shadow: var(--yapi-shadow-popover-up-sm);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--yapi-duration-fast) var(--yapi-ease-out), visibility var(--yapi-duration-fast) var(--yapi-ease-out);
+  z-index: 3000;
+  font-family: inherit;
+}
+
+.yapi-external-context-selector:focus-within .yapi-external-context-dropdown {
+  opacity: 1;
+  visibility: visible;
+}
+
+.yapi-external-context-header {
+  padding: 3px 8px;
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--yapi-host-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  font-family: inherit;
+}
+
+.yapi-external-context-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.yapi-external-context-empty {
+  padding: 10px 8px;
+  text-align: center;
+  color: var(--yapi-host-text-muted);
+  font-family: inherit;
+  font-size: var(--yapi-text-sm);
+}
+
+.yapi-external-context-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  padding: 4px 32px 4px 8px;
+  gap: 5px;
+  border-radius: var(--yapi-radius-xs);
+  cursor: pointer;
+  color: var(--yapi-host-text-muted);
+  font-family: inherit;
+  font-size: var(--yapi-text-sm);
+  transition: background var(--yapi-duration-instant) var(--yapi-ease-out), color var(--yapi-duration-instant) var(--yapi-ease-out);
+  overflow: hidden;
+}
+
+.yapi-external-context-item.has-remove {
+  padding-inline-end: 53px;
+}
+
+.yapi-external-context-item:focus-within {
+  background: var(--yapi-host-background-hover);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-external-context-item.enabled {
+  color: var(--yapi-brand);
+  font-weight: 500;
+}
+
+.yapi-external-context-item.unavailable .yapi-external-context-text {
+  position: relative;
+  color: var(--yapi-host-text-faint);
+}
+
+.yapi-external-context-item.unavailable .yapi-external-context-text::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 50%;
+  border-block-start: 1px solid var(--yapi-host-text-faint);
+}
+
+.yapi-external-context-checkbox {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.yapi-external-context-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: inherit;
+  font-size: var(--yapi-text-sm);
+}
+
+.yapi-external-context-warning {
+  display: flex;
+  color: var(--yapi-error);
+}
+
+.yapi-external-context-warning svg {
+  width: 13px;
+  height: 13px;
+}
+
+.yapi-external-context-action {
+  appearance: none;
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  transform: translateY(-50%);
+  border-radius: var(--yapi-radius-xs);
+  color: var(--yapi-host-text-normal);
+  background: var(--yapi-host-background-hover);
+  box-shadow: none;
+  pointer-events: none;
+  visibility: hidden;
+  transition: color var(--yapi-duration-fast) var(--yapi-ease-out), background var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-external-context-pin {
+  inset-inline-end: 6px;
+}
+
+.yapi-external-context-item.has-remove .yapi-external-context-pin {
+  inset-inline-end: 27px;
+}
+
+.yapi-external-context-remove {
+  inset-inline-end: 6px;
+}
+
+.yapi-external-context-action svg {
+  width: 14px;
+  height: 14px;
+}
+
+.yapi-external-context-item:focus-within .yapi-external-context-action {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.yapi-external-context-add {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  padding: 4px 8px;
+  border: 0;
+  border-top: 1px solid var(--yapi-host-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  height: auto;
+  color: var(--yapi-host-text-muted);
+  font-family: inherit;
+  font-size: var(--yapi-text-sm);
+  cursor: pointer;
+  text-align: start;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-external-context-selector:hover {
+    z-index: 3000;
+  }
+
+  .yapi-external-context-btn:hover {
+    color: var(--yapi-brand);
+  }
+
+  .yapi-external-context-selector:hover .yapi-external-context-dropdown {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .yapi-external-context-item:hover {
+    background: var(--yapi-host-background-hover);
+    color: var(--yapi-host-text-normal);
+  }
+
+  .yapi-external-context-item:hover .yapi-external-context-action {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .yapi-external-context-action:hover {
+    background: var(--yapi-host-border-hover);
+  }
+
+  .yapi-external-context-add:hover {
+    color: var(--yapi-host-text-normal);
+    background: var(--yapi-host-background-hover);
+  }
+}
+
+.yapi-external-context-add-icon,
+.yapi-external-context-add-icon svg {
+  width: 14px;
+  height: 14px;
+}

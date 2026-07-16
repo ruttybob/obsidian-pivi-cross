@@ -6,10 +6,10 @@ describe('production session append recovery', () => {
       import fs from 'node:fs';
       import os from 'node:os';
       import path from 'node:path';
-      import { PiSessionStore } from '@pivi/pivi-agent-core/engine/pi/session/piSessionStore';
-      import { SessionTreeStore } from '@pivi/pivi-agent-core/engine/pi/session/sessionTreeStore';
+      import { PiSessionStore } from '@yapi/yapi-agent-core/engine/pi/session/piSessionStore';
+      import { SessionTreeStore } from '@yapi/yapi-agent-core/engine/pi/session/sessionTreeStore';
 
-      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-live-append-recovery-'));
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-live-append-recovery-'));
       try {
         const tree = SessionTreeStore.create(root);
         const userId = tree.appendUserMessage('Inspect notes');

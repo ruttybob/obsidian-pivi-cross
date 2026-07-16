@@ -29,7 +29,7 @@ export function renderSkillExpanded(
   }
 
   if (isSkillInstructionResult(result)) {
-    container.createDiv({ cls: 'pivi-tool-empty', text: t('chat.stream.noDescription') });
+    container.createDiv({ cls: 'yapi-tool-empty', text: t('chat.stream.noDescription') });
     return;
   }
 

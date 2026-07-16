@@ -3,14 +3,14 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-import { captureSessionJsonlSource } from '@pivi/pivi-agent-core/engine/pi/session/sessionJsonlIndex';
-import { SessionTreeStore } from '@pivi/pivi-agent-core/engine/pi/session/sessionTreeStore';
+import { captureSessionJsonlSource } from '@yapi/yapi-agent-core/engine/pi/session/sessionJsonlIndex';
+import { SessionTreeStore } from '@yapi/yapi-agent-core/engine/pi/session/sessionTreeStore';
 import {
   missingAgentMessages,
   sanitizeAgentMessagesForLlm,
-} from '@pivi/pivi-agent-core/engine/pi/session/agentMessageHistory';
-import { PIVI_MESSAGE_UI } from '@pivi/pivi-agent-core/session';
-import { SessionIndexStaleError } from '@pivi/pivi-agent-core/session';
+} from '@yapi/yapi-agent-core/engine/pi/session/agentMessageHistory';
+import { YAPI_MESSAGE_UI } from '@yapi/yapi-agent-core/session';
+import { SessionIndexStaleError } from '@yapi/yapi-agent-core/session';
 
 const assistantToolCall = {
   role: 'assistant',
@@ -45,7 +45,7 @@ describe('SessionTreeStore', () => {
     });
 
     const persisted = store.getEntries().find((entry) => (
-      entry.type === 'custom' && entry.customType === PIVI_MESSAGE_UI
+      entry.type === 'custom' && entry.customType === YAPI_MESSAGE_UI
     ));
     expect(JSON.stringify(persisted)).not.toContain('externalContextPaths');
     expect(persisted).toEqual(expect.objectContaining({
@@ -55,7 +55,7 @@ describe('SessionTreeStore', () => {
     }));
   });
 
-  it('marks the Pi manager flushed after Pivi eagerly rewrites a persisted file', () => {
+  it('marks the Pi manager flushed after Yapi eagerly rewrites a persisted file', () => {
     interface PersistedTestManager {
       flushed: boolean;
       getSessionFile(): string | undefined;
@@ -82,7 +82,7 @@ describe('SessionTreeStore', () => {
   it('uses Pi append methods without rewriting the persisted file', () => {
     const manager = {
       appendMessage: jest.fn(() => 'user-1'),
-      getSessionFile: () => '/vault/.pivi/sessions/session.jsonl',
+      getSessionFile: () => '/vault/.yapi/sessions/session.jsonl',
       isPersisted: () => false,
       _rewriteFile: jest.fn(),
     };
@@ -98,7 +98,7 @@ describe('SessionTreeStore', () => {
   });
 
   it('rejects a live append before writing when the source changed externally', () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-live-session-'));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-live-session-'));
     const sessionFile = path.join(root, 'session.jsonl');
     fs.writeFileSync(sessionFile, `${JSON.stringify({
       type: 'session',
@@ -132,7 +132,7 @@ describe('SessionTreeStore', () => {
   });
 
   it('rejects stale UI save, redo, fork, and compaction before mutation', () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-live-mutations-'));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-live-mutations-'));
     const sessionFile = path.join(root, 'session.jsonl');
     const header = {
       type: 'session',
@@ -186,7 +186,7 @@ describe('SessionTreeStore', () => {
   });
 
   it('uses the held live fingerprint before the production fork path', () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-live-fork-'));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-live-fork-'));
     const sessionFile = path.join(root, 'session.jsonl');
     fs.writeFileSync(sessionFile, `${JSON.stringify({
       type: 'session',
@@ -220,7 +220,7 @@ describe('SessionTreeStore', () => {
     const store = SessionTreeStore.inMemory('/test/vault');
     const defaultLeaf = store.getLeafId();
 
-    const reopened = SessionTreeStore.open('/test/vault', '.pivi/sessions/mock.jsonl', 'deadbeef');
+    const reopened = SessionTreeStore.open('/test/vault', '.yapi/sessions/mock.jsonl', 'deadbeef');
     expect(reopened.getLeafId()).toBe(defaultLeaf);
   });
 
@@ -240,7 +240,7 @@ describe('SessionTreeStore', () => {
     expect(reopened.getLeafId()).toBe(store.getLeafId());
   });
 
-  it('keeps Pivi custom entries out of agent message context', () => {
+  it('keeps Yapi custom entries out of agent message context', () => {
     const store = SessionTreeStore.inMemory('/test/vault');
 
     store.appendUserMessage('hello');
@@ -390,7 +390,7 @@ describe('SessionTreeStore', () => {
     });
 
     const persisted = store.getEntries().find((entry) => (
-      entry.type === 'custom' && entry.customType === PIVI_MESSAGE_UI
+      entry.type === 'custom' && entry.customType === YAPI_MESSAGE_UI
     ));
     expect(JSON.stringify(persisted)).not.toContain('/Users/example/private');
     expect(persisted).not.toHaveProperty('data.toolCalls.0.toolUseResult.agent_report');
@@ -592,12 +592,12 @@ describe('SessionTreeStore', () => {
       tokenEstimates: { contextBefore: 100, checkpoint: 10 },
     };
 
-    store.appendCompaction('Readable legacy summary.', userId, 100, { piviCheckpoint: checkpoint });
+    store.appendCompaction('Readable legacy summary.', userId, 100, { yapiCheckpoint: checkpoint });
 
     const compaction = store.getEntries().find((entry) => entry.type === 'compaction');
     expect(compaction).toMatchObject({
       summary: 'Readable legacy summary.',
-      details: { piviCheckpoint: checkpoint },
+      details: { yapiCheckpoint: checkpoint },
     });
     expect(store.loadAgentMessages()[0]).toMatchObject({
       role: 'user',
@@ -610,7 +610,7 @@ describe('SessionTreeStore', () => {
     const store = SessionTreeStore.inMemory('/test/checkpoint-privacy');
     const userId = store.appendUserMessage('request');
     store.appendCompaction('Legacy summary.', userId, 100, {
-      piviCheckpoint: {
+      yapiCheckpoint: {
         schemaVersion: 1,
         continuationSummary: 'Continue.',
         goal: null,

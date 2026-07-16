@@ -1,7 +1,7 @@
 import {
   type PresentationPlatform,
   PresentationPlatformProvider,
-} from '@pivi/pivi-react';
+} from '@yapi/yapi-react';
 import { createElement, type ReactNode } from 'react';
 
 export const testPresentationPlatform: PresentationPlatform = {

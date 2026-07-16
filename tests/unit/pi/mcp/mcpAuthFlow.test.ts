@@ -1,15 +1,15 @@
 import { get } from 'http';
 
-import type { ExternalOpener } from '@pivi/pivi-agent-core/ports';
-import type { McpTransportFetch } from '@pivi/pivi-agent-core/mcp/ports';
-import type { ManagedMcpServer } from '@pivi/pivi-agent-core/mcp/types';
+import type { ExternalOpener } from '@yapi/yapi-agent-core/ports';
+import type { McpTransportFetch } from '@yapi/yapi-agent-core/mcp/ports';
+import type { ManagedMcpServer } from '@yapi/yapi-agent-core/mcp/types';
 import {
   McpAuthFlow,
-} from '@pivi/pivi-agent-core/mcp/oauth/mcpAuthFlow';
+} from '@yapi/yapi-agent-core/mcp/oauth/mcpAuthFlow';
 import {
   OAUTH_CALLBACK_PATH,
-} from '@pivi/pivi-agent-core/mcp/oauth/mcpOAuthProvider';
-import { McpVaultAuthStore } from '@pivi/pivi-agent-core/mcp/oauth/mcpVaultAuthStore';
+} from '@yapi/yapi-agent-core/mcp/oauth/mcpOAuthProvider';
+import { McpVaultAuthStore } from '@yapi/yapi-agent-core/mcp/oauth/mcpVaultAuthStore';
 
 const mockRunSdkAuth = jest.fn();
 const mockOpenExternalUrl = jest.fn<Promise<void>, [string]>().mockResolvedValue(undefined);

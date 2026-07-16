@@ -3,10 +3,10 @@ import path from 'node:path';
 
 import { listSourceFiles, rootDir } from './check-helpers.mjs';
 
-const projectRoot = process.env.PIVI_I18N_PROJECT_ROOT
-  ? path.resolve(process.env.PIVI_I18N_PROJECT_ROOT)
+const projectRoot = process.env.YAPI_I18N_PROJECT_ROOT
+  ? path.resolve(process.env.YAPI_I18N_PROJECT_ROOT)
   : rootDir;
-const localesDir = path.join(projectRoot, 'packages/pivi-react/src/i18n/locales');
+const localesDir = path.join(projectRoot, 'packages/yapi-react/src/i18n/locales');
 const enPath = path.join(localesDir, 'en.json');
 
 const DYNAMIC_PREFIX_RULES = [
@@ -20,7 +20,7 @@ const DYNAMIC_PREFIX_RULES = [
 
 const DYNAMIC_KEY_SOURCE_FILES = [
   {
-    file: 'packages/pivi-react/src/settings/models/statusLabels.ts',
+    file: 'packages/yapi-react/src/settings/models/statusLabels.ts',
     patterns: [
       /'((?:settings\.modelsTab\.status(?:Desc)?)\.[^']+)'/g,
     ],
@@ -32,7 +32,7 @@ const DYNAMIC_KEY_SOURCE_FILES = [
     ],
   },
   {
-    file: 'packages/pivi-agent-core/src/tools/toolPresentation.ts',
+    file: 'packages/yapi-agent-core/src/tools/toolPresentation.ts',
     patterns: [
       /(?:labelKey|stepPhraseKey):\s*'((?:tools\.(?:display|steps))\.[^']+)'/g,
       /key:\s*'((?:tools\.(?:display|steps))\.[^']+)'/g,
@@ -96,7 +96,7 @@ function collectUsedKeys() {
 
   const scanRoots = [
     path.join(projectRoot, 'src'),
-    path.join(projectRoot, 'packages/pivi-react/src'),
+    path.join(projectRoot, 'packages/yapi-react/src'),
   ];
   for (const scanRoot of scanRoots) {
     for (const file of listSourceFiles(scanRoot)) {

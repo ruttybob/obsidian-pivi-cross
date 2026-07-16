@@ -1,8 +1,8 @@
-import type { SubagentInfo, ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
+import type { SubagentInfo, ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
 import {
   isToolPresentationGroupable,
   shouldPresentToolCall,
-} from '@pivi/pivi-agent-core/tools/toolPresentation';
+} from '@yapi/yapi-agent-core/tools/toolPresentation';
 
 import { t } from '@/app/i18n';
 
@@ -104,8 +104,8 @@ function ensureResultSection(state: SubagentState) {
     return { wrapperEl: state.resultSectionEl, bodyEl: state.resultBodyEl };
   }
 
-  const section = createSection(state.contentEl, t('chat.activity.result'), 'pivi-subagent-result-body');
-  section.wrapperEl.addClass('pivi-subagent-section-result');
+  const section = createSection(state.contentEl, t('chat.activity.result'), 'yapi-subagent-result-body');
+  section.wrapperEl.addClass('yapi-subagent-section-result');
   state.resultSectionEl = section.wrapperEl;
   state.resultBodyEl = section.bodyEl;
   return section;
@@ -122,9 +122,9 @@ function renderSyncContentFromState(state: SubagentState): void {
   const promptSection = createSection(
     state.contentEl,
     t('chat.activity.prompt'),
-    'pivi-subagent-prompt-body',
+    'yapi-subagent-prompt-body',
   );
-  promptSection.wrapperEl.addClass('pivi-subagent-section-prompt');
+  promptSection.wrapperEl.addClass('yapi-subagent-section-prompt');
   state.promptSectionEl = promptSection.wrapperEl;
   state.promptBodyEl = promptSection.bodyEl;
   setPromptText(
@@ -134,7 +134,7 @@ function renderSyncContentFromState(state: SubagentState): void {
     state.contentEl,
   );
 
-  state.toolsContainerEl = state.contentEl.createDiv({ cls: 'pivi-subagent-tools' });
+  state.toolsContainerEl = state.contentEl.createDiv({ cls: 'yapi-subagent-tools' });
   for (const toolCall of state.info.toolCalls) {
     mountSubagentToolCall(state, toolCall);
   }
@@ -155,7 +155,7 @@ function renderSyncContentFromState(state: SubagentState): void {
 export function setSubagentResultText(state: SubagentState, text: string): void {
   const section = ensureResultSection(state);
   section.bodyEl.empty();
-  const resultEl = section.bodyEl.createDiv({ cls: 'pivi-subagent-result-output' });
+  const resultEl = section.bodyEl.createDiv({ cls: 'yapi-subagent-result-output' });
   renderSubagentMarkdownWithFallback({
     generationEl: section.bodyEl,
     targetEl: resultEl,

@@ -1,6 +1,6 @@
 import { TFile, TFolder } from 'obsidian';
 
-import { ObsidianVaultApi } from '@pivi/obsidian-host';
+import { ObsidianVaultApi } from '@yapi/obsidian-host';
 
 function makeApp(
   files: Array<{ path: string; content: string; tags?: string[]; frontmatter?: Record<string, unknown> }>,

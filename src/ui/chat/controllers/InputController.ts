@@ -1,19 +1,19 @@
-import type { BrowserSelectionContext } from '@pivi/pivi-agent-core/context/browser';
-import type { CanvasSelectionContext } from '@pivi/pivi-agent-core/context/canvas';
-import type { EditorSelectionContext } from '@pivi/pivi-agent-core/context/editor';
+import type { BrowserSelectionContext } from '@yapi/yapi-agent-core/context/browser';
+import type { CanvasSelectionContext } from '@yapi/yapi-agent-core/context/canvas';
+import type { EditorSelectionContext } from '@yapi/yapi-agent-core/context/editor';
 import type {
   ChatMessage,
   StreamChunk,
-} from '@pivi/pivi-agent-core/foundation';
-import type { TitleGenerationService } from '@pivi/pivi-agent-core/runtime/auxTypes';
+} from '@yapi/yapi-agent-core/foundation';
+import type { TitleGenerationService } from '@yapi/yapi-agent-core/runtime/auxTypes';
 import type {
   ChatPorts,
   ChatSettingsPort,
-} from '@pivi/pivi-agent-core/runtime/chatPorts';
-import type { PiChatService } from '@pivi/pivi-agent-core/runtime/piChatService';
-import type { ChatTurnRequest } from '@pivi/pivi-agent-core/runtime/types';
+} from '@yapi/yapi-agent-core/runtime/chatPorts';
+import type { PiChatService } from '@yapi/yapi-agent-core/runtime/piChatService';
+import type { ChatTurnRequest } from '@yapi/yapi-agent-core/runtime/types';
 
-import type { PiviChatHost } from '@/app/hostContracts';
+import type { YapiChatHost } from '@/app/hostContracts';
 import { ComposerInlinePrompts } from '@/ui/chat/composer/ComposerInlinePrompts';
 
 import type { MessageRenderer } from '../rendering/MessageRenderer';
@@ -35,7 +35,7 @@ import type { StreamController } from './StreamController';
 import { TitleGenerationCoordinator } from './TitleGenerationCoordinator';
 
 export interface InputControllerDeps {
-  plugin: PiviChatHost;
+  plugin: YapiChatHost;
   settings: ChatSettingsPort;
   sessions: ChatPorts['sessions'];
   state: ChatState;

@@ -1,12 +1,12 @@
-import { parseEnvironmentVariables } from '@pivi/pivi-agent-core/foundation/settingsEnv';
-import type { SettingsSubagentsSnapshot } from '@pivi/pivi-react/settings';
+import { parseEnvironmentVariables } from '@yapi/yapi-agent-core/foundation/settingsEnv';
+import type { SettingsSubagentsSnapshot } from '@yapi/yapi-react/settings';
 
-import type { PiviPluginWorkspace } from '@/app/hostContracts';
+import type { YapiPluginWorkspace } from '@/app/hostContracts';
 
 /** Chat/settings ports take an explicit workspace; throw when composition has not wired one. */
-export function requireWorkspace(workspace: PiviPluginWorkspace | null): PiviPluginWorkspace {
+export function requireWorkspace(workspace: YapiPluginWorkspace | null): YapiPluginWorkspace {
   if (!workspace) {
-    throw new Error('Pivi workspace services are not initialized.');
+    throw new Error('Yapi workspace services are not initialized.');
   }
   return workspace;
 }

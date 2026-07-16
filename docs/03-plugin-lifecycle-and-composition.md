@@ -2,14 +2,14 @@
 
 [Back to the developer handbook](README.md)
 
-Pivi registers visible Obsidian surfaces before performing workspace I/O. Expensive services are initialized once, lazily, and shared by views and settings surfaces.
+Yapi registers visible Obsidian surfaces before performing workspace I/O. Expensive services are initialized once, lazily, and shared by views and settings surfaces.
 
 ## Startup
 
 ```mermaid
 sequenceDiagram
   participant O as Obsidian
-  participant P as PiviPlugin
+  participant P as YapiPlugin
   participant R as Registrations
   participant W as Workspace services
   participant V as View/settings host
@@ -24,7 +24,7 @@ sequenceDiagram
   V->>V: mount ports and presentation
 ```
 
-`initializePiviPlugin()` loads required settings, registers commands/views/settings, and then starts the retryable single-flight workspace promise from `workspace.onLayoutReady` or the first visible surface. `PiviViewHost` and `PiviSettingTabHost` receive a lazy `getWorkspace` callback, so registration never captures a partially initialized service graph.
+`initializeYapiPlugin()` loads required settings, registers commands/views/settings, and then starts the retryable single-flight workspace promise from `workspace.onLayoutReady` or the first visible surface. `YapiViewHost` and `YapiSettingTabHost` receive a lazy `getWorkspace` callback, so registration never captures a partially initialized service graph.
 
 Generation guards invalidate late initialization after a view closes or the plugin unloads. A failed workspace initialization clears the single-flight state so a later visible action can retry.
 
@@ -32,11 +32,11 @@ Generation guards invalidate late initialization after a view closes or the plug
 
 | Contract | Owner and purpose |
 |---|---|
-| `PiviChatHost` | App-only runtime host containing the Obsidian `app`; used by `src/ui/chat` for UI context |
-| `PiviChatCompositionHost` | Wider app composition surface for settings, facades, view enumeration, and tab-state persistence |
+| `YapiChatHost` | App-only runtime host containing the Obsidian `app`; used by `src/ui/chat` for UI context |
+| `YapiChatCompositionHost` | Wider app composition surface for settings, facades, view enumeration, and tab-state persistence |
 | `ChatPorts` | Core-owned runtime, session, catalog, models, and settings capabilities injected into `TabManager` |
 | `SettingsPorts` | React-owned settings capabilities implemented by `src/app/ui` |
-| `PiviChatViewHandle` | Semantic app control surface split into user `commands` and lifecycle `maintenance` operations |
+| `YapiChatViewHandle` | Semantic app control surface split into user `commands` and lifecycle `maintenance` operations |
 | `PiWorkspaceServices` | Plugin-wide service graph: stores, tools, MCP, skills, providers, runtime factories, and subagent limiter |
 
 `createChatUiPorts(host, workspace)` adapts app facades and workspace services into `ChatPorts`. The app-owned imperative adapter closure captures those ports and constructs `TabManager`; the React mount contract never receives or forwards them.
@@ -47,7 +47,7 @@ App callers control a mounted chat through behavior-named operations such as cre
 
 ```mermaid
 flowchart LR
-  View["PiviViewHost.onOpen"] -- "creates" --> Ports["ChatPorts"]
+  View["YapiViewHost.onOpen"] -- "creates" --> Ports["ChatPorts"]
   View -- "prepares" --> Adapter["ImperativeChatAdapter"]
   Adapter -- "constructs" --> Tabs["TabManager"]
   Adapter -- "bridges" --> Store["ChatTabsStore + ActiveChatUiBridge"]
@@ -57,9 +57,9 @@ flowchart LR
   React -- "calls narrow actions" --> Adapter
 ```
 
-The adapter restores `.pivi/tab-manager-state.json` or creates a blank tab. Each tab owns controllers, state, imperative input/context adapters, subscriptions, timers, optional runtime, and cleanup callbacks. React owns the shell and portals the active tab's input and adapter slots into the presentation tree.
+The adapter restores `.yapi/tab-manager-state.json` or creates a blank tab. Each tab owns controllers, state, imperative input/context adapters, subscriptions, timers, optional runtime, and cleanup callbacks. React owns the shell and portals the active tab's input and adapter slots into the presentation tree.
 
-Settings mount independently through `PiviSettingTabHost` and `SettingsRoot`. On Obsidian 1.13 or newer, the host exposes one localized custom setting definition so settings search can index the React page; `display()` remains the Obsidian 1.12 fallback. Both routes share the same generation guard and disposal path. The service graph does not contain a settings renderer.
+Settings mount independently through `YapiSettingTabHost` and `SettingsRoot`. On Obsidian 1.13 or newer, the host exposes one localized custom setting definition so settings search can index the React page; `display()` remains the Obsidian 1.12 fallback. Both routes share the same generation guard and disposal path. The service graph does not contain a settings renderer.
 
 ## Runtime creation and refresh
 
@@ -80,7 +80,7 @@ Refresh code must preserve lazy runtime creation and must not reach into tabs fr
 ```mermaid
 sequenceDiagram
   participant O as Obsidian
-  participant P as PiviPlugin
+  participant P as YapiPlugin
   participant V as Mounted views
   participant T as TabManager
   participant W as Workspace services

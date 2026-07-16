@@ -1,13 +1,13 @@
-jest.mock('@/app/commandRegistration', () => ({ registerPiviCommands: jest.fn() }));
-jest.mock('@/app/settingsRegistration', () => ({ registerPiviSettings: jest.fn() }));
-jest.mock('@/app/viewRegistration', () => ({ registerPiviViews: jest.fn() }));
+jest.mock('@/app/commandRegistration', () => ({ registerYapiCommands: jest.fn() }));
+jest.mock('@/app/settingsRegistration', () => ({ registerYapiSettings: jest.fn() }));
+jest.mock('@/app/viewRegistration', () => ({ registerYapiViews: jest.fn() }));
 
-import { registerPiviCommands } from '@/app/commandRegistration';
-import { initializePiviPlugin } from '@/app/pluginLifecycle';
-import { registerPiviSettings } from '@/app/settingsRegistration';
-import { registerPiviViews } from '@/app/viewRegistration';
+import { registerYapiCommands } from '@/app/commandRegistration';
+import { initializeYapiPlugin } from '@/app/pluginLifecycle';
+import { registerYapiSettings } from '@/app/settingsRegistration';
+import { registerYapiViews } from '@/app/viewRegistration';
 
-describe('initializePiviPlugin', () => {
+describe('initializeYapiPlugin', () => {
   it('registers surfaces before layout-ready workspace initialization', async () => {
     let onLayoutReady: (() => void) | null = null;
     const neverReady = new Promise<never>(() => undefined);
@@ -23,11 +23,11 @@ describe('initializePiviPlugin', () => {
       ensureWorkspaceServices: jest.fn(() => neverReady),
     };
 
-    await initializePiviPlugin(plugin as never);
+    await initializeYapiPlugin(plugin as never);
 
-    expect(registerPiviViews).toHaveBeenCalledWith(plugin);
-    expect(registerPiviCommands).toHaveBeenCalledWith(plugin);
-    expect(registerPiviSettings).toHaveBeenCalledWith(plugin);
+    expect(registerYapiViews).toHaveBeenCalledWith(plugin);
+    expect(registerYapiCommands).toHaveBeenCalledWith(plugin);
+    expect(registerYapiSettings).toHaveBeenCalledWith(plugin);
     expect(plugin.ensureWorkspaceServices).not.toHaveBeenCalled();
 
     expect(onLayoutReady).not.toBeNull();

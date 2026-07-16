@@ -3,9 +3,9 @@ import { readdirSync } from 'fs';
 import { join, resolve } from 'path';
 
 describe('Jest React project discovery', () => {
-  it('discovers every test in the renamed pivi-react directory', () => {
+  it('discovers every test in the renamed yapi-react directory', () => {
     const rootDir = process.cwd();
-    const testDir = join(rootDir, 'tests/pivi-react');
+    const testDir = join(rootDir, 'tests/yapi-react');
     const expected = readdirSync(testDir, { withFileTypes: true })
       .filter(entry => entry.isFile() && /\.test\.tsx?$/.test(entry.name))
       .map(entry => resolve(testDir, entry.name))
@@ -17,7 +17,7 @@ describe('Jest React project discovery', () => {
         'scripts/run-jest.js',
         '--listTests',
         '--selectProjects',
-        'pivi-react',
+        'yapi-react',
         '--runInBand',
       ],
       { cwd: rootDir, encoding: 'utf8' },

@@ -1,4 +1,4 @@
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
 
 describe('PluginLogger', () => {
   afterEach(() => {
@@ -13,7 +13,7 @@ describe('PluginLogger', () => {
 
     new PluginLogger('Test')[method]('Something happened');
 
-    expect(spy).toHaveBeenCalledWith('[Pivi:Test] Something happened');
+    expect(spy).toHaveBeenCalledWith('[Yapi:Test] Something happened');
   });
 
   it.each([
@@ -25,6 +25,6 @@ describe('PluginLogger', () => {
 
     new PluginLogger('Test')[method]('Something happened', error);
 
-    expect(spy).toHaveBeenCalledWith('[Pivi:Test] Something happened', error);
+    expect(spy).toHaveBeenCalledWith('[Yapi:Test] Something happened', error);
   });
 });

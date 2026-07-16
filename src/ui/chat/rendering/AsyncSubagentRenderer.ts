@@ -1,4 +1,4 @@
-import type { SubagentInfo } from '@pivi/pivi-agent-core/foundation';
+import type { SubagentInfo } from '@yapi/yapi-agent-core/foundation';
 
 import { t } from '@/app/i18n';
 
@@ -90,11 +90,11 @@ function renderAsyncContentLikeSync(
   const generation = nextMarkdownRenderGeneration(contentEl);
   contentEl.empty();
 
-  const promptSection = createSection(contentEl, t('chat.activity.prompt'), 'pivi-subagent-prompt-body');
-  promptSection.wrapperEl.addClass('pivi-subagent-section-prompt');
+  const promptSection = createSection(contentEl, t('chat.activity.prompt'), 'yapi-subagent-prompt-body');
+  promptSection.wrapperEl.addClass('yapi-subagent-section-prompt');
   setPromptText(promptSection.bodyEl, subagent.prompt || '', renderContent, contentEl);
 
-  const toolsContainerEl = contentEl.createDiv({ cls: 'pivi-subagent-tools' });
+  const toolsContainerEl = contentEl.createDiv({ cls: 'yapi-subagent-tools' });
 
   const toolCalls = subagent.toolCalls.map((originalToolCall) => ({
     ...originalToolCall,
@@ -116,9 +116,9 @@ function renderAsyncContentLikeSync(
     return;
   }
 
-  const resultSection = createSection(contentEl, t('chat.activity.result'), 'pivi-subagent-result-body');
-  resultSection.wrapperEl.addClass('pivi-subagent-section-result');
-  const resultEl = resultSection.bodyEl.createDiv({ cls: 'pivi-subagent-result-output' });
+  const resultSection = createSection(contentEl, t('chat.activity.result'), 'yapi-subagent-result-body');
+  resultSection.wrapperEl.addClass('yapi-subagent-section-result');
+  const resultEl = resultSection.bodyEl.createDiv({ cls: 'yapi-subagent-result-output' });
 
   if (displayStatus === 'orphaned') {
     renderSubagentMarkdownWithFallback({

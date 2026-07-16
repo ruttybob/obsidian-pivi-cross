@@ -1,4 +1,4 @@
-import { formatDurationMmSs } from '@pivi/pivi-agent-core/context/date';
+import { formatDurationMmSs } from '@yapi/yapi-agent-core/context/date';
 
 import { t } from '@/app/i18n';
 
@@ -122,7 +122,7 @@ export function showThinkingIndicator(
     }
 
     const text = overrideText || FLAVOR_TEXTS[Math.floor(Math.random() * FLAVOR_TEXTS.length)] || 'Thinking...';
-    const className = overrideCls ? `pivi-thinking ${overrideCls}` : 'pivi-thinking';
+    const className = overrideCls ? `yapi-thinking ${overrideCls}` : 'yapi-thinking';
     writeIndicator(deps, text, className);
     ensureElapsedInterval(deps, ownerWindow);
   }, THINKING_INDICATOR_DELAY_MS);

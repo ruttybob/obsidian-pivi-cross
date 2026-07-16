@@ -1,0 +1,194 @@
+/* Model selector */
+.yapi-model-selector {
+  position: relative;
+  z-index: 30;
+}
+
+.yapi-model-selector.is-open {
+  z-index: 3000;
+}
+
+.yapi-model-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-xs);
+  padding: 4px 8px;
+  border-radius: var(--yapi-radius-xs);
+  cursor: pointer;
+  color: var(--yapi-host-text-accent);
+  font-family: inherit;
+  font-size: var(--yapi-text-sm);
+  line-height: 1.2;
+  appearance: none;
+  border: 0;
+  background: var(--yapi-host-background-primary);
+  box-shadow: none;
+  min-height: 0;
+  height: auto;
+  margin: 0;
+  transition: scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-model-label {
+  font-weight: 500;
+}
+
+/* Fixed icon slot so provider mark / Lucide fallback swaps do not shift thinking. */
+.yapi-model-btn .yapi-model-provider-icon,
+.yapi-model-btn .yapi-provider-logo-mask {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  --yapi-provider-logo-size: 12px;
+}
+
+.yapi-model-btn .yapi-model-provider-icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.yapi-model-chevron {
+  display: flex;
+  align-items: center;
+}
+
+.yapi-model-chevron svg {
+  width: 12px;
+  height: 12px;
+}
+
+.yapi-model-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--yapi-material-bg-secondary);
+  -webkit-backdrop-filter: var(--yapi-material-blur-lg);
+  backdrop-filter: var(--yapi-material-blur-lg);
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  box-shadow: var(--yapi-shadow-popover-up-sm);
+  z-index: 3000;
+  width: max-content;
+  padding: var(--yapi-spacing-xs);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--yapi-duration-fast) var(--yapi-ease-out), visibility var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-model-selector.is-open .yapi-model-dropdown {
+  opacity: 1;
+  visibility: visible;
+}
+
+.yapi-model-group {
+  padding: 3px 8px;
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--yapi-host-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+
+.yapi-model-group:not(:first-child) {
+  margin-top: var(--yapi-spacing-xs);
+  border-top: 1px solid var(--yapi-host-border);
+  padding-top: 6px;
+}
+
+.yapi-model-provider-icon,
+.yapi-provider-logo-mask {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.yapi-model-btn .yapi-provider-logo-mask,
+.yapi-model-btn .yapi-model-provider-icon {
+  opacity: 0.85;
+}
+
+.yapi-model-dropdown .yapi-model-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-muted);
+  border-radius: var(--yapi-radius-xs);
+  transition: background var(--yapi-duration-instant) var(--yapi-ease-out), color var(--yapi-duration-instant) var(--yapi-ease-out);
+  white-space: nowrap;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  width: 100%;
+  height: auto;
+  text-align: start;
+}
+
+.yapi-model-option-label {
+  flex: 1;
+}
+
+.yapi-model-readiness {
+  padding: 1px 5px;
+  border-radius: var(--yapi-radius-pill);
+  background: var(--yapi-host-border);
+  color: var(--yapi-host-text-muted);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.yapi-model-readiness.ready {
+  background: var(--yapi-host-background-active-hover);
+  color: var(--yapi-host-text-accent);
+}
+
+.yapi-model-readiness.missing-credential,
+.yapi-model-readiness.oauth-expired,
+.yapi-model-readiness.disabled,
+.yapi-model-readiness.unavailable {
+  background: var(--yapi-host-background-error);
+  color: var(--yapi-host-text-error);
+}
+
+.yapi-model-test-btn {
+  min-height: 20px;
+  padding: 1px 6px;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-xs);
+  background: var(--yapi-host-background-primary);
+  color: var(--yapi-host-text-muted);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.yapi-model-test-btn:focus-visible {
+  border-color: var(--yapi-host-interactive-accent);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-model-option.selected {
+  background: transparent;
+  color: var(--yapi-host-text-accent);
+  font-weight: 500;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-model-test-btn:hover {
+    border-color: var(--yapi-host-interactive-accent);
+    color: var(--yapi-host-text-normal);
+  }
+
+  .yapi-model-option:hover {
+    background: var(--yapi-host-background-hover);
+    color: var(--yapi-host-text-normal);
+  }
+}

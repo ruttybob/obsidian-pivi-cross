@@ -87,11 +87,11 @@ export class MentionDropdownController {
     this.fixed = options.fixed ?? false;
 
     this.dropdown = new SelectableDropdown<MentionItem>(this.containerEl, {
-      listClassName: 'pivi-mention-dropdown',
-      itemClassName: 'pivi-mention-item',
-      emptyClassName: 'pivi-mention-empty',
+      listClassName: 'yapi-mention-dropdown',
+      itemClassName: 'yapi-mention-item',
+      emptyClassName: 'yapi-mention-empty',
       fixed: this.fixed,
-      fixedClassName: 'pivi-mention-dropdown-fixed',
+      fixedClassName: 'yapi-mention-dropdown-fixed',
     });
   }
 
@@ -112,7 +112,7 @@ export class MentionDropdownController {
 
   hide(): void {
     this.dropdown.hide();
-    this.containerEl.removeClass('pivi-mention-dropdown-open');
+    this.containerEl.removeClass('yapi-mention-dropdown-open');
     this.mentionStartIndex = -1;
   }
 
@@ -124,7 +124,7 @@ export class MentionDropdownController {
     if (this.debounceTimer !== null) {
       getActiveWindow(this.containerEl).clearTimeout(this.debounceTimer);
     }
-    this.containerEl.removeClass('pivi-mention-dropdown-open');
+    this.containerEl.removeClass('yapi-mention-dropdown-open');
     this.dropdown.destroy();
   }
 
@@ -301,15 +301,15 @@ export class MentionDropdownController {
       emptyText: t('chat.mention.noMatches'),
       getItemClass: (item) => {
         switch (item.type) {
-          case 'file': return 'pivi-mention-item--workspace-file';
-          case 'folder': return 'pivi-mention-item--workspace-folder';
-          case 'agent': return 'pivi-mention-item--agent';
-          case 'agent-folder': return 'pivi-mention-item--agent-folder';
-          case 'context-folder': return 'pivi-mention-item--context-folder';
+          case 'file': return 'yapi-mention-item--workspace-file';
+          case 'folder': return 'yapi-mention-item--workspace-folder';
+          case 'agent': return 'yapi-mention-item--agent';
+          case 'agent-folder': return 'yapi-mention-item--agent-folder';
+          case 'context-folder': return 'yapi-mention-item--context-folder';
         }
       },
       renderItem: (item, itemEl) => {
-        const iconEl = itemEl.createSpan({ cls: 'pivi-mention-icon' });
+        const iconEl = itemEl.createSpan({ cls: 'yapi-mention-icon' });
         switch (item.type) {
           case 'agent':
           case 'agent-folder':
@@ -326,43 +326,43 @@ export class MentionDropdownController {
             break;
         }
 
-        const textEl = itemEl.createSpan({ cls: 'pivi-mention-text' });
+        const textEl = itemEl.createSpan({ cls: 'yapi-mention-text' });
 
         switch (item.type) {
           case 'agent-folder':
             textEl.createSpan({
-              cls: 'pivi-mention-name pivi-mention-name-agent-folder',
+              cls: 'yapi-mention-name yapi-mention-name-agent-folder',
             }).setText(`@${item.name}/`);
             break;
           case 'agent': {
             // Show ID (which is namespaced for plugin agents) for consistency with inserted text
             textEl.createSpan({
-              cls: 'pivi-mention-name pivi-mention-name-agent',
+              cls: 'yapi-mention-name yapi-mention-name-agent',
             }).setText(`@${item.id}`);
             if (item.description) {
-              textEl.createSpan({ cls: 'pivi-mention-agent-desc' }).setText(item.description);
+              textEl.createSpan({ cls: 'yapi-mention-agent-desc' }).setText(item.description);
             }
             break;
           }
           case 'context-folder':
             textEl.createSpan({
-              cls: 'pivi-mention-name pivi-mention-name-folder',
+              cls: 'yapi-mention-name yapi-mention-name-folder',
             }).setText(item.name);
             break;
           case 'folder':
             textEl.createSpan({
-              cls: 'pivi-mention-name pivi-mention-name-folder',
+              cls: 'yapi-mention-name yapi-mention-name-folder',
             }).setText(`${item.path}/`);
             break;
           case 'file': {
             const alias = getPreferredAlias(item.aliases, item.matchedAlias);
             textEl.createSpan({
               cls: alias
-                ? 'pivi-mention-name pivi-mention-name-file-alias'
-                : 'pivi-mention-name pivi-mention-name-file',
+                ? 'yapi-mention-name yapi-mention-name-file-alias'
+                : 'yapi-mention-name yapi-mention-name-file',
             }).setText(alias ?? item.name);
             textEl.createSpan({
-              cls: 'pivi-mention-path pivi-mention-path-secondary',
+              cls: 'yapi-mention-path yapi-mention-path-secondary',
             }).setText(item.path);
             break;
           }
@@ -381,7 +381,7 @@ export class MentionDropdownController {
         this.selectedMentionIndex = index;
       },
     });
-    this.containerEl.addClass('pivi-mention-dropdown-open');
+    this.containerEl.addClass('yapi-mention-dropdown-open');
 
     if (this.fixed) {
       this.positionFixed();
@@ -412,9 +412,9 @@ export class MentionDropdownController {
     const bottom = Math.max(0, containerRect.bottom - anchorRect.top + 4);
 
     dropdownEl.setCssProps({
-      '--pivi-anchored-dropdown-bottom': `${bottom}px`,
-      '--pivi-anchored-dropdown-left': `${left}px`,
-      '--pivi-anchored-dropdown-width': `${dropdownWidth}px`,
+      '--yapi-anchored-dropdown-bottom': `${bottom}px`,
+      '--yapi-anchored-dropdown-left': `${left}px`,
+      '--yapi-anchored-dropdown-width': `${dropdownWidth}px`,
     });
   }
 
@@ -439,9 +439,9 @@ export class MentionDropdownController {
     );
 
     dropdownEl.setCssProps({
-      '--pivi-fixed-dropdown-bottom': `${win.innerHeight - anchorRect.top + 4}px`,
-      '--pivi-fixed-dropdown-left': `${left}px`,
-      '--pivi-fixed-dropdown-width': `${dropdownWidth}px`,
+      '--yapi-fixed-dropdown-bottom': `${win.innerHeight - anchorRect.top + 4}px`,
+      '--yapi-fixed-dropdown-left': `${left}px`,
+      '--yapi-fixed-dropdown-width': `${dropdownWidth}px`,
     });
   }
 

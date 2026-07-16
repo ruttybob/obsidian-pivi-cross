@@ -7,29 +7,29 @@
       "@test/*": [
         "./tests/*"
       ],
-      "@pivi/pivi-agent-core": [
-        "./packages/pivi-agent-core/src/index.ts"
+      "@yapi/yapi-agent-core": [
+        "./packages/yapi-agent-core/src/index.ts"
       ],
-      "@pivi/pivi-agent-core/*": [
-        "./packages/pivi-agent-core/src/*"
+      "@yapi/yapi-agent-core/*": [
+        "./packages/yapi-agent-core/src/*"
       ],
-      "@pivi/obsidian-host": [
+      "@yapi/obsidian-host": [
         "./packages/obsidian-host/src/index.ts"
       ],
-      "@pivi/obsidian-host/*": [
+      "@yapi/obsidian-host/*": [
         "./packages/obsidian-host/src/*"
       ],
-      "@pivi/obsidian-tools": [
+      "@yapi/obsidian-tools": [
         "./packages/obsidian-tools/src/index.ts"
       ],
-      "@pivi/obsidian-tools/*": [
+      "@yapi/obsidian-tools/*": [
         "./packages/obsidian-tools/src/*"
       ],
-      "@pivi/pivi-react": [
-        "./packages/pivi-react/src/index.ts"
+      "@yapi/yapi-react": [
+        "./packages/yapi-react/src/index.ts"
       ],
-      "@pivi/pivi-react/*": [
-        "./packages/pivi-react/src/*"
+      "@yapi/yapi-react/*": [
+        "./packages/yapi-react/src/*"
       ],
       "@earendil-works/pi-ai/dist/*": [
         "./node_modules/@earendil-works/pi-ai/dist/*"

@@ -1,0 +1,162 @@
+/* @settings
+name: Yapi
+id: yapi
+description: Configure Yapi chat and markdown typography.
+settings:
+  -
+    id: yapi-chat-ui-heading
+    title: Chat UI
+    type: heading
+    level: 2
+  -
+    id: yapi-chat-font-size
+    title: Chat message font size
+    description: Font size for user and assistant messages in the Yapi chat view.
+    type: variable-number-slider
+    default: 14
+    min: 11
+    max: 22
+    step: 0.5
+    format: px
+  -
+    id: yapi-chat-line-height
+    title: Chat message line height
+    description: Line height for user and assistant messages in the Yapi chat view.
+    type: variable-number-slider
+    default: 1.4
+    min: 1.1
+    max: 2
+    step: 0.05
+  -
+    id: yapi-composer-font-size
+    title: Composer font size
+    description: Font size for the message composer.
+    type: variable-number-slider
+    default: 14
+    min: 11
+    max: 22
+    step: 0.5
+    format: px
+  -
+    id: yapi-welcome-font-size
+    title: Welcome greeting font size
+    description: Font size for the empty chat greeting.
+    type: variable-number-slider
+    default: 28
+    min: 18
+    max: 42
+    step: 1
+    format: px
+  -
+    id: yapi-markdown-headings-heading
+    title: Markdown headings
+    type: heading
+    level: 2
+  -
+    id: yapi-chat-h1-size
+    title: Assistant H1 size
+    description: Font size for level 1 headings in assistant markdown responses.
+    type: variable-number-slider
+    default: 16
+    min: 12
+    max: 30
+    step: 0.5
+    format: px
+  -
+    id: yapi-chat-h2-size
+    title: Assistant H2 size
+    description: Font size for level 2 headings in assistant markdown responses.
+    type: variable-number-slider
+    default: 15.5
+    min: 12
+    max: 28
+    step: 0.5
+    format: px
+  -
+    id: yapi-chat-h3-size
+    title: Assistant H3 size
+    description: Font size for level 3 headings in assistant markdown responses.
+    type: variable-number-slider
+    default: 15
+    min: 12
+    max: 26
+    step: 0.5
+    format: px
+  -
+    id: yapi-chat-h4-size
+    title: Assistant H4 size
+    description: Font size for level 4 headings in assistant markdown responses.
+    type: variable-number-slider
+    default: 14.5
+    min: 12
+    max: 24
+    step: 0.5
+    format: px
+  -
+    id: yapi-chat-h5-size
+    title: Assistant H5-H6 size
+    description: Font size for level 5 and 6 headings in assistant markdown responses.
+    type: variable-number-slider
+    default: 14
+    min: 12
+    max: 22
+    step: 0.5
+    format: px
+*/
+
+/* Shared product tokens for every Yapi presentation root. */
+.yapi-container,
+.yapi-settings,
+.yapi-inline-edit-modal {
+  --yapi-spacing-xs: 4px;
+  --yapi-spacing-sm: 8px;
+  --yapi-spacing-md: 12px;
+  --yapi-spacing-lg: 16px;
+  --yapi-spacing-xl: 24px;
+  --yapi-radius-xs: 4px;
+  --yapi-radius-sm: 6px;
+  --yapi-radius-md: 8px;
+  --yapi-radius-lg: 12px;
+  --yapi-radius-pill: 999px;
+  --yapi-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --yapi-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.14);
+  --yapi-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.22);
+  --yapi-shadow-modal: 0 12px 40px rgba(0, 0, 0, 0.35);
+  --yapi-shadow-control: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --yapi-shadow-popover-up-sm: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  --yapi-shadow-popover-up-md: 0 -4px 16px rgba(0, 0, 0, 0.2);
+  --yapi-material-blur-sm: blur(8px);
+  --yapi-material-blur-md: blur(14px);
+  --yapi-material-blur-lg: blur(20px);
+  --yapi-material-bg: color-mix(in srgb, var(--yapi-host-background-primary) 86%, transparent);
+  --yapi-material-bg-secondary: color-mix(in srgb, var(--yapi-host-background-secondary) 90%, transparent);
+  --yapi-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --yapi-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --yapi-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --yapi-duration-instant: 80ms;
+  --yapi-duration-fast: 120ms;
+  --yapi-duration-normal: 180ms;
+  --yapi-duration-deliberate: 280ms;
+  --yapi-surface-subtle: rgba(var(--yapi-host-mono-rgb-100), 0.012);
+  --yapi-surface-raised: rgba(var(--yapi-host-mono-rgb-100), 0.02);
+  --yapi-border-subtle: rgba(var(--yapi-host-mono-rgb-100), 0.08);
+  --yapi-text-xs: 11px;
+  --yapi-text-sm: 12px;
+  --yapi-text-base: 13px;
+  --yapi-text-body: 14px;
+  --yapi-text-lg: 16px;
+  --yapi-text-chat-body: var(--yapi-chat-font-size, var(--yapi-text-body));
+  --yapi-text-composer: var(--yapi-composer-font-size, var(--yapi-text-body));
+  --yapi-focus-ring: 2px solid var(--yapi-host-interactive-accent);
+  --yapi-focus-offset: 2px;
+  --yapi-press-scale: 0.97;
+  --yapi-press-scale-strong: 0.94;
+  --yapi-press-duration: var(--yapi-duration-fast);
+  --yapi-brand: #1B365D;
+  --yapi-brand-rgb: 27, 54, 93;
+  --yapi-error: #dc3545;
+  --yapi-error-rgb: 220, 53, 69;
+  --yapi-compact: #5bc0de;
+  --yapi-chat-accent: var(--yapi-host-text-accent);
+  font-optical-sizing: auto;
+}

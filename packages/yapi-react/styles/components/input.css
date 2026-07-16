@@ -1,0 +1,346 @@
+/* Input area
+ * z-index must sit above .yapi-messages-bottom-controls (40) so model/thinking/
+ * external dropdowns paint over the floating tab switcher and chat chrome.
+ */
+.yapi-input-container {
+  position: relative;
+  z-index: 50;
+  padding: 0;
+}
+
+.yapi-input-container.yapi-mention-dropdown-open,
+.yapi-input-container.yapi-slash-dropdown-open,
+.yapi-input-container:focus-within {
+  z-index: 7000;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-input-container:hover {
+    z-index: 7000;
+  }
+}
+
+/* Input wrapper (border container) - flex column so textarea expands when no chips */
+/* Height calculation: context row (36px) + textarea min (60px) + toolbar (38px) + border (2px) = 136px */
+.yapi-input-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 140px;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  background: var(--yapi-host-background-primary);
+}
+
+/* Context row (file chip start, selection indicator end) - inside input wrapper at top */
+/* Collapsed by default; expanded via .has-content class; textarea fills remaining space */
+.yapi-context-row {
+  display: none;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  padding: 4px 10px 0 10px;
+  gap: 6px;
+}
+
+/* Show context row when it has visible content */
+.yapi-context-row.has-content {
+  display: flex;
+}
+
+/* Nav content for the compact tab switcher (React-owned in messages bottom controls) */
+.yapi-input-nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-width: 0;
+}
+
+.yapi-messages-bottom-controls .yapi-input-nav-content {
+  pointer-events: none;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-messages-bottom-controls .yapi-tab-bar-container {
+  pointer-events: auto;
+}
+
+/* Selection indicator (shown when text is selected in editor) */
+/* Match file chip height (24px): chip has 16px remove button + 6px padding + 2px border */
+/* Indicator: 12px text + 10px padding (5+5) + 2px border = 24px */
+.yapi-selection-indicator,
+.yapi-browser-selection-indicator,
+.yapi-canvas-indicator {
+  color: #7abaff;
+  font-size: var(--yapi-text-sm);
+  line-height: 1;
+  opacity: 0.9;
+  pointer-events: none;
+  white-space: nowrap;
+  padding: 5px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--yapi-radius-xs);
+  margin-inline-start: auto;
+  flex-shrink: 0;
+  order: 4;
+  max-width: min(100%, clamp(220px, 64vw, 560px));
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yapi-input-wrapper .yapi-input {
+  width: 100%;
+  flex: 1 1 0;
+  min-height: var(--yapi-textarea-min-height, 60px);
+  max-height: var(--yapi-textarea-max-height, none);
+  resize: none;
+  padding: 8px 10px 10px 10px;
+  border: none;
+  border-radius: var(--yapi-radius-sm);
+  background: transparent;
+  color: var(--yapi-host-text-normal);
+  font-family: inherit;
+  font-size: var(--yapi-text-composer);
+  line-height: var(--yapi-chat-line-height, 1.4);
+  box-shadow: none;
+  overflow-y: auto;
+  unicode-bidi: plaintext; /* Proper BiDi text handling for mixed RTL/LTR */
+}
+
+.yapi-input-wrapper .yapi-input:hover,
+.yapi-input-wrapper .yapi-input:focus {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.yapi-input::placeholder {
+  color: var(--yapi-host-text-muted);
+}
+
+/* Rich contenteditable composer */
+.yapi-rich-input {
+  position: relative;
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.yapi-rich-input-empty::before {
+  position: absolute;
+  inset-block-start: 8px;
+  inset-inline-start: 10px;
+  inset-inline-end: 10px;
+  content: attr(data-placeholder);
+  color: var(--yapi-host-text-faint);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Input toolbar */
+.yapi-input-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  padding: 4px 6px 6px 6px;
+  gap: var(--yapi-spacing-xs);
+}
+
+/* Reset Obsidian theme button chrome on toolbar triggers only (not dropdown options).
+ * Inherit the chat text face so React <button> controls match the original div triggers.
+ * Padding/line-height live here so host `button` rules cannot inflate the row. */
+.yapi-container .yapi-input-toolbar > .yapi-model-selector > .yapi-model-btn,
+.yapi-container .yapi-input-toolbar .yapi-thinking-current,
+.yapi-container .yapi-input-toolbar > .yapi-external-context-selector > .yapi-external-context-btn,
+.yapi-container .yapi-input-toolbar > .yapi-mode-selector {
+  appearance: none;
+  background: var(--yapi-host-background-primary);
+  border: 0;
+  box-shadow: none;
+  min-height: 0;
+  height: auto;
+  margin: 0;
+  line-height: 1.2;
+  font-family: inherit;
+}
+
+.yapi-container .yapi-input-toolbar > .yapi-model-selector > .yapi-model-btn {
+  padding: 4px 8px;
+}
+
+.yapi-container .yapi-input-toolbar .yapi-thinking-current {
+  padding: 3px 8px;
+  background: transparent;
+}
+
+.yapi-container .yapi-input-toolbar > .yapi-external-context-selector > .yapi-external-context-btn {
+  padding: 4px 8px;
+}
+
+/* Keep external dropdown rows on the chat text face (not Obsidian interface font). */
+.yapi-container .yapi-input-toolbar .yapi-external-context-dropdown,
+.yapi-container .yapi-input-toolbar .yapi-external-context-item,
+.yapi-container .yapi-input-toolbar .yapi-external-context-add {
+  font-family: inherit;
+}
+
+.yapi-input-action-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+.yapi-send-button-wrap {
+  display: flex;
+  align-items: center;
+  margin-inline-start: 0;
+  flex-shrink: 0;
+}
+
+.yapi-send-button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: var(--yapi-radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  appearance: none;
+  box-shadow: none;
+  flex-shrink: 0;
+  transition:
+    background-color var(--yapi-duration-fast) var(--yapi-ease-out),
+    color var(--yapi-duration-fast) var(--yapi-ease-out),
+    opacity var(--yapi-duration-fast) var(--yapi-ease-out),
+    scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-send-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+.yapi-send-button.yapi-send-disabled {
+  background: transparent;
+  color: var(--yapi-host-text-faint);
+  cursor: default;
+  opacity: 0.45;
+}
+
+.yapi-send-button.yapi-send-ready {
+  background: var(--yapi-host-interactive-accent);
+  color: var(--yapi-host-text-on-accent);
+}
+
+.yapi-send-button.yapi-send-ready:hover {
+  background: var(--yapi-host-interactive-accent-hover);
+}
+
+.yapi-send-button.yapi-send-streaming {
+  background: var(--yapi-host-background-hover);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-send-button.yapi-send-streaming:hover {
+  background: var(--yapi-host-border);
+  color: var(--yapi-host-text-normal);
+}
+
+/* File indicator (attached files) */
+.yapi-file-indicator {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: var(--yapi-text-body);
+}
+
+/* Composer queue status row (queued follow-up preview + steer action) */
+.yapi-input-queue-row {
+  display: none;
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-muted);
+  font-style: normal;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  padding: 0 2px 8px 2px;
+}
+
+.yapi-queue-indicator-text {
+  min-width: 0;
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yapi-queue-indicator-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-xs);
+}
+
+.yapi-queue-indicator-action {
+  flex: 0 0 auto;
+  padding: 1px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--yapi-host-interactive-accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.yapi-queue-indicator-action:hover {
+  text-decoration: underline;
+}
+
+.yapi-queue-indicator-action[disabled] {
+  color: var(--yapi-host-text-faint);
+  cursor: default;
+  text-decoration: none;
+}
+
+.yapi-queue-indicator-icon-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--yapi-radius-xs);
+  background: transparent;
+  color: var(--yapi-host-text-muted);
+  cursor: pointer;
+}
+
+.yapi-queue-indicator-icon-action:hover {
+  background: var(--yapi-host-background-hover);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-queue-indicator-icon-action svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Pink border when bash mode is active */
+.yapi-container .yapi-input-wrapper.yapi-input-bang-bash-mode {
+  border-color: #f472b6;
+  box-shadow: 0 0 0 1px #f472b6;
+}
+
+/* Monospace input while in bash mode */
+.yapi-input-wrapper.yapi-input-bang-bash-mode .yapi-input {
+  font-family: var(--yapi-host-font-monospace);
+}

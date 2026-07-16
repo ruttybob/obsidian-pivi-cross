@@ -2,8 +2,8 @@ import type {
   ChatPerfRecorder,
   MessageContentAdapter,
   StreamingMarkdownValue,
-} from '@pivi/pivi-react';
-import { NOOP_CHAT_PERF_RECORDER } from '@pivi/pivi-react';
+} from '@yapi/yapi-react';
+import { NOOP_CHAT_PERF_RECORDER } from '@yapi/yapi-react';
 import { Component } from 'obsidian';
 
 import type { RenderContentFn } from '@/ui/chat/rendering/MessageRenderer';
@@ -101,7 +101,7 @@ function appendSealedSegment(
 ): void {
   if (!markdown) return;
   const segment = state.root.ownerDocument.win.createDiv();
-  segment.className = 'pivi-streaming-markdown-segment';
+  segment.className = 'yapi-streaming-markdown-segment';
   state.sealedRoot.appendChild(segment);
   const scope = new Component();
   parent.addChild(scope);
@@ -187,11 +187,11 @@ export function createStreamingMarkdownContentAdapter(
   return {
     mount(container, value) {
       const root = container.ownerDocument.win.createDiv();
-      root.className = 'pivi-streaming-markdown';
+      root.className = 'yapi-streaming-markdown';
       const sealedRoot = container.ownerDocument.win.createDiv();
-      sealedRoot.className = 'pivi-streaming-markdown-sealed';
+      sealedRoot.className = 'yapi-streaming-markdown-sealed';
       const tail = container.ownerDocument.win.createDiv();
-      tail.className = 'pivi-streaming-markdown-tail';
+      tail.className = 'yapi-streaming-markdown-tail';
       root.append(sealedRoot, tail);
       container.replaceChildren(root);
       const state: MountedStreamingMarkdown = {

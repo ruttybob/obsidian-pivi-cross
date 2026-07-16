@@ -8,7 +8,7 @@ The input panel is a mixed React/imperative surface. React owns serializable chr
 
 ```mermaid
 flowchart TD
-  Shell["ComposerChrome<br/>@pivi/pivi-react"] -- "consumes snapshots" --> Store["ChatUiStore"]
+  Shell["ComposerChrome<br/>@yapi/yapi-react"] -- "consumes snapshots" --> Store["ChatUiStore"]
   Wire["wireComposerChrome<br/>tabToolbarInit.ts"] -- "publishes" --> Store
   Wire -- "reads/writes through" --> Ports["ChatPorts models/settings"]
   Shell -- "calls actions" --> Wire
@@ -58,7 +58,7 @@ Each tab tracks pinned roots, session-only roots, and selected keys. An added pa
 
 New/load session flows reset session-only choices to current pinned device-local roots. A runtime restart preserves the tab's current selection. Pin/unpin persists through the app's device-local external-context store and broadcasts to every mounted view.
 
-At execution time, selected roots become `ChatTurnRequest.externalContextPaths`. A queued turn snapshots its content, but permissions are refreshed from the current UI when it actually runs. Writers remove absolute paths from `.pivi/settings.json` and JSONL `message_ui`; readers overlay the device-local data after loading.
+At execution time, selected roots become `ChatTurnRequest.externalContextPaths`. A queued turn snapshots its content, but permissions are refreshed from the current UI when it actually runs. Writers remove absolute paths from `.yapi/settings.json` and JSONL `message_ui`; readers overlay the device-local data after loading.
 
 ## Keyboard and queue behavior
 
@@ -99,10 +99,10 @@ There are three content layers:
 The stable Obsidian command is:
 
 ```text
-pivi:add-selection-to-chat-input
+yapi:add-selection-to-chat-input
 ```
 
-It opens or reuses Pivi and inserts an inline context badge containing the note path/name, exact selection positions, complete touched lines, and markers around the exact selected text. It supports Source mode and Live Preview because those modes provide a stable Obsidian `Editor`; reading-mode selections are not attached.
+It opens or reuses Yapi and inserts an inline context badge containing the note path/name, exact selection positions, complete touched lines, and markers around the exact selected text. It supports Source mode and Live Preview because those modes provide a stable Obsidian `Editor`; reading-mode selections are not attached.
 
 Note Toolbar setup and CLI requirements are covered in [Tools, skills, MCP, and integrations](07-tools-skills-mcp-and-integrations.md).
 

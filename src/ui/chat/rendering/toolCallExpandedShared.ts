@@ -40,13 +40,13 @@ export function renderKeyValueLines(
 ): void {
   const visibleRows = rows.filter(([, value]) => value !== undefined && value !== null && value !== '');
   if (visibleRows.length === 0) {
-    container.createDiv({ cls: 'pivi-tool-empty', text: t('chat.stream.noDetails') });
+    container.createDiv({ cls: 'yapi-tool-empty', text: t('chat.stream.noDetails') });
     return;
   }
 
-  const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
+  const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
   for (const [label, value] of visibleRows) {
-    linesEl.createDiv({ cls: 'pivi-tool-line pivi-tool-line-wrap', text: `${label}: ${formatToolDisplayValue(value)}` });
+    linesEl.createDiv({ cls: 'yapi-tool-line yapi-tool-line-wrap', text: `${label}: ${formatToolDisplayValue(value)}` });
   }
 }
 
@@ -55,8 +55,8 @@ export function renderLinesExpanded(
   result: string,
   hoverable = false
 ): void {
-  const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
-  const lineEl = linesEl.createDiv({ cls: 'pivi-tool-line pivi-tool-line-wrap' });
+  const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
+  const lineEl = linesEl.createDiv({ cls: 'yapi-tool-line yapi-tool-line-wrap' });
   if (hoverable) lineEl.addClass('hoverable');
   lineEl.setText(result.replace(/^\s*\d+→/gm, '') || ' ');
 }
@@ -71,10 +71,10 @@ export function renderVaultPathLines(
   container: HTMLElement,
   paths: VaultPathLine[],
 ): void {
-  const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
+  const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
 
   for (const pathLine of paths) {
-    const lineEl = linesEl.createDiv({ cls: 'pivi-tool-line pivi-tool-line-path hoverable' });
+    const lineEl = linesEl.createDiv({ cls: 'yapi-tool-line yapi-tool-line-path hoverable' });
     appendVaultPath(lineEl, pathLine.path, pathLine.displayPath ?? pathLine.path, pathLine.clickable);
   }
 }
@@ -86,12 +86,12 @@ export function appendVaultPath(
   clickable = false,
 ): void {
   if (!clickable) {
-    parent.createSpan({ cls: 'pivi-tool-path-text', text: displayPath });
+    parent.createSpan({ cls: 'yapi-tool-path-text', text: displayPath });
     return;
   }
 
   const linkEl = parent.createEl('a', {
-    cls: 'pivi-tool-path-link pivi-file-link internal-link',
+    cls: 'yapi-tool-path-link yapi-file-link internal-link',
     text: displayPath,
   });
   linkEl.setAttribute('href', path);
@@ -111,19 +111,19 @@ export function formatToolDisplayValue(value: unknown): string {
 }
 
 export function contentFallback(container: HTMLElement, text: string): void {
-  const resultRow = container.createDiv({ cls: 'pivi-tool-result-row' });
-  const resultText = resultRow.createSpan({ cls: 'pivi-tool-result-text' });
+  const resultRow = container.createDiv({ cls: 'yapi-tool-result-row' });
+  const resultText = resultRow.createSpan({ cls: 'yapi-tool-result-text' });
   resultText.setText(text);
 }
 
 export function appendToolLink(parent: HTMLElement, title: string, url: string): void {
-  const linkEl = parent.createEl('a', { cls: 'pivi-tool-link' });
+  const linkEl = parent.createEl('a', { cls: 'yapi-tool-link' });
   linkEl.setAttribute('href', url);
   linkEl.setAttribute('target', '_blank');
   linkEl.setAttribute('rel', 'noopener noreferrer');
 
-  const iconEl = linkEl.createSpan({ cls: 'pivi-tool-link-icon' });
+  const iconEl = linkEl.createSpan({ cls: 'yapi-tool-link-icon' });
   setIcon(iconEl, 'external-link');
 
-  linkEl.createSpan({ cls: 'pivi-tool-link-title', text: title });
+  linkEl.createSpan({ cls: 'yapi-tool-link-title', text: title });
 }

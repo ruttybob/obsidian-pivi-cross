@@ -5,9 +5,9 @@ describe('measureStartupPhase', () => {
     const result = await measureStartupPhase('workspace', async () => 'ready');
 
     expect(result).toBe('ready');
-    const entries = performance.getEntriesByName('pivi:startup:workspace', 'measure');
+    const entries = performance.getEntriesByName('yapi:startup:workspace', 'measure');
     expect(entries.length).toBeGreaterThan(0);
-    performance.clearMeasures('pivi:startup:workspace');
+    performance.clearMeasures('yapi:startup:workspace');
   });
 
   it('records failed phases without swallowing the error', async () => {
@@ -15,7 +15,7 @@ describe('measureStartupPhase', () => {
       throw new Error('settings failed');
     })).rejects.toThrow('settings failed');
 
-    expect(performance.getEntriesByName('pivi:startup:settings', 'measure')).not.toHaveLength(0);
-    performance.clearMeasures('pivi:startup:settings');
+    expect(performance.getEntriesByName('yapi:startup:settings', 'measure')).not.toHaveLength(0);
+    performance.clearMeasures('yapi:startup:settings');
   });
 });

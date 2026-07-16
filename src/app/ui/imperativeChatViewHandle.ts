@@ -1,12 +1,12 @@
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
-import { recalculateUsageForModel } from '@pivi/pivi-agent-core/foundation/usage';
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
+import { recalculateUsageForModel } from '@yapi/yapi-agent-core/foundation/usage';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 import { type Editor, type MarkdownView, type TFile } from 'obsidian';
 
 import type {
-  PiviChatCompositionHost,
-  PiviChatDevelopmentCommands,
-  PiviChatViewHandle,
+  YapiChatCompositionHost,
+  YapiChatDevelopmentCommands,
+  YapiChatViewHandle,
 } from '@/app/hostContracts';
 import { imperativeChatLogger } from '@/app/ui/imperativeChatTabAction';
 import { refreshBlankTabModelState } from '@/ui/chat/tabs/Tab';
@@ -18,7 +18,7 @@ import { getDefaultExternalContextPaths } from '@/ui/shared/utils/defaultExterna
 export interface ImperativeChatViewHandleDeps {
   getTabManager: () => TabManager | null;
   getMountedPorts: () => ChatPorts | null;
-  plugin: PiviChatCompositionHost;
+  plugin: YapiChatCompositionHost;
   persistTabStateImmediate: (state: ReturnType<TabManager['getPersistedState']>) => Promise<void>;
   publishTabSnapshot: () => void;
   runWithoutTabPersistence: <T>(action: () => Promise<T>) => Promise<T>;
@@ -28,9 +28,9 @@ export interface ImperativeChatViewHandleDeps {
 const DEVELOPMENT_MARKDOWN_BYTES = 100 * 1024;
 const DEVELOPMENT_MARKDOWN_CHUNK_BYTES = 1_600;
 const DEVELOPMENT_MARKDOWN_SETTLE_MS = 750;
-const DEVELOPMENT_SUBAGENTS_FIXTURE = '.pivi/sessions/perf-004-20-subagents.jsonl';
+const DEVELOPMENT_SUBAGENTS_FIXTURE = '.yapi/sessions/perf-004-20-subagents.jsonl';
 const DEVELOPMENT_SUBAGENTS_SETTLE_MS = 750;
-const DEVELOPMENT_PAGING_FIXTURE = '.pivi/sessions/perf-002-5k-messages.jsonl';
+const DEVELOPMENT_PAGING_FIXTURE = '.yapi/sessions/perf-002-5k-messages.jsonl';
 const DEVELOPMENT_PAGING_SETTLE_MS = 750;
 const DEVELOPMENT_SWITCHING_MESSAGE_COUNT = 100;
 const DEVELOPMENT_SWITCHING_PASSES = 2;
@@ -88,7 +88,7 @@ async function waitForDevelopmentMessageCount(
 }
 
 async function createDevelopmentSessionFixture(
-  plugin: PiviChatCompositionHost,
+  plugin: YapiChatCompositionHost,
   runId: number,
   sourceFile: string,
   fixtureName: string,
@@ -103,18 +103,18 @@ async function createDevelopmentSessionFixture(
   if (header.type !== 'session') {
     throw new Error('The performance fixture has no session header.');
   }
-  header.id = `pivi-development-${fixtureName}-${runId}`;
-  const sessionFile = `.pivi/sessions/perf-isolated-${fixtureName}-${runId}.jsonl`;
+  header.id = `yapi-development-${fixtureName}-${runId}`;
+  const sessionFile = `.yapi/sessions/perf-isolated-${fixtureName}-${runId}.jsonl`;
   await adapter.write(sessionFile, `${JSON.stringify(header)}${source.slice(lineEnd)}`);
   return sessionFile;
 }
 
 async function removeDevelopmentSessionFixture(
-  plugin: PiviChatCompositionHost,
+  plugin: YapiChatCompositionHost,
   sessionFile: string,
 ): Promise<void> {
   const adapter = plugin.app.vault.adapter;
-  const indexFile = `${sessionFile}.pivi-index`;
+  const indexFile = `${sessionFile}.yapi-index`;
   if (await adapter.exists(indexFile)) await adapter.remove(indexFile);
   if (await adapter.exists(sessionFile)) await adapter.remove(sessionFile);
 }
@@ -122,16 +122,16 @@ async function removeDevelopmentSessionFixture(
 async function runDevelopment20Subagents(
   manager: TabManager,
   ownerWindow: Window,
-  plugin: PiviChatCompositionHost,
-  hooks: Parameters<PiviChatDevelopmentCommands['run20SubagentsWorkload']>[0],
-): Promise<Awaited<ReturnType<PiviChatDevelopmentCommands['run20SubagentsWorkload']>>> {
+  plugin: YapiChatCompositionHost,
+  hooks: Parameters<YapiChatDevelopmentCommands['run20SubagentsWorkload']>[0],
+): Promise<Awaited<ReturnType<YapiChatDevelopmentCommands['run20SubagentsWorkload']>>> {
   const originalTabId = manager.getActiveTabId();
   if (!originalTabId) {
     throw new Error('An active chat tab is required for the 20-subagent workload.');
   }
 
   const runId = Date.now();
-  const tabId = `pivi-development-subagents-${runId}`;
+  const tabId = `yapi-development-subagents-${runId}`;
   const sessionFile = await createDevelopmentSessionFixture(
     plugin,
     runId,
@@ -166,16 +166,16 @@ async function runDevelopment20Subagents(
 async function runDevelopmentIndexedSessionPaging(
   manager: TabManager,
   ownerWindow: Window,
-  plugin: PiviChatCompositionHost,
-  hooks: Parameters<PiviChatDevelopmentCommands['runIndexedSessionPagingWorkload']>[0],
-): Promise<Awaited<ReturnType<PiviChatDevelopmentCommands['runIndexedSessionPagingWorkload']>>> {
+  plugin: YapiChatCompositionHost,
+  hooks: Parameters<YapiChatDevelopmentCommands['runIndexedSessionPagingWorkload']>[0],
+): Promise<Awaited<ReturnType<YapiChatDevelopmentCommands['runIndexedSessionPagingWorkload']>>> {
   const originalTabId = manager.getActiveTabId();
   if (!originalTabId) {
     throw new Error('An active chat tab is required for the indexed paging workload.');
   }
 
   const runId = Date.now();
-  const tabId = `pivi-development-indexed-paging-${runId}`;
+  const tabId = `yapi-development-indexed-paging-${runId}`;
   const sessionFile = await createDevelopmentSessionFixture(
     plugin,
     runId,
@@ -221,7 +221,7 @@ async function runDevelopmentIndexedSessionPaging(
 
 function createDevelopmentTabMessages(tabIndex: number): ChatMessage[] {
   return Array.from({ length: DEVELOPMENT_SWITCHING_MESSAGE_COUNT }, (_, messageIndex) => ({
-    id: `pivi-development-tab-${tabIndex}-message-${messageIndex}`,
+    id: `yapi-development-tab-${tabIndex}-message-${messageIndex}`,
     role: messageIndex % 2 === 0 ? 'user' : 'assistant',
     content: `## Tab ${tabIndex + 1}\n\nDeterministic message ${messageIndex + 1}.`,
     timestamp: messageIndex + 1,
@@ -232,7 +232,7 @@ function createDevelopmentTabMessages(tabIndex: number): ChatMessage[] {
 export async function runDevelopmentTabSwitching(
   manager: TabManager,
   ownerWindow: Window,
-): Promise<Awaited<ReturnType<PiviChatDevelopmentCommands['runTabSwitchingWorkload']>>> {
+): Promise<Awaited<ReturnType<YapiChatDevelopmentCommands['runTabSwitchingWorkload']>>> {
   const originalTabId = manager.getActiveTabId();
   if (!originalTabId) {
     throw new Error('An active chat tab is required for the switching workload.');
@@ -245,7 +245,7 @@ export async function runDevelopmentTabSwitching(
 
   try {
     for (let index = 0; index < DEVELOPMENT_SWITCHING_TAB_COUNT; index += 1) {
-      const tabId = `pivi-development-tab-switch-${runId}-${index}`;
+      const tabId = `yapi-development-tab-switch-${runId}-${index}`;
       const tab = await manager.createTab(undefined, tabId, {
         activate: false,
         draftTitle: `Performance tab ${index + 1}`,
@@ -285,7 +285,7 @@ export async function runDevelopmentTabSwitching(
 export async function runDevelopmentMarkdownStream(
   state: DevelopmentMarkdownStreamState,
   ownerWindow: Window,
-): Promise<Awaited<ReturnType<PiviChatDevelopmentCommands['run100KbMarkdownStream']>>> {
+): Promise<Awaited<ReturnType<YapiChatDevelopmentCommands['run100KbMarkdownStream']>>> {
   if (state.isStreaming) {
     throw new Error('Cannot run the Markdown performance stream while a turn is active.');
   }
@@ -294,13 +294,13 @@ export async function runDevelopmentMarkdownStream(
   const markdown = createDevelopmentMarkdown();
   const turnId = Date.now();
   const userMessage: ChatMessage = {
-    id: `pivi-development-markdown-stream-user-${turnId}`,
+    id: `yapi-development-markdown-stream-user-${turnId}`,
     role: 'user',
     content: 'Render the deterministic 100 KB Markdown stream.',
     timestamp: turnId,
   };
   const message: ChatMessage = {
-    id: `pivi-development-markdown-stream-assistant-${turnId}`,
+    id: `yapi-development-markdown-stream-assistant-${turnId}`,
     role: 'assistant',
     content: '',
     contentBlocks: [{ type: 'text', content: '' }],
@@ -346,12 +346,12 @@ export async function runDevelopmentMarkdownStream(
 /** Runs the Markdown workload in a disposable in-memory tab without touching user tab state. */
 export async function runDevelopmentMarkdownStreamInIsolatedTab(
   manager: DevelopmentMarkdownTabManager,
-): Promise<Awaited<ReturnType<PiviChatDevelopmentCommands['run100KbMarkdownStream']>>> {
+): Promise<Awaited<ReturnType<YapiChatDevelopmentCommands['run100KbMarkdownStream']>>> {
   const originalTabId = manager.getActiveTabId();
   if (!originalTabId) {
     throw new Error('An active chat tab is required for the Markdown performance stream.');
   }
-  const tabId = `pivi-development-markdown-stream-${Date.now()}`;
+  const tabId = `yapi-development-markdown-stream-${Date.now()}`;
   try {
     const tab = await manager.createTab(undefined, tabId);
     const ownerWindow = tab?.dom.messagesEl.ownerDocument.defaultView;
@@ -371,7 +371,7 @@ export async function runDevelopmentMarkdownStreamInIsolatedTab(
 
 export function createImperativeChatViewHandle(
   deps: ImperativeChatViewHandleDeps,
-): PiviChatViewHandle {
+): YapiChatViewHandle {
   const {
     getMountedPorts,
     getTabManager,

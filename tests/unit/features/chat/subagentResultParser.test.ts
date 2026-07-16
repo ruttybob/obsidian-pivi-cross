@@ -1,6 +1,6 @@
 import { SubagentResultParser } from '@/ui/chat/services/SubagentResultParser';
-import { AGENT_REPORT_BLOCK_LANGUAGE } from '@pivi/pivi-agent-core/session/continuationSchemas';
-import type { TaskResultInterpreter } from '@pivi/pivi-agent-core/tools';
+import { AGENT_REPORT_BLOCK_LANGUAGE } from '@yapi/yapi-agent-core/session/continuationSchemas';
+import type { TaskResultInterpreter } from '@yapi/yapi-agent-core/tools';
 
 const mockInterpreter: TaskResultInterpreter = {
   hasAsyncLaunchMarker: () => false,

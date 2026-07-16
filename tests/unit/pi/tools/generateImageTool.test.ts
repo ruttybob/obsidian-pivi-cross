@@ -1,4 +1,4 @@
-import { createBashTool, createGenerateImageTool, createObsidianTools } from '@pivi/obsidian-tools';
+import { createBashTool, createGenerateImageTool, createObsidianTools } from '@yapi/obsidian-tools';
 
 function makeVault() {
   const notes = new Map<string, string>([['note.md', 'hello']]);

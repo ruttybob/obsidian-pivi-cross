@@ -1,4 +1,4 @@
-import { openExternalUrl } from "@pivi/obsidian-host/openExternalUrl";
+import { openExternalUrl } from "@yapi/obsidian-host/openExternalUrl";
 import type { App } from "obsidian";
 
 const STYLE_SETTINGS_PLUGIN_ID = "obsidian-style-settings";

@@ -2,13 +2,13 @@
 
 [Back to the developer handbook](README.md)
 
-`@pivi/pivi-react` owns Pivi's product presentation independently of Obsidian. App composition injects platform terminology, icons, tooltips, feature ports, and imperative content adapters.
+`@yapi/yapi-react` owns Yapi's product presentation independently of Obsidian. App composition injects platform terminology, icons, tooltips, feature ports, and imperative content adapters.
 
 ## Presentation boundary
 
 ```mermaid
 flowchart TD
-  Host["src/app/ui Obsidian wiring"] -- "injects platform and ports" --> React["@pivi/pivi-react"]
+  Host["src/app/ui Obsidian wiring"] -- "injects platform and ports" --> React["@yapi/yapi-react"]
   Chat["src/ui/chat orchestration"] -- "publishes ChatUiStore" --> React
   React -- "narrow actions" --> Host
   React -- "empty content slots" --> Adapters["Imperative adapters"]
@@ -19,7 +19,7 @@ flowchart TD
 
 React snapshots contain data only. Runtime objects, controllers, Obsidian views, DOM elements, and mutable service aggregates remain in registries or adapter closures. `ActiveChatUiBridge` selects the active tab's store and portal elements without putting DOM into a snapshot.
 
-Product React DOM and CSS use `pivi-*` classes. Host appearance enters through `--pivi-host-*` tokens. Do not copy Obsidian-private setting, modal, checkbox, theme, or icon class names into the package.
+Product React DOM and CSS use `yapi-*` classes. Host appearance enters through `--yapi-host-*` tokens. Do not copy Obsidian-private setting, modal, checkbox, theme, or icon class names into the package.
 
 ## Imperative adapter slots
 
@@ -42,7 +42,7 @@ Every non-empty transcript uses `@tanstack/react-virtual`. Rows use stable messa
 
 `SettingsRoot` consumes package-owned `SettingsPorts` implemented by `src/app/ui/createUiPorts.ts` and focused settings-port modules. React does not import app settings types or engine facades.
 
-`PiviSettingTabHost` supports both Obsidian settings generations. Obsidian 1.13 renders the existing React surface through one custom `getSettingDefinitions()` item whose localized aliases come synchronously from `@pivi/pivi-react`; locale changes call `update()` so the settings search index is rebuilt. Obsidian 1.12 continues through `display()`. Both paths share one generation-guarded mount and cleanup implementation.
+`YapiSettingTabHost` supports both Obsidian settings generations. Obsidian 1.13 renders the existing React surface through one custom `getSettingDefinitions()` item whose localized aliases come synchronously from `@yapi/yapi-react`; locale changes call `update()` so the settings search index is rebuilt. Obsidian 1.12 continues through `display()`. Both paths share one generation-guarded mount and cleanup implementation.
 
 ```mermaid
 flowchart LR
@@ -59,7 +59,7 @@ Settings use the correct store for each data class:
 - synchronized vault settings for portable non-secret configuration;
 - Obsidian `secretStorage` for provider credentials;
 - vault-scoped device-local storage for absolute external roots and overlays;
-- vault files such as `.pivi/mcp.json` and `.pivi/commands/` for explicit workspace configuration.
+- vault files such as `.yapi/mcp.json` and `.yapi/commands/` for explicit workspace configuration.
 
 Save actions return structured feedback. App wiring converts transient results to Obsidian Notices while React retains only actionable errors beside their controls.
 
@@ -67,7 +67,7 @@ Hot refresh is capability-specific. Tool changes refresh registries/prompts; MCP
 
 Model provider identity is also the credential identity. The Add provider picker orders Local, OAuth, API, then Custom API. OAuth always shows OpenAI Codex, Grok Build, and Claude; entries already configured remain visible with an Added state. `xai/*` and `anthropic/*` are API-key providers, while Grok Build and Claude use the independent `grok-build/*` and `claude/*` model namespaces with OAuth-only credentials. Grok Build owns its coding-agent catalog, including `grok-composer-2.5-fast`, and sends Responses requests to the subscription inference proxy with the selected model override; it does not mirror or dispatch through the xAI API-key catalog. Claude reuses Anthropic's model catalog and transport while keeping Claude Pro/Max OAuth credentials separate from Anthropic API keys. Disable, remove, test, readiness, and fallback behavior stay within each namespace. Settings-load migration moves legacy backing-slot OAuth and unambiguous selected model keys into the matching product namespace without overwriting an existing credential; when both identities already exist, backing selections stay unchanged and matching subscription aliases are added instead. Legacy xAI selections move to Composer 2.5 because xAI API model ids are not valid Grok Build catalog entries. Local Ollama, LM Studio, and llama.cpp endpoint cards place their optional API key directly below Base URL and omit a separate authentication section.
 
-The Grok Build catalog is currently Pivi-owned because pi-ai's `xaiProvider()` models and transport target the API-key `api.x.ai` surface; pi-ai does not currently provide a first-class `grok-build` provider or supported Grok Build model discovery. Prefer the pi-ai implementation once upstream owns an equivalent provider that preserves the separate `grok-build/*` identity and OAuth credential slot, routes through the subscription inference proxy with the required headers and payload normalization, supplies verified model metadata, and passes Pivi's provider-isolation, migration, and request-contract tests. A similarly named model appearing in `xaiProvider()` alone is not sufficient, because that provider represents a different credential and inference surface.
+The Grok Build catalog is currently Yapi-owned because pi-ai's `xaiProvider()` models and transport target the API-key `api.x.ai` surface; pi-ai does not currently provide a first-class `grok-build` provider or supported Grok Build model discovery. Prefer the pi-ai implementation once upstream owns an equivalent provider that preserves the separate `grok-build/*` identity and OAuth credential slot, routes through the subscription inference proxy with the required headers and payload normalization, supplies verified model metadata, and passes Yapi's provider-isolation, migration, and request-contract tests. A similarly named model appearing in `xaiProvider()` alone is not sufficient, because that provider represents a different credential and inference surface.
 
 General settings expose the current compaction threshold as a percentage beside its range control. The send-shortcut toggle is read from the composer owner's window at keydown time so the shortcut still runs when the host keymap stops propagation above the input. It applies only while that composer's contenteditable owns focus: when enabled, plain Enter inserts a newline and either Command+Enter or Ctrl+Enter sends; when disabled, plain Enter sends. Shift/Alt combinations and IME composition remain editing input rather than send actions.
 
@@ -75,13 +75,13 @@ Subagent settings control execution and concurrency only. Composer chrome does n
 
 ## Localization
 
-All product copy, accessibility labels, settings descriptions, Notices, placeholders, commands, and tool display labels use the shared translator. `packages/pivi-react/src/i18n/locales/en.json` is canonical. Every locale must mirror its keys and interpolation placeholders in the same commit.
+All product copy, accessibility labels, settings descriptions, Notices, placeholders, commands, and tool display labels use the shared translator. `packages/yapi-react/src/i18n/locales/en.json` is canonical. Every locale must mirror its keys and interpolation placeholders in the same commit.
 
 React uses `useT()` under `I18nProvider`; imperative app/UI code uses the app translator. Host-neutral React text uses injected terms such as host, workspace, and secure storage rather than hard-coding Obsidian-specific vocabulary.
 
 ## Styling and icons
 
-CSS is organized by responsibility under `packages/pivi-react/styles/` and concatenated in manifest order. `npm run build:css` validates the graph and rejects `!important`. Add a stylesheet to the owning layer and manifest rather than importing CSS ad hoc from components.
+CSS is organized by responsibility under `packages/yapi-react/styles/` and concatenated in manifest order. `npm run build:css` validates the graph and rejects `!important`. Add a stylesheet to the owning layer and manifest rather than importing CSS ad hoc from components.
 
 Icons cross the presentation platform as product descriptors or SVG data. React does not call Obsidian icon APIs directly. Tooltips are attached through the injected platform and must be cleaned up with their owner surface.
 

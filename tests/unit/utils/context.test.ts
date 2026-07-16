@@ -1,7 +1,7 @@
 import {
   extractUserQuery,
   resolveUserMessageDisplayText,
-} from '@pivi/pivi-agent-core/context/context';
+} from '@yapi/yapi-agent-core/context/context';
 
 describe('extractUserQuery', () => {
   it('strips context-only turns with no user text', () => {

@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
 
 export interface RewindContext {
   checkpointId: string | null | undefined;

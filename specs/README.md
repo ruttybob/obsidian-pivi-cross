@@ -1,4 +1,4 @@
-# Pivi specs
+# YaPi specs
 
 Specs are the repository's tracked execution records for long-running work. They capture decisions, work breakdown, multi-agent coordination, handoffs, and acceptance evidence while a task is in progress.
 

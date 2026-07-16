@@ -2,17 +2,17 @@ import {
   DEFAULT_MODEL_KEY,
   DEFAULT_PI_PROVIDER_IDS,
   PI_DEFAULT_ENVIRONMENT_VARIABLES,
-} from '@pivi/pivi-agent-core/foundation/settingsDefaults';
+} from '@yapi/yapi-agent-core/foundation/settingsDefaults';
 import {
   getObsidianToolsSettingsFromBag,
   resolveObsidianToolsSettings,
-} from '@pivi/pivi-agent-core/foundation/settings';
-import { isValidModelKey } from '@pivi/pivi-agent-core/foundation/settingsModelKey';
+} from '@yapi/yapi-agent-core/foundation/settings';
+import { isValidModelKey } from '@yapi/yapi-agent-core/foundation/settingsModelKey';
 import {
   getPiAgentSettings,
   normalizePiAgentSettingsRecord,
   updatePiAgentSettings,
-} from '@pivi/pivi-agent-core/foundation/agentSettings';
+} from '@yapi/yapi-agent-core/foundation/agentSettings';
 
 
 function isPersistedAgentSettings(

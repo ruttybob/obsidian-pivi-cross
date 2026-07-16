@@ -9,7 +9,7 @@ import {
   stream,
   streamSimple,
   unregisterApiProviders,
-} from '@pivi/pivi-agent-core/engine/pi/shims/piAiCompat';
+} from '@yapi/yapi-agent-core/engine/pi/shims/piAiCompat';
 
 const deepseekEnvName = ['DEEPSEEK', 'API', 'KEY'].join('_');
 
@@ -45,7 +45,7 @@ describe('piAiCompat shim', () => {
     delete process.env[deepseekEnvName];
   });
 
-  it('exposes the same model catalog as the Pivi-supported pi-ai models collection', () => {
+  it('exposes the same model catalog as the Yapi-supported pi-ai models collection', () => {
     expect(getProviders()).toEqual([
       'anthropic',
       'deepseek',

@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
-import type { ExternalOpener } from '@pivi/pivi-agent-core/ports';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
+import type { ExternalOpener } from '@yapi/yapi-agent-core/ports';
 
 type SpawnChild = { unref: () => void };
 const logger = new PluginLogger('openExternalUrl');

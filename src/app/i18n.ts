@@ -1,4 +1,4 @@
-import { createI18n } from '@pivi/pivi-react';
+import { createI18n } from '@yapi/yapi-react';
 
 export const appI18n = createI18n();
 
@@ -15,10 +15,10 @@ export type {
   TFunction,
   TranslationKey,
   TranslationParams,
-} from '@pivi/pivi-react';
+} from '@yapi/yapi-react';
 export {
   DEFAULT_LOCALE,
   getLocaleDisplayString,
   getLocaleInfo,
   SUPPORTED_LOCALES,
-} from '@pivi/pivi-react';
+} from '@yapi/yapi-react';

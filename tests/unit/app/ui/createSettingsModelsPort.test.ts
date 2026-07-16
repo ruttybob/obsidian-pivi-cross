@@ -1,16 +1,16 @@
-import type { ChatUIOption } from '@pivi/pivi-agent-core/foundation/chatUi';
-import { DEFAULT_PIVI_SETTINGS } from '@pivi/pivi-agent-core/foundation/settingsDefaults';
+import type { ChatUIOption } from '@yapi/yapi-agent-core/foundation/chatUi';
+import { DEFAULT_YAPI_SETTINGS } from '@yapi/yapi-agent-core/foundation/settingsDefaults';
 
-import type { PiviPluginWorkspace, PiviSettingsHost, PiviUiFacades } from '@/app/hostContracts';
+import type { YapiPluginWorkspace, YapiSettingsHost, YapiUiFacades } from '@/app/hostContracts';
 import { createSettingsModelsPort } from '@/app/ui/createSettingsModelsPort';
 
 function createHarness() {
   const settings = {
-    ...DEFAULT_PIVI_SETTINGS,
+    ...DEFAULT_YAPI_SETTINGS,
     model: 'anthropic/claude-test',
     titleGenerationModel: 'anthropic/claude-test',
     agentSettings: {
-      ...DEFAULT_PIVI_SETTINGS.agentSettings,
+      ...DEFAULT_YAPI_SETTINGS.agentSettings,
       addedProviders: ['anthropic', 'deepseek'],
       disabledProviders: ['anthropic'],
       visibleModels: ['anthropic/claude-test'],
@@ -31,7 +31,7 @@ function createHarness() {
     getAllViews: () => [{
       getChatHandle: () => ({ maintenance: { refreshModelPresentation } }),
     }],
-  } as unknown as PiviSettingsHost;
+  } as unknown as YapiSettingsHost;
   const uiFacades = {
     listModelsForProvider: (providerId: string) => providerId === 'deepseek' ? [deepseekModel] : [],
     syncCustomProviders: jest.fn(),
@@ -39,14 +39,14 @@ function createHarness() {
     commitSettingsSnapshot: (target: Record<string, unknown>, snapshot: Record<string, unknown>) => {
       Object.assign(target, snapshot);
     },
-  } as unknown as PiviUiFacades;
+  } as unknown as YapiUiFacades;
   const workspace = {
     credentialStore: {
       readSync: () => undefined,
       modify: async () => undefined,
       delete: deleteCredential,
     },
-  } as unknown as PiviPluginWorkspace;
+  } as unknown as YapiPluginWorkspace;
 
   return {
     deleteCredential,
@@ -111,7 +111,7 @@ describe('createSettingsModelsPort provider removal', () => {
 
   it('fails before removing settings when requested credential storage is unavailable', async () => {
     const harness = createHarness();
-    const workspaceWithoutCredentials = {} as PiviPluginWorkspace;
+    const workspaceWithoutCredentials = {} as YapiPluginWorkspace;
     const port = createSettingsModelsPort(
       harness.host,
       harness.uiFacades,

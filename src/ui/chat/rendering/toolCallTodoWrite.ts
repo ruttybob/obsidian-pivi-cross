@@ -2,9 +2,9 @@ import {
   type ActivityStatus,
   resolveToolActivityStatus,
   type ToolCallInfo,
-} from '@pivi/pivi-agent-core/foundation';
-import type { TodoItem } from '@pivi/pivi-agent-core/tools/todo';
-import { TOOL_APPLY_PATCH } from '@pivi/pivi-agent-core/tools/toolNames';
+} from '@yapi/yapi-agent-core/foundation';
+import type { TodoItem } from '@yapi/yapi-agent-core/tools/todo';
+import { TOOL_APPLY_PATCH } from '@yapi/yapi-agent-core/tools/toolNames';
 
 import { t } from '@/app/i18n';
 
@@ -33,7 +33,7 @@ export function areAllTodosCompleted(input: Record<string, unknown>): boolean {
 }
 
 export function resetStatusElement(statusEl: HTMLElement, status: ActivityStatus): void {
-  statusEl.className = 'pivi-tool-status';
+  statusEl.className = 'yapi-tool-status';
   statusEl.addClass(`status-${status}`);
   renderActivityStatusContents(statusEl, status);
 }
@@ -55,7 +55,7 @@ export function setApplyPatchHeaderRight(statusEl: HTMLElement, toolCall: ToolCa
     return;
   }
 
-  statusEl.className = 'pivi-tool-status pivi-write-edit-stats';
+  statusEl.className = 'yapi-tool-status yapi-write-edit-stats';
   statusEl.empty();
   statusEl.setAttribute('aria-label', getDiffStatsAriaLabel(stats));
   renderDiffStats(statusEl, stats);
@@ -75,12 +75,12 @@ export function renderTodoWriteResult(
   input: Record<string, unknown>
 ): void {
   container.empty();
-  container.addClass('pivi-todo-panel-content');
-  container.addClass('pivi-todo-list-container');
+  container.addClass('yapi-todo-panel-content');
+  container.addClass('yapi-todo-list-container');
 
   const todos = input.todos as TodoItem[] | undefined;
   if (!todos || !Array.isArray(todos)) {
-    const item = container.createSpan({ cls: 'pivi-tool-result-item' });
+    const item = container.createSpan({ cls: 'yapi-tool-result-item' });
     item.setText(t('chat.stream.tasksUpdated'));
     return;
   }
@@ -91,7 +91,7 @@ export function createCurrentTaskPreview(
   header: HTMLElement,
   input: Record<string, unknown>
 ): HTMLElement {
-  const currentTaskEl = header.createSpan({ cls: 'pivi-tool-current' });
+  const currentTaskEl = header.createSpan({ cls: 'yapi-tool-current' });
   const currentTask = getCurrentTask(input);
   if (currentTask) {
     currentTaskEl.setText(currentTask.activeForm ?? currentTask.content);
@@ -107,10 +107,10 @@ export function createTodoToggleHandler(
   return (expanded: boolean) => {
     if (onExpandChange) onExpandChange(expanded);
     if (currentTaskEl) {
-      currentTaskEl.toggleClass('pivi-hidden', expanded);
+      currentTaskEl.toggleClass('yapi-hidden', expanded);
     }
     if (statusEl) {
-      statusEl.toggleClass('pivi-hidden', expanded);
+      statusEl.toggleClass('yapi-hidden', expanded);
     }
   };
 }

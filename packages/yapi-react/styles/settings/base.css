@@ -1,0 +1,1284 @@
+/* ── Settings tab navigation ── */
+
+/* Match Obsidian 1.13's definition-row specificity without coupling to host class names. */
+:root .yapi-settings-definition-host.yapi-settings-definition-host {
+  display: block;
+  padding: 0;
+  border-top: 0;
+}
+
+.yapi-settings {
+  --yapi-settings-gutter: 12px;
+  --yapi-settings-control-width: 280px;
+  --yapi-settings-section-gap: 32px;
+  --yapi-settings-section-title-gap: 8px;
+  --yapi-settings-subsection-gap: 20px;
+}
+
+.yapi-settings-control:not(.yapi-select) {
+  box-sizing: border-box;
+  width: min(var(--yapi-settings-control-width), 100%);
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  outline: none;
+  background: var(--yapi-host-background-primary);
+  color: var(--yapi-host-text-normal);
+  font: inherit;
+  transition:
+    background-color var(--yapi-duration-fast) var(--yapi-ease-out),
+    border-color var(--yapi-duration-fast) var(--yapi-ease-out),
+    box-shadow var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-settings-control:hover:not(:disabled) {
+  border-color: var(--yapi-host-border-focus);
+}
+
+.yapi-settings-control:focus-visible {
+  border-color: var(--yapi-host-interactive-accent);
+  box-shadow: 0 0 0 2px var(--yapi-host-border-focus);
+}
+
+.yapi-settings-control::placeholder {
+  color: var(--yapi-host-text-faint);
+}
+
+.yapi-settings-control:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+textarea.yapi-settings-control {
+  min-height: 88px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.yapi-settings-control--fill {
+  width: 100%;
+}
+
+.yapi-setting-row__control > .yapi-settings-control:not(.yapi-select) {
+  flex: 0 1 var(--yapi-settings-control-width);
+}
+
+.yapi-settings-range {
+  display: flex;
+  width: min(var(--yapi-settings-control-width), 100%);
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-settings-range input[type="range"] {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.yapi-settings-range__value {
+  min-width: 3ch;
+  color: var(--yapi-host-text-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.yapi-settings-badge-field {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.yapi-settings-badge-list {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 40px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  background: var(--yapi-host-background-primary);
+  transition:
+    border-color var(--yapi-duration-fast) var(--yapi-ease-out),
+    box-shadow var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-settings-badge-list:focus-within {
+  border-color: var(--yapi-host-interactive-accent);
+  box-shadow: 0 0 0 2px var(--yapi-host-border-focus);
+}
+
+.yapi-settings-badge {
+  display: inline-flex;
+  max-width: 100%;
+  min-height: 26px;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 3px 2px 8px;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-pill);
+  background: var(--yapi-host-background-secondary);
+  color: var(--yapi-host-text-normal);
+  font-size: var(--yapi-host-font-ui-smaller);
+}
+
+.yapi-settings-badge__text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.yapi-settings-badge__remove {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  color: var(--yapi-host-text-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--yapi-duration-fast) var(--yapi-ease-out),
+    color var(--yapi-duration-fast) var(--yapi-ease-out),
+    scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-settings-badge__remove:hover:not(:disabled) {
+  background: var(--yapi-host-background-hover);
+  color: var(--yapi-host-text-error);
+}
+
+.yapi-settings-badge__remove:focus-visible {
+  outline: var(--yapi-focus-ring);
+  outline-offset: var(--yapi-focus-offset);
+}
+
+.yapi-settings-badge__remove:active:not(:disabled) {
+  scale: var(--yapi-press-scale);
+}
+
+.yapi-settings-badge__remove .yapi-platform-icon {
+  --icon-size: 13px;
+}
+
+.yapi-settings-badge-input.yapi-settings-control {
+  width: 140px;
+  min-width: 120px;
+  flex: 1 1 140px;
+  padding-inline: 5px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.yapi-settings-tabs {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border-bottom: 1px solid var(--yapi-host-border);
+  margin-bottom: var(--yapi-spacing-lg);
+  scrollbar-width: thin;
+}
+
+.yapi-settings-tab {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  min-height: 0;
+  margin: 0;
+  margin-bottom: -1px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--yapi-host-text-muted);
+  font: inherit;
+  font-size: var(--yapi-host-font-ui-small);
+  font-weight: var(--yapi-host-font-medium);
+  line-height: 1.4;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color var(--yapi-duration-fast) var(--yapi-ease-out), border-color var(--yapi-duration-fast) var(--yapi-ease-out);
+  white-space: nowrap;
+  appearance: none;
+}
+
+.yapi-settings-tab:hover {
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-settings-tab--active {
+  color: var(--yapi-host-text-normal);
+  border-bottom-color: var(--yapi-host-interactive-accent);
+}
+
+.yapi-settings-content {
+  min-width: 0;
+}
+
+.yapi-tools-settings-page {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0;
+}
+
+.yapi-settings-section {
+  margin-block-start: var(--yapi-settings-section-gap);
+}
+
+.yapi-settings-content > .yapi-settings-section:first-child,
+.yapi-settings-content > .yapi-setting-row:first-child + .yapi-settings-section,
+.yapi-tools-settings-page > .yapi-settings-section:first-child {
+  margin-block-start: 0;
+}
+
+.yapi-settings-section__body > .yapi-settings-section {
+  margin-block-start: var(--yapi-settings-subsection-gap);
+}
+
+.yapi-settings-section__body > .yapi-settings-section:first-child {
+  margin-block-start: 0;
+}
+
+.yapi-settings-section-heading {
+  margin: 0;
+  padding: 0;
+  padding-inline: var(--yapi-settings-gutter);
+  border: 0;
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-small);
+  font-weight: var(--yapi-host-font-semibold);
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+.yapi-settings-section > .yapi-settings-section-heading {
+  margin-block-end: var(--yapi-settings-section-title-gap);
+}
+
+.yapi-settings-section-heading--sub {
+  margin-block-start: var(--yapi-settings-subsection-gap);
+  margin-block-end: var(--yapi-settings-section-title-gap);
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-smaller);
+  font-weight: var(--yapi-host-font-medium);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.yapi-settings-section__body > .yapi-settings-section-heading--sub:first-child {
+  margin-block-start: 0;
+}
+
+.yapi-settings-list-header > .yapi-settings-section-heading {
+  margin: 0;
+}
+
+.yapi-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Settings page - remove separator lines from setting rows */
+.yapi-settings .yapi-setting-row {
+  border-top: none;
+}
+
+.yapi-settings-content > .yapi-setting-row,
+.yapi-settings-content > .yapi-setting-stack > .yapi-setting-row,
+.yapi-settings-section__body > .yapi-setting-row,
+.yapi-settings-section__body > .yapi-setting-stack > .yapi-setting-row {
+  box-sizing: border-box;
+  padding-inline: var(--yapi-settings-gutter);
+}
+
+.yapi-settings-content > .yapi-setting-description,
+.yapi-settings-content > .yapi-setting-validation,
+.yapi-settings-section__body > .yapi-setting-description,
+.yapi-settings-section__body > .yapi-setting-validation,
+.yapi-settings-section__body > .yapi-env-review-warning {
+  padding-inline: var(--yapi-settings-gutter);
+}
+
+.yapi-settings-content > .yapi-hotkey-grid,
+.yapi-settings-section__body > .yapi-hotkey-grid {
+  padding-inline: var(--yapi-settings-gutter);
+}
+
+/* Page copy and list headers share the setting-row gutter. */
+.yapi-settings-page-description {
+  padding-inline: var(--yapi-settings-gutter);
+}
+
+.yapi-settings-page-description {
+  margin-bottom: var(--yapi-spacing-md);
+}
+
+.yapi-settings-page-description > :first-child {
+  margin-top: 0;
+}
+
+.yapi-settings-page-description > :last-child {
+  margin-bottom: 0;
+}
+
+/* Unified icon action buttons for settings */
+.yapi-settings-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: var(--yapi-radius-xs);
+  cursor: pointer;
+  color: var(--yapi-host-text-muted);
+  transition:
+    background var(--yapi-duration-fast) var(--yapi-ease-out),
+    color var(--yapi-duration-fast) var(--yapi-ease-out),
+    scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-settings-action-btn:hover {
+  background: var(--yapi-host-background-hover);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-settings-action-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.yapi-settings-text-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border: none;
+  background: transparent;
+  border-radius: var(--yapi-radius-xs);
+  cursor: pointer;
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-smaller);
+  transition:
+    background var(--yapi-duration-fast) var(--yapi-ease-out),
+    color var(--yapi-duration-fast) var(--yapi-ease-out),
+    scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-settings-text-btn:hover {
+  background: var(--yapi-host-background-hover);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-settings-delete-btn:hover {
+  color: var(--yapi-host-text-error);
+}
+
+.yapi-setting-validation {
+  font-size: var(--yapi-host-font-ui-smaller);
+  margin-top: -0.5em;
+  margin-bottom: 0.5em;
+}
+
+.yapi-setting-validation-error {
+  color: var(--yapi-host-text-error);
+}
+
+.yapi-setting-validation-warning {
+  color: var(--yapi-host-text-warning);
+}
+
+.yapi-settings-action-feedback {
+  min-width: 0;
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-smaller);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.yapi-settings-action-feedback.is-success {
+  color: var(--yapi-host-color-green);
+}
+
+.yapi-settings-action-feedback.is-error {
+  color: var(--yapi-host-text-error);
+}
+
+.yapi-settings-badge-field > .yapi-settings-action-feedback {
+  display: block;
+  margin-block-start: 4px;
+}
+
+.yapi-settings-action-group,
+.yapi-skills-install-actions {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-settings-control-feedback {
+  display: grid;
+  gap: 4px;
+}
+
+.yapi-settings-cli-path-input {
+  width: 100%;
+}
+
+.yapi-settings-cli-path-input.yapi-input-error {
+  border-color: var(--yapi-host-text-error);
+}
+
+/* Hotkey grid - 3 columns */
+.yapi-hotkey-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 12px;
+  padding: 4px 0;
+}
+
+.yapi-hotkey-item {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: var(--yapi-radius-sm);
+  appearance: none;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  color: inherit;
+  min-height: 0;
+  transition: scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-hotkey-item:hover {
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-hotkey-name {
+  flex: 1;
+  color: var(--yapi-host-text-normal);
+  font-size: var(--yapi-host-font-ui-small);
+}
+
+.yapi-hotkey-badge {
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-smaller);
+  background: var(--yapi-host-background-hover);
+  padding: 2px 6px;
+  border-radius: var(--yapi-radius-xs);
+  font-family: var(--yapi-host-font-monospace);
+}
+
+/* ── Shared settings panel layout (used by slash-settings + agent-settings) ── */
+
+.yapi-settings-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block: var(--yapi-settings-section-gap) var(--yapi-settings-section-title-gap);
+  padding-inline: var(--yapi-settings-gutter);
+}
+
+.yapi-settings-content > .yapi-settings-list-header:first-child {
+  margin-block-start: 0;
+}
+
+.yapi-settings-list-header__actions {
+  display: flex;
+  gap: var(--yapi-spacing-xs);
+  margin-inline-start: auto;
+}
+
+.yapi-sp-empty-state {
+  padding: 20px;
+  text-align: center;
+  color: var(--yapi-host-text-muted);
+  background: var(--yapi-host-background-secondary);
+  border-radius: var(--yapi-radius-sm);
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-sp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yapi-spacing-sm);
+  margin-top: 0;
+}
+
+.yapi-sp-list--internal {
+  margin-bottom: 20px;
+}
+
+.yapi-sp-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--yapi-spacing-md);
+  background: var(--yapi-host-background-secondary);
+  border-radius: var(--yapi-radius-sm);
+}
+
+.yapi-sp-item:hover {
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-sp-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.yapi-sp-item-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-sp-item-name {
+  font-weight: 600;
+  font-family: var(--yapi-host-font-monospace);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-sp-item-desc {
+  font-size: var(--yapi-text-base);
+  color: var(--yapi-host-text-muted);
+  margin-top: 2px;
+}
+
+.yapi-sp-item-folder {
+  font-size: var(--yapi-host-font-ui-smaller);
+  color: var(--yapi-host-text-faint);
+  font-family: var(--yapi-host-font-monospace);
+}
+
+.yapi-sp-item-actions {
+  display: flex;
+  gap: var(--yapi-spacing-xs);
+  margin-left: var(--yapi-spacing-lg);
+  flex-shrink: 0;
+}
+
+.yapi-sp-advanced-section {
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  padding: 0 12px;
+  margin: 8px 0;
+}
+
+.yapi-sp-advanced-summary {
+  cursor: pointer;
+  padding: 8px 0;
+  font-size: var(--yapi-host-font-ui-small);
+  color: var(--yapi-host-text-muted);
+  font-weight: var(--yapi-host-font-medium);
+}
+
+.yapi-sp-advanced-section[open] .yapi-sp-advanced-summary {
+  margin-bottom: var(--yapi-spacing-xs);
+}
+
+.yapi-sp-content-area {
+  width: 100%;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-base);
+  padding: var(--yapi-spacing-sm);
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-xs);
+  background: var(--yapi-host-background-primary);
+  color: var(--yapi-host-text-normal);
+  resize: vertical;
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-sp-content-area:focus {
+  outline: none;
+  border-color: var(--yapi-host-interactive-accent);
+}
+
+.yapi-skills-remote-host {
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-skill-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: var(--yapi-spacing-md);
+  background: var(--yapi-host-background-secondary);
+  border-radius: var(--yapi-radius-sm);
+  cursor: pointer;
+  transition:
+    background var(--yapi-duration-fast) var(--yapi-ease-out),
+    scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-skill-choice:hover {
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-skill-choice-checkbox {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.yapi-skill-choice-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.yapi-skills-install-selected-btn {
+  margin: 12px 12px 0;
+}
+
+.yapi-sp-modal-buttons {
+  display: flex;
+  gap: var(--yapi-spacing-sm);
+  margin-top: var(--yapi-spacing-lg);
+  justify-content: flex-end;
+}
+
+
+.yapi-providers-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yapi-spacing-md);
+  margin-top: var(--yapi-spacing-md);
+}
+
+.yapi-provider-card {
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-md);
+  background: var(--yapi-host-background-primary);
+  overflow: hidden;
+  transition: border-color var(--yapi-duration-normal) var(--yapi-ease-out), box-shadow var(--yapi-duration-normal) var(--yapi-ease-out);
+}
+
+.yapi-provider-card:hover {
+  border-color: var(--yapi-host-interactive-accent);
+  box-shadow: 0 2px 8px var(--yapi-shadow, rgba(0, 0, 0, 0.05));
+}
+
+.yapi-provider-card[open] {
+  border-color: var(--yapi-host-interactive-accent);
+}
+
+.yapi-provider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-weight: var(--yapi-host-font-semibold);
+  background: var(--yapi-host-background-secondary);
+  list-style: none;
+  user-select: none;
+  transition:
+    background var(--yapi-duration-fast) var(--yapi-ease-out),
+    scale var(--yapi-press-duration) var(--yapi-ease-out);
+}
+
+.yapi-provider-header::-webkit-details-marker {
+  display: none;
+}
+
+.yapi-provider-header:hover {
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-provider-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  min-width: 0;
+}
+
+.yapi-provider-title {
+  font-size: var(--yapi-host-font-ui-medium);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-provider-logo-mask,
+.yapi-provider-card-logo {
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.yapi-provider-add-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  flex-wrap: wrap;
+  margin-top: var(--yapi-spacing-md);
+}
+
+.yapi-provider-add-container {
+  position: relative;
+  width: max-content;
+  min-width: 180px;
+}
+
+.yapi-provider-add-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  width: auto;
+  padding: 6px 10px;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  background: var(--yapi-host-background-primary);
+  color: var(--yapi-host-text-normal);
+  font-size: var(--yapi-host-font-ui-small);
+  cursor: pointer;
+  text-align: left;
+}
+
+.yapi-provider-add-trigger:hover:not(:disabled) {
+  border-color: var(--yapi-host-interactive-accent);
+}
+
+.yapi-provider-add-trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.yapi-provider-add-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  margin-top: var(--yapi-spacing-xs);
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--yapi-host-modal-background, var(--yapi-host-background-primary));
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  box-shadow: var(--yapi-shadow-md);
+  z-index: 100;
+}
+
+.yapi-provider-add-dropdown.is-visible {
+  display: block;
+}
+
+.yapi-provider-add-section {
+  padding: 8px 12px 4px;
+  font-size: var(--yapi-host-font-ui-smaller);
+  font-weight: var(--yapi-host-font-semibold, 600);
+  color: var(--yapi-host-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.yapi-provider-add-option {
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: var(--yapi-host-font-ui-small);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-provider-add-option.is-added {
+  cursor: default;
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-provider-add-option-state {
+  margin-left: auto;
+  font-size: var(--yapi-host-font-ui-smaller);
+  color: var(--yapi-host-text-faint);
+}
+
+.yapi-custom-provider-actions {
+  display: flex;
+  gap: var(--yapi-spacing-sm);
+  margin: 8px 0 12px;
+}
+
+.yapi-provider-fetch-models-btn {
+  cursor: pointer;
+}
+
+.yapi-provider-add-option:not(.is-added):hover {
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-provider-add-option-logo {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.yapi-provider-status {
+  font-size: var(--yapi-host-font-ui-smaller);
+  font-weight: var(--yapi-host-font-medium);
+  padding: 2px 8px;
+  border-radius: var(--yapi-radius-lg);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+}
+
+.yapi-provider-status.configured {
+  background-color: rgba(46, 125, 50, 0.1);
+  color: var(--yapi-host-text-success);
+}
+
+.yapi-sortable-provider-card {
+  position: relative;
+  transform: translateY(var(--yapi-provider-drag-y, 0));
+}
+
+.yapi-sortable-provider-card.is-dragging {
+  z-index: 2;
+  opacity: 0.9;
+  box-shadow: var(--yapi-shadow-md);
+  will-change: transform;
+}
+
+.yapi-web-provider-header {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-model-provider-header {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto auto;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-provider-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--yapi-host-text-muted);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.yapi-provider-drag-handle:active,
+.yapi-provider-drag-handle[aria-pressed="true"] {
+  cursor: grabbing;
+  color: var(--yapi-host-interactive-accent);
+}
+
+.yapi-provider-drag-handle:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.yapi-provider-priority {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-smaller);
+  font-variant-numeric: tabular-nums;
+}
+
+.yapi-web-provider-capabilities {
+  display: inline-flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.yapi-web-provider-capabilities > span {
+  padding: 1px 6px;
+  border-radius: var(--yapi-radius-lg);
+  background: var(--yapi-host-background-modifier-border);
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-smaller);
+  font-weight: var(--yapi-host-font-medium);
+}
+
+.yapi-provider-status.missing,
+.yapi-provider-status.disabled {
+  background: var(--yapi-host-background-modifier-border);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-web-provider-body {
+  display: grid;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-web-provider-key-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-web-fallback-note {
+  margin-top: var(--yapi-spacing-md);
+  padding: 10px 12px;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-small);
+}
+
+.yapi-web-fallback-note p {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yapi-sortable-provider-card {
+    transform: none;
+  }
+
+  .yapi-sortable-provider-card.is-dragging {
+    opacity: 0.75;
+  }
+}
+
+.yapi-web-provider-header .yapi-provider-disable-btn,
+.yapi-model-provider-header .yapi-provider-disable-btn,
+.yapi-model-provider-header .yapi-provider-remove-btn {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.yapi-provider-status.ready {
+  background-color: rgba(46, 125, 50, 0.1);
+  color: var(--yapi-host-text-success);
+}
+
+.yapi-provider-status.not-configured {
+  background-color: var(--yapi-host-border);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-provider-status.missing-credential,
+.yapi-provider-status.unavailable {
+  background-color: var(--yapi-host-border);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-provider-status.oauth-expired {
+  background-color: rgba(var(--yapi-error-rgb), 0.12);
+  color: var(--yapi-error);
+}
+
+.yapi-provider-status.disabled {
+  background-color: var(--yapi-host-border);
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-provider-card-disabled {
+  opacity: 0.65;
+}
+
+.yapi-provider-card-disabled .yapi-provider-header {
+  background: var(--yapi-host-background-primary);
+}
+
+.yapi-provider-disable-btn {
+  font-size: var(--yapi-host-font-ui-smaller);
+  padding: 2px 8px;
+  border-radius: var(--yapi-radius-xs);
+  background-color: var(--yapi-host-border);
+  color: var(--yapi-host-text-muted);
+  border: none;
+  cursor: pointer;
+  margin-right: var(--yapi-spacing-sm);
+  transition: background var(--yapi-duration-fast) var(--yapi-ease-out), color var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-provider-disable-btn:hover {
+  background-color: var(--yapi-host-interactive-accent);
+  color: var(--yapi-host-text-on-accent);
+}
+
+.yapi-provider-remove-btn {
+  font-size: var(--yapi-host-font-ui-smaller);
+  padding: 2px 8px;
+  border-radius: var(--yapi-radius-xs);
+  background-color: var(--yapi-host-border);
+  color: var(--yapi-host-text-muted);
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 10px;
+  transition: background var(--yapi-duration-fast) var(--yapi-ease-out), color var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-provider-remove-btn:hover {
+  background-color: var(--yapi-host-text-error);
+  color: #ffffff;
+}
+
+.yapi-provider-test-btn {
+  margin-top: var(--yapi-spacing-md);
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-host-radius-small);
+  background: var(--yapi-host-background-secondary);
+  color: var(--yapi-host-text-normal);
+  cursor: pointer;
+}
+
+.yapi-provider-test-btn:hover:not(:disabled) {
+  border-color: var(--yapi-host-interactive-accent);
+  background: var(--yapi-host-background-hover);
+}
+
+.yapi-provider-test-btn:focus-visible {
+  outline: 2px solid var(--yapi-host-interactive-accent);
+  outline-offset: 2px;
+}
+
+.yapi-provider-test-btn:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.yapi-provider-body {
+  padding: var(--yapi-spacing-lg);
+  background: var(--yapi-host-background-primary);
+  border-top: 1px solid var(--yapi-host-border);
+}
+
+.yapi-provider-body h5 {
+  margin: 0 0 12px 0;
+  font-size: var(--yapi-host-font-ui-small);
+  font-weight: var(--yapi-host-font-bold);
+  color: var(--yapi-host-text-normal);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--yapi-host-border);
+  padding-bottom: 6px;
+}
+
+.yapi-provider-body h5:not(:first-of-type) {
+  margin-top: 20px;
+}
+
+.yapi-setting-stack .yapi-setting-row {
+  flex-direction: column;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-setting-stack .yapi-setting-row__control {
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.yapi-setting-stack .yapi-settings-control:not(.yapi-select) {
+  width: 100%;
+}
+
+.yapi-integration-setting .yapi-setting-row__name {
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-small);
+  font-weight: var(--yapi-host-font-medium);
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+}
+
+.yapi-skills-remote-setting .yapi-setting-row__control > input,
+.yapi-cred-row .yapi-setting-row__control > input {
+  flex: 1 1 240px;
+}
+
+.yapi-provider-oauth-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  width: 100%;
+}
+
+.yapi-provider-oauth-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+}
+
+.yapi-provider-oauth-code {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--yapi-spacing-sm);
+  margin-inline-start: auto;
+  padding: 4px 10px;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  background: var(--yapi-host-surface-raised);
+}
+
+.yapi-provider-oauth-code__label {
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-small);
+}
+
+.yapi-provider-oauth-code__value {
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-host-font-ui-small);
+  font-weight: var(--yapi-host-font-medium);
+  letter-spacing: 0.04em;
+}
+
+/* Auth Toggle */
+.yapi-auth-toggle-wrapper {
+  display: flex;
+  gap: var(--yapi-spacing-sm);
+  margin-bottom: var(--yapi-spacing-md);
+}
+
+.yapi-auth-toggle-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--yapi-host-border);
+  background: var(--yapi-host-background-secondary);
+  color: var(--yapi-host-text-muted);
+  border-radius: var(--yapi-radius-sm);
+  font-size: var(--yapi-host-font-ui-smaller);
+  cursor: pointer;
+  transition:
+    background var(--yapi-duration-fast) var(--yapi-ease-out),
+    color var(--yapi-duration-fast) var(--yapi-ease-out),
+    border-color var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-auth-toggle-btn:hover {
+  background: var(--yapi-host-background-hover);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-auth-toggle-btn.active {
+  background: var(--yapi-host-interactive-accent);
+  color: var(--yapi-host-text-on-accent);
+  border-color: var(--yapi-host-interactive-accent);
+}
+
+/* Credentials Row */
+.yapi-cred-row {
+  margin-bottom: var(--yapi-spacing-sm);
+}
+
+.yapi-cred-row .yapi-setting-row {
+  padding: 8px 0;
+}
+
+/* Models Checklist Grid */
+.yapi-models-checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.yapi-model-checkbox-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--yapi-host-background-secondary);
+  border: 1px solid var(--yapi-host-border);
+  border-radius: var(--yapi-radius-sm);
+  cursor: pointer;
+  transition:
+    background var(--yapi-duration-fast) var(--yapi-ease-out),
+    border-color var(--yapi-duration-fast) var(--yapi-ease-out),
+    box-shadow var(--yapi-duration-fast) var(--yapi-ease-out);
+}
+
+.yapi-model-checkbox-wrapper:hover {
+  background: var(--yapi-host-background-hover);
+  border-color: var(--yapi-host-interactive-accent);
+}
+
+.yapi-model-checkbox-wrapper:focus-within {
+  border-color: var(--yapi-host-interactive-accent);
+  box-shadow: 0 0 0 2px var(--yapi-host-border-focus);
+}
+
+.yapi-model-checkbox {
+  margin-top: 3px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.yapi-model-checkbox-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.yapi-model-checkbox-title {
+  font-size: var(--yapi-host-font-ui-small);
+  font-weight: var(--yapi-host-font-medium);
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-model-checkbox-desc {
+  font-size: var(--yapi-host-font-ui-smaller);
+  color: var(--yapi-host-text-muted);
+  line-height: 1.3;
+}
+
+.yapi-no-models-message {
+  grid-column: 1 / -1;
+  color: var(--yapi-host-text-muted);
+  font-size: var(--yapi-host-font-ui-small);
+  padding: 8px 0;
+}
+
+.yapi-template-textarea {
+  width: 100%;
+  min-height: 96px;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-host-font-ui-smaller);
+}
+
+@media (max-width: 520px) {
+  .yapi-settings-control:not(.yapi-select) {
+    width: 100%;
+  }
+
+  .yapi-settings-badge-input.yapi-settings-control {
+    width: 120px;
+  }
+}

@@ -1,10 +1,10 @@
-import type { UsageInfo } from '@pivi/pivi-agent-core/foundation';
+import type { UsageInfo } from '@yapi/yapi-agent-core/foundation';
 import {
   calculateContextEnvelope,
   calculateContextUsagePercentage,
   calculateUsagePercentage,
   recalculateUsageForModel,
-} from '@pivi/pivi-agent-core/foundation/usage';
+} from '@yapi/yapi-agent-core/foundation/usage';
 
 const baseUsage: UsageInfo = {
   contextTokens: 980,

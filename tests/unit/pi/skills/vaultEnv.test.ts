@@ -6,13 +6,13 @@ import {
   findNpxExecutable,
   formatNpxNotFoundError,
   getSpawnEnvWithEnhancedPath,
-} from '@pivi/pivi-agent-core/skills/vault/env';
+} from '@yapi/yapi-agent-core/skills/vault/env';
 
 describe('vault skills environment helpers', () => {
   let tempDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-vault-env-'));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-vault-env-'));
   });
 
   afterEach(() => {

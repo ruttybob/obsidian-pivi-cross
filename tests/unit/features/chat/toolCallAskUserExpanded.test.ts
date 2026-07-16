@@ -1,5 +1,5 @@
-import type { ToolCallInfo } from '@pivi/pivi-agent-core/foundation';
-import { TOOL_ASK_USER_QUESTION } from '@pivi/pivi-agent-core/tools/toolNames';
+import type { ToolCallInfo } from '@yapi/yapi-agent-core/foundation';
+import { TOOL_ASK_USER_QUESTION } from '@yapi/yapi-agent-core/tools/toolNames';
 
 import {
   formatAnswer,
@@ -146,7 +146,7 @@ describe('renderAskUserQuestionResult', () => {
     expect(container.textContent).toContain('Option A');
     expect(container.textContent).toContain('Colors?');
     expect(container.textContent).toContain('Red, Blue');
-    expect(container.findByClass('pivi-ask-review')).toBeDefined();
+    expect(container.findByClass('yapi-ask-review')).toBeDefined();
   });
 
   it('returns false when answers are missing', () => {
@@ -199,8 +199,8 @@ describe('renderAskUserQuestionFallback', () => {
     expect(container.textContent).toContain('Choose a mode');
     expect(container.textContent).toContain('Fast');
     expect(container.textContent).toContain('Lower latency');
-    expect(container.findByClass('pivi-ask-review-prompt')).toBeDefined();
-    expect(container.findByClass('pivi-ask-list')).toBeDefined();
+    expect(container.findByClass('yapi-ask-review-prompt')).toBeDefined();
+    expect(container.findByClass('yapi-ask-list')).toBeDefined();
   });
 
   it('uses content fallback when no questions are recorded', () => {

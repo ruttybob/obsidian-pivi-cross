@@ -22,8 +22,8 @@ export function renderToolSearchExpanded(container: HTMLElement, result: string)
   }
 
   for (const name of toolNames) {
-    const lineEl = container.createDiv({ cls: 'pivi-tool-search-item' });
-    const iconEl = lineEl.createSpan({ cls: 'pivi-tool-icon pivi-tool-icon--small pivi-tool-search-icon' });
+    const lineEl = container.createDiv({ cls: 'yapi-tool-search-item' });
+    const iconEl = lineEl.createSpan({ cls: 'yapi-tool-icon yapi-tool-icon--small yapi-tool-search-icon' });
     appendToolIcon(iconEl, name);
     lineEl.createSpan({ text: name });
   }
@@ -34,9 +34,9 @@ export function renderAgentLifecycleExpanded(container: HTMLElement, result: str
   if (trimmed.startsWith('{')) {
     try {
       const parsed = JSON.parse(trimmed) as Record<string, unknown>;
-      const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
+      const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
       for (const [key, value] of Object.entries(parsed)) {
-        const lineEl = linesEl.createDiv({ cls: 'pivi-tool-line' });
+        const lineEl = linesEl.createDiv({ cls: 'yapi-tool-line' });
         const displayValue = formatToolDisplayValue(value);
         lineEl.setText(`${key}: ${displayValue}`);
       }
@@ -53,7 +53,7 @@ export function renderBashContent(
 ): void {
   const command = (input.command as string) || '';
   if (command) {
-    const cmdEl = container.createDiv({ cls: 'pivi-tool-bash-command' });
+    const cmdEl = container.createDiv({ cls: 'yapi-tool-bash-command' });
     cmdEl.setText(`$ ${command}`);
   }
   if (initialText) {
@@ -61,6 +61,6 @@ export function renderBashContent(
   } else if (result) {
     renderLinesExpanded(container, result);
   } else {
-    container.createDiv({ cls: 'pivi-tool-empty', text: t('chat.stream.noResult') });
+    container.createDiv({ cls: 'yapi-tool-empty', text: t('chat.stream.noResult') });
   }
 }

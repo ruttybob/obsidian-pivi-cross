@@ -1,0 +1,277 @@
+.yapi-subagent-list {
+  margin: 8px 0;
+  border: 1px solid var(--yapi-border-subtle);
+  border-radius: var(--yapi-radius-sm);
+  background: var(--yapi-surface-subtle);
+  overflow: hidden;
+}
+
+.yapi-subagent-list.expanded {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: var(--yapi-subagent-expanded-max-height, min(640px, 66vh));
+  overflow: hidden;
+}
+
+.yapi-text-block+.yapi-subagent-list {
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-subagent-list+.yapi-text-block {
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-tool-call+.yapi-subagent-list {
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-subagent-list+.yapi-tool-call {
+  margin-top: var(--yapi-spacing-sm);
+}
+
+.yapi-subagent-card {
+  margin: 4px 0;
+  border-radius: var(--yapi-radius-sm);
+  background: var(--yapi-surface-raised);
+}
+
+.yapi-subagent-card:not(.expanded) {
+  box-shadow: none;
+}
+
+.yapi-subagent-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  padding: 3px 8px 3px 4px;
+  cursor: pointer;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+.yapi-subagent-list.expanded > .yapi-subagent-header {
+  flex: 0 0 auto;
+  z-index: 9;
+  background: var(--yapi-host-background-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yapi-subagent-header:hover {
+    background: rgba(var(--yapi-host-mono-rgb-100), 0.03);
+  }
+}
+
+.yapi-subagent-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  line-height: 0;
+  color: var(--yapi-host-text-accent);
+}
+
+.yapi-subagent-icon.status-completed {
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-subagent-icon.status-failed,
+.yapi-subagent-icon.status-cancelled,
+.yapi-subagent-icon.status-error {
+  color: var(--yapi-host-color-red);
+}
+
+.yapi-subagent-icon.status-orphaned {
+  color: var(--yapi-host-color-orange);
+}
+
+.yapi-subagent-label {
+  flex: 0 0 auto;
+  max-width: 32%;
+  font-family: var(--yapi-host-font-interface);
+  font-size: var(--yapi-text-base);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--yapi-host-text-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yapi-subagent-step-summary {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--yapi-host-font-interface);
+  font-size: var(--yapi-text-base);
+  line-height: 1.2;
+  color: var(--yapi-host-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yapi-subagent-status {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-family: var(--yapi-host-font-interface);
+  font-size: var(--yapi-text-xs);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.yapi-subagent-status.status-queued,
+.yapi-subagent-status.status-running {
+  color: var(--yapi-host-text-accent);
+}
+
+.yapi-subagent-status.status-completed {
+  color: var(--yapi-host-text-muted);
+}
+
+.yapi-subagent-status.status-failed,
+.yapi-subagent-status.status-cancelled,
+.yapi-subagent-status.status-error {
+  color: var(--yapi-host-color-red);
+}
+
+.yapi-subagent-status.status-orphaned {
+  color: var(--yapi-host-color-orange);
+}
+
+
+.yapi-subagent-content {
+  container: yapi-subagent-content / inline-size;
+  box-sizing: border-box;
+  min-height: 0;
+  padding-block: 0 8px;
+  padding-inline: 10px;
+  margin: 0;
+}
+
+.yapi-subagent-content > :first-child {
+  margin-block-start: 6px;
+}
+
+.yapi-subagent-list.expanded > .yapi-subagent-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+.yapi-subagent-section {
+  margin: 4px 0 8px;
+  border-radius: var(--yapi-radius-sm);
+  background: var(--yapi-surface-raised);
+}
+
+.yapi-subagent-section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--yapi-host-font-monospace);
+  font-size: var(--yapi-text-sm);
+  color: var(--yapi-host-text-faint);
+  padding: 4px 6px;
+}
+
+.yapi-subagent-section-header:hover {
+  color: var(--yapi-host-text-normal);
+}
+
+.yapi-subagent-section-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.yapi-subagent-section-body {
+  padding: 2px 8px 8px;
+}
+
+.yapi-subagent-prompt-text {
+  font-size: var(--yapi-text-sm);
+  line-height: 1.35;
+  color: var(--yapi-host-text-muted);
+  word-break: break-word;
+}
+
+.yapi-subagent-result-output {
+  font-size: var(--yapi-text-chat-body);
+  line-height: var(--yapi-chat-line-height, 1.4);
+  color: var(--yapi-host-text-normal);
+  word-break: break-word;
+  max-height: none;
+  overflow: visible;
+}
+
+.yapi-subagent-prompt-text {
+  font-family: var(--yapi-host-font-text);
+}
+
+.yapi-subagent-prompt-text> :first-child,
+.yapi-subagent-result-output> :first-child {
+  margin-top: 0;
+}
+
+.yapi-subagent-prompt-text> :last-child,
+.yapi-subagent-result-output> :last-child {
+  margin-bottom: 0;
+}
+
+.yapi-subagent-tools {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yapi-spacing-sm);
+  min-width: 0;
+}
+
+.yapi-subagent-tools>.yapi-tool-step-group {
+  min-width: 0;
+  margin: 0;
+}
+
+.yapi-subagent-tools .yapi-tool-step-group-steps:not(.yapi-hidden) {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  padding-block: 0 4px;
+  padding-inline: 8px 0;
+}
+
+.yapi-subagent-tools .yapi-tool-step-item {
+  min-width: 0;
+  margin: 0;
+}
+
+.yapi-subagent-tools .yapi-tool-call-in-step-group {
+  min-width: 0;
+  margin: 0;
+}
+
+@container yapi-subagent-content (max-width: 320px) {
+  .yapi-subagent-tools .yapi-tool-step-group-summary {
+    display: none;
+  }
+
+  .yapi-subagent-tools .yapi-tool-header,
+  .yapi-subagent-tools .yapi-tool-step-group-header {
+    gap: var(--yapi-spacing-xs);
+  }
+}
+
+@container yapi-subagent-content (max-width: 240px) {
+  .yapi-subagent-tools .yapi-tool-summary {
+    display: none;
+  }
+}

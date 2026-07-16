@@ -1,9 +1,9 @@
-import type { MentionBadgeParseContext, MentionVaultLookup } from '@pivi/pivi-agent-core/context/mentions';
+import type { MentionBadgeParseContext, MentionVaultLookup } from '@yapi/yapi-agent-core/context/mentions';
 import {
   messageTextHasMentionBadges,
   parseMessageMentions,
-} from '@pivi/pivi-agent-core/context/mentions';
-import { createInlineContextToken } from '@pivi/pivi-agent-core/context/inlineContext';
+} from '@yapi/yapi-agent-core/context/mentions';
+import { createInlineContextToken } from '@yapi/yapi-agent-core/context/inlineContext';
 
 function createVaultLookup(): MentionVaultLookup {
   const files = [
@@ -76,7 +76,7 @@ describe('parseMessageMentions', () => {
   });
 
   it('keeps absolute filesystem paths as plain text instead of slash command badges', () => {
-    const path = '/Users/shuuul/Projects/pivi/zed';
+    const path = '/Users/shuuul/Projects/yapi/zed';
     expect(parseMessageMentions(path, createContext())).toEqual([
       { kind: 'plain', text: path },
     ]);

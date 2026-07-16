@@ -41,7 +41,7 @@ export function createSessionGreeting(options: SessionGreetingOptions = {}): str
 
   const getTimeGreetings = (): string[] => {
     if (hour >= 5 && hour < 12) {
-      return [t('chat.welcome.goodMorning', { name }), t('chat.welcome.coffeePivi')];
+      return [t('chat.welcome.goodMorning', { name }), t('chat.welcome.coffeeYapi')];
     } else if (hour >= 12 && hour < 18) {
       return [
         t('chat.welcome.goodAfternoon', { name }),

@@ -3,7 +3,7 @@ import {
   getFuzzyMatchIndexes,
   getTextMatchScore,
   isSearchBoundary,
-} from '@pivi/pivi-agent-core/skills/commands/fuzzyScore';
+} from '@yapi/yapi-agent-core/skills/commands/fuzzyScore';
 
 import type { DropdownItem } from './slashCommandDropdownData';
 
@@ -56,7 +56,7 @@ export function appendHighlightedText(parent: HTMLElement, text: string, query: 
     if (matchIndex > cursor) {
       parent.createSpan({ text: text.slice(cursor, matchIndex) });
     }
-    parent.createSpan({ cls: 'pivi-slash-match', text: text.slice(matchIndex, matchIndex + query.length) });
+    parent.createSpan({ cls: 'yapi-slash-match', text: text.slice(matchIndex, matchIndex + query.length) });
     cursor = matchIndex + query.length;
     matchIndex = textLower.indexOf(queryLower, cursor);
   }
@@ -75,7 +75,7 @@ export function appendFuzzyHighlightedText(parent: HTMLElement, text: string, qu
     if (index > cursor) {
       parent.createSpan({ text: text.slice(cursor, index) });
     }
-    parent.createSpan({ cls: 'pivi-slash-match', text: text.charAt(index) });
+    parent.createSpan({ cls: 'yapi-slash-match', text: text.charAt(index) });
     cursor = index + 1;
   }
 

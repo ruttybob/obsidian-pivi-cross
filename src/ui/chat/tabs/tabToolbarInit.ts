@@ -1,8 +1,8 @@
-import { recalculateUsageForModel } from "@pivi/pivi-agent-core/foundation/usage";
-import type { ChatPorts } from "@pivi/pivi-agent-core/runtime/chatPorts";
+import { recalculateUsageForModel } from "@yapi/yapi-agent-core/foundation/usage";
+import type { ChatPorts } from "@yapi/yapi-agent-core/runtime/chatPorts";
 import { Notice } from "obsidian";
 
-import type { PiviChatHost } from "@/app/hostContracts";
+import type { YapiChatHost } from "@/app/hostContracts";
 import { t } from "@/app/i18n";
 
 import { pickDirectoryPath } from '../../shared/utils/folderPicker';
@@ -26,7 +26,7 @@ import type { TabData } from "./types";
  */
 export function wireComposerChrome(
   tab: TabData,
-  plugin: PiviChatHost,
+  plugin: YapiChatHost,
   ports: ChatPorts,
   getSlashCatalogConfig?: () => SlashCatalogInfo,
 ): void {

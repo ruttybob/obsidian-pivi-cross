@@ -1,6 +1,6 @@
-import type { McpServerManager } from '@pivi/pivi-agent-core/mcp/mcpServerManager';
-import type { McpOAuthService } from '@pivi/pivi-agent-core/mcp/oauth/mcpOAuthService';
-import type { ManagedMcpServer } from '@pivi/pivi-agent-core/mcp/types';
+import type { McpServerManager } from '@yapi/yapi-agent-core/mcp/mcpServerManager';
+import type { McpOAuthService } from '@yapi/yapi-agent-core/mcp/oauth/mcpOAuthService';
+import type { ManagedMcpServer } from '@yapi/yapi-agent-core/mcp/types';
 
 import { PiMcpDiagnostics, PiMcpToolProvider } from '@/app/workspace/workspaceServiceProviders';
 
@@ -9,7 +9,7 @@ const close = jest.fn(async () => {});
 const closeAll = jest.fn(async () => {});
 const dispose = jest.fn(async () => {});
 
-jest.mock('@pivi/pivi-agent-core/mcp/piMcpConnectionPool', () => ({
+jest.mock('@yapi/yapi-agent-core/mcp/piMcpConnectionPool', () => ({
   PiMcpConnectionPool: class MockPiMcpConnectionPool {
     listTools = listTools;
     close = close;

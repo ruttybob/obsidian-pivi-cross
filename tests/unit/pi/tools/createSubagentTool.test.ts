@@ -1,6 +1,6 @@
-import type { PiSubagentQueryRunner } from '@pivi/pivi-agent-core/engine/pi/createSubagentTool';
-import { createSubagentTool } from '@pivi/pivi-agent-core/engine/pi/createSubagentTool';
-import { AGENT_REPORT_BLOCK_LANGUAGE } from '@pivi/pivi-agent-core/session/continuationSchemas';
+import type { PiSubagentQueryRunner } from '@yapi/yapi-agent-core/engine/pi/createSubagentTool';
+import { createSubagentTool } from '@yapi/yapi-agent-core/engine/pi/createSubagentTool';
+import { AGENT_REPORT_BLOCK_LANGUAGE } from '@yapi/yapi-agent-core/session/continuationSchemas';
 
 import { createAgentReportBlock } from '../../../helpers/agentReport';
 

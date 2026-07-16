@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import { Component } from 'obsidian';
-import type { ChatPerfRecorder } from '@pivi/pivi-react';
+import type { ChatPerfRecorder } from '@yapi/yapi-react';
 
 import {
   createStreamingMarkdownContentAdapter,
@@ -32,8 +32,8 @@ describe('createStreamingMarkdownContentAdapter', () => {
     await flushRenderQueue();
 
     expect(renderContent).toHaveBeenCalledTimes(1);
-    expect(container.querySelector('.pivi-streaming-markdown-sealed')?.textContent).toContain('Settled paragraph.');
-    expect(container.querySelector('.pivi-streaming-markdown-tail')?.textContent).toBe('**live');
+    expect(container.querySelector('.yapi-streaming-markdown-sealed')?.textContent).toContain('Settled paragraph.');
+    expect(container.querySelector('.yapi-streaming-markdown-tail')?.textContent).toBe('**live');
     expect(container.querySelector('strong')).toBeNull();
 
     adapter.update?.(container, {
@@ -42,7 +42,7 @@ describe('createStreamingMarkdownContentAdapter', () => {
       phase: 'streaming',
     }, { generation: 'block-1', ownerDocument: document, ownerWindow: window });
     expect(renderContent).toHaveBeenCalledTimes(1);
-    expect(container.querySelector('.pivi-streaming-markdown-tail')?.textContent).toBe('**live tail**');
+    expect(container.querySelector('.yapi-streaming-markdown-tail')?.textContent).toBe('**live tail**');
     dispose?.();
     expect(container.childElementCount).toBe(0);
   });
@@ -73,7 +73,7 @@ describe('createStreamingMarkdownContentAdapter', () => {
     await flushRenderQueue();
 
     adapter.update?.(container, { blockId: 'block-1', content: 'rewritten', phase: 'streaming' }, context);
-    expect(container.querySelector('.pivi-streaming-markdown-tail')?.textContent).toBe('rewritten');
+    expect(container.querySelector('.yapi-streaming-markdown-tail')?.textContent).toBe('rewritten');
     adapter.update?.(container, { blockId: 'block-1', content: '# Final', phase: 'terminal' }, context);
     await flushRenderQueue();
 

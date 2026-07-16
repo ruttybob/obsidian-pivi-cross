@@ -47,14 +47,14 @@ describe('streamThinkingIndicator', () => {
     state.isStreaming = true;
     state.responseStartTime = performance.now() - 1500;
 
-    showThinkingIndicator(deps, 'Custom thinking', 'pivi-thinking--compact');
+    showThinkingIndicator(deps, 'Custom thinking', 'yapi-thinking--compact');
     expect(state.uiStore.getSnapshot().thinkingIndicator).toBeNull();
 
     jest.advanceTimersByTime(THINKING_INDICATOR_DELAY_MS);
     const first = state.uiStore.getSnapshot().thinkingIndicator;
     expect(first).toEqual({
       text: 'Custom thinking',
-      className: 'pivi-thinking pivi-thinking--compact',
+      className: 'yapi-thinking yapi-thinking--compact',
       elapsedLabel: expect.stringContaining('esc to interrupt'),
     });
     expect(Object.isFrozen(first)).toBe(true);

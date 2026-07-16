@@ -1,5 +1,5 @@
-import type { SubagentInfo } from '@pivi/pivi-agent-core/foundation';
-import type { MessageContentAdapter } from '@pivi/pivi-react';
+import type { SubagentInfo } from '@yapi/yapi-agent-core/foundation';
+import type { MessageContentAdapter } from '@yapi/yapi-react';
 
 import type { RenderContentOptions } from '@/ui/chat/rendering/messageRendererTypes';
 import {

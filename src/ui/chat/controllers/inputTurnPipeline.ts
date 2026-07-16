@@ -1,10 +1,10 @@
-import type { BrowserSelectionContext } from '@pivi/pivi-agent-core/context/browser';
-import type { CanvasSelectionContext } from '@pivi/pivi-agent-core/context/canvas';
-import type { EditorSelectionContext } from '@pivi/pivi-agent-core/context/editor';
-import type { ChatMessage, StreamChunk } from '@pivi/pivi-agent-core/foundation';
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
-import type { PiChatService } from '@pivi/pivi-agent-core/runtime/piChatService';
-import type { ChatTurnRequest } from '@pivi/pivi-agent-core/runtime/types';
+import type { BrowserSelectionContext } from '@yapi/yapi-agent-core/context/browser';
+import type { CanvasSelectionContext } from '@yapi/yapi-agent-core/context/canvas';
+import type { EditorSelectionContext } from '@yapi/yapi-agent-core/context/editor';
+import type { ChatMessage, StreamChunk } from '@yapi/yapi-agent-core/foundation';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
+import type { PiChatService } from '@yapi/yapi-agent-core/runtime/piChatService';
+import type { ChatTurnRequest } from '@yapi/yapi-agent-core/runtime/types';
 import { Notice } from 'obsidian';
 
 import { t } from '@/app/i18n';
@@ -165,7 +165,7 @@ export class InputTurnPipeline {
 
     streamController.showThinkingIndicator(
       isCompact ? 'Compacting...' : undefined,
-      isCompact ? 'pivi-thinking--compact' : undefined,
+      isCompact ? 'yapi-thinking--compact' : undefined,
     );
     state.responseStartTime = performance.now();
 
@@ -327,7 +327,7 @@ export class InputTurnPipeline {
     const didCancelThisTurn = options.wasInterrupted || state.cancelRequested;
 
     if (didCancelThisTurn) {
-      const interruption = '\n\n<span class="pivi-interrupted">Interrupted</span> <span class="pivi-interrupted-hint">· What should Pivi do instead?</span>';
+      const interruption = '\n\n<span class="yapi-interrupted">Interrupted</span> <span class="yapi-interrupted-hint">· What should Yapi do instead?</span>';
       options.finalAssistantMsg.content += interruption;
       options.finalAssistantMsg.contentBlocks = [
         ...(options.finalAssistantMsg.contentBlocks ?? []),

@@ -1,6 +1,6 @@
 import { Notice } from 'obsidian';
 
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
 import { findRedoContext, findRewindContext } from '@/ui/chat/branchContext';
 import { ChatState } from '@/ui/chat/state/ChatState';
 import { handleForkAll, handleForkRequest } from '@/ui/chat/tabs/tabFork';
@@ -8,7 +8,7 @@ import { handleRedoRequest, resolveRedoTurnContext } from '@/ui/chat/tabs/tabRed
 import type { TabData } from '@/ui/chat/tabs/types';
 import { confirm } from '@/ui/shared/modals/ConfirmModal';
 import { createFakeChatPorts } from '../../../helpers/createFakeChatPorts';
-import { asPiviPlugin, createMockPiviPluginStub } from '../../../helpers/mockPiviPlugin';
+import { asYapiPlugin, createMockYapiPluginStub } from '../../../helpers/mockYapiPlugin';
 
 jest.mock('@/ui/shared/modals/ConfirmModal', () => ({
   confirm: jest.fn(async () => true),
@@ -42,12 +42,12 @@ function makeTab(messages: ChatMessage[], overrides: Partial<TabData> = {}): Tab
 }
 
 function makePlugin() {
-  const plugin = createMockPiviPluginStub();
+  const plugin = createMockYapiPluginStub();
   Object.assign(plugin, {
     getOpenSessionSync: jest.fn(() => ({ id: 'open-1', title: 'Source', currentNote: 'note.md', sessionFile: 'source.jsonl' })),
     saveSettings: jest.fn(async () => {}),
   });
-  return asPiviPlugin(plugin);
+  return asYapiPlugin(plugin);
 }
 
 function makePorts() {

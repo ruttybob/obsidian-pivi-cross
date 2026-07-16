@@ -1,31 +1,31 @@
 // Must run before any SDK imports to patch Electron/Node.js realm incompatibility
-import { patchSetMaxListenersForElectron } from "@pivi/obsidian-host/electronCompat";
-import { patchRendererFetchForElectron } from "@pivi/obsidian-host/nodeFetch";
+import { patchSetMaxListenersForElectron } from "@yapi/obsidian-host/electronCompat";
+import { patchRendererFetchForElectron } from "@yapi/obsidian-host/nodeFetch";
 patchSetMaxListenersForElectron();
 patchRendererFetchForElectron();
 
-import type { AgentHostContext } from "@pivi/obsidian-host/bootstrap/hostContext";
-import type { SharedAppStorage } from "@pivi/obsidian-host/bootstrap/storage";
-import type { AppTabManagerState } from "@pivi/obsidian-host/bootstrap/types";
-import { ObsidianCliTransport } from "@pivi/obsidian-host/cli/obsidianCliTransport";
-import { isOfficialObsidianCliEnabled } from "@pivi/obsidian-host/cli/officialObsidianCli";
-import { obsidianHttpClient } from "@pivi/obsidian-host/obsidianHttpClient";
-import { openExternalUrl } from "@pivi/obsidian-host/openExternalUrl";
-import { systemProcessRunner } from "@pivi/obsidian-host/systemProcessRunner";
-import { warmPiAiModelsCache } from "@pivi/pivi-agent-core/engine/pi/piChatUiConfig";
-import { PiSettingsCoordinator } from "@pivi/pivi-agent-core/engine/pi/piSettingsCoordinator";
+import type { AgentHostContext } from "@yapi/obsidian-host/bootstrap/hostContext";
+import type { SharedAppStorage } from "@yapi/obsidian-host/bootstrap/storage";
+import type { AppTabManagerState } from "@yapi/obsidian-host/bootstrap/types";
+import { ObsidianCliTransport } from "@yapi/obsidian-host/cli/obsidianCliTransport";
+import { isOfficialObsidianCliEnabled } from "@yapi/obsidian-host/cli/officialObsidianCli";
+import { obsidianHttpClient } from "@yapi/obsidian-host/obsidianHttpClient";
+import { openExternalUrl } from "@yapi/obsidian-host/openExternalUrl";
+import { systemProcessRunner } from "@yapi/obsidian-host/systemProcessRunner";
+import { warmPiAiModelsCache } from "@yapi/yapi-agent-core/engine/pi/piChatUiConfig";
+import { PiSettingsCoordinator } from "@yapi/yapi-agent-core/engine/pi/piSettingsCoordinator";
 import type {
   OpenSessionState,
-  PiviSettings,
   SessionSummary,
-} from "@pivi/pivi-agent-core/foundation";
-import { PluginLogger } from "@pivi/pivi-agent-core/foundation/pluginLogger";
-import type { EnvironmentScope } from "@pivi/pivi-agent-core/foundation/settings";
-import { getObsidianToolsSettingsFromBag } from "@pivi/pivi-agent-core/foundation/settings";
-import type { SessionMessagePage, SessionStore } from "@pivi/pivi-agent-core/session";
-import { OpenSessionManager } from "@pivi/pivi-agent-core/session/openSessionManager";
-import type { SlashCatalogEntry } from "@pivi/pivi-agent-core/skills/commands/slashCommandEntry";
-import type { ChatPerfRecorder } from "@pivi/pivi-react/store";
+  YapiSettings,
+} from "@yapi/yapi-agent-core/foundation";
+import { PluginLogger } from "@yapi/yapi-agent-core/foundation/pluginLogger";
+import type { EnvironmentScope } from "@yapi/yapi-agent-core/foundation/settings";
+import { getObsidianToolsSettingsFromBag } from "@yapi/yapi-agent-core/foundation/settings";
+import type { SessionMessagePage, SessionStore } from "@yapi/yapi-agent-core/session";
+import { OpenSessionManager } from "@yapi/yapi-agent-core/session/openSessionManager";
+import type { SlashCatalogEntry } from "@yapi/yapi-agent-core/skills/commands/slashCommandEntry";
+import type { ChatPerfRecorder } from "@yapi/yapi-react/store";
 import type { Editor, MarkdownView } from "obsidian";
 import { apiVersion, getIcon, Notice, Plugin } from "obsidian";
 
@@ -35,7 +35,7 @@ import {
 } from "@/app/chatPerformanceController";
 import { ADD_SELECTION_TO_CHAT_INPUT_COMMAND_ID } from "@/app/commandRegistration";
 import { ObsidianDeviceLocalExternalContextStore } from "@/app/deviceLocalExternalContextStore";
-import type { PiviChatView, PiviPluginHost } from "@/app/hostContracts";
+import type { YapiChatView, YapiPluginHost } from "@/app/hostContracts";
 import { getVaultPath } from "@/app/hostPlatform";
 import { t } from "@/app/i18n";
 import {
@@ -49,13 +49,7 @@ import {
   setupNoteToolbarIntegration as setupNoteToolbar,
 } from "@/app/noteToolbarIntegration";
 import { openStyleSettingsOrMarketplace } from "@/app/openStyleSettings";
-import {
-  activatePiviView,
-  canCreatePiviTab,
-  ensurePiviViewOpen,
-  openPiviNewTab,
-} from "@/app/piviViewActivation";
-import { initializePiviPlugin, persistOpenTabStates } from "@/app/pluginLifecycle";
+import { initializeYapiPlugin, persistOpenTabStates } from "@/app/pluginLifecycle";
 import * as sessionApi from "@/app/pluginSessionApi";
 import { loadPluginSettings } from "@/app/pluginSettingsLoad";
 import {
@@ -70,22 +64,28 @@ import {
 } from "@/app/settings/environmentVariables";
 import { measureStartupPhase } from "@/app/startupPerformance";
 import { showDefaultVaultSkillsInstallPrompt } from "@/app/ui/defaultVaultSkillsPrompt";
-import { findAllPiviViews } from "@/app/viewAccess";
+import { findAllYapiViews } from "@/app/viewAccess";
 import { createPiUiFacades } from "@/app/workspace/piUiFacades";
 import type { PiWorkspaceServices } from "@/app/workspace/PiWorkspaceServices";
 import {
   getWorkspaceCommandFullId,
   WorkspaceCommandRegistry,
 } from "@/app/workspaceCommandRegistry";
+import {
+  activateYapiView,
+  canCreateYapiTab,
+  ensureYapiViewOpen,
+  openYapiNewTab,
+} from "@/app/yapiViewActivation";
 
-const logger = new PluginLogger('PiviPlugin');
+const logger = new PluginLogger('YapiPlugin');
 
 /**
  * Thin Obsidian Plugin composition root. Product lifecycle, sessions, and
  * settings load live under src/app/; this class wires host methods and DI.
  */
-export default class PiviPlugin extends Plugin implements PiviPluginHost {
-  declare settings: PiviSettings;
+export default class YapiPlugin extends Plugin implements YapiPluginHost {
+  declare settings: YapiSettings;
   readonly httpClient = obsidianHttpClient;
   readonly processRunner = systemProcessRunner;
   storage!: SharedAppStorage;
@@ -232,7 +232,7 @@ export default class PiviPlugin extends Plugin implements PiviPluginHost {
         window,
       );
     }
-    await initializePiviPlugin(this);
+    await initializeYapiPlugin(this);
   }
 
   onunload(): void {
@@ -254,15 +254,15 @@ export default class PiviPlugin extends Plugin implements PiviPluginHost {
   }
 
   async activateView() {
-    await activatePiviView(this.app, this.settings.chatViewPlacement);
+    await activateYapiView(this.app, this.settings.chatViewPlacement);
   }
 
   canCreateNewTab(): boolean {
-    return canCreatePiviTab(this.app);
+    return canCreateYapiTab(this.app);
   }
 
   async openNewTab(): Promise<void> {
-    await openPiviNewTab(
+    await openYapiNewTab(
       this.app,
       this.settings.chatViewPlacement,
       this.lastKnownTabManagerState,
@@ -273,7 +273,7 @@ export default class PiviPlugin extends Plugin implements PiviPluginHost {
     editor: Editor,
     markdownView: MarkdownView,
   ): Promise<void> {
-    const view = await ensurePiviViewOpen(this.app, this.settings.chatViewPlacement);
+    const view = await ensureYapiViewOpen(this.app, this.settings.chatViewPlacement);
     const added = view?.getChatHandle()?.commands
       .addEditorSelection(editor, markdownView) ?? false;
     if (!added) {
@@ -354,7 +354,7 @@ export default class PiviPlugin extends Plugin implements PiviPluginHost {
   }
 
   async saveSettings() {
-    await this.storage.savePiviSettings(this.settings);
+    await this.storage.saveYapiSettings(this.settings);
   }
 
   async applyEnvironmentVariables(
@@ -475,8 +475,8 @@ export default class PiviPlugin extends Plugin implements PiviPluginHost {
     await this.storage.setTabManagerState(state);
   }
 
-  getAllViews(): PiviChatView[] {
-    return findAllPiviViews(this.app);
+  getAllViews(): YapiChatView[] {
+    return findAllYapiViews(this.app);
   }
 
   async refreshVaultSkills(): Promise<void> {
@@ -487,7 +487,7 @@ export default class PiviPlugin extends Plugin implements PiviPluginHost {
 
   ensureWorkspaceServices(): Promise<PiWorkspaceServices> {
     if (this.isUnloading) {
-      return Promise.reject(new Error('Pivi plugin is unloading'));
+      return Promise.reject(new Error('Yapi plugin is unloading'));
     }
     if (this.piWorkspace) {
       return Promise.resolve(this.piWorkspace);
@@ -503,7 +503,7 @@ export default class PiviPlugin extends Plugin implements PiviPluginHost {
     ).then(async (graph) => {
       if (generation !== this.workspaceGeneration) {
         await graph.piWorkspace.dispose();
-        throw new Error('Pivi workspace initialization was cancelled');
+        throw new Error('Yapi workspace initialization was cancelled');
       }
       this.piWorkspace = graph.piWorkspace;
       warmPiAiModelsCache();

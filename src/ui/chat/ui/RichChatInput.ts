@@ -1,6 +1,6 @@
-import { createInlineContextToken, type InlineContextReference } from '@pivi/pivi-agent-core/context/inlineContext';
-import type { MentionBadgeParseContext } from '@pivi/pivi-agent-core/context/mentions';
-import { parseMessageMentions } from '@pivi/pivi-agent-core/context/mentions';
+import { createInlineContextToken, type InlineContextReference } from '@yapi/yapi-agent-core/context/inlineContext';
+import type { MentionBadgeParseContext } from '@yapi/yapi-agent-core/context/mentions';
+import { parseMessageMentions } from '@yapi/yapi-agent-core/context/mentions';
 import type { App } from 'obsidian';
 
 import { getOrderedListEnterEdit } from '@/ui/chat/composer/markdownListContinuation';
@@ -44,7 +44,7 @@ export class RichChatInput implements ComposerInput {
     this.getMentionContext = options.getMentionContext;
 
     this.el = parent.createDiv({
-      cls: ['pivi-input', 'pivi-rich-input', 'pivi-rich-input-empty', options.className].filter(Boolean).join(' '),
+      cls: ['yapi-input', 'yapi-rich-input', 'yapi-rich-input-empty', options.className].filter(Boolean).join(' '),
       attr: {
         contenteditable: 'true',
         role: 'textbox',
@@ -244,7 +244,7 @@ export class RichChatInput implements ComposerInput {
   private dispatchInputEvent(): void {
     const EventConstructor = this.el.ownerDocument.defaultView?.Event;
     if (!EventConstructor) {
-      throw new Error('Pivi rich input has no owning window.');
+      throw new Error('Yapi rich input has no owning window.');
     }
     this.el.dispatchEvent(new EventConstructor('input', { bubbles: true }));
   }
@@ -277,6 +277,6 @@ export class RichChatInput implements ComposerInput {
 
   private updateEmptyState(): void {
     const empty = this.value.trim() === '';
-    this.el.toggleClass('pivi-rich-input-empty', empty);
+    this.el.toggleClass('yapi-rich-input-empty', empty);
   }
 }

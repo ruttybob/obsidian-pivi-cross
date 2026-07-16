@@ -1,5 +1,5 @@
-import type { ToolCallInfo, ToolDiffData } from '@pivi/pivi-agent-core/foundation';
-import { TOOL_WRITE } from '@pivi/pivi-agent-core/tools/toolNames';
+import type { ToolCallInfo, ToolDiffData } from '@yapi/yapi-agent-core/foundation';
+import { TOOL_WRITE } from '@yapi/yapi-agent-core/tools/toolNames';
 
 import { renderWriteEditContent } from '@/ui/chat/rendering/WriteEditRenderer';
 
@@ -77,10 +77,10 @@ describe('renderWriteEditContent', () => {
       toolCall({ diffData: sampleDiffData }),
     );
 
-    expect(container.className).toContain('pivi-write-edit-content');
-    expect(container.findByClass('pivi-write-edit-diff')).toBeDefined();
-    expect(container.findByClass('pivi-write-edit-block')).toBeUndefined();
-    expect(container.findByClass('pivi-write-edit-header')).toBeUndefined();
+    expect(container.className).toContain('yapi-write-edit-content');
+    expect(container.findByClass('yapi-write-edit-diff')).toBeDefined();
+    expect(container.findByClass('yapi-write-edit-block')).toBeUndefined();
+    expect(container.findByClass('yapi-write-edit-header')).toBeUndefined();
     expect(container.textContent).toContain('old line');
     expect(container.textContent).toContain('new line');
   });
@@ -107,9 +107,9 @@ describe('renderWriteEditContent', () => {
       }),
     );
 
-    expect(container.findByClass('pivi-write-edit-diff')?.textContent).toContain('first line');
-    expect(container.findByClass('pivi-write-edit-diff')?.textContent).toContain('last line');
-    expect(container.findByClass('pivi-diff-separator')).toBeUndefined();
+    expect(container.findByClass('yapi-write-edit-diff')?.textContent).toContain('first line');
+    expect(container.findByClass('yapi-write-edit-diff')?.textContent).toContain('last line');
+    expect(container.findByClass('yapi-diff-separator')).toBeUndefined();
   });
 
   it.each([
@@ -123,7 +123,7 @@ describe('renderWriteEditContent', () => {
       toolCall({ status, result }),
     );
 
-    expect(container.findByClass('pivi-write-edit-error')?.text).toBe(result);
+    expect(container.findByClass('yapi-write-edit-error')?.text).toBe(result);
   });
 
   it('renders a compact completion fallback when no diff is available', () => {
@@ -131,6 +131,6 @@ describe('renderWriteEditContent', () => {
 
     renderWriteEditContent(container as unknown as HTMLElement, toolCall());
 
-    expect(container.findByClass('pivi-write-edit-done-text')?.text).toBe('DONE');
+    expect(container.findByClass('yapi-write-edit-done-text')?.text).toBe('DONE');
   });
 });

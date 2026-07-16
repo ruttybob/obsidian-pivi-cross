@@ -1,8 +1,8 @@
-import { McpServerManager } from '@pivi/pivi-agent-core/mcp/mcpServerManager';
-import { PiMcpConnectionPool } from '@pivi/pivi-agent-core/mcp/piMcpConnectionPool';
-import type { ManagedMcpServer } from '@pivi/pivi-agent-core/mcp/types';
-import { PiMcpBridge } from '@pivi/pivi-agent-core/mcp/piMcpBridge';
-import type { McpTransportFetch } from '@pivi/pivi-agent-core/mcp/ports';
+import { McpServerManager } from '@yapi/yapi-agent-core/mcp/mcpServerManager';
+import { PiMcpConnectionPool } from '@yapi/yapi-agent-core/mcp/piMcpConnectionPool';
+import type { ManagedMcpServer } from '@yapi/yapi-agent-core/mcp/types';
+import { PiMcpBridge } from '@yapi/yapi-agent-core/mcp/piMcpBridge';
+import type { McpTransportFetch } from '@yapi/yapi-agent-core/mcp/ports';
 
 
 function createStorage(servers: ManagedMcpServer[]) {

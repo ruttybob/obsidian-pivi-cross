@@ -1,7 +1,7 @@
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
-import { PluginLogger } from '@pivi/pivi-agent-core/foundation/pluginLogger';
-import type { MessageViewportHandle } from '@pivi/pivi-react';
-import type { MessagePresentationRuntime } from '@pivi/pivi-react/mount';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
+import { PluginLogger } from '@yapi/yapi-agent-core/foundation/pluginLogger';
+import type { MessageViewportHandle } from '@yapi/yapi-react';
+import type { MessagePresentationRuntime } from '@yapi/yapi-react/mount';
 
 import { createStreamingMarkdownContentAdapter } from '@/app/ui/createStreamingMarkdownContentAdapter';
 import { createSubagentContentAdapter } from '@/app/ui/createSubagentContentAdapter';
@@ -24,17 +24,17 @@ function mountMessageContentAdapter(
 ): (() => void) {
   const token = `${generation}:${++messageAdapterGeneration}`;
   const staging = container.ownerDocument.win.createDiv();
-  container.dataset.piviRenderGeneration = token;
+  container.dataset.yapiRenderGeneration = token;
   let disposed = false;
   void Promise.resolve(render(staging)).then(() => {
-    if (disposed || container.dataset.piviRenderGeneration !== token) return;
+    if (disposed || container.dataset.yapiRenderGeneration !== token) return;
     container.replaceChildren(...Array.from(staging.childNodes));
   });
   return () => {
     disposed = true;
     staging.replaceChildren();
-    if (container.dataset.piviRenderGeneration !== token) return;
-    delete container.dataset.piviRenderGeneration;
+    if (container.dataset.yapiRenderGeneration !== token) return;
+    delete container.dataset.yapiRenderGeneration;
     container.replaceChildren();
   };
 }

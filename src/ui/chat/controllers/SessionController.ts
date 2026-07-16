@@ -1,11 +1,11 @@
-import type { OpenSessionState } from '@pivi/pivi-agent-core/foundation';
+import type { OpenSessionState } from '@yapi/yapi-agent-core/foundation';
 import type {
   ChatPorts,
   ChatSettingsPort,
-} from '@pivi/pivi-agent-core/runtime/chatPorts';
-import type { PiChatService } from '@pivi/pivi-agent-core/runtime/piChatService';
-import type { SessionMessagePage } from '@pivi/pivi-agent-core/session';
-import { CHAT_PROJECTION_PAGE_SIZE } from '@pivi/pivi-react/store';
+} from '@yapi/yapi-agent-core/runtime/chatPorts';
+import type { PiChatService } from '@yapi/yapi-agent-core/runtime/piChatService';
+import type { SessionMessagePage } from '@yapi/yapi-agent-core/session';
+import { CHAT_PROJECTION_PAGE_SIZE } from '@yapi/yapi-react/store';
 
 import { TodoEventPresenter } from '@/ui/chat/stream/TodoEventPresenter';
 

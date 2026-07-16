@@ -1,0 +1,56 @@
+.yapi-react-chat-root {
+  height: 100%;
+  min-height: 0;
+}
+
+.yapi-react-settings-root {
+  width: 100%;
+}
+
+.yapi-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  font-family: var(--yapi-host-font-text);
+}
+
+.yapi-container .yapi-hidden,
+.yapi-settings .yapi-hidden {
+  display: none;
+}
+
+.yapi-container .yapi-visible-block {
+  display: block;
+}
+
+.yapi-container .yapi-visible-flex {
+  display: flex;
+}
+
+.yapi-provider-logo-mask {
+  --yapi-provider-logo-size: 14px;
+  display: inline-block;
+  width: var(--yapi-provider-logo-size);
+  height: var(--yapi-provider-logo-size);
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.yapi-platform-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.yapi-platform-icon > svg {
+  width: 1em;
+  height: 1em;
+}

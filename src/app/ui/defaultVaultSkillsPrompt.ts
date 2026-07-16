@@ -1,8 +1,8 @@
 import {
   DEFAULT_VAULT_SKILLS_REPO_URL,
   DEFAULT_VAULT_SKILLS_SLUG,
-} from '@pivi/pivi-agent-core/skills/vault/defaultVaultSkills';
-import type { DefaultVaultSkillsPromptActions } from '@pivi/pivi-agent-core/skills/vault/ensureDefaultVaultSkills';
+} from '@yapi/yapi-agent-core/skills/vault/defaultVaultSkills';
+import type { DefaultVaultSkillsPromptActions } from '@yapi/yapi-agent-core/skills/vault/ensureDefaultVaultSkills';
 import { Notice } from 'obsidian';
 
 import { appI18n } from '@/app/i18n';
@@ -12,7 +12,7 @@ export function showDefaultVaultSkillsInstallPrompt(
   actions: DefaultVaultSkillsPromptActions,
 ): Notice {
   const fragment = activeDocument.win.createFragment();
-  const container = fragment.createDiv({ cls: 'pivi-default-skills-notice' });
+  const container = fragment.createDiv({ cls: 'yapi-default-skills-notice' });
   const terminology = obsidianPresentationPlatform.getTerminology(appI18n.getLocale());
 
   container.createEl('p', {
@@ -27,7 +27,7 @@ export function showDefaultVaultSkillsInstallPrompt(
     text: DEFAULT_VAULT_SKILLS_SLUG,
   });
 
-  const buttons = container.createDiv({ cls: 'pivi-default-skills-notice-actions' });
+  const buttons = container.createDiv({ cls: 'yapi-default-skills-notice-actions' });
   const installButton = buttons.createEl('button', {
     attr: { type: 'button' },
     text: appI18n.t('settings.skills.defaultBundle.button'),

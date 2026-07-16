@@ -1,6 +1,6 @@
-# Pivi developer handbook
+# YaPi developer handbook
 
-This handbook is the narrative entry point for developers who are new to Pivi. It explains why the repository is shaped as it is, how a chat turn moves through the system, and how to change the plugin without crossing its ownership boundaries.
+This handbook is the narrative entry point for developers who are new to YaPi. It explains why the repository is shaped as it is, how a chat turn moves through the system, and how to change the plugin without crossing its ownership boundaries.
 
 For a first contribution, follow the getting-started and architecture documents in the table below, then read the feature document closest to the change. Read the nearest `AGENTS.md` before editing code: those files contain operational rules and local invariants that are intentionally more prescriptive than this handbook.
 
@@ -24,18 +24,18 @@ For long-running or multi-agent work, use the tracked [specs system](../specs/RE
 
 ## Overall architecture
 
-Pivi is an Obsidian desktop plugin with one agent runtime: Pi. `src/main.ts` is the composition root. Application code constructs host services and the concrete engine, product UI orchestrates chat behavior through injected contracts, React owns product presentation, and reusable packages enforce host and runtime boundaries.
+YaPi is an Obsidian desktop plugin with one agent runtime: Pi. `src/main.ts` is the composition root. Application code constructs host services and the concrete engine, product UI orchestrates chat behavior through injected contracts, React owns product presentation, and reusable packages enforce host and runtime boundaries.
 
 ```mermaid
 flowchart TD
   Main["Plugin entry<br/>src/main.ts"] -- "composes" --> App["Application shell<br/>src/app/"]
   App -- "mounts and injects ports" --> AppUI["UI composition<br/>src/app/ui/"]
-  AppUI -- "mounts" --> React["React presentation<br/>@pivi/pivi-react"]
+  AppUI -- "mounts" --> React["React presentation<br/>@yapi/yapi-react"]
   AppUI -- "injects ChatPorts" --> Chat["Chat orchestration<br/>src/ui/chat/"]
   App -- "constructs" --> Engine["Pi engine<br/>core/engine/pi"]
-  App -- "uses" --> Host["Obsidian host<br/>@pivi/obsidian-host"]
-  App -- "registers" --> Tools["Obsidian tools<br/>@pivi/obsidian-tools"]
-  React -- "uses domain models" --> Core["Host-neutral core<br/>@pivi/pivi-agent-core"]
+  App -- "uses" --> Host["Obsidian host<br/>@yapi/obsidian-host"]
+  App -- "registers" --> Tools["Obsidian tools<br/>@yapi/obsidian-tools"]
+  React -- "uses domain models" --> Core["Host-neutral core<br/>@yapi/yapi-agent-core"]
   Chat -- "uses contracts" --> Core
   Engine -- "implements runtime" --> Core
   Tools -- "uses host adapters" --> Host
@@ -48,13 +48,13 @@ Imports and capabilities flow through explicit seams. Presentation does not cons
 flowchart TD
   Composition["Composition<br/>src/main.ts + src/app/"] --> Presentation["Presentation wiring<br/>src/app/ui/"]
   Presentation --> ProductUI["Product orchestration<br/>src/ui/"]
-  Presentation --> React["React surfaces<br/>@pivi/pivi-react"]
-  ProductUI --> Core["Core contracts and models<br/>@pivi/pivi-agent-core"]
+  Presentation --> React["React surfaces<br/>@yapi/yapi-react"]
+  ProductUI --> Core["Core contracts and models<br/>@yapi/yapi-agent-core"]
   React --> Core
   Composition --> Engine["Concrete Pi engine<br/>core/engine/pi"]
   Engine --> Core
-  Composition --> Host["Concrete host<br/>@pivi/obsidian-host"]
-  Composition --> Tools["Concrete tools<br/>@pivi/obsidian-tools"]
+  Composition --> Host["Concrete host<br/>@yapi/obsidian-host"]
+  Composition --> Tools["Concrete tools<br/>@yapi/obsidian-tools"]
   Tools --> Host
   Tools --> Core
 ```
@@ -73,7 +73,7 @@ flowchart LR
   Engine -- "streams chunks" --> Stream["StreamController"]
   Stream -- "updates state" --> Store["ChatUiStore + ChatProjectionStore"]
   Store -- "renders chrome and virtualized messages" --> React["ChatShell"]
-  Engine -- "appends JSONL" --> Session[(".pivi/sessions/")]
+  Engine -- "appends JSONL" --> Session[(".yapi/sessions/")]
 ```
 
 ## Sources of truth

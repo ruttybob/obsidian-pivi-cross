@@ -43,7 +43,7 @@ function shuffled(items: readonly WelcomeQuote[], random: () => number): Welcome
 function appendCharacters(parent: HTMLElement, text: string, characters: HTMLElement[]): void {
   for (const character of Array.from(text)) {
     const characterEl = parent.createSpan({
-      cls: 'pivi-welcome-quote-char',
+      cls: 'yapi-welcome-quote-char',
       text: character,
     });
     characters.push(characterEl);
@@ -55,9 +55,9 @@ function renderQuote(
   quote: WelcomeQuote,
   widthPercent: number,
 ): RenderedQuote {
-  const cardEl = layerEl.createDiv({ cls: 'pivi-welcome-quote' });
+  const cardEl = layerEl.createDiv({ cls: 'yapi-welcome-quote' });
   cardEl.style.width = `clamp(132px, ${widthPercent}%, 300px)`;
-  const textEl = cardEl.createDiv({ cls: 'pivi-welcome-quote-text' });
+  const textEl = cardEl.createDiv({ cls: 'yapi-welcome-quote-text' });
   const characters: HTMLElement[] = [];
 
   for (const segment of quote.text.split(/(\s+)/).filter(Boolean)) {
@@ -65,12 +65,12 @@ function renderQuote(
       appendCharacters(textEl, segment, characters);
       continue;
     }
-    const wordEl = textEl.createSpan({ cls: 'pivi-welcome-quote-word' });
+    const wordEl = textEl.createSpan({ cls: 'yapi-welcome-quote-word' });
     appendCharacters(wordEl, segment, characters);
   }
 
   const authorEl = cardEl.createDiv({
-    cls: 'pivi-welcome-quote-author',
+    cls: 'yapi-welcome-quote-author',
     text: `— ${quote.author}`,
   });
   return {
@@ -107,7 +107,7 @@ export class QuoteBackgroundController {
   start(): void {
     if (this.running) return;
     this.running = true;
-    this.layerEl = this.welcomeEl.createDiv({ cls: 'pivi-welcome-quote-layer' });
+    this.layerEl = this.welcomeEl.createDiv({ cls: 'yapi-welcome-quote-layer' });
     this.layerEl.setAttribute('aria-hidden', 'true');
 
     const win = getActiveWindow(this.layerEl) as WindowWithResizeObserver;
@@ -197,7 +197,7 @@ export class QuoteBackgroundController {
     if (containerRect.width <= 0 || containerRect.height <= 0) return null;
 
     const greetingRect = this.welcomeEl.parentElement
-      ?.querySelector<HTMLElement>('.pivi-welcome-greeting')
+      ?.querySelector<HTMLElement>('.yapi-welcome-greeting')
       ?.getBoundingClientRect();
     return {
       container: { width: containerRect.width, height: containerRect.height },
@@ -284,12 +284,12 @@ export class QuoteBackgroundController {
 
   private revealQuote(quote: RenderedQuote): void {
     if (!this.running || quote.retiring) return;
-    quote.cardEl.addClass('pivi-quote-visible');
+    quote.cardEl.addClass('yapi-quote-visible');
     const win = getActiveWindow(this.layerEl);
     const reducedMotion = win.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
     if (reducedMotion) {
-      quote.characters.forEach(character => character.addClass('pivi-quote-char-visible'));
-      quote.authorEl.addClass('pivi-quote-author-visible');
+      quote.characters.forEach(character => character.addClass('yapi-quote-char-visible'));
+      quote.authorEl.addClass('yapi-quote-author-visible');
       this.finishQuote(quote);
       return;
     }
@@ -298,9 +298,9 @@ export class QuoteBackgroundController {
 
   private revealCharacter(quote: RenderedQuote, characterIndex: number): void {
     if (!this.running || quote.retiring) return;
-    quote.characters[characterIndex]?.addClass('pivi-quote-char-visible');
+    quote.characters[characterIndex]?.addClass('yapi-quote-char-visible');
     if (characterIndex === quote.characters.length - 1) {
-      quote.authorEl.addClass('pivi-quote-author-visible');
+      quote.authorEl.addClass('yapi-quote-author-visible');
       this.finishQuote(quote);
       return;
     }
@@ -314,7 +314,7 @@ export class QuoteBackgroundController {
   private retireQuote(quote: RenderedQuote): void {
     if (!this.running || quote.retiring) return;
     quote.retiring = true;
-    quote.cardEl.removeClass('pivi-quote-visible');
+    quote.cardEl.removeClass('yapi-quote-visible');
     this.schedule(() => {
       quote.cardEl.remove();
       this.renderedQuotes = this.renderedQuotes.filter(rendered => rendered !== quote);

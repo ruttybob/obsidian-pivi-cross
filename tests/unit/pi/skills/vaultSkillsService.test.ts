@@ -1,17 +1,17 @@
-import type { Skill } from '@pivi/pivi-agent-core/skills/vault/loadVaultSkills';
-import type { ProcessRunner, ProcessRunRequest } from '@pivi/pivi-agent-core/ports';
+import type { Skill } from '@yapi/yapi-agent-core/skills/vault/loadVaultSkills';
+import type { ProcessRunner, ProcessRunRequest } from '@yapi/yapi-agent-core/ports';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-import * as vaultSkillLoader from '@pivi/pivi-agent-core/skills/vault/loadVaultSkills';
-import { formatNpxNotFoundError } from '@pivi/pivi-agent-core/skills/vault/env';
+import * as vaultSkillLoader from '@yapi/yapi-agent-core/skills/vault/loadVaultSkills';
+import { formatNpxNotFoundError } from '@yapi/yapi-agent-core/skills/vault/env';
 import {
   normalizeSkillSlug,
   parseRemoteSkillsListOutput,
-  syncCliSkillsIntoPivi,
+  syncCliSkillsIntoYapi,
   VaultSkillsService,
-} from '@pivi/pivi-agent-core/skills/vault/vaultSkillsService';
+} from '@yapi/yapi-agent-core/skills/vault/vaultSkillsService';
 
 describe('normalizeSkillSlug', () => {
   it('accepts owner/repo', () => {
@@ -102,8 +102,8 @@ describe('VaultSkillsService sync', () => {
   let vaultPath: string;
 
   beforeEach(() => {
-    vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-skills-'));
-    fs.mkdirSync(path.join(vaultPath, '.pivi', 'skills'), { recursive: true });
+    vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-skills-'));
+    fs.mkdirSync(path.join(vaultPath, '.yapi', 'skills'), { recursive: true });
   });
 
   afterEach(() => {
@@ -137,7 +137,7 @@ describe('VaultSkillsService sync', () => {
   }
 
   it('lists skills from loadVaultSkills', () => {
-    const skillMd = path.join(vaultPath, '.pivi', 'skills', 'demo-skill', 'SKILL.md');
+    const skillMd = path.join(vaultPath, '.yapi', 'skills', 'demo-skill', 'SKILL.md');
     const mockSkill = {
       name: 'demo',
       description: 'Demo skill',
@@ -145,7 +145,7 @@ describe('VaultSkillsService sync', () => {
       baseDir: path.dirname(skillMd),
       content: '# Demo skill',
       sourceInfo: {
-        source: 'pivi-vault',
+        source: 'yapi-vault',
         path: skillMd,
         scope: 'project',
         origin: 'package',
@@ -167,7 +167,7 @@ describe('VaultSkillsService sync', () => {
   });
 
   it('toggles a skill disabled marker without removing the skill folder', () => {
-    const skillDir = path.join(vaultPath, '.pivi', 'skills', 'toggle-skill');
+    const skillDir = path.join(vaultPath, '.yapi', 'skills', 'toggle-skill');
     fs.mkdirSync(skillDir, { recursive: true });
     fs.writeFileSync(path.join(skillDir, 'SKILL.md'), '---\nname: toggle\ndescription: y\n---\n', 'utf-8');
 
@@ -182,7 +182,7 @@ describe('VaultSkillsService sync', () => {
   });
 
   it('removes a skill folder', () => {
-    const skillDir = path.join(vaultPath, '.pivi', 'skills', 'to-remove');
+    const skillDir = path.join(vaultPath, '.yapi', 'skills', 'to-remove');
     fs.mkdirSync(skillDir, { recursive: true });
     fs.writeFileSync(path.join(skillDir, 'SKILL.md'), '---\nname: x\ndescription: y\n---\n', 'utf-8');
 
@@ -191,29 +191,29 @@ describe('VaultSkillsService sync', () => {
     expect(fs.existsSync(skillDir)).toBe(false);
   });
 
-  it('migrates root skills CLI metadata into .pivi work dir', () => {
+  it('migrates root skills CLI metadata into .yapi work dir', () => {
     const rootLock = path.join(vaultPath, 'skills-lock.json');
     fs.writeFileSync(rootLock, '{"version":1}', 'utf-8');
 
     new VaultSkillsService(vaultPath);
 
     expect(fs.existsSync(rootLock)).toBe(false);
-    expect(fs.existsSync(path.join(vaultPath, '.pivi', 'skills-lock.json'))).toBe(true);
+    expect(fs.existsSync(path.join(vaultPath, '.yapi', 'skills-lock.json'))).toBe(true);
   });
 
-  it('removes duplicate root skills CLI metadata when .pivi copy already exists', () => {
+  it('removes duplicate root skills CLI metadata when .yapi copy already exists', () => {
     const rootLock = path.join(vaultPath, 'skills-lock.json');
-    const piviLock = path.join(vaultPath, '.pivi', 'skills-lock.json');
+    const yapiLock = path.join(vaultPath, '.yapi', 'skills-lock.json');
     fs.writeFileSync(rootLock, '{"version":1}', 'utf-8');
-    fs.writeFileSync(piviLock, '{"version":1}', 'utf-8');
+    fs.writeFileSync(yapiLock, '{"version":1}', 'utf-8');
 
     new VaultSkillsService(vaultPath);
 
     expect(fs.existsSync(rootLock)).toBe(false);
-    expect(fs.readFileSync(piviLock, 'utf-8')).toBe('{"version":1}');
+    expect(fs.readFileSync(yapiLock, 'utf-8')).toBe('{"version":1}');
   });
 
-  it('syncs flat skills from .agents/skills into .pivi/skills', () => {
+  it('syncs flat skills from .agents/skills into .yapi/skills', () => {
     const flatDir = path.join(vaultPath, '.agents', 'skills', 'flat-skill');
     fs.mkdirSync(flatDir, { recursive: true });
     fs.writeFileSync(
@@ -222,15 +222,15 @@ describe('VaultSkillsService sync', () => {
       'utf-8',
     );
 
-    const synced = syncCliSkillsIntoPivi(vaultPath, new Set());
+    const synced = syncCliSkillsIntoYapi(vaultPath, new Set());
     expect(synced).toEqual(['flat-skill']);
-    expect(fs.existsSync(path.join(vaultPath, '.pivi', 'skills', 'flat-skill', 'SKILL.md'))).toBe(
+    expect(fs.existsSync(path.join(vaultPath, '.yapi', 'skills', 'flat-skill', 'SKILL.md'))).toBe(
       true,
     );
   });
 
-  it('syncs skills written under .pivi by npx skills working directory', () => {
-    const flatDir = path.join(vaultPath, '.pivi', '.agents', 'skills', 'flat-skill');
+  it('syncs skills written under .yapi by npx skills working directory', () => {
+    const flatDir = path.join(vaultPath, '.yapi', '.agents', 'skills', 'flat-skill');
     fs.mkdirSync(flatDir, { recursive: true });
     fs.writeFileSync(
       path.join(flatDir, 'SKILL.md'),
@@ -238,15 +238,15 @@ describe('VaultSkillsService sync', () => {
       'utf-8',
     );
 
-    const synced = syncCliSkillsIntoPivi(vaultPath, new Set());
+    const synced = syncCliSkillsIntoYapi(vaultPath, new Set());
     expect(synced).toEqual(['flat-skill']);
-    expect(fs.existsSync(path.join(vaultPath, '.pivi', 'skills', 'flat-skill', 'SKILL.md'))).toBe(
+    expect(fs.existsSync(path.join(vaultPath, '.yapi', 'skills', 'flat-skill', 'SKILL.md'))).toBe(
       true,
     );
   });
 
-  it('treats skills already written to .pivi/skills as synced', () => {
-    const flatDir = path.join(vaultPath, '.pivi', 'skills', 'direct-skill');
+  it('treats skills already written to .yapi/skills as synced', () => {
+    const flatDir = path.join(vaultPath, '.yapi', 'skills', 'direct-skill');
     fs.mkdirSync(flatDir, { recursive: true });
     fs.writeFileSync(
       path.join(flatDir, 'SKILL.md'),
@@ -254,7 +254,7 @@ describe('VaultSkillsService sync', () => {
       'utf-8',
     );
 
-    const synced = syncCliSkillsIntoPivi(vaultPath, new Set(), {
+    const synced = syncCliSkillsIntoYapi(vaultPath, new Set(), {
       overwriteFolders: new Set(['direct-skill']),
     });
     expect(synced).toEqual(['direct-skill']);
@@ -277,15 +277,15 @@ describe('VaultSkillsService sync', () => {
       'utf-8',
     );
 
-    const synced = syncCliSkillsIntoPivi(vaultPath, new Set());
+    const synced = syncCliSkillsIntoYapi(vaultPath, new Set());
     expect(synced).toEqual(['nested-skill']);
     expect(
-      fs.existsSync(path.join(vaultPath, '.pivi', 'skills', 'nested-skill', 'SKILL.md')),
+      fs.existsSync(path.join(vaultPath, '.yapi', 'skills', 'nested-skill', 'SKILL.md')),
     ).toBe(true);
   });
 
   it('overwrites existing folders when overwriteFolders is set', () => {
-    const existing = path.join(vaultPath, '.pivi', 'skills', 'flat-skill');
+    const existing = path.join(vaultPath, '.yapi', 'skills', 'flat-skill');
     fs.mkdirSync(existing, { recursive: true });
     fs.writeFileSync(
       path.join(existing, 'SKILL.md'),
@@ -301,15 +301,15 @@ describe('VaultSkillsService sync', () => {
       'utf-8',
     );
 
-    syncCliSkillsIntoPivi(vaultPath, new Set(['flat-skill']), {
+    syncCliSkillsIntoYapi(vaultPath, new Set(['flat-skill']), {
       overwriteFolders: new Set(['flat-skill']),
     });
     const content = fs.readFileSync(path.join(existing, 'SKILL.md'), 'utf-8');
     expect(content).toContain('name: new');
   });
 
-  it('skips skill folders that already exist in .pivi/skills', () => {
-    const existing = path.join(vaultPath, '.pivi', 'skills', 'existing');
+  it('skips skill folders that already exist in .yapi/skills', () => {
+    const existing = path.join(vaultPath, '.yapi', 'skills', 'existing');
     fs.mkdirSync(existing, { recursive: true });
     fs.writeFileSync(path.join(existing, 'SKILL.md'), '---\nname: e\ndescription: e\n---\n', 'utf-8');
 
@@ -317,7 +317,7 @@ describe('VaultSkillsService sync', () => {
     fs.mkdirSync(flatDir, { recursive: true });
     fs.writeFileSync(path.join(flatDir, 'SKILL.md'), '---\nname: e2\ndescription: e2\n---\n', 'utf-8');
 
-    const synced = syncCliSkillsIntoPivi(vaultPath, new Set(['existing']));
+    const synced = syncCliSkillsIntoYapi(vaultPath, new Set(['existing']));
     expect(synced).toEqual([]);
   });
 
@@ -340,7 +340,7 @@ describe('VaultSkillsService sync', () => {
     ]);
 
     expect(calls[0]?.args).toEqual(['skills', 'add', 'owner/repo', '--list']);
-    expect(calls[0]?.cwd).toBe(path.join(vaultPath, '.pivi'));
+    expect(calls[0]?.cwd).toBe(path.join(vaultPath, '.yapi'));
     expect(calls[0]?.timeoutMs).toBe(120_000);
   });
 
@@ -434,7 +434,7 @@ describe('VaultSkillsService sync', () => {
       '--skill',
       'selected',
     ]);
-    expect(calls[0]?.cwd).toBe(path.join(vaultPath, '.pivi'));
+    expect(calls[0]?.cwd).toBe(path.join(vaultPath, '.yapi'));
   });
 
   it('installs a normalized slug without selected skill flags', async () => {
@@ -465,7 +465,7 @@ describe('VaultSkillsService sync', () => {
 
   it('updates all existing skills through the process runner', async () => {
     const { processEnv, npxPath } = createNpxProcessEnv();
-    const existing = path.join(vaultPath, '.pivi', 'skills', 'existing');
+    const existing = path.join(vaultPath, '.yapi', 'skills', 'existing');
     fs.mkdirSync(existing, { recursive: true });
     fs.writeFileSync(path.join(existing, 'SKILL.md'), '---\nname: old\ndescription: old\n---\n', 'utf-8');
     const calls: ProcessRunRequest[] = [];
@@ -487,7 +487,7 @@ describe('VaultSkillsService sync', () => {
 
   it('updates one skill through the process runner', async () => {
     const { processEnv, npxPath } = createNpxProcessEnv();
-    const existing = path.join(vaultPath, '.pivi', 'skills', 'target-folder');
+    const existing = path.join(vaultPath, '.yapi', 'skills', 'target-folder');
     fs.mkdirSync(existing, { recursive: true });
     fs.writeFileSync(path.join(existing, 'SKILL.md'), '---\nname: old\ndescription: old\n---\n', 'utf-8');
     const calls: ProcessRunRequest[] = [];
@@ -509,7 +509,7 @@ describe('VaultSkillsService sync', () => {
 
   it('upgrades default bundle folders through the process runner', async () => {
     const { processEnv, npxPath } = createNpxProcessEnv();
-    const existing = path.join(vaultPath, '.pivi', 'skills', 'obsidian-markdown');
+    const existing = path.join(vaultPath, '.yapi', 'skills', 'obsidian-markdown');
     fs.mkdirSync(existing, { recursive: true });
     fs.writeFileSync(path.join(existing, 'SKILL.md'), '---\nname: old\ndescription: old\n---\n', 'utf-8');
     const calls: ProcessRunRequest[] = [];
@@ -560,7 +560,7 @@ describe('VaultSkillsService sync', () => {
 
   it('preserves the disabled marker when updating an existing skill', async () => {
     const { processEnv, npxPath } = createNpxProcessEnv();
-    const existing = path.join(vaultPath, '.pivi', 'skills', 'existing');
+    const existing = path.join(vaultPath, '.yapi', 'skills', 'existing');
     fs.mkdirSync(existing, { recursive: true });
     fs.writeFileSync(path.join(existing, 'SKILL.md'), '---\nname: old\ndescription: old\n---\n', 'utf-8');
     fs.writeFileSync(path.join(existing, '.disabled'), 'disabled\n', 'utf-8');
@@ -584,7 +584,7 @@ describe('VaultSkillsService sync', () => {
   });
 
   it('rejects path-escaping folder names when toggling disabled state', () => {
-    const skillDir = path.join(vaultPath, '.pivi', 'skills', 'safe-skill');
+    const skillDir = path.join(vaultPath, '.yapi', 'skills', 'safe-skill');
     fs.mkdirSync(skillDir, { recursive: true });
     fs.writeFileSync(path.join(skillDir, 'SKILL.md'), '---\nname: safe\ndescription: y\n---\n', 'utf-8');
 

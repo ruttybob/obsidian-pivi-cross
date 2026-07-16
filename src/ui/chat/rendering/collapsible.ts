@@ -1,6 +1,6 @@
 import { setIcon } from 'obsidian';
 
-export const COLLAPSIBLE_CHEVRON_CLASS = 'pivi-collapsible-chevron';
+export const COLLAPSIBLE_CHEVRON_CLASS = 'yapi-collapsible-chevron';
 
 export interface CollapsibleState {
   isExpanded: boolean;
@@ -59,10 +59,10 @@ function syncCollapsibleState(
   state.isExpanded = isExpanded;
   if (isExpanded) {
     wrapperEl.addClass('expanded');
-    contentEl.removeClass('pivi-hidden');
+    contentEl.removeClass('yapi-hidden');
   } else {
     wrapperEl.removeClass('expanded');
-    contentEl.addClass('pivi-hidden');
+    contentEl.addClass('yapi-hidden');
   }
   headerEl.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
   syncChevron(chevronEl, isExpanded);
@@ -99,7 +99,7 @@ export function setupCollapsible(
     baseAriaLabel,
   } = options;
 
-  wrapperEl.addClass('pivi-collapsible');
+  wrapperEl.addClass('yapi-collapsible');
   prepareCollapsibleHeader(headerEl);
 
   const chevronEl = ensureChevron(headerEl);

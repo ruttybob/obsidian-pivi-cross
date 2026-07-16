@@ -1,11 +1,11 @@
-jest.mock('@/app/ui/PiviSettingTabHost', () => ({
-  PiviSettingTabHost: jest.fn(),
+jest.mock('@/app/ui/YapiSettingTabHost', () => ({
+  YapiSettingTabHost: jest.fn(),
 }));
 
-import { registerPiviSettings } from '@/app/settingsRegistration';
-import { PiviSettingTabHost } from '@/app/ui/PiviSettingTabHost';
+import { registerYapiSettings } from '@/app/settingsRegistration';
+import { YapiSettingTabHost } from '@/app/ui/YapiSettingTabHost';
 
-describe('registerPiviSettings', () => {
+describe('registerYapiSettings', () => {
   it('injects the shared asynchronous workspace readiness callback', async () => {
     const firstWorkspace = { id: 'first' };
     const secondWorkspace = { id: 'second' };
@@ -17,10 +17,10 @@ describe('registerPiviSettings', () => {
       ensureWorkspaceServices,
     };
 
-    registerPiviSettings(plugin as never);
+    registerYapiSettings(plugin as never);
 
-    expect(PiviSettingTabHost).toHaveBeenCalledTimes(1);
-    const getWorkspace = jest.mocked(PiviSettingTabHost).mock.calls[0]?.[2];
+    expect(YapiSettingTabHost).toHaveBeenCalledTimes(1);
+    const getWorkspace = jest.mocked(YapiSettingTabHost).mock.calls[0]?.[2];
     expect(getWorkspace).toEqual(expect.any(Function));
     expect(ensureWorkspaceServices).not.toHaveBeenCalled();
     await expect(getWorkspace?.()).resolves.toBe(firstWorkspace);

@@ -1,6 +1,6 @@
 const mockSharedStorageInitialize = jest.fn();
 const mockGetTabManagerState = jest.fn();
-const mockSavePiviSettings = jest.fn();
+const mockSaveYapiSettings = jest.fn();
 const mockGetAdapter = jest.fn();
 const mockSetTabManagerState = jest.fn();
 const mockGetDeletedSessionFiles = jest.fn();
@@ -9,9 +9,9 @@ const mockListSessions = jest.fn();
 const mockSetupNoteToolbarIntegration = jest.fn();
 const mockCreatePluginServiceGraph = jest.fn();
 
-jest.mock("@pivi/obsidian-host", () => {
-  const actual = jest.requireActual<typeof import("@pivi/obsidian-host")>(
-    "@pivi/obsidian-host",
+jest.mock("@yapi/obsidian-host", () => {
+  const actual = jest.requireActual<typeof import("@yapi/obsidian-host")>(
+    "@yapi/obsidian-host",
   );
   return {
     ...actual,
@@ -19,7 +19,7 @@ jest.mock("@pivi/obsidian-host", () => {
     initialize: mockSharedStorageInitialize,
     getTabManagerState: mockGetTabManagerState,
     getDeletedSessionFiles: mockGetDeletedSessionFiles,
-    savePiviSettings: mockSavePiviSettings,
+    saveYapiSettings: mockSaveYapiSettings,
     setTabManagerState: mockSetTabManagerState,
     setDeletedSessionFiles: mockSetDeletedSessionFiles,
     getAdapter: mockGetAdapter,
@@ -27,7 +27,7 @@ jest.mock("@pivi/obsidian-host", () => {
   };
 });
 
-jest.mock("@pivi/pivi-agent-core/engine/pi/session/piSessionStore", () => ({
+jest.mock("@yapi/yapi-agent-core/engine/pi/session/piSessionStore", () => ({
   PiSessionStore: jest.fn().mockImplementation(() => ({
     migrateDeviceLocalExternalContexts: jest.fn().mockResolvedValue(0),
     listSessions: mockListSessions,
@@ -38,10 +38,10 @@ jest.mock("@pivi/pivi-agent-core/engine/pi/session/piSessionStore", () => ({
   })),
 }));
 
-jest.mock("@pivi/pivi-agent-core/auth/providerSecretStorage", () => {
+jest.mock("@yapi/yapi-agent-core/auth/providerSecretStorage", () => {
   const actual = jest.requireActual<
-    typeof import("@pivi/pivi-agent-core/auth/providerSecretStorage")
-  >("@pivi/pivi-agent-core/auth/providerSecretStorage");
+    typeof import("@yapi/yapi-agent-core/auth/providerSecretStorage")
+  >("@yapi/yapi-agent-core/auth/providerSecretStorage");
   return {
     ...actual,
     isSecretStorageAvailable: jest.fn().mockReturnValue(false),
@@ -68,18 +68,18 @@ jest.mock("@/app/serviceGraph", () => {
   };
 });
 
-import type { OpenSessionState } from "@pivi/pivi-agent-core/foundation";
-import { VIEW_TYPE_PIVI } from "@pivi/pivi-agent-core/foundation";
-import { DEFAULT_PIVI_SETTINGS } from "@pivi/pivi-agent-core/foundation/settingsDefaults";
+import type { OpenSessionState } from "@yapi/yapi-agent-core/foundation";
+import { VIEW_TYPE_YAPI } from "@yapi/yapi-agent-core/foundation";
+import { DEFAULT_YAPI_SETTINGS } from "@yapi/yapi-agent-core/foundation/settingsDefaults";
 import { persistOpenTabStates } from "@/app/pluginLifecycle";
-import PiviPlugin from "@/main";
+import YapiPlugin from "@/main";
 import { createMockApp } from "../../helpers/mockApp";
 
-function createPlugin(): PiviPlugin {
+function createPlugin(): YapiPlugin {
   const app = createMockApp();
-  return new PiviPlugin(app, {
-    id: "pivi",
-    name: "Pivi",
+  return new YapiPlugin(app, {
+    id: "yapi",
+    name: "YaPi",
     version: "0.0.0",
   } as never);
 }
@@ -103,16 +103,16 @@ function openSession(
     updatedAt: 1,
     messages: [],
     sessionId: null,
-    sessionFile: ".pivi/sessions/a.jsonl",
+    sessionFile: ".yapi/sessions/a.jsonl",
     ...overrides,
   };
 }
 
-describe("PiviPlugin lifecycle", () => {
+describe("YapiPlugin lifecycle", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockSharedStorageInitialize.mockResolvedValue({ pivi: {} });
+    mockSharedStorageInitialize.mockResolvedValue({ yapi: {} });
     mockGetTabManagerState.mockResolvedValue(null);
     mockGetDeletedSessionFiles.mockResolvedValue([]);
     mockListSessions.mockResolvedValue([]);
@@ -206,14 +206,14 @@ describe("PiviPlugin lifecycle", () => {
   describe("loadSettings", () => {
     it("merges stored settings with defaults", async () => {
       mockSharedStorageInitialize.mockResolvedValue({
-        pivi: { userName: "Ada" },
+        yapi: { userName: "Ada" },
       });
 
       const plugin = createPlugin();
       await plugin.loadSettings();
 
       expect(plugin.settings.userName).toBe("Ada");
-      expect(plugin.settings.model).toBe(DEFAULT_PIVI_SETTINGS.model);
+      expect(plugin.settings.model).toBe(DEFAULT_YAPI_SETTINGS.model);
     });
 
     it("propagates storage initialization failures", async () => {
@@ -231,7 +231,7 @@ describe("PiviPlugin lifecycle", () => {
       mockListSessions.mockResolvedValue([
         {
           sessionId: "sess-a",
-          sessionFile: ".pivi/sessions/a.jsonl",
+          sessionFile: ".yapi/sessions/a.jsonl",
           title: "First",
           updatedAt: 100,
         },
@@ -289,7 +289,7 @@ describe("PiviPlugin lifecycle", () => {
       await expect(persistence).rejects.toThrow("first failed");
     });
 
-    it("asks each open Pivi view handle to persist its state", async () => {
+    it("asks each open Yapi view handle to persist its state", async () => {
       const tabState = { openTabs: [{ id: "tab-1", openSessionId: null }] };
       const persistState = jest.fn(async () => {
         await mockSetTabManagerState(tabState);
@@ -420,30 +420,30 @@ describe("PiviPlugin lifecycle", () => {
       const plugin = createPlugin();
       await plugin.loadSettings();
 
-      expect(mockSavePiviSettings).not.toHaveBeenCalled();
+      expect(mockSaveYapiSettings).not.toHaveBeenCalled();
     });
   });
 
   describe("getAllViews", () => {
-    it("returns semantic Pivi views and filters malformed leaves", () => {
-      const piviView = { leaf: {}, getChatHandle: jest.fn(() => null) };
+    it("returns semantic Yapi views and filters malformed leaves", () => {
+      const yapiView = { leaf: {}, getChatHandle: jest.fn(() => null) };
       const missingLeaf = { getChatHandle: jest.fn(() => null) };
       const missingHandle = { leaf: {} };
       const plugin = createPlugin();
       plugin.app.workspace.getLeavesOfType = jest
         .fn()
         .mockImplementation((type: string) => {
-          if (type === VIEW_TYPE_PIVI) {
+          if (type === VIEW_TYPE_YAPI) {
             return [
               { view: missingLeaf },
-              { view: piviView },
+              { view: yapiView },
               { view: missingHandle },
             ];
           }
           return [];
         });
 
-      expect(plugin.getAllViews()).toEqual([piviView]);
+      expect(plugin.getAllViews()).toEqual([yapiView]);
     });
   });
 });

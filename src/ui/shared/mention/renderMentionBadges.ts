@@ -1,5 +1,5 @@
-import type { MentionBadgeParseContext,MentionBadgePart } from '@pivi/pivi-agent-core/context/mentions';
-import { messageTextHasMentionBadges, parseMessageMentions } from '@pivi/pivi-agent-core/context/mentions';
+import type { MentionBadgeParseContext,MentionBadgePart } from '@yapi/yapi-agent-core/context/mentions';
+import { messageTextHasMentionBadges, parseMessageMentions } from '@yapi/yapi-agent-core/context/mentions';
 import type { App } from 'obsidian';
 
 import { mentionPartToContextBadgeToken } from '../context-badge/ContextBadgeParser';
@@ -37,7 +37,7 @@ export function renderMentionBadges(
   }
 
   container.empty();
-  container.addClass('pivi-text-with-mentions');
+  container.addClass('yapi-text-with-mentions');
 
   for (const part of parts) {
     if (part.kind === 'plain') {

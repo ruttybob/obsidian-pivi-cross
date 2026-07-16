@@ -1,5 +1,5 @@
-import type { ChatMessage } from '@pivi/pivi-agent-core/foundation';
-import type { ChatProjectionEvent } from '@pivi/pivi-react/store';
+import type { ChatMessage } from '@yapi/yapi-agent-core/foundation';
+import type { ChatProjectionEvent } from '@yapi/yapi-react/store';
 import { ChatState } from '@/ui/chat/state/ChatState';
 
 function userMessage(id: string, content = 'hello'): ChatMessage {
@@ -193,12 +193,12 @@ describe('ChatState', () => {
         delta: 'hello',
       });
 
-      sessionFile = '.pivi/sessions/one.jsonl';
+      sessionFile = '.yapi/sessions/one.jsonl';
       state.currentOpenSessionId = 'open-1';
       state.notifyMessageChanged(message);
       const rebound = dispatch.mock.calls.at(-1)?.[0] as ChatProjectionEvent;
       expect(rebound).toMatchObject({
-        sessionFile: '.pivi/sessions/one.jsonl',
+        sessionFile: '.yapi/sessions/one.jsonl',
         openSessionId: 'open-1',
         sequence: 1,
       });

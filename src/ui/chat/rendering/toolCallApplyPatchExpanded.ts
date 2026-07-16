@@ -1,5 +1,5 @@
-import type { DiffStats } from '@pivi/pivi-agent-core/foundation/diff';
-import { parseApplyPatchDiffs, parseFileUpdateChangeDiffs } from '@pivi/pivi-agent-core/tools/diff';
+import type { DiffStats } from '@yapi/yapi-agent-core/foundation/diff';
+import { parseApplyPatchDiffs, parseFileUpdateChangeDiffs } from '@yapi/yapi-agent-core/tools/diff';
 
 import { t } from '@/app/i18n';
 
@@ -25,7 +25,7 @@ export function renderApplyPatchExpanded(
 
   const changes = Array.isArray(input.changes) ? input.changes : [];
   if (changes.length > 0) {
-    const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
+    const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
     for (const change of changes as unknown[]) {
       if (!change || typeof change !== 'object' || Array.isArray(change)) continue;
       const changeRecord = change as Record<string, unknown>;
@@ -33,7 +33,7 @@ export function renderApplyPatchExpanded(
       if (!path) continue;
       const movedTo = readMoveTarget(changeRecord.kind);
       const pathText = movedTo ? `${path} -> ${movedTo}` : path;
-      linesEl.createDiv({ cls: 'pivi-tool-line', text: pathText });
+      linesEl.createDiv({ cls: 'yapi-tool-line', text: pathText });
     }
     return;
   }
@@ -46,11 +46,11 @@ export function renderApplyPatchExpanded(
   if (result) {
     const fileMatches = [...result.matchAll(/(?:update|add|delete|create|modify|Applied:\s*)(?:\w+:\s*)?([^\n,]+)/gi)];
     if (fileMatches.length > 0) {
-      const linesEl = container.createDiv({ cls: 'pivi-tool-lines' });
+      const linesEl = container.createDiv({ cls: 'yapi-tool-lines' });
       for (const match of fileMatches) {
         const filePath = match[1]?.trim();
         if (filePath) {
-          const lineEl = linesEl.createDiv({ cls: 'pivi-tool-line' });
+          const lineEl = linesEl.createDiv({ cls: 'yapi-tool-line' });
           lineEl.setText(filePath);
         }
       }
@@ -60,7 +60,7 @@ export function renderApplyPatchExpanded(
     return;
   }
 
-  container.createDiv({ cls: 'pivi-tool-empty', text: t('chat.stream.noResult') });
+  container.createDiv({ cls: 'yapi-tool-empty', text: t('chat.stream.noResult') });
 }
 
 export function renderApplyPatchDiffSections(
@@ -68,20 +68,20 @@ export function renderApplyPatchDiffSections(
   fileDiffs: ReturnType<typeof parseApplyPatchDiffs>,
 ): void {
   for (const fileDiff of fileDiffs) {
-    const sectionEl = container.createDiv({ cls: 'pivi-tool-patch-section' });
+    const sectionEl = container.createDiv({ cls: 'yapi-tool-patch-section' });
 
     if (fileDiff.operation === 'delete' && fileDiff.diffLines.length === 0) {
-      sectionEl.createDiv({ cls: 'pivi-tool-empty', text: t('chat.stream.fileDeleted') });
+      sectionEl.createDiv({ cls: 'yapi-tool-empty', text: t('chat.stream.fileDeleted') });
       continue;
     }
 
     if (fileDiff.diffLines.length === 0) {
-      sectionEl.createDiv({ cls: 'pivi-tool-empty', text: t('chat.stream.noTextualDiff') });
+      sectionEl.createDiv({ cls: 'yapi-tool-empty', text: t('chat.stream.noTextualDiff') });
       continue;
     }
 
-    const diffRow = sectionEl.createDiv({ cls: 'pivi-write-edit-diff-row' });
-    const diffEl = diffRow.createDiv({ cls: 'pivi-write-edit-diff' });
+    const diffRow = sectionEl.createDiv({ cls: 'yapi-write-edit-diff-row' });
+    const diffEl = diffRow.createDiv({ cls: 'yapi-write-edit-diff' });
     renderDiffContent(diffEl, fileDiff.diffLines);
   }
 }

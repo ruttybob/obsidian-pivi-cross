@@ -1,13 +1,13 @@
-import { obsidianHttpClient } from '@pivi/obsidian-host/obsidianHttpClient';
-import { isProviderDisabled } from '@pivi/pivi-agent-core/auth/providerSecretStorage';
-import { piAiModels } from '@pivi/pivi-agent-core/engine/pi/piAiModels';
+import { obsidianHttpClient } from '@yapi/obsidian-host/obsidianHttpClient';
+import { isProviderDisabled } from '@yapi/yapi-agent-core/auth/providerSecretStorage';
+import { piAiModels } from '@yapi/yapi-agent-core/engine/pi/piAiModels';
 import {
   type PiResolvedModel,
   resolvePiModelFromKeyWithLookup,
-} from '@pivi/pivi-agent-core/engine/pi/piModelRegistry';
-import { getProviderIdFromModelValue } from '@pivi/pivi-agent-core/foundation/providerLogos';
-import type { PiAgentSettingsView } from '@pivi/pivi-agent-core/foundation/settingsModelKey';
-import { testEndpointConnectivity } from '@pivi/pivi-agent-core/runtime/connectivity';
+} from '@yapi/yapi-agent-core/engine/pi/piModelRegistry';
+import { getProviderIdFromModelValue } from '@yapi/yapi-agent-core/foundation/providerLogos';
+import type { PiAgentSettingsView } from '@yapi/yapi-agent-core/foundation/settingsModelKey';
+import { testEndpointConnectivity } from '@yapi/yapi-agent-core/runtime/connectivity';
 
 export interface ProviderTestResult {
   ok: boolean;

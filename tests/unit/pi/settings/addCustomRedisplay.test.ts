@@ -1,7 +1,7 @@
-import { isKnownPiProviderId } from '@pivi/pivi-agent-core/auth/piProviderValidation';
-import { migratePiProviderCredentialsToKeychain } from '@pivi/pivi-agent-core/engine/pi/piProviderCredentialStore';
-import { updatePiAgentSettings } from '@pivi/pivi-agent-core/foundation/agentSettings';
-import { createDefaultCustomProviderConfig } from '@pivi/pivi-agent-core/foundation/customProviders';
+import { isKnownPiProviderId } from '@yapi/yapi-agent-core/auth/piProviderValidation';
+import { migratePiProviderCredentialsToKeychain } from '@yapi/yapi-agent-core/engine/pi/piProviderCredentialStore';
+import { updatePiAgentSettings } from '@yapi/yapi-agent-core/foundation/agentSettings';
+import { createDefaultCustomProviderConfig } from '@yapi/yapi-agent-core/foundation/customProviders';
 
 describe('add ollama then redisplay normalize', () => {
   it('keeps ollama after addedProviders-only update like migration path', () => {

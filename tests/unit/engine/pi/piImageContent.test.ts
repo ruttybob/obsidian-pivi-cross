@@ -1,5 +1,5 @@
-import type { ImageAttachment } from '@pivi/pivi-agent-core/foundation';
-import { toPiImageContent } from '@pivi/pivi-agent-core/engine/pi/piImageContent';
+import type { ImageAttachment } from '@yapi/yapi-agent-core/foundation';
+import { toPiImageContent } from '@yapi/yapi-agent-core/engine/pi/piImageContent';
 
 function attachmentFixture(
   overrides: Partial<ImageAttachment> & Pick<ImageAttachment, 'id' | 'data' | 'mediaType'>,
@@ -35,7 +35,7 @@ describe('toPiImageContent (core)', () => {
     ]);
   });
 
-  it('omits Pivi-only attachment metadata from mapped content', () => {
+  it('omits Yapi-only attachment metadata from mapped content', () => {
     const images: ImageAttachment[] = [
       {
         id: 'img-1',

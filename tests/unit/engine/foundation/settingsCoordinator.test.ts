@@ -1,10 +1,10 @@
-import type { ChatUIConfig } from '@pivi/pivi-agent-core/foundation/chatUi';
+import type { ChatUIConfig } from '@yapi/yapi-agent-core/foundation/chatUi';
 import {
   commitSettingsSnapshot,
   getProjectedSettingsSnapshot,
   reconcileSettingsWithChatUi,
-} from '@pivi/pivi-agent-core/foundation/settingsCoordinator';
-import type { OpenSessionState } from '@pivi/pivi-agent-core/foundation/chat';
+} from '@yapi/yapi-agent-core/foundation/settingsCoordinator';
+import type { OpenSessionState } from '@yapi/yapi-agent-core/foundation/chat';
 
 const ADAPTIVE_MODEL = 'provider/adaptive-model';
 const STANDARD_MODEL = 'provider/standard-model';

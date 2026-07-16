@@ -1,11 +1,11 @@
-import type { PiChatService } from '@pivi/pivi-agent-core/runtime';
-import type { ChatPorts } from '@pivi/pivi-agent-core/runtime/chatPorts';
+import type { PiChatService } from '@yapi/yapi-agent-core/runtime';
+import type { ChatPorts } from '@yapi/yapi-agent-core/runtime/chatPorts';
 import {
   type ChatPerfRecorder,
   NOOP_CHAT_PERF_RECORDER,
-} from '@pivi/pivi-react/store';
+} from '@yapi/yapi-react/store';
 
-import type { PiviChatHost } from '@/app/hostContracts';
+import type { YapiChatHost } from '@/app/hostContracts';
 
 import {
   activateTab,
@@ -57,7 +57,7 @@ type OpenSessionOptions = {
  * TabManager coordinates multiple chat tabs.
  */
 export class TabManager {
-  private plugin: PiviChatHost;
+  private plugin: YapiChatHost;
   private containerEl: HTMLElement;
   private view: TabManagerViewHost;
   private ports: ChatPorts;
@@ -74,7 +74,7 @@ export class TabManager {
   private switchingPromise: Promise<void> | null = null;
 
   constructor(
-    plugin: PiviChatHost,
+    plugin: YapiChatHost,
     containerEl: HTMLElement,
     view: TabManagerViewHost,
     callbacks: TabManagerCallbacks = {},

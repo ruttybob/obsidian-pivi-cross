@@ -1,4 +1,4 @@
-import type { AskUserQuestionItem, AskUserQuestionOption } from '@pivi/pivi-agent-core/foundation/tools';
+import type { AskUserQuestionItem, AskUserQuestionOption } from '@yapi/yapi-agent-core/foundation/tools';
 
 import { t } from '@/app/i18n';
 
@@ -86,7 +86,7 @@ export function parseQuestionsFromInput(input: Record<string, unknown>): AskUser
 function renderMultiSelectCheckbox(parent: HTMLElement, checked: boolean): void {
   parent.createSpan({
     text: checked ? '[\u2713] ' : '[ ] ',
-    cls: `pivi-ask-check${checked ? ' is-checked' : ''}`,
+    cls: `yapi-ask-check${checked ? ' is-checked' : ''}`,
   });
 }
 
@@ -94,7 +94,7 @@ export function updateFocusIndicator(host: InlineAskUserQuestionHost): void {
   for (let i = 0; i < host.currentItems.length; i++) {
     const item = host.currentItems[i];
     if (!item) continue;
-    const cursor = item.querySelector('.pivi-ask-cursor');
+    const cursor = item.querySelector('.yapi-ask-cursor');
     if (i === host.focusedItemIndex) {
       item.addClass('is-focused');
       if (cursor) cursor.textContent = '\u203A';
@@ -120,16 +120,16 @@ export function updateOptionVisuals(host: InlineAskUserQuestionHost, qIdx: numbe
     item.toggleClass('is-selected', isSelected);
 
     if (isMulti) {
-      const checkSpan = item.querySelector('.pivi-ask-check');
+      const checkSpan = item.querySelector('.yapi-ask-check');
       if (checkSpan) {
         checkSpan.textContent = isSelected ? '[\u2713] ' : '[ ] ';
         checkSpan.toggleClass('is-checked', isSelected);
       }
     } else {
-      const labelRow = item.querySelector('.pivi-ask-label-row');
-      const existingMark = item.querySelector('.pivi-ask-check-mark');
+      const labelRow = item.querySelector('.yapi-ask-label-row');
+      const existingMark = item.querySelector('.yapi-ask-check-mark');
       if (isSelected && !existingMark && labelRow) {
-        labelRow.createSpan({ text: ' \u2713', cls: 'pivi-ask-check-mark' });
+        labelRow.createSpan({ text: ' \u2713', cls: 'yapi-ask-check-mark' });
       } else if (!isSelected && existingMark) {
         existingMark.remove();
       }
@@ -141,14 +141,14 @@ export function updateTabIndicators(host: InlineAskUserQuestionHost): void {
   for (let idx = 0; idx < host.questions.length; idx++) {
     const tab = host.tabElements[idx];
     if (!tab) continue;
-    const tick = tab.querySelector('.pivi-ask-tab-tick');
+    const tick = tab.querySelector('.yapi-ask-tab-tick');
     const answered = host.isQuestionAnswered(idx);
     tab.toggleClass('is-answered', answered);
     if (tick) tick.textContent = answered ? ' \u2713' : '';
   }
   const submitTab = host.tabElements[host.questions.length];
   if (submitTab) {
-    const submitCheck = submitTab.querySelector('.pivi-ask-tab-submit-check');
+    const submitCheck = submitTab.querySelector('.yapi-ask-tab-submit-check');
     const allAnswered = host.questions.every((_, i) => host.isQuestionAnswered(i));
     if (submitCheck) submitCheck.textContent = allAnswered ? '\u2713 ' : '';
   }
@@ -171,9 +171,9 @@ export function renderAskUserQuestionTabs(host: InlineAskUserQuestionHost): void
     const answered = host.isQuestionAnswered(idx);
     const q = host.questions[idx];
     if (!q) continue;
-    const tab = host.tabBar.createSpan({ cls: 'pivi-ask-tab' });
-    tab.createSpan({ text: q.header, cls: 'pivi-ask-tab-label' });
-    tab.createSpan({ text: answered ? ' \u2713' : '', cls: 'pivi-ask-tab-tick' });
+    const tab = host.tabBar.createSpan({ cls: 'yapi-ask-tab' });
+    tab.createSpan({ text: q.header, cls: 'yapi-ask-tab-label' });
+    tab.createSpan({ text: answered ? ' \u2713' : '', cls: 'yapi-ask-tab-tick' });
     tab.setAttribute('title', q.question);
 
     if (idx === host.activeTabIndex) tab.addClass('is-active');
@@ -183,9 +183,9 @@ export function renderAskUserQuestionTabs(host: InlineAskUserQuestionHost): void
   }
 
   const allAnswered = host.questions.every((_, i) => host.isQuestionAnswered(i));
-  const submitTab = host.tabBar.createSpan({ cls: 'pivi-ask-tab' });
-  submitTab.createSpan({ text: allAnswered ? '\u2713 ' : '', cls: 'pivi-ask-tab-submit-check' });
-  submitTab.createSpan({ text: t('chat.askUser.submit'), cls: 'pivi-ask-tab-label' });
+  const submitTab = host.tabBar.createSpan({ cls: 'yapi-ask-tab' });
+  submitTab.createSpan({ text: allAnswered ? '\u2713 ' : '', cls: 'yapi-ask-tab-submit-check' });
+  submitTab.createSpan({ text: t('chat.askUser.submit'), cls: 'yapi-ask-tab-label' });
   if (host.activeTabIndex === host.questions.length) submitTab.addClass('is-active');
   submitTab.addEventListener('click', () => host.switchTab(host.questions.length));
   host.tabElements.push(submitTab);
@@ -199,10 +199,10 @@ function renderQuestionTab(host: InlineAskUserQuestionHost, idx: number): void {
 
   host.contentArea.createDiv({
     text: q.question,
-    cls: 'pivi-ask-question-text',
+    cls: 'yapi-ask-question-text',
   });
 
-  const listEl = host.contentArea.createDiv({ cls: 'pivi-ask-list' });
+  const listEl = host.contentArea.createDiv({ cls: 'yapi-ask-list' });
 
   for (let optIdx = 0; optIdx < q.options.length; optIdx++) {
     const option = q.options[optIdx];
@@ -211,27 +211,27 @@ function renderQuestionTab(host: InlineAskUserQuestionHost, idx: number): void {
     const optionValue = host.getOptionValue(option);
     const isSelected = selected.has(optionValue);
 
-    const row = listEl.createDiv({ cls: 'pivi-ask-item' });
+    const row = listEl.createDiv({ cls: 'yapi-ask-item' });
     if (isFocused) row.addClass('is-focused');
     if (isSelected) row.addClass('is-selected');
 
-    row.createSpan({ text: isFocused ? '\u203A' : '\u00A0', cls: 'pivi-ask-cursor' });
-    row.createSpan({ text: `${optIdx + 1}. `, cls: 'pivi-ask-item-num' });
+    row.createSpan({ text: isFocused ? '\u203A' : '\u00A0', cls: 'yapi-ask-cursor' });
+    row.createSpan({ text: `${optIdx + 1}. `, cls: 'yapi-ask-item-num' });
 
     if (isMulti) {
       renderMultiSelectCheckbox(row, isSelected);
     }
 
-    const labelBlock = row.createDiv({ cls: 'pivi-ask-item-content' });
-    const labelRow = labelBlock.createDiv({ cls: 'pivi-ask-label-row' });
-    labelRow.createSpan({ text: option.label, cls: 'pivi-ask-item-label' });
+    const labelBlock = row.createDiv({ cls: 'yapi-ask-item-content' });
+    const labelRow = labelBlock.createDiv({ cls: 'yapi-ask-label-row' });
+    labelRow.createSpan({ text: option.label, cls: 'yapi-ask-item-label' });
 
     if (!isMulti && isSelected) {
-      labelRow.createSpan({ text: ' \u2713', cls: 'pivi-ask-check-mark' });
+      labelRow.createSpan({ text: ' \u2713', cls: 'yapi-ask-check-mark' });
     }
 
     if (option.description) {
-      labelBlock.createDiv({ text: option.description, cls: 'pivi-ask-item-desc' });
+      labelBlock.createDiv({ text: option.description, cls: 'yapi-ask-item-desc' });
     }
 
     row.addEventListener('click', () => {
@@ -249,18 +249,18 @@ function renderQuestionTab(host: InlineAskUserQuestionHost, idx: number): void {
     const customText = host.customInputs.get(idx) ?? '';
     const hasCustomText = customText.trim().length > 0;
 
-    const customRow = listEl.createDiv({ cls: 'pivi-ask-item pivi-ask-custom-item' });
+    const customRow = listEl.createDiv({ cls: 'yapi-ask-item yapi-ask-custom-item' });
     if (customFocused) customRow.addClass('is-focused');
 
-    customRow.createSpan({ text: customFocused ? '\u203A' : '\u00A0', cls: 'pivi-ask-cursor' });
-    customRow.createSpan({ text: `${customIdx + 1}. `, cls: 'pivi-ask-item-num' });
+    customRow.createSpan({ text: customFocused ? '\u203A' : '\u00A0', cls: 'yapi-ask-cursor' });
+    customRow.createSpan({ text: `${customIdx + 1}. `, cls: 'yapi-ask-item-num' });
 
     if (isMulti) {
       renderMultiSelectCheckbox(customRow, hasCustomText);
     }
 
     const inputEl = customRow.createEl('input', {
-      cls: 'pivi-ask-custom-text',
+      cls: 'yapi-ask-custom-text',
       value: customText,
     });
     inputEl.setAttribute('type', q.isSecret ? 'password' : 'text');
@@ -292,48 +292,48 @@ function renderQuestionTab(host: InlineAskUserQuestionHost, idx: number): void {
 
   host.contentArea.createDiv({
     text: host.config.immediateSelect ? HINTS_TEXT_IMMEDIATE : HINTS_TEXT,
-    cls: 'pivi-ask-hints',
+    cls: 'yapi-ask-hints',
   });
 }
 
 function renderSubmitTab(host: InlineAskUserQuestionHost): void {
   host.contentArea.createDiv({
     text: t('chat.askUser.reviewAnswers'),
-    cls: 'pivi-ask-review-title',
+    cls: 'yapi-ask-review-title',
   });
 
-  const reviewEl = host.contentArea.createDiv({ cls: 'pivi-ask-review' });
+  const reviewEl = host.contentArea.createDiv({ cls: 'yapi-ask-review' });
 
   for (let idx = 0; idx < host.questions.length; idx++) {
     const q = host.questions[idx];
     if (!q) continue;
     const answerText = getAnswerText(host, idx);
 
-    const pairEl = reviewEl.createDiv({ cls: 'pivi-ask-review-pair' });
-    pairEl.createDiv({ text: `${idx + 1}.`, cls: 'pivi-ask-review-num' });
-    const bodyEl = pairEl.createDiv({ cls: 'pivi-ask-review-body' });
-    bodyEl.createDiv({ text: q.question, cls: 'pivi-ask-review-q-text' });
+    const pairEl = reviewEl.createDiv({ cls: 'yapi-ask-review-pair' });
+    pairEl.createDiv({ text: `${idx + 1}.`, cls: 'yapi-ask-review-num' });
+    const bodyEl = pairEl.createDiv({ cls: 'yapi-ask-review-body' });
+    bodyEl.createDiv({ text: q.question, cls: 'yapi-ask-review-q-text' });
     bodyEl.createDiv({
       text: answerText || t('chat.askUser.notAnswered'),
-      cls: answerText ? 'pivi-ask-review-a-text' : 'pivi-ask-review-empty',
+      cls: answerText ? 'yapi-ask-review-a-text' : 'yapi-ask-review-empty',
     });
     pairEl.addEventListener('click', () => host.switchTab(idx));
   }
 
   host.contentArea.createDiv({
     text: t('chat.askUser.readyToSubmit'),
-    cls: 'pivi-ask-review-prompt',
+    cls: 'yapi-ask-review-prompt',
   });
 
-  const actionsEl = host.contentArea.createDiv({ cls: 'pivi-ask-list' });
+  const actionsEl = host.contentArea.createDiv({ cls: 'yapi-ask-list' });
   const allAnswered = host.questions.every((_, i) => host.isQuestionAnswered(i));
 
-  const submitRow = actionsEl.createDiv({ cls: 'pivi-ask-item' });
+  const submitRow = actionsEl.createDiv({ cls: 'yapi-ask-item' });
   if (host.focusedItemIndex === 0) submitRow.addClass('is-focused');
   if (!allAnswered) submitRow.addClass('is-disabled');
-  submitRow.createSpan({ text: host.focusedItemIndex === 0 ? '\u203A' : '\u00A0', cls: 'pivi-ask-cursor' });
-  submitRow.createSpan({ text: '1. ', cls: 'pivi-ask-item-num' });
-  submitRow.createSpan({ text: t('chat.askUser.submitAnswers'), cls: 'pivi-ask-item-label' });
+  submitRow.createSpan({ text: host.focusedItemIndex === 0 ? '\u203A' : '\u00A0', cls: 'yapi-ask-cursor' });
+  submitRow.createSpan({ text: '1. ', cls: 'yapi-ask-item-num' });
+  submitRow.createSpan({ text: t('chat.askUser.submitAnswers'), cls: 'yapi-ask-item-label' });
   submitRow.addEventListener('click', () => {
     host.focusedItemIndex = 0;
     updateFocusIndicator(host);
@@ -341,11 +341,11 @@ function renderSubmitTab(host: InlineAskUserQuestionHost): void {
   });
   host.currentItems.push(submitRow);
 
-  const cancelRow = actionsEl.createDiv({ cls: 'pivi-ask-item' });
+  const cancelRow = actionsEl.createDiv({ cls: 'yapi-ask-item' });
   if (host.focusedItemIndex === 1) cancelRow.addClass('is-focused');
-  cancelRow.createSpan({ text: host.focusedItemIndex === 1 ? '\u203A' : '\u00A0', cls: 'pivi-ask-cursor' });
-  cancelRow.createSpan({ text: '2. ', cls: 'pivi-ask-item-num' });
-  cancelRow.createSpan({ text: t('common.cancel'), cls: 'pivi-ask-item-label' });
+  cancelRow.createSpan({ text: host.focusedItemIndex === 1 ? '\u203A' : '\u00A0', cls: 'yapi-ask-cursor' });
+  cancelRow.createSpan({ text: '2. ', cls: 'yapi-ask-item-num' });
+  cancelRow.createSpan({ text: t('common.cancel'), cls: 'yapi-ask-item-label' });
   cancelRow.addEventListener('click', () => {
     host.focusedItemIndex = 1;
     host.handleResolve(null);
@@ -354,7 +354,7 @@ function renderSubmitTab(host: InlineAskUserQuestionHost): void {
 
   host.contentArea.createDiv({
     text: HINTS_TEXT,
-    cls: 'pivi-ask-hints',
+    cls: 'yapi-ask-hints',
   });
 }
 

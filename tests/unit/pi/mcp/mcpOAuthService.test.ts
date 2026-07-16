@@ -1,11 +1,11 @@
 import { App } from "obsidian";
 
-import { ObsidianVaultFileAdapter } from "@pivi/obsidian-host";
-import type { ManagedMcpServer } from "@pivi/pivi-agent-core/mcp/types";
-import type { McpTransportFetch } from "@pivi/pivi-agent-core/mcp/ports";
-import type { ExternalOpener } from "@pivi/pivi-agent-core/ports";
-import { McpOAuthService } from "@pivi/pivi-agent-core/mcp/oauth/mcpOAuthService";
-import { McpVaultAuthStore } from "@pivi/pivi-agent-core/mcp/oauth/mcpVaultAuthStore";
+import { ObsidianVaultFileAdapter } from "@yapi/obsidian-host";
+import type { ManagedMcpServer } from "@yapi/yapi-agent-core/mcp/types";
+import type { McpTransportFetch } from "@yapi/yapi-agent-core/mcp/ports";
+import type { ExternalOpener } from "@yapi/yapi-agent-core/ports";
+import { McpOAuthService } from "@yapi/yapi-agent-core/mcp/oauth/mcpOAuthService";
+import { McpVaultAuthStore } from "@yapi/yapi-agent-core/mcp/oauth/mcpVaultAuthStore";
 
 function createMemoryVaultAdapter(): ObsidianVaultFileAdapter {
   const app = new App();

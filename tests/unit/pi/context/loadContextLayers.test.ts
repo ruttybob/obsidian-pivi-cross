@@ -1,17 +1,17 @@
 import {
   loadAgentsMdChain,
   loadContextLayers,
-} from '@pivi/pivi-agent-core/context/loadContextLayers';
+} from '@yapi/yapi-agent-core/context/loadContextLayers';
 import {
   loadRuntimeVaultSkills,
   loadVaultSkills,
-} from '@pivi/pivi-agent-core/skills/vault/loadVaultSkills';
+} from '@yapi/yapi-agent-core/skills/vault/loadVaultSkills';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
 function seedSkill(vaultPath: string, slug: string, name: string, description: string): void {
-  const skillDir = path.join(vaultPath, '.pivi', 'skills', slug);
+  const skillDir = path.join(vaultPath, '.yapi', 'skills', slug);
   fs.mkdirSync(skillDir, { recursive: true });
   fs.writeFileSync(
     path.join(skillDir, 'SKILL.md'),
@@ -28,7 +28,7 @@ describe('loadAgentsMdChain', () => {
   let vaultPath: string;
 
   beforeEach(() => {
-    vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-context-'));
+    vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-context-'));
   });
 
   afterEach(() => {
@@ -73,7 +73,7 @@ describe('loadAgentsMdChain', () => {
   });
 
   it('does not walk outside the vault when active note path escapes the vault root', () => {
-    const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-outside-'));
+    const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-outside-'));
     try {
       fs.writeFileSync(path.join(vaultPath, 'AGENTS.md'), 'Inside vault only.', 'utf-8');
       fs.writeFileSync(path.join(outsideDir, 'AGENTS.md'), 'Outside vault must not load.', 'utf-8');
@@ -114,7 +114,7 @@ describe('loadContextLayers', () => {
   let vaultPath: string;
 
   beforeEach(() => {
-    vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-layers-'));
+    vaultPath = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-layers-'));
   });
 
   afterEach(() => {
@@ -162,8 +162,8 @@ describe('loadContextLayers', () => {
 
   it('includes SYSTEM.md and vault skill XML when present', () => {
     fs.writeFileSync(path.join(vaultPath, 'AGENTS.md'), 'agents', 'utf-8');
-    fs.mkdirSync(path.join(vaultPath, '.pivi'), { recursive: true });
-    fs.writeFileSync(path.join(vaultPath, '.pivi', 'SYSTEM.md'), 'Vault system rules.', 'utf-8');
+    fs.mkdirSync(path.join(vaultPath, '.yapi'), { recursive: true });
+    fs.writeFileSync(path.join(vaultPath, '.yapi', 'SYSTEM.md'), 'Vault system rules.', 'utf-8');
     seedSkill(vaultPath, 'demo-skill', 'demo-skill', 'A demo skill');
 
     const layers = loadContextLayers(vaultPath);
@@ -179,7 +179,7 @@ describe('loadContextLayers', () => {
   it('excludes disabled vault skills from runtime context', () => {
     seedSkill(vaultPath, 'enabled-skill', 'enabled-skill', 'Enabled skill');
     seedSkill(vaultPath, 'disabled-skill', 'disabled-skill', 'Disabled skill');
-    fs.writeFileSync(path.join(vaultPath, '.pivi', 'skills', 'disabled-skill', '.disabled'), 'disabled\n', 'utf-8');
+    fs.writeFileSync(path.join(vaultPath, '.yapi', 'skills', 'disabled-skill', '.disabled'), 'disabled\n', 'utf-8');
 
     const layers = loadContextLayers(vaultPath);
     const runtime = loadRuntimeVaultSkills(vaultPath);
@@ -194,7 +194,7 @@ describe('loadContextLayers', () => {
   it('includes disabled vault skills in the inventory load', () => {
     seedSkill(vaultPath, 'enabled-skill', 'enabled-skill', 'Enabled skill');
     seedSkill(vaultPath, 'disabled-skill', 'disabled-skill', 'Disabled skill');
-    fs.writeFileSync(path.join(vaultPath, '.pivi', 'skills', 'disabled-skill', '.disabled'), 'disabled\n', 'utf-8');
+    fs.writeFileSync(path.join(vaultPath, '.yapi', 'skills', 'disabled-skill', '.disabled'), 'disabled\n', 'utf-8');
 
     const inventory = loadVaultSkills(vaultPath);
 
@@ -206,7 +206,7 @@ describe('loadContextLayers', () => {
   });
 
   it('ignores AGENTS.md outside the vault for escaped active note paths', () => {
-    const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pivi-layers-out-'));
+    const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), 'yapi-layers-out-'));
     try {
       fs.writeFileSync(path.join(vaultPath, 'AGENTS.md'), 'Vault agents', 'utf-8');
       fs.writeFileSync(path.join(outsideDir, 'AGENTS.md'), 'External agents', 'utf-8');

@@ -1,0 +1,56 @@
+/* Context usage meter (inline in toolbar) */
+
+.yapi-context-meter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--yapi-spacing-xs);
+}
+
+.yapi-context-meter-gauge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 24px;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  cursor: default;
+}
+
+.yapi-context-meter-gauge svg {
+  width: 16px;
+  height: 16px;
+}
+
+.yapi-meter-bg {
+  stroke: var(--yapi-host-border);
+}
+
+.yapi-meter-fill,
+.yapi-meter-fill-input {
+  stroke: var(--yapi-brand);
+  transition:
+    stroke-dashoffset var(--yapi-duration-deliberate) var(--yapi-ease-in-out),
+    stroke var(--yapi-duration-deliberate) var(--yapi-ease-in-out);
+}
+
+/* Warning state (> 80%) - scoped to the input gauge that crossed the threshold. */
+.yapi-context-meter-gauge.warning .yapi-meter-fill,
+.yapi-context-meter-gauge.warning .yapi-meter-fill-input {
+  stroke: #E57373;
+}
+
+.yapi-context-meter-gauge.unknown .yapi-meter-bg {
+  stroke: #E57373;
+}
+
+.yapi-meter-unknown-mark {
+  fill: #E57373;
+  font-size: 10px;
+  font-weight: 700;
+}

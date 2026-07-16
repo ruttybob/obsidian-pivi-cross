@@ -3,7 +3,7 @@ import {
   cloneChatTurnRequest,
   mergeQueuedChatTurns,
   type QueuedChatTurn,
-} from '@pivi/pivi-agent-core/runtime';
+} from '@yapi/yapi-agent-core/runtime';
 
 import type { QueuedMessage } from '../state/types';
 

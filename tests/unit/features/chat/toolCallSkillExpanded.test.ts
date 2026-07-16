@@ -1,4 +1,4 @@
-import { TOOL_SKILL } from '@pivi/pivi-agent-core/tools/toolNames';
+import { TOOL_SKILL } from '@yapi/yapi-agent-core/tools/toolNames';
 import { renderExpandedContent } from '@/ui/chat/rendering/toolCallExpandedDispatcher';
 
 class FakeElement {
@@ -49,8 +49,8 @@ class FakeElement {
 }
 
 const skillInstructionResult = [
-  '<skill name="demo" location="/vault/.pivi/skills/demo/SKILL.md">',
-  'References are relative to /vault/.pivi/skills/demo.',
+  '<skill name="demo" location="/vault/.yapi/skills/demo/SKILL.md">',
+  'References are relative to /vault/.yapi/skills/demo.',
   '',
   '# Full instructions',
   'Follow these steps.',

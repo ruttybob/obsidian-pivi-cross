@@ -1,5 +1,5 @@
-import type { MentionBadgePart } from '@pivi/pivi-agent-core/context/mentions';
-import { messageTextHasMentionBadges } from '@pivi/pivi-agent-core/context/mentions';
+import type { MentionBadgePart } from '@yapi/yapi-agent-core/context/mentions';
+import { messageTextHasMentionBadges } from '@yapi/yapi-agent-core/context/mentions';
 
 import type { ContextBadgeToken } from './ContextBadgeTypes';
 
