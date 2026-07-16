@@ -14,6 +14,7 @@
     "check:boundaries": "npm run check:architecture && npm run check:package-readmes && npm run check:i18n-dead-keys && npm run check:specs",
     "check:bundle-size": "node scripts/check-bundle-size.mjs",
     "check:i18n-dead-keys": "node scripts/check-i18n-dead-keys.mjs",
+    "check:rename": "node scripts/check-rename.mjs",
     "typecheck": "npm run typecheck:source && npm run typecheck:tests",
     "typecheck:source": "node node_modules/typescript-native/bin/tsc --noEmit -p tsconfig.json",
     "typecheck:tests": "node node_modules/typescript-native/bin/tsc --noEmit -p tests/tsconfig.json",

@@ -107,6 +107,7 @@ export default defineConfig([
       "dist/**",
       "node_modules/**",
       "coverage/**",
+      ".remember/**",
       "main.js",
       "metafile.json",
       "styles.css",

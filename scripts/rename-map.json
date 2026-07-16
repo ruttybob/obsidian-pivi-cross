@@ -1,0 +1,118 @@
+{
+  "$comment": "Source of truth for the pivi->yapi rebrand. Drives scripts/apply-rename.mjs (initial rename + future re-runs) and scripts/check-rename.mjs (completeness gate), and guides manual upstream cherry-pick translation. See docs/adr/0001-rebrand-pivi-to-yapi-as-soft-fork.md and CONTEXT.md.",
+  "version": 1,
+  "identity": {
+    "old_id": "pivi",
+    "new_id": "yapi",
+    "wordmark": "YaPi",
+    "owning_company": "Yadro",
+    "publisher": "se.kostrov",
+    "upstream_author": "shuuul",
+    "upstream_repo": "shuuul/obsidian-pivi",
+    "fork_repo": "obsidian-pivi-cross",
+    "tagline": "YaPi — Pi, living in Yadro"
+  },
+  "token_rules": {
+    "pass1_uniform": [
+      { "from": "pivi", "to": "yapi" },
+      { "from": "Pivi", "to": "Yapi" },
+      { "from": "PIVI", "to": "YAPI" }
+    ],
+    "pass2_display": [
+      { "from": "Yapi", "to": "YaPi" }
+    ],
+    "disambiguation": "Pass 1 matches the full 4-character case-sensitive tokens pivi/Pivi/PIVI. The 2-character engine tokens pi/Pi (PiAgent, PiChatService, engine/pi, @earendil-works/pi-agent-core) are never matched and are preserved unchanged. Pass 2 (Yapi->YaPi) applies only to display surfaces; code identifiers, CSS, JSON keys, and fenced/inline code in markdown are spared."
+  },
+  "display_surfaces": {
+    "description": "Where Pass 2 (Yapi->YaPi) applies. Code identifiers and JSON keys keep Yapi; only these display surfaces get the wordmark.",
+    "json_value_glob": "**/i18n/locales/*.json",
+    "json_value_fields": {
+      "manifest.json": ["name", "description"],
+      "package.json": ["description"]
+    },
+    "markdown_prose_globs": ["README.md", "AGENTS.md", "**/AGENTS.md", "**/README.md"],
+    "manual_display_surfaces": {
+      "description": "Display surfaces NOT auto-transformed by apply-rename Pass 2 — a blanket Yapi->YaPi would corrupt code identifiers sharing the file (e.g. YapiPluginHost in eslint.config.mjs). Maintain as YaPi by hand; check-rename guards quoted \"Yapi\" literals against regression.",
+      "files": [
+        "eslint.config.mjs — brands + ignoreWords entries must be \"YaPi\"",
+        "src/**/*.ts, packages/**/*.ts — hardcoded UI literals (getDisplayText, createEl text, throw/Error, Notice, prompt strings, DOM textContent)",
+        "src/styles/**/*.css — Style Settings @settings name/description",
+        "packages/**/*.ts — OAuth client_name, callback HTML, tool descriptions"
+      ]
+    }
+  },
+  "structural_renames": {
+    "description": "Paths moved with git mv. The generator renames ONLY the explicit entries below (directories shallowest-first, then files) — there is no auto-discovery, so every pivi/Pivi-named path in the tree must be listed or it keeps its old name while its contents get renamed (breaking imports). The entry for tests/yapi-react/PiviViewHost.test.ts uses its POST-directory-rename path because directory renames run before file renames.",
+    "directories": [
+      { "from": "packages/pivi-agent-core", "to": "packages/yapi-agent-core" },
+      { "from": "packages/pivi-react", "to": "packages/yapi-react" },
+      { "from": "tests/unit/pivi-agent-core", "to": "tests/unit/yapi-agent-core" },
+      { "from": "tests/pivi-react", "to": "tests/yapi-react" },
+      { "from": ".pivi", "to": ".yapi" }
+    ],
+    "files": [
+      { "from": "src/ui/chat/view/PiviView.ts", "to": "src/ui/chat/view/YapiView.ts" },
+      { "from": "src/ui/settings/PiviSettings.ts", "to": "src/ui/settings/YapiSettings.ts" },
+      { "from": "src/ui/settings/piviSettingsHotkeys.ts", "to": "src/ui/settings/yapiSettingsHotkeys.ts" },
+      { "from": "src/ui/settings/piviSettingsTabs.ts", "to": "src/ui/settings/yapiSettingsTabs.ts" },
+      { "from": "src/app/settings/piviSettingsCodec.ts", "to": "src/app/settings/yapiSettingsCodec.ts" },
+      { "from": "src/ui/chat/rendering/piviToolDisplay.ts", "to": "src/ui/chat/rendering/yapiToolDisplay.ts" },
+      { "from": "packages/obsidian-host/src/settings/piviSettingsStorage.ts", "to": "packages/obsidian-host/src/settings/yapiSettingsStorage.ts" },
+      { "from": "tests/helpers/mockPiviPlugin.ts", "to": "tests/helpers/mockYapiPlugin.ts" },
+      { "from": "tests/helpers/mockPiviSettings.ts", "to": "tests/helpers/mockYapiSettings.ts" },
+      { "from": "tests/unit/app/settings/piviSettingsStorage.test.ts", "to": "tests/unit/app/settings/yapiSettingsStorage.test.ts" },
+      { "from": "tests/unit/features/chat/piviToolDisplay.test.ts", "to": "tests/unit/features/chat/yapiToolDisplay.test.ts" },
+      { "from": "assets/icons/pivi-p.svg", "to": "assets/icons/yapi-yp.svg" },
+      { "from": "assets/pivi-example-sm.png", "to": "assets/yapi-example-sm.png" },
+      { "from": "packages/obsidian-host/styles/pivi-theme.css", "to": "packages/obsidian-host/styles/yapi-theme.css" },
+      { "from": "src/app/piviViewActivation.ts", "to": "src/app/yapiViewActivation.ts" },
+      { "from": "src/app/ui/PiviSettingTabHost.ts", "to": "src/app/ui/YapiSettingTabHost.ts" },
+      { "from": "src/app/ui/PiviViewHost.ts", "to": "src/app/ui/YapiViewHost.ts" },
+      { "from": "tests/unit/app/piviViewActivation.test.ts", "to": "tests/unit/app/yapiViewActivation.test.ts" },
+      { "from": "tests/yapi-react/PiviViewHost.test.ts", "to": "tests/yapi-react/YapiViewHost.test.ts" }
+    ]
+  },
+  "allowlist": {
+    "description": "Surviving pivi/Pivi/PIVI tokens that are legitimate and must not be renamed by the generator or flagged by check-rename.",
+    "file_globs": [
+      "scripts/rename-map.json",
+      "scripts/apply-rename.mjs",
+      "scripts/check-rename.mjs",
+      "tests/unit/scripts/applyRename.disambiguation.test.ts",
+      "CONTEXT.md",
+      "docs/adr/0001-rebrand-pivi-to-yapi-as-soft-fork.md",
+      "docs/adr/0002-adopt-upstream-react-ui-migration.md",
+      ".scratch/**",
+      ".fork-skills/**"
+    ],
+    "token_contexts": [
+      "obsidian-pivi",
+      "shuuul/obsidian-pivi",
+      "obsidian-pivi-cross",
+      "rebrand-pivi-to-yapi"
+    ],
+    "file_token_contexts": {
+      "README.md": [".pivi/"]
+    },
+    "rationale": "file_globs cover documents that reference old names by definition (the rename tooling itself, the glossary/ADR that define the rebrand, the issue specs under .scratch, and the fork-skills profile/skills that carry upstream attribution and are refreshed separately). token_contexts cover upstream-attribution repo names and the rebrand slug that survive inside otherwise-renamed files. file_token_contexts allow the README migration note to name the legacy `.pivi/` data directory (switchers need the old folder name); code is never covered by this."
+  },
+  "preserved": {
+    "description": "Tokens intentionally NOT renamed: the Pi engine layer keeps its own name.",
+    "tokens": ["pi", "Pi", "PI"],
+    "examples": [
+      "PiAgent",
+      "PiChatService",
+      "PiChatRuntime",
+      "engine/pi",
+      "@earendil-works/pi-agent-core",
+      "@earendil-works/pi-ai",
+      "@earendil-works/pi-coding-agent"
+    ]
+  },
+  "authorship": {
+    "manifest": { "author": "se.kostrov", "authorUrl": "", "name": "YaPi" },
+    "package": { "author": "Yadro" },
+    "license_copyright": "Copyright (c) 2026 Yadro",
+    "upstream_attribution": "shuuul (original author of obsidian-pivi)"
+  }
+}
