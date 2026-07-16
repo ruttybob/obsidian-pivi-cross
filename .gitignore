@@ -16,6 +16,13 @@ yarn-error.log*
 # remember skill runtime scratch (timestamps, session buffers)
 .remember/
 
+# Fork-maintenance flow generated test logs
+.cache/
+
+# graphify knowledge graph output (graphify-out/)
+# Regenerable from source via `graphify update .` / `/graphify`. Do not commit.
+graphify-out/
+
 # Environment variables
 .env
 .env.local
