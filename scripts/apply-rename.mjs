@@ -29,7 +29,7 @@ export function loadMap() {
 
 const TEXT_EXTENSIONS = new Set([
   '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.json', '.json5', '.md',
-  '.mdc', '.css', '.html', '.htm', '.svg', '.xml', '.yml', '.yaml', '.sh',
+  '.mdc', '.jsonl', '.css', '.html', '.htm', '.svg', '.xml', '.yml', '.yaml', '.sh',
   '.bash', '.txt', '.env', '.example', '.gitignore', '.npmrc', '.toml',
   '.lock', '.editorconfig', '.properties',
 ]);

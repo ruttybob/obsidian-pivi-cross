@@ -12,7 +12,7 @@ describe('Yapi 0.7.0 tag-generated session compatibility', () => {
       import { OpenSessionManager } from '@yapi/yapi-agent-core/session/openSessionManager';
       import { getYapiSessionDir, toVaultRelativePath } from '@yapi/yapi-agent-core/session/sessionPaths';
 
-      const fixtureSha256 = '3c191e3440fc1a95859ddb6a07687a74a2b5cc383062c0fab3b0c53e357ef67b';
+      const fixtureSha256 = 'd51b60c088b5a96922db38f4cf78c4e81c6e1d0343b278121ba78585d5b25955';
       const source = path.join(
         process.cwd(),
         'tests',
@@ -143,7 +143,7 @@ describe('Yapi 0.7.0 tag-generated session compatibility', () => {
     expect(result.stderr).toBe('');
     expect(result.status).toBe(0);
     expect(JSON.parse(result.stdout)).toEqual({
-      sourceSha256: '3c191e3440fc1a95859ddb6a07687a74a2b5cc383062c0fab3b0c53e357ef67b',
+      sourceSha256: 'd51b60c088b5a96922db38f4cf78c4e81c6e1d0343b278121ba78585d5b25955',
       migrationMarker: 1,
       restoredRoles: ['user', 'assistant'],
       idempotentSecondOpen: true,

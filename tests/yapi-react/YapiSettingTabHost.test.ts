@@ -91,7 +91,7 @@ describe('YapiSettingTabHost', () => {
 
     expect(definition).toMatchObject({
       name: 'YaPi',
-      desc: 'Yapi settings',
+      desc: 'YaPi settings',
       aliases: expect.arrayContaining(['General', 'Models', 'Tools']),
     });
     if (!definition || !('render' in definition) || !definition.render) {

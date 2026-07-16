@@ -60,7 +60,7 @@ describe('Obsidian settings integration adapter', () => {
     await expect(runObsidianIntegrationAction(
       host,
       sections[1]!.actions[0]!.id,
-    )).resolves.toEqual({ feedback: { kind: 'success', message: 'Added Yapi to the selected-text toolbar.' } });
+    )).resolves.toEqual({ feedback: { kind: 'success', message: 'Added YaPi to the selected-text toolbar.' } });
     expect(setupNoteToolbarIntegration).toHaveBeenCalledWith('label-and-icon');
   });
 
