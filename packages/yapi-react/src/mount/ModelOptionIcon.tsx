@@ -15,7 +15,7 @@ function InlineChatIcon({ className, icon }: { className: string; icon: DeepRead
   const generatedId = useId().replace(/:/g, '');
   if (icon.kind === 'yapi-brand') {
     const maskId = `yapi-model-brand-${generatedId}`;
-    return <svg aria-hidden="true" className={className} fill="none" height="12" viewBox="0 0 100 100" width="12"><defs><mask id={maskId}><rect fill="black" height="100" width="100" /><rect fill="white" height="72" rx="9" width="18" x="23" y="14" /><g transform="rotate(18 56 35)"><ellipse cx="56" cy="35" fill="white" rx="31" ry="25" /></g><g transform="rotate(-20 58 36)"><ellipse cx="58" cy="36" fill="black" rx="14" ry="11" /></g></mask></defs><rect fill="currentColor" height="100" mask={`url(#${maskId})`} width="100" /></svg>;
+    return <svg aria-hidden="true" className={className} fill="none" height="12" viewBox="0 0 100 100" width="12"><defs><mask id={maskId}><rect fill="black" height="100" width="100" /><g fill="none" stroke="white" strokeLinecap="round" strokeLinejoin="round" strokeWidth={9}><path d="M17,24 L33,48 L49,24 M33,48 L33,76" /><path d="M65,76 L65,24 A15,15 0 0 1 65,54" /></g></mask></defs><rect fill="currentColor" height="100" mask={`url(#${maskId})`} width="100" /></svg>;
   }
   return <svg aria-hidden="true" className={className} fill="none" height="12" viewBox={icon.viewBox} width="12">{icon.kind === 'composite' ? icon.children.map((child, index) => renderSvgChild(child, index)) : <path d={icon.path} fill="currentColor" />}</svg>;
 }

@@ -319,7 +319,7 @@ export class MentionDropdownController {
             setIcon(iconEl, 'folder');
             break;
           case 'context-folder':
-            setIcon(iconEl, 'database-search');
+            setIcon(iconEl, 'folder-search');
             break;
           case 'file':
             setIcon(iconEl, 'file-text');

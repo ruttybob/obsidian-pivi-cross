@@ -81,7 +81,7 @@ describe('ContextBadge model and parser', () => {
       source: 'external',
     }, t)).toMatchObject({
       label: 'Docs',
-      icon: { name: 'database-search' },
+      icon: { name: 'folder-search' },
     });
 
     expect(createContextBadgeViewModel({

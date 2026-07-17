@@ -194,7 +194,7 @@ export function ExternalContextControl({
         type="button"
       >
         <span className="yapi-external-context-icon">
-          <PlatformIcon name="database-search" />
+          <PlatformIcon name="folder-search" />
         </span>
         <span className={`yapi-external-context-count${external.availableSelectedCount !== external.selectedCount ? ' has-unavailable' : ''}`}>{count}</span>
       </button>
