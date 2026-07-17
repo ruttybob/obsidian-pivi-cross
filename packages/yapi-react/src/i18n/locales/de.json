@@ -387,12 +387,6 @@
       }
     },
     "environment": "Umgebung",
-    "tabBarPosition": {
-      "name": "Position der Tab-Leiste",
-      "desc": "Tabs oben in der Chat-Kopfzeile oder unten über der Eingabe anzeigen.",
-      "input": "Unten",
-      "header": "Oben"
-    },
     "enableAutoScroll": {
       "name": "Beim Streaming automatisch scrollen",
       "desc": "Automatisch nach unten scrollen, während Pi Antworten streamt. Deaktivieren, um oben zu bleiben und von Anfang an zu lesen."

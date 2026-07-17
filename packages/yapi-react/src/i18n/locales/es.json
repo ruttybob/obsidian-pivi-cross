@@ -387,12 +387,6 @@
       }
     },
     "environment": "Entorno",
-    "tabBarPosition": {
-      "name": "Posición de la barra de pestañas",
-      "desc": "Muestra las pestañas arriba en el encabezado del chat o abajo sobre la entrada.",
-      "input": "Abajo",
-      "header": "Arriba"
-    },
     "enableAutoScroll": {
       "name": "Desplazamiento automático durante el streaming",
       "desc": "Desplazarse automáticamente al final mientras Pi transmite respuestas. Desactiva para quedarte arriba y leer desde el principio."

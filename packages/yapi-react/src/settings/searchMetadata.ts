@@ -11,7 +11,6 @@ const SETTINGS_SEARCH_KEYS = [
   'settings.language.name',
   'settings.layout',
   'settings.chatViewPlacement.name',
-  'settings.tabBarPosition.name',
   'settings.chatBehavior',
   'settings.enableAutoScroll.name',
   'settings.deferMathRenderingDuringStreaming.name',

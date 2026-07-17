@@ -8,21 +8,13 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: min(260px, 68vw);
+  width: min(220px, 46vw);
   min-width: 0;
   transition: width var(--yapi-duration-deliberate) var(--yapi-ease-out);
   will-change: width;
 }
 
 .yapi-tab-switcher.is-open {
-  width: min(380px, calc(100vw - 48px));
-}
-
-.yapi-container--header-mode .yapi-tab-switcher {
-  width: min(220px, 46vw);
-}
-
-.yapi-container--header-mode .yapi-tab-switcher.is-open {
   width: min(320px, calc(100vw - 48px));
 }
 
@@ -33,14 +25,14 @@
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   width: 100%;
-  height: 28px;
-  border: 1px solid rgba(var(--yapi-host-mono-rgb-100), 0.08);
-  border-radius: var(--yapi-radius-pill);
-  box-shadow: var(--yapi-shadow-sm);
+  height: 26px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
   color: var(--yapi-host-text-normal);
-  background: var(--yapi-host-background-primary);
-  -webkit-backdrop-filter: var(--yapi-material-blur-md);
-  backdrop-filter: var(--yapi-material-blur-md);
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   transition:
     border-color var(--yapi-duration-normal) var(--yapi-ease-out),
     background var(--yapi-duration-normal) var(--yapi-ease-out),
@@ -48,22 +40,7 @@
     border-radius var(--yapi-duration-normal) var(--yapi-ease-out);
 }
 
-.yapi-container--header-mode .yapi-tab-switcher-control {
-  height: 26px;
-  border-color: transparent;
-  border-radius: 0;
-  box-shadow: none;
-  background: transparent;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
 .yapi-tab-switcher.is-open .yapi-tab-switcher-control {
-  border-color: rgba(var(--yapi-host-mono-rgb-100), 0.16);
-  box-shadow: var(--yapi-shadow-md);
-}
-
-.yapi-container--header-mode .yapi-tab-switcher.is-open .yapi-tab-switcher-control {
   border-color: transparent;
   box-shadow: none;
   background: transparent;
@@ -80,10 +57,6 @@
   font-size: var(--yapi-text-sm);
   font-weight: 500;
   cursor: pointer;
-  border-radius: 0 var(--yapi-radius-pill) var(--yapi-radius-pill) 0;
-}
-
-.yapi-container--header-mode .yapi-tab-switcher-trigger {
   border-radius: 0;
 }
 
@@ -150,17 +123,10 @@
   width: 14px;
   height: 14px;
   transition: transform var(--yapi-duration-normal) var(--yapi-ease-in-out);
+  transform: rotate(180deg);
 }
 
 .yapi-tab-switcher.is-open .yapi-tab-switcher-chevron svg {
-  transform: rotate(180deg);
-}
-
-.yapi-container--header-mode .yapi-tab-switcher-chevron svg {
-  transform: rotate(180deg);
-}
-
-.yapi-container--header-mode .yapi-tab-switcher.is-open .yapi-tab-switcher-chevron svg {
   transform: rotate(0deg);
 }
 
@@ -174,19 +140,14 @@
   min-height: 0;
   padding: 0;
   line-height: 0;
-  border-inline-end: 1px solid var(--yapi-host-border);
-  border-radius: var(--yapi-radius-pill) 0 0 var(--yapi-radius-pill);
+  border-inline-end: 0;
+  border-radius: 0;
   color: var(--yapi-host-text-faint);
   cursor: pointer;
   transition:
     color var(--yapi-duration-fast) var(--yapi-ease-out),
     background var(--yapi-duration-fast) var(--yapi-ease-out),
     scale var(--yapi-press-duration) var(--yapi-ease-out);
-}
-
-.yapi-container--header-mode .yapi-tab-switcher-new-chat {
-  border-inline-end: 0;
-  border-radius: 0;
 }
 
 .yapi-tab-switcher-new-chat > span,
@@ -201,19 +162,20 @@
   position: absolute;
   z-index: 2100;
   inset-inline-end: 0;
-  bottom: 100%;
-  width: calc(100% - 30px);
+  top: 100%;
+  bottom: auto;
+  width: 100%;
   max-height: 298px;
   overflow-y: auto;
-  padding: var(--yapi-spacing-sm);
-  border: 1px solid rgba(var(--yapi-host-mono-rgb-100), 0.08);
-  border-radius: var(--yapi-radius-lg);
-  box-shadow: var(--yapi-shadow-lg);
-  background: var(--yapi-material-bg);
-  -webkit-backdrop-filter: var(--yapi-material-blur-md);
-  backdrop-filter: var(--yapi-material-blur-md);
-  animation: yapi-tab-menu-in var(--yapi-duration-normal) var(--yapi-ease-out);
-  transform-origin: bottom right;
+  padding: 4px 0 0;
+  border: 1px solid var(--yapi-host-border);
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--yapi-host-background-primary);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  animation: yapi-tab-menu-in-down var(--yapi-duration-normal) var(--yapi-ease-out);
+  transform-origin: top right;
   will-change: opacity, transform;
   pointer-events: auto;
   transition: max-height var(--yapi-duration-normal) var(--yapi-ease-in-out);
@@ -224,27 +186,8 @@
 }
 
 .yapi-tab-switcher-menu.is-closing {
-  animation: yapi-tab-menu-flow-to-trigger var(--yapi-duration-deliberate) var(--yapi-ease-spring) forwards;
+  animation: yapi-tab-menu-flow-to-trigger-down var(--yapi-duration-deliberate) var(--yapi-ease-spring) forwards;
   pointer-events: none;
-}
-
-.yapi-container--header-mode .yapi-tab-switcher-menu {
-  top: 100%;
-  bottom: auto;
-  width: 100%;
-  padding: 4px 0 0;
-  border: 1px solid var(--yapi-host-border);
-  border-radius: 0;
-  box-shadow: none;
-  background: var(--yapi-host-background-primary);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  transform-origin: top right;
-  animation-name: yapi-tab-menu-in-down;
-}
-
-.yapi-container--header-mode .yapi-tab-switcher-menu.is-closing {
-  animation-name: yapi-tab-menu-flow-to-trigger-down;
 }
 
 .yapi-tab-switcher-item {
@@ -255,7 +198,7 @@
   gap: var(--yapi-spacing-sm);
   block-size: 28px;
   padding: 0 7px;
-  border-radius: var(--yapi-radius-md);
+  border-radius: 0;
   color: var(--yapi-host-text-normal);
   font-size: var(--yapi-host-font-ui-small);
   cursor: pointer;
@@ -310,10 +253,6 @@
   opacity: 0;
   block-size: 0;
   pointer-events: none;
-}
-
-.yapi-container--header-mode .yapi-tab-switcher-item {
-  border-radius: 0;
 }
 
 .yapi-tab-switcher-section-label {
@@ -438,11 +377,6 @@
 
 @media (hover: hover) and (pointer: fine) {
   .yapi-tab-switcher-control:hover {
-    border-color: rgba(var(--yapi-host-mono-rgb-100), 0.16);
-    box-shadow: var(--yapi-shadow-md);
-  }
-
-  .yapi-container--header-mode .yapi-tab-switcher-control:hover {
     border-color: transparent;
     box-shadow: none;
     background: transparent;
@@ -476,18 +410,6 @@
   }
 }
 
-@keyframes yapi-tab-menu-in {
-  from {
-    opacity: 0;
-    transform: translateY(4px) scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 @keyframes yapi-tab-menu-in-down {
   from {
     opacity: 0;
@@ -497,18 +419,6 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes yapi-tab-menu-flow-to-trigger {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateY(6px) scale(0.74, 0.48);
   }
 }
 

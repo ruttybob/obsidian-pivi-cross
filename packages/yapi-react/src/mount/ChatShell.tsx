@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from 'react';
-import { createPortal } from 'react-dom';
 
 import { ChatLogo } from './ChatLogo';
 import { ActiveTabSurfaces } from './surfaces';
@@ -22,12 +21,11 @@ export function ChatShell({
     shell.store.getSnapshot,
     shell.store.getSnapshot,
   );
-  const inputPortalContainer = shell.inputPortalContainer;
   const tabBar = <ChatTabBar ownerWindow={ownerWindow} shell={shell} />;
 
   return (
     <div
-      className={`yapi-react-chat-root yapi-container${snapshot.position === 'header' ? ' yapi-container--header-mode' : ''}`}
+      className="yapi-react-chat-root yapi-container"
       data-yapi-react-surface="chat"
     >
       <header className="yapi-header">
@@ -35,20 +33,10 @@ export function ChatShell({
           <span className="yapi-logo"><ChatLogo icon={snapshot.chatIcon} /></span>
           <h4 className="yapi-title-text">Yapi</h4>
         </div>
-        {snapshot.position === 'header'
-          ? <div className="yapi-tab-bar-container">{tabBar}</div>
-          : null}
+        <div className="yapi-tab-bar-container">{tabBar}</div>
       </header>
       <div className="yapi-tab-content-container" ref={setImperativeContainer} />
       <ActiveTabSurfaces shell={shell} />
-      {snapshot.position === 'input' && inputPortalContainer
-        ? createPortal(
-            <div className="yapi-input-nav-content">
-              <div className="yapi-tab-bar-container">{tabBar}</div>
-            </div>,
-            inputPortalContainer,
-          )
-        : null}
     </div>
   );
 }

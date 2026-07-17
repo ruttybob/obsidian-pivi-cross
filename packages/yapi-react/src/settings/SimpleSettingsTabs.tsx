@@ -237,16 +237,6 @@ export function GeneralSettingsTab({
             <option value="main-tab">{t('settings.chatViewPlacement.mainTab')}</option>
           </Select>
         </SettingRow>
-        <SettingRow name={t('settings.tabBarPosition.name')} description={t('settings.tabBarPosition.desc')}>
-          <Select
-            label={t('settings.tabBarPosition.name')}
-            value={general.tabBarPosition}
-            onChange={(value) => { void save({ tabBarPosition: value as typeof general.tabBarPosition }); }}
-          >
-            <option value="header">{t('settings.tabBarPosition.header')}</option>
-            <option value="input">{t('settings.tabBarPosition.input')}</option>
-          </Select>
-        </SettingRow>
       </SettingsSection>
       <SettingsSection title={t('settings.chatBehavior')}>
         <SettingRow name={t('settings.enableAutoScroll.name')} description={t('settings.enableAutoScroll.desc')}>

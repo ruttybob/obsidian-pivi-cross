@@ -134,7 +134,7 @@ export class YapiViewHost extends ItemView {
     });
     this.chatAdapter = chatAdapter;
 
-    const shell = chatAdapter.prepareShell(ownerDocument);
+    const shell = chatAdapter.prepareShell();
     const imperativeAdapter: ImperativeChatAdapter = {
       mount: async (adapterContainer, environment) => {
         await chatAdapter.mount(adapterContainer, environment, ports);
@@ -154,7 +154,6 @@ export class YapiViewHost extends ItemView {
         chatShell: {
           store: shell.store,
           actions: chatAdapter.getShellActions(),
-          inputPortalContainer: shell.inputPortalContainer,
           activeChat: shell.activeChat,
           surfaceActions: chatAdapter.getSurfaceActions(),
           welcomeQuoteAdapter: chatAdapter.getWelcomeQuoteAdapter(),

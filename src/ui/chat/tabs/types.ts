@@ -91,7 +91,6 @@ export interface TabDOMElements {
   messagesEl: HTMLElement;
   /** Empty React-owned message-list portal inside the scrolling message container. */
   messagesPortalEl: HTMLElement;
-  messagesBottomControlsEl: HTMLElement;
   /** Empty React-owned portal targets for presentation migrated from the legacy tab DOM. */
   welcomePortalEl: HTMLElement;
   todoPortalEl: HTMLElement;

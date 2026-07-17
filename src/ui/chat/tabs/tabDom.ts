@@ -24,9 +24,6 @@ export function buildTabDOM(
     cls: "yapi-status-panel-container",
   });
   const todoPortalEl = statusPanelContainerEl.createDiv({ cls: "yapi-react-todo-slot" });
-  const messagesBottomControlsEl = messagesWrapperEl.createDiv({
-    cls: "yapi-messages-bottom-controls",
-  });
   const inputContainerEl = contentEl.createDiv({ cls: "yapi-input-container" });
   const queuePortalEl = inputContainerEl.createDiv({
     cls: "yapi-react-queue-slot",
@@ -51,7 +48,6 @@ export function buildTabDOM(
     messagesWrapperEl,
     messagesEl,
     messagesPortalEl,
-    messagesBottomControlsEl,
     welcomePortalEl,
     todoPortalEl,
     navigationPortalEl,

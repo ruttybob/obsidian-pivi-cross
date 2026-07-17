@@ -67,7 +67,6 @@ function createHandle(): YapiChatViewHandle {
       hasSession: jest.fn(() => false),
       activateSession: jest.fn(async () => false),
       refreshModelPresentation: jest.fn(),
-      refreshTabBarPosition: jest.fn(),
       refreshRuntimePrompt: jest.fn(async () => undefined),
       reloadMcpServers: jest.fn(async () => undefined),
       refreshVaultSkills: jest.fn(async () => undefined),
@@ -100,7 +99,7 @@ function createHarness() {
         on: workspaceOn,
       },
     },
-    settings: { tabBarPosition: 'header' },
+    settings: {},
     getUiFacades: jest.fn(() => ({
       chatUIConfig: {
         getChatIcon: jest.fn(() => ({ kind: 'yapi-brand' })),
@@ -119,7 +118,6 @@ function createHarness() {
     prepareShell: jest.fn(() => ({
       store: { id: 'store' },
       activeChat: { id: 'active-chat' },
-      inputPortalContainer: document.createElement('div'),
     })),
     getShellActions: jest.fn(() => ({ id: 'shell-actions' })),
     getSurfaceActions: jest.fn(() => ({ id: 'surface-actions' })),

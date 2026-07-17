@@ -387,12 +387,6 @@
       }
     },
     "environment": "Environnement",
-    "tabBarPosition": {
-      "name": "Position de la barre d’onglets",
-      "desc": "Afficher les onglets en haut dans l’en-tête du chat ou en bas au-dessus de la saisie.",
-      "input": "Bas",
-      "header": "Haut"
-    },
     "enableAutoScroll": {
       "name": "Défilement automatique pendant le streaming",
       "desc": "Défiler automatiquement vers le bas pendant que Pi diffuse les réponses. Désactiver pour rester en haut et lire depuis le début."

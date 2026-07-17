@@ -51,7 +51,6 @@ export const DEFAULT_YAPI_SETTINGS: YapiSettings = {
   requireCommandOrControlEnterToSend: false,
   locale: "en",
   agentSettings: { ...DEFAULT_AGENT_SETTINGS },
-  tabBarPosition: "input",
   enableAutoScroll: true,
   deferMathRenderingDuringStreaming: true,
   chatViewPlacement: "right-sidebar",

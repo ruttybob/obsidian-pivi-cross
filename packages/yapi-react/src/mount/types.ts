@@ -18,7 +18,6 @@ export interface WelcomeQuoteAdapter {
 export interface ChatShellOptions {
   store: ChatTabsStore;
   actions: ChatTabActions;
-  inputPortalContainer: HTMLElement;
   activeChat?: ActiveChatUiBridge;
   surfaceActions?: ChatSurfaceActions;
   welcomeQuoteAdapter?: WelcomeQuoteAdapter;

@@ -12,7 +12,7 @@ import {
 
 import { testPresentationPlatform } from '../helpers/presentationPlatform';
 
-function snapshot(position: 'input' | 'header' = 'header'): ChatTabsSnapshot {
+function snapshot(): ChatTabsSnapshot {
   return {
     chatIcon: { kind: 'yapi-brand', viewBox: '0 0 100 100' },
     items: [
@@ -47,7 +47,6 @@ function snapshot(position: 'input' | 'header' = 'header'): ChatTabsSnapshot {
         canClose: true,
       },
     ],
-    position,
   };
 }
 
@@ -62,7 +61,6 @@ function actions(): jest.Mocked<ChatTabActions> {
 }
 
 async function mountShell(options: {
-  position?: 'input' | 'header';
   ownerDocument?: Document;
   ownerWindow?: Window;
   activeChat?: ActiveChatUiBridge;
@@ -75,13 +73,12 @@ async function mountShell(options: {
     scrollToBottom: () => void;
     resumeAutoScroll: () => void;
   };
-}) {
+} = {}) {
   const ownerDocument = options.ownerDocument ?? document;
   const ownerWindow = options.ownerWindow ?? window;
   const host = ownerDocument.createElement('div');
-  const inputPortal = ownerDocument.createElement('div');
-  ownerDocument.body.append(host, inputPortal);
-  const store = new ChatTabsStore(snapshot(options.position));
+  ownerDocument.body.append(host);
+  const store = new ChatTabsStore(snapshot());
   const tabActions = actions();
   let mounted: Awaited<ReturnType<typeof mountChatView>>;
   await act(async () => {
@@ -89,7 +86,6 @@ async function mountShell(options: {
       chatShell: {
         actions: tabActions,
         activeChat: options.activeChat,
-        inputPortalContainer: inputPortal,
         store,
         surfaceActions: options.surfaceActions,
       },
@@ -102,7 +98,7 @@ async function mountShell(options: {
       portalContainer: ownerDocument.body,
     });
   });
-  return { host, inputPortal, mounted: mounted!, store, tabActions };
+  return { host, mounted: mounted!, store, tabActions };
 }
 
 function createPortalTargets(ownerDocument: Document = document) {
@@ -136,53 +132,35 @@ describe('React ChatShell tabs', () => {
     jest.useRealTimers();
   });
 
-  it('owns header/logo and renders the tab bar in header mode', async () => {
-    const mounted = await mountShell({ position: 'header' });
+  it('owns header/logo and renders the tab bar in the header', async () => {
+    const mounted = await mountShell();
     const root = mounted.host.querySelector('[data-yapi-react-surface="chat"]');
 
-    expect(root).toHaveClass('yapi-container--header-mode');
+    expect(root).toHaveClass('yapi-container');
     expect(root?.querySelector('.yapi-header .yapi-brand-icon')).not.toBeNull();
     expect(root?.querySelector('.yapi-header .yapi-tab-switcher')).not.toBeNull();
-    expect(mounted.inputPortal).toBeEmptyDOMElement();
 
     await act(async () => mounted.mounted.dispose());
   });
 
-  it('portals the same-root tab bar into the supplied input host and follows store position', async () => {
-    const mounted = await mountShell({ position: 'input' });
-    expect(mounted.inputPortal.querySelector('.yapi-tab-switcher')).not.toBeNull();
-    expect(mounted.host.querySelector('.yapi-header .yapi-tab-switcher')).toBeNull();
+  it('keeps the new-chat control visible and in right-aligned tab-bar flow', async () => {
+    const mounted = await mountShell();
+    const tabBar = mounted.host.querySelector('.yapi-header .yapi-tab-bar-container');
+    const control = tabBar?.querySelector('.yapi-tab-switcher-control');
+    const newChat = tabBar?.querySelector('.yapi-tab-switcher-new-chat');
 
-    act(() => mounted.store.update(snapshot('header')));
+    expect(tabBar).not.toBeNull();
+    expect(newChat).toHaveClass('yapi-tab-switcher-new-chat');
+    expect(newChat).not.toHaveClass('yapi-tab-switcher-action');
+    expect(control?.firstElementChild).toBe(newChat);
+    expect(control?.lastElementChild).toHaveClass('yapi-tab-switcher-trigger');
 
-    expect(mounted.inputPortal).toBeEmptyDOMElement();
-    expect(mounted.host.querySelector('.yapi-header .yapi-tab-switcher')).not.toBeNull();
     await act(async () => mounted.mounted.dispose());
   });
-
-  it.each(['header', 'input'] as const)(
-    'keeps the new-chat control visible and in right-aligned tab-bar flow in %s mode',
-    async (position) => {
-      const mounted = await mountShell({ position });
-      const tabBar = position === 'header'
-        ? mounted.host.querySelector('.yapi-header .yapi-tab-bar-container')
-        : mounted.inputPortal.querySelector('.yapi-input-nav-content');
-      const control = tabBar?.querySelector('.yapi-tab-switcher-control');
-      const newChat = tabBar?.querySelector('.yapi-tab-switcher-new-chat');
-
-      expect(tabBar).not.toBeNull();
-      expect(newChat).toHaveClass('yapi-tab-switcher-new-chat');
-      expect(newChat).not.toHaveClass('yapi-tab-switcher-action');
-      expect(control?.firstElementChild).toBe(newChat);
-      expect(control?.lastElementChild).toHaveClass('yapi-tab-switcher-trigger');
-
-      await act(async () => mounted.mounted.dispose());
-    },
-  );
 
   it('projects state classes and delegates switch, create, rename, archive, and close actions', async () => {
     jest.useFakeTimers();
-    const mounted = await mountShell({ position: 'header' });
+    const mounted = await mountShell();
     fireEvent.click(screen.getByRole('button', { name: 'Switch tab: Active chat' }));
 
     expect(document.querySelector('.yapi-tab-switcher-item[data-tab-id="active"] .is-live')).not.toBeNull();
@@ -215,11 +193,11 @@ describe('React ChatShell tabs', () => {
 
   it('switches away immediately and commits one active-tab archive after store updates', async () => {
     jest.useFakeTimers();
-    const mounted = await mountShell({ position: 'input' });
+    const mounted = await mountShell();
     mounted.tabActions.switchTab.mockImplementation((id) => {
       mounted.store.update({
-        ...snapshot('input'),
-        items: snapshot('input').items.map(item => ({ ...item, isActive: item.id === id })),
+        ...snapshot(),
+        items: snapshot().items.map(item => ({ ...item, isActive: item.id === id })),
       });
     });
 
@@ -231,7 +209,7 @@ describe('React ChatShell tabs', () => {
     expect(mounted.tabActions.switchTab).toHaveBeenCalledTimes(1);
     expect(mounted.tabActions.switchTab).toHaveBeenCalledWith('attention');
     expect(mounted.tabActions.archiveTab).not.toHaveBeenCalled();
-    expect(mounted.inputPortal.querySelector('.yapi-tab-switcher')).not.toBeNull();
+    expect(mounted.host.querySelector('.yapi-header .yapi-tab-switcher')).not.toBeNull();
 
     act(() => jest.advanceTimersByTime(200));
     expect(mounted.tabActions.archiveTab).toHaveBeenCalledTimes(1);
@@ -241,7 +219,7 @@ describe('React ChatShell tabs', () => {
 
   it('guards duplicate close actions and does not select an exiting row from the keyboard', async () => {
     jest.useFakeTimers();
-    const mounted = await mountShell({ position: 'header' });
+    const mounted = await mountShell();
     fireEvent.click(screen.getByRole('button', { name: 'Switch tab: Active chat' }));
     const close = screen.getByRole('button', { name: 'Close Needs attention' });
     const row = screen.getByRole('menuitem', { name: 'Needs attention' });
@@ -259,7 +237,7 @@ describe('React ChatShell tabs', () => {
 
   it('keeps the menu mounted for its close animation for trigger and outside clicks', async () => {
     jest.useFakeTimers();
-    const mounted = await mountShell({ position: 'header' });
+    const mounted = await mountShell();
     const trigger = screen.getByRole('button', { name: 'Switch tab: Active chat' });
     fireEvent.click(trigger);
     fireEvent.click(document.body);
@@ -279,7 +257,7 @@ describe('React ChatShell tabs', () => {
 
   it('preserves keyboard focus, Escape, edit cancellation, and caret placement', async () => {
     jest.useFakeTimers();
-    const mounted = await mountShell({ position: 'header' });
+    const mounted = await mountShell();
     const trigger = screen.getByRole('button', { name: 'Switch tab: Active chat' });
     fireEvent.keyDown(trigger, { key: 'ArrowDown' });
     expect(screen.getByRole('menuitem', { name: 'Active chat' })).toHaveFocus();
@@ -303,7 +281,7 @@ describe('React ChatShell tabs', () => {
   });
 
   it('caps the switcher at ten rows and opens around the active tab', async () => {
-    const mounted = await mountShell({ position: 'header' });
+    const mounted = await mountShell();
     const items = Array.from({ length: 14 }, (_, index) => ({
       id: `tab-${index + 1}`,
       index: index + 1,
@@ -315,7 +293,7 @@ describe('React ChatShell tabs', () => {
       canClose: true,
     }));
     act(() => mounted.store.update({
-      ...snapshot('header'),
+      ...snapshot(),
       items,
     }));
 
@@ -331,10 +309,10 @@ describe('React ChatShell tabs', () => {
 
   it('animates active title changes in tab-index direction', async () => {
     jest.useFakeTimers();
-    const mounted = await mountShell({ position: 'header' });
+    const mounted = await mountShell();
     const withActive = (id: string): ChatTabsSnapshot => ({
-      ...snapshot('header'),
-      items: snapshot('header').items.map(item => ({ ...item, isActive: item.id === id })),
+      ...snapshot(),
+      items: snapshot().items.map(item => ({ ...item, isActive: item.id === id })),
     });
 
     act(() => mounted.store.update(withActive('attention')));
@@ -361,7 +339,7 @@ describe('React ChatShell tabs', () => {
     expect(ownerWindow).not.toBeNull();
     if (!ownerDocument || !ownerWindow) return;
 
-    const mounted = await mountShell({ ownerDocument, ownerWindow, position: 'header' });
+    const mounted = await mountShell({ ownerDocument, ownerWindow });
     const trigger = ownerDocument.querySelector<HTMLElement>('[aria-label="Switch tab: Active chat"]');
     expect(trigger?.ownerDocument).toBe(ownerDocument);
     fireEvent.click(trigger!);
@@ -415,7 +393,6 @@ describe('React ChatShell tabs', () => {
     bridge.setActive(uiStore, projectionStore, targets, composerActions);
     const mounted = await mountShell({
       activeChat: bridge,
-      position: 'header',
       surfaceActions,
     });
 
@@ -607,7 +584,7 @@ describe('React ChatShell tabs', () => {
     const firstTargets = createPortalTargets();
     const secondTargets = createPortalTargets();
     bridge.setActive(firstStore, firstProjection, firstTargets);
-    const mounted = await mountShell({ activeChat: bridge, position: 'header' });
+    const mounted = await mountShell({ activeChat: bridge });
 
     act(() => firstStore.update({ welcomeGreeting: 'First tab' }));
     act(() => firstStore.update({
@@ -696,7 +673,7 @@ describe('React ChatShell tabs', () => {
       });
       bridge.setActive(uiStore, projectionStore, targets, composerActions);
     });
-    const mounted = await mountShell({ activeChat: bridge, position: 'header' });
+    const mounted = await mountShell({ activeChat: bridge });
     await act(async () => {});
     expect(targets.composer.querySelector('.yapi-external-context-dropdown')).not.toBeNull();
     expect(targets.composer.querySelector('.yapi-external-context-btn')).not.toBeNull();

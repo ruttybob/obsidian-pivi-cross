@@ -305,7 +305,6 @@ export function createSettingsUiPorts(
     const next = { ...current, ...patch };
     host.settings.locale = next.locale;
     host.settings.chatViewPlacement = next.chatViewPlacement;
-    host.settings.tabBarPosition = next.tabBarPosition;
     host.settings.enableAutoScroll = next.enableAutoScroll;
     host.settings.deferMathRenderingDuringStreaming = next.deferMathRenderingDuringStreaming;
     host.settings.enableAutoTitleGeneration = next.enableAutoTitleGeneration;
@@ -320,11 +319,6 @@ export function createSettingsUiPorts(
       scrollDownKey: next.keyboardNavigation.scrollDownKey,
       focusInputKey: next.keyboardNavigation.focusInputKey,
     };
-    if (patch.tabBarPosition !== undefined) {
-      for (const view of host.getAllViews()) {
-        view.getChatHandle()?.maintenance.refreshTabBarPosition();
-      }
-    }
     await host.saveSettings();
   };
   const saveSubagents = async (patch: Partial<SettingsSubagentsSnapshot>): Promise<void> => {

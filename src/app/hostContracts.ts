@@ -69,7 +69,6 @@ export interface YapiChatViewMaintenance {
   hasSession(openSessionId: string): boolean;
   activateSession(openSessionId: string): Promise<boolean>;
   refreshModelPresentation(): void;
-  refreshTabBarPosition(): void;
   refreshRuntimePrompt(): Promise<void>;
   reloadMcpServers(): Promise<void>;
   refreshVaultSkills(): Promise<void>;

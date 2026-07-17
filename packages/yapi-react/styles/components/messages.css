@@ -19,21 +19,6 @@
   background: linear-gradient(to bottom, transparent, var(--yapi-host-background-primary));
 }
 
-.yapi-messages-bottom-controls {
-  position: absolute;
-  z-index: 40;
-  pointer-events: none;
-  inset-inline: 12px;
-  inset-block-end: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.yapi-messages-bottom-controls:empty {
-  display: none;
-}
-
 .yapi-messages {
   flex: 1;
   overflow-y: auto;

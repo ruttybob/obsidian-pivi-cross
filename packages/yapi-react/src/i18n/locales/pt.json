@@ -387,12 +387,6 @@
       }
     },
     "environment": "Ambiente",
-    "tabBarPosition": {
-      "name": "Posição da barra de abas",
-      "desc": "Mostra as abas no topo do cabeçalho do chat ou embaixo, acima da entrada.",
-      "input": "Embaixo",
-      "header": "Topo"
-    },
     "enableAutoScroll": {
       "name": "Rolagem automática durante streaming",
       "desc": "Rolar automaticamente para baixo enquanto o Pi transmite respostas. Desativar para ficar no topo e ler desde o início."

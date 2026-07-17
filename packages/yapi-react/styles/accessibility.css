@@ -143,10 +143,4 @@
     border-color: var(--yapi-host-border-focus);
     background: var(--yapi-host-background-primary);
   }
-
-  .yapi-container--header-mode .yapi-tab-switcher-control,
-  .yapi-container--header-mode .yapi-tab-switcher.is-open .yapi-tab-switcher-control {
-    border-color: var(--yapi-host-border-focus);
-    background: var(--yapi-host-background-primary);
-  }
 }

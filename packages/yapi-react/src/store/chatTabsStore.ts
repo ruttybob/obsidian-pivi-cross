@@ -11,11 +11,8 @@ export interface ChatTabSnapshotItem {
   readonly canClose: boolean;
 }
 
-export type ChatTabBarPosition = 'input' | 'header';
-
 export interface ChatTabsSnapshot {
   readonly items: readonly ChatTabSnapshotItem[];
-  readonly position: ChatTabBarPosition;
   readonly chatIcon: ChatIconSvg | null;
 }
 

@@ -387,12 +387,6 @@
       }
     },
     "environment": "Environment",
-    "tabBarPosition": {
-      "name": "Tab bar position",
-      "desc": "Show tabs at the top of the chat header or at the bottom above the input.",
-      "input": "Bottom",
-      "header": "Top"
-    },
     "enableAutoScroll": {
       "name": "Auto-scroll during streaming",
       "desc": "Automatically scroll to the bottom as Pi streams responses. Disable to stay at the top and read from the beginning."

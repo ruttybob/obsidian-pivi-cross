@@ -387,12 +387,6 @@
       }
     },
     "environment": "環境",
-    "tabBarPosition": {
-      "name": "分頁列位置",
-      "desc": "在聊天標題列頂部顯示分頁，或在底部輸入框上方顯示。",
-      "input": "底部",
-      "header": "頂部"
-    },
     "enableAutoScroll": {
       "name": "串流時自動捲動",
       "desc": "在 Pi 串流回應時自動捲動到底部。停用後將停留在頂部，從頭開始閱讀。"

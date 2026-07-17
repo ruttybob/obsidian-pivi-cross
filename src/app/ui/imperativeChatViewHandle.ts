@@ -22,7 +22,6 @@ export interface ImperativeChatViewHandleDeps {
   persistTabStateImmediate: (state: ReturnType<TabManager['getPersistedState']>) => Promise<void>;
   publishTabSnapshot: () => void;
   runWithoutTabPersistence: <T>(action: () => Promise<T>) => Promise<T>;
-  syncInputTabBarPortal: (tabId?: TabId | null) => void;
 }
 
 const DEVELOPMENT_MARKDOWN_BYTES = 100 * 1024;
@@ -379,7 +378,6 @@ export function createImperativeChatViewHandle(
     plugin,
     publishTabSnapshot,
     runWithoutTabPersistence,
-    syncInputTabBarPortal,
   } = deps;
 
   const refreshModelPresentation = (): void => {
@@ -502,10 +500,6 @@ export function createImperativeChatViewHandle(
         return true;
       },
       refreshModelPresentation,
-      refreshTabBarPosition() {
-        syncInputTabBarPortal();
-        publishTabSnapshot();
-      },
       async refreshRuntimePrompt() {
         await getTabManager()?.broadcastToAllTabs(async service => {
           if (service.syncSystemPrompt) await service.syncSystemPrompt();

@@ -285,36 +285,6 @@ describe('UI port adapters', () => {
     expect(refreshSecond).toHaveBeenCalledTimes(1);
   });
 
-  it('applies tab bar position changes to every mounted view', async () => {
-    const saveSettings = jest.fn(async () => undefined);
-    const refreshFirst = jest.fn();
-    const refreshSecond = jest.fn();
-    const host = {
-      settings: { ...DEFAULT_YAPI_SETTINGS, tabBarPosition: 'input' } as YapiSettings,
-      saveSettings,
-      getAllViews: () => [
-        { getChatHandle: () => ({ maintenance: { refreshTabBarPosition: refreshFirst } }) },
-        { getChatHandle: () => ({ maintenance: { refreshTabBarPosition: refreshSecond } }) },
-      ],
-      getUiFacades: () => createUiFacades(),
-    } as unknown as YapiSettingsHost;
-    const workspace = {
-      credentialStore: null,
-      webSearchCredentialStore: null,
-      mcpStorage: {},
-      mcpToolProvider: {},
-      slashCommandCatalog: {},
-    };
-    const ports = createSettingsUiPorts(host, workspace as never);
-
-    await ports.actions.saveGeneral({ tabBarPosition: 'header' });
-
-    expect(host.settings.tabBarPosition).toBe('header');
-    expect(saveSettings).toHaveBeenCalledTimes(1);
-    expect(refreshFirst).toHaveBeenCalledTimes(1);
-    expect(refreshSecond).toHaveBeenCalledTimes(1);
-  });
-
   it('invalidates slash catalogs when tool enablement changes', async () => {
     const saveSettings = jest.fn(async () => undefined);
     const invalidateSlashCatalog = jest.fn();

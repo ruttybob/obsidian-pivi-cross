@@ -7,7 +7,7 @@ import { withTestPresentationPlatform } from '../helpers/presentationPlatform';
 
 const snapshot: SettingsUiSnapshotData = {
   general: {
-    locale: 'en', chatViewPlacement: 'right-sidebar', tabBarPosition: 'input', enableAutoScroll: true,
+    locale: 'en', chatViewPlacement: 'right-sidebar', enableAutoScroll: true,
     deferMathRenderingDuringStreaming: true, enableAutoTitleGeneration: false, autoCompact: true,
     autoCompactThresholdPercent: 90, autoCompactKeepRecentTokens: 20_000, userName: '', excludedTags: [],
     requireCommandOrControlEnterToSend: false,
@@ -213,17 +213,6 @@ describe('React settings foundation', () => {
 
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Delete removed files' })).not.toBeInTheDocument();
-  });
-
-  it('maps Top and Bottom labels to the existing tab position values', async () => {
-    const saveGeneral = jest.fn(async () => undefined);
-    render(withTestPresentationPlatform(<I18nProvider i18n={createI18n()}><SettingsRoot ports={createPorts({ saveGeneral })} /></I18nProvider>));
-    const row = screen.getByText('Tab bar position').closest('.yapi-setting-row');
-    const select = within(row as HTMLElement).getByRole('combobox');
-    expect(within(select).getAllByRole('option').map(option => option.textContent)).toEqual(['Top', 'Bottom']);
-    fireEvent.change(select, { target: { value: 'header' } });
-    await act(async () => undefined);
-    expect(saveGeneral).toHaveBeenCalledWith({ tabBarPosition: 'header' });
   });
 
   it('normalizes excluded tags into removable badges', async () => {

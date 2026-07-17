@@ -11,7 +11,7 @@ import { ChatTabsStore, type ChatTabActions } from '@yapi/yapi-react/store';
 
 import { testPresentationPlatform } from '../helpers/presentationPlatform';
 
-function createChatShell(position: 'input' | 'header' = 'header') {
+function createChatShell() {
   const actions: ChatTabActions = {
     archiveTab: jest.fn(),
     closeTab: jest.fn(),
@@ -19,14 +19,11 @@ function createChatShell(position: 'input' | 'header' = 'header') {
     startNewChat: jest.fn(),
     switchTab: jest.fn(),
   };
-  const inputPortalContainer = document.createElement('div');
   return {
     actions,
-    inputPortalContainer,
     store: new ChatTabsStore({
       chatIcon: { kind: 'yapi-brand', viewBox: '0 0 100 100' },
       items: [],
-      position,
     }),
   };
 }
@@ -136,7 +133,6 @@ describe('React surface mounts', () => {
               general: {
                 locale: 'en',
                 chatViewPlacement: 'right-sidebar',
-                tabBarPosition: 'input',
                 enableAutoScroll: true,
                 deferMathRenderingDuringStreaming: true,
                 enableAutoTitleGeneration: false,

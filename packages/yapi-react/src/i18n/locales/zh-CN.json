@@ -387,12 +387,6 @@
       }
     },
     "environment": "环境",
-    "tabBarPosition": {
-      "name": "标签栏位置",
-      "desc": "在聊天标题栏顶部显示标签，或在底部输入框上方显示。",
-      "input": "底部",
-      "header": "顶部"
-    },
     "enableAutoScroll": {
       "name": "流式传输时自动滚动",
       "desc": "在 Pi 流式传输响应时自动滚动到底部。禁用后将停留在顶部，从头开始阅读。"

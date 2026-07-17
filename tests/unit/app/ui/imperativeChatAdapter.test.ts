@@ -77,7 +77,6 @@ type TestTab = {
     navigationPortalEl: HTMLElement;
     messagesPortalEl: HTMLElement;
     composerPortalEl: HTMLElement;
-    messagesBottomControlsEl: HTMLElement;
     messagesEl: HTMLElement;
   };
   renderer?: {
@@ -176,7 +175,6 @@ function createPresentationTab(uiStore: ChatUiStore): TestTab {
       navigationPortalEl: createPortalElement(),
       messagesPortalEl: createPortalElement(),
       composerPortalEl: createPortalElement(),
-      messagesBottomControlsEl: createPortalElement(),
       messagesEl: createPortalElement(),
     },
     renderer: {
@@ -196,15 +194,8 @@ function createHarness(options: HarnessOptions = {}) {
   jest.mocked(TabManager).mockImplementation(() => manager as unknown as TabManager);
 
   const persistTabStateImmediate = jest.fn(async () => undefined);
-  const inputPortalContainer = {
-    parentElement: null,
-    remove: jest.fn(),
-  } as unknown as HTMLElement;
   const ownerDocument = {
     defaultView: options.ownerWindow ?? null,
-    win: {
-      createDiv: jest.fn(() => inputPortalContainer),
-    },
   } as unknown as Document;
   const loadPersistedTabState = jest.fn(async () => options.persistedState ?? null);
   const persistTabState = jest.fn();
@@ -220,7 +211,7 @@ function createHarness(options: HarnessOptions = {}) {
       },
       workspace: {},
     },
-    settings: { tabBarPosition: 'header' },
+    settings: {},
     getUiFacades: jest.fn(),
     getAllViews: jest.fn(),
     loadTabManagerState: jest.fn(),
@@ -249,7 +240,6 @@ function createHarness(options: HarnessOptions = {}) {
   return {
     adapter,
     handle: adapter.getViewHandle(),
-    inputPortalContainer,
     loadPersistedTabState,
     manager,
     mount,
@@ -386,7 +376,6 @@ describe('imperative chat semantic view handle', () => {
         navigationPortalEl: createPortalElement(),
         messagesPortalEl: createPortalElement(),
         composerPortalEl: createPortalElement(),
-        messagesBottomControlsEl: createPortalElement(),
         messagesEl: { ownerDocument: { defaultView: ownerWindow } } as unknown as HTMLElement,
       },
     });
@@ -664,7 +653,6 @@ describe('imperative chat semantic view handle', () => {
           navigationPortalEl: createPortalElement(),
           messagesPortalEl: createPortalElement(),
           composerPortalEl: createPortalElement(),
-          messagesBottomControlsEl: createPortalElement(),
           messagesEl,
         },
       });
@@ -832,7 +820,7 @@ describe('imperative chat semantic view handle', () => {
     manager.getActiveTab.mockReturnValue(activeTab);
     manager.getTabBarItems.mockReturnValue([tabItem]);
 
-    const shell = adapter.prepareShell(ownerDocument);
+    const shell = adapter.prepareShell();
     const activeChanges = jest.fn();
     shell.activeChat.subscribe(activeChanges);
 
@@ -856,29 +844,6 @@ describe('imperative chat semantic view handle', () => {
     expect(activeChanges).toHaveBeenCalledWith(new Set(['isStreaming']));
   });
 
-  it('moves and republishes the tab bar when its setting changes', async () => {
-    const harness = createHarness();
-    const activeTab = createPresentationTab(new ChatUiStore(createInitialChatUiSnapshot()));
-    harness.manager.getActiveTab.mockReturnValue(activeTab);
-    const shell = harness.adapter.prepareShell(harness.ownerDocument);
-    await harness.mount();
-
-    expect(shell.store.getSnapshot().position).toBe('header');
-    harness.plugin.settings.tabBarPosition = 'input';
-    harness.handle.maintenance.refreshTabBarPosition();
-
-    expect(shell.store.getSnapshot().position).toBe('input');
-    expect(activeTab.dom?.messagesBottomControlsEl.appendChild)
-      .toHaveBeenCalledWith(harness.inputPortalContainer);
-
-    harness.inputPortalContainer.remove = jest.fn();
-    harness.plugin.settings.tabBarPosition = 'header';
-    harness.handle.maintenance.refreshTabBarPosition();
-
-    expect(shell.store.getSnapshot().position).toBe('header');
-    expect(harness.inputPortalContainer.remove).toHaveBeenCalledTimes(1);
-  });
-
   it('destroys the manager and detaches bridge, store, portal, and pending RAF work', async () => {
     const requestAnimationFrame = jest.fn(() => 73);
     const cancelAnimationFrame = jest.fn();
@@ -887,7 +852,7 @@ describe('imperative chat semantic view handle', () => {
     });
     const uiStore = new ChatUiStore(createInitialChatUiSnapshot());
     harness.manager.getActiveTab.mockReturnValue(createPresentationTab(uiStore));
-    const shell = harness.adapter.prepareShell(harness.ownerDocument);
+    const shell = harness.adapter.prepareShell();
     const activeChanges = jest.fn();
     shell.activeChat.subscribe(activeChanges);
     await harness.mount();
@@ -896,14 +861,12 @@ describe('imperative chat semantic view handle', () => {
     callbacks.onTabTitleChanged?.('tab-1', 'Scheduled title');
     expect(requestAnimationFrame).toHaveBeenCalledTimes(1);
 
-    harness.inputPortalContainer.remove = jest.fn();
     activeChanges.mockClear();
     const tabSnapshotBeforeDispose = shell.store.getSnapshot();
     await harness.adapter.dispose();
 
     expect(harness.manager.destroy).toHaveBeenCalledTimes(1);
     expect(cancelAnimationFrame).toHaveBeenCalledWith(73);
-    expect(harness.inputPortalContainer.remove).toHaveBeenCalledTimes(1);
     expect(shell.activeChat.getPortalTargets()).toBeNull();
     expect(shell.activeChat.getComposerActions()).toBeNull();
     expect(shell.activeChat.getMessagePresentation()).toBeNull();
@@ -933,19 +896,17 @@ describe('imperative chat semantic view handle', () => {
     const harness = createHarness();
     const uiStore = new ChatUiStore(createInitialChatUiSnapshot());
     harness.manager.getActiveTab.mockReturnValue(createPresentationTab(uiStore));
-    const shell = harness.adapter.prepareShell(harness.ownerDocument);
+    const shell = harness.adapter.prepareShell();
     const activeChanges = jest.fn();
     shell.activeChat.subscribe(activeChanges);
     await harness.mount();
 
     const destroyError = new Error('manager destroy failed');
     harness.manager.destroy.mockRejectedValue(destroyError);
-    harness.inputPortalContainer.remove = jest.fn();
     activeChanges.mockClear();
 
     await expect(harness.adapter.dispose()).rejects.toBe(destroyError);
 
-    expect(harness.inputPortalContainer.remove).toHaveBeenCalledTimes(1);
     expect(shell.activeChat.getPortalTargets()).toBeNull();
     expect(shell.activeChat.getComposerActions()).toBeNull();
     expect(shell.activeChat.getMessagePresentation()).toBeNull();

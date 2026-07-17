@@ -15,7 +15,6 @@ export interface SettingsKeyboardNavigationSnapshot {
 export interface SettingsGeneralSnapshot {
   readonly locale: string;
   readonly chatViewPlacement: 'right-sidebar' | 'left-sidebar' | 'main-tab';
-  readonly tabBarPosition: 'input' | 'header';
   readonly enableAutoScroll: boolean;
   readonly deferMathRenderingDuringStreaming: boolean;
   readonly enableAutoTitleGeneration: boolean;

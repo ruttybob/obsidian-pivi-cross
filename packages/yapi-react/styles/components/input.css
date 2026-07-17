@@ -1,6 +1,6 @@
 /* Input area
- * z-index must sit above .yapi-messages-bottom-controls (40) so model/thinking/
- * external dropdowns paint over the floating tab switcher and chat chrome.
+ * Toolbar dropdowns paint over message content; keep a stacking context here
+ * so model/thinking/external menus render cleanly above the chat surface.
  */
 .yapi-input-container {
   position: relative;
@@ -46,24 +46,6 @@
 /* Show context row when it has visible content */
 .yapi-context-row.has-content {
   display: flex;
-}
-
-/* Nav content for the compact tab switcher (React-owned in messages bottom controls) */
-.yapi-input-nav-content {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 100%;
-  min-width: 0;
-}
-
-.yapi-messages-bottom-controls .yapi-input-nav-content {
-  pointer-events: none;
-  gap: var(--yapi-spacing-sm);
-}
-
-.yapi-messages-bottom-controls .yapi-tab-bar-container {
-  pointer-events: auto;
 }
 
 /* Selection indicator (shown when text is selected in editor) */

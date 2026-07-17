@@ -51,10 +51,9 @@ export interface CreatedImperativeChatAdapter {
   mount(container: HTMLElement, environment: SurfaceEnvironment, ports: ChatPorts): Promise<void>;
   dispose(): Promise<void>;
   /** Builds the React shell store/bridge/portal before `mountChatView`. */
-  prepareShell(ownerDocument: Document): {
+  prepareShell(): {
     store: ChatTabsStore;
     activeChat: ActiveChatUiBridge;
-    inputPortalContainer: HTMLElement;
   };
   getShellActions(): ChatTabActions;
   getSurfaceActions(): ChatSurfaceActions;
@@ -81,7 +80,6 @@ export function createImperativeChatAdapter(
   let mountedPorts: ChatPorts | null = null;
   let chatTabsStore: ChatTabsStore | null = null;
   let activeChatBridge: ActiveChatUiBridge | null = null;
-  let inputTabBarPortalEl: HTMLElement | null = null;
   let tabContentEl: HTMLElement | null = null;
   let pendingTabBarUpdate: ScheduledAnimationFrame | null = null;
   let tabPersistenceSuspensions = 0;
@@ -90,7 +88,6 @@ export function createImperativeChatAdapter(
 
   const getChatTabsSnapshot = (): ChatTabsSnapshot => ({
     items: tabManager?.getTabBarItems() ?? [],
-    position: plugin.settings.tabBarPosition === 'header' ? 'header' : 'input',
     chatIcon,
   });
 
@@ -122,20 +119,6 @@ export function createImperativeChatAdapter(
       pendingTabBarUpdate = null;
       publishTabSnapshot();
     }, getContainerEl().ownerDocument.defaultView ?? null);
-  };
-
-  const syncInputTabBarPortal = (tabId?: TabId | null): void => {
-    const portal = inputTabBarPortalEl;
-    if (!portal) return;
-    if (plugin.settings.tabBarPosition === 'header') {
-      portal.remove();
-      return;
-    }
-    const targetTab = tabId ? tabManager?.getTab(tabId) : tabManager?.getActiveTab();
-    const target = targetTab?.dom.messagesBottomControlsEl;
-    if (target && portal.parentElement !== target) {
-      target.appendChild(portal);
-    }
   };
 
   const scrollActiveMessages = (position: 'top' | 'bottom'): void => {
@@ -221,7 +204,6 @@ export function createImperativeChatAdapter(
 
   const onTabLifecycle = (): void => {
     scheduleTabsSnapshotPublish();
-    syncInputTabBarPortal();
     syncActiveChatSurface();
     persistCurrentTabState();
   };
@@ -235,18 +217,15 @@ export function createImperativeChatAdapter(
       : Promise.resolve(),
     publishTabSnapshot,
     runWithoutTabPersistence,
-    syncInputTabBarPortal,
   });
 
   return {
-    prepareShell(ownerDocument) {
-      inputTabBarPortalEl = ownerDocument.win.createDiv();
+    prepareShell() {
       chatTabsStore = new ChatTabsStore(getChatTabsSnapshot());
       activeChatBridge = new ActiveChatUiBridge();
       return {
         store: chatTabsStore,
         activeChat: activeChatBridge,
-        inputPortalContainer: inputTabBarPortalEl,
       };
     },
 
@@ -299,7 +278,6 @@ export function createImperativeChatAdapter(
         {
           onTabCreated: onTabLifecycle,
           onTabWillSwitch: (_fromTabId, toTabId) => {
-            syncInputTabBarPortal(toTabId);
             syncActiveChatSurface(toTabId);
           },
           onTabSwitched: onTabLifecycle,
@@ -330,7 +308,6 @@ export function createImperativeChatAdapter(
       } else {
         await tabManager.createTab();
       }
-      syncInputTabBarPortal();
       syncActiveChatSurface();
       publishTabSnapshot();
       tabManager.prefetchSlashCommandCaches();
@@ -353,8 +330,6 @@ export function createImperativeChatAdapter(
 
         tabContentEl = null;
         chatTabsStore = null;
-        inputTabBarPortalEl?.remove();
-        inputTabBarPortalEl = null;
       }
     },
 
