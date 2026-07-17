@@ -15,7 +15,7 @@
   padding: 4px 8px;
   border-radius: var(--yapi-radius-xs);
   cursor: pointer;
-  color: var(--yapi-host-text-muted);
+  color: var(--yapi-interactive-fg);
   font-family: inherit;
   font-size: var(--yapi-text-sm);
   white-space: nowrap;

@@ -152,8 +152,9 @@ settings:
   --yapi-press-scale: 0.97;
   --yapi-press-scale-strong: 0.94;
   --yapi-press-duration: var(--yapi-duration-fast);
-  --yapi-brand: #1B365D;
-  --yapi-brand-rgb: 27, 54, 93;
+  --yapi-brand: #0635f9;
+  --yapi-brand-rgb: 6, 53, 249;
+  --yapi-interactive-fg: var(--yapi-host-text-normal);
   --yapi-error: #dc3545;
   --yapi-error-rgb: 220, 53, 69;
   --yapi-compact: #5bc0de;

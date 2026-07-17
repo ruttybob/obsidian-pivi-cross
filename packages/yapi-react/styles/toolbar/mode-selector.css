@@ -19,7 +19,7 @@
 .yapi-mode-label {
   font-family: inherit;
   font-size: var(--yapi-text-xs);
-  color: var(--yapi-host-text-muted);
+  color: var(--yapi-interactive-fg);
   min-width: 32px;
 }
 
