@@ -1,10 +1,10 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/icons/yapi-p.svg">
-    <img src="assets/icons/yapi-p.svg" alt="YaPi" width="64">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/icons/yapi-yp.svg">
+    <img src="assets/icons/yapi-yp.svg" alt="YaPi" width="64">
   </picture>
   <br>
-  <strong>YaPi</strong> — <em>Pi as the Vault Intelligence</em>
+  <strong>YaPi</strong> — <em>Pi, living in Yadro</em>
 </p>
 
 <p align="center">
@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/shuuul/obsidian-pivi/releases"><img src="https://img.shields.io/static/v1?label=version&message=0.1.0-u0.11.0&color=blue" alt="version"></a>
+  <img src="https://img.shields.io/static/v1?label=version&message=0.1.0-u0.11.0&color=blue" alt="version">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
   <a href="https://obsidian.md/plugins"><img src="https://img.shields.io/badge/Obsidian-Plugin-7C3AED?logo=obsidian&logoColor=white" alt="Obsidian plugin"></a>
 </p>
@@ -27,7 +27,7 @@
 
 ## Quick start
 
-Install from [Obsidian Community Plugins](https://community.obsidian.md/plugins/yapi), add an API key in Settings → YaPi, and start chatting.
+YaPi is local-only and not published to the Obsidian Community Plugins directory. Build it and copy it into your vault (see [Installation](#installation)), add an API key in Settings → YaPi, and start chatting.
 
 ---
 
@@ -41,7 +41,7 @@ Install from [Obsidian Community Plugins](https://community.obsidian.md/plugins/
 
 ✦ **Vault skills** — Install [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) or other Agent Skills into `.yapi/skills/` to teach the agent your workflows.
 
-✦ **MCP support** — Wire in vault-local MCP servers (`.yapi/mcp.json`), remote servers with OAuth, and use `/server` or `/server/tool` slash tokens in chat.
+✦ **MCP support** — Wire in vault-local MCP servers (`.yapi/mcp.json`), remote servers with OAuth, and use `@server` mentions in chat.
 
 ✦ **Privacy first** — API keys stored in Obsidian's secretStorage (Electron safeStorage). Or run fully local with Ollama, LM Studio, or llama.cpp. No YaPi telemetry.
 
@@ -49,15 +49,13 @@ Install from [Obsidian Community Plugins](https://community.obsidian.md/plugins/
 
 ## Features
 ### 💬 Sidebar chat
-Multi-tab conversational AI with streaming, file context, slash commands, and model switching. Sessions persist as Pi-compatible JSONL under `.yapi/sessions/` — resume a complete linear session or fork a new session file from an earlier entry.
-
-Attach vault files or explicitly allowed external folders as turn context. External folders require external read access and can be pinned on this device without syncing their absolute paths into settings or session history.
+Multi-tab conversational AI with streaming, file context, slash commands, and model switching. Sessions persist as Pi-compatible JSONL under `.yapi/sessions/` — fork, branch, and resume conversations.
 
 ### ✏️ Inline editing
 Select text, run a rewrite — YaPi uses auxiliary queries to edit with precision, no context window overhead, no conversation history pollution.
 
 ### 🛠️ Obsidian-native tools
-Vault note operations prefer Obsidian's public plugin APIs. Capabilities that Obsidian does not expose publicly use explicit CLI, network-provider, MCP, or allowlisted process integrations as noted below.
+Every tool works through Obsidian's APIs:
 
 <details>
 <summary><strong>All tools</strong></summary>
@@ -71,18 +69,14 @@ Vault note operations prefer Obsidian's public plugin APIs. Capabilities that Ob
 | `obsidian_links` | Outgoing links and backlinks for a note |
 | `obsidian_list` | List vault folder contents |
 | `obsidian_attachment` | Attachment metadata and paths |
-| `obsidian_daily` | Read, append to, or open the daily note (requires the official Obsidian CLI) |
-| `obsidian_graph` | Analyze orphans, dead ends, and unresolved links |
-| `obsidian_tags` | List tags and inspect tagged notes |
-| `obsidian_base` | List Bases, inspect views, or run CLI-backed Base queries |
 | `obsidian_edit` | Replace text in an existing note |
 | `obsidian_write` | Create or overwrite notes |
 | `obsidian_properties` | List, read, set, or remove frontmatter properties |
 | `obsidian_delete` | Move files or folders to trash |
 | `obsidian_move` | Rename or move files, update links |
 | `obsidian_mkdir` | Create a vault folder |
-| `obsidian_history` | List, read, and restore file-history snapshots (requires the official Obsidian CLI) |
-| `obsidian_tasks` | List or update Markdown task status (requires the official Obsidian CLI) |
+| `obsidian_history` | List, read, and restore file-history snapshots |
+| `obsidian_tasks` | List or toggle Markdown task status |
 | `obsidian_open` | Open a file in the Obsidian workspace |
 | `obsidian_read_external` | Read files outside the vault (off by default) |
 | `obsidian_list_external` | List external directories (off by default) |
@@ -90,7 +84,7 @@ Vault note operations prefer Obsidian's public plugin APIs. Capabilities that Ob
 | `obsidian_command` | Execute an Obsidian command by id (off by default) |
 | `obsidian_eval` | Run JavaScript in Obsidian context (off by default) |
 | `obsidian_generate_image` | Generate images with Codex, save as attachments |
-| `WebSearch` | Search the web (Brave, Tavily, Exa, AnySearch) |
+| `WebSearch` | Search the web (Brave, Tavily, Exa) |
 | `WebFetch` | Fetch readable content from a URL |
 | `mcp` | Call vault-local MCP servers |
 | `skill` | Load vault-local Agent Skills |
@@ -100,39 +94,50 @@ Vault note operations prefer Obsidian's public plugin APIs. Capabilities that Ob
 
 ### 🔌 Skills & MCP
 - **Vault skills**: Install Agent Skills into `.yapi/skills/` after confirmation. Add more via `npx skills add`.
-- **MCP servers**: Configure in `.yapi/mcp.json` — stdio or remote HTTP/SSE servers with OAuth support. Test connections, inspect available tools, and enable or disable individual tools from settings.
-- **`/server` slash tokens**: Type `/server` or `/server/tool` in chat to emphasize an MCP server or tool; settings-enabled servers are already available to the agent.
-- **`/generate-image` tool token**: When Codex image generation is connected and `obsidian_generate_image` is enabled under Tools, the slash selector inserts this durable token. YaPi expands it only in the API prompt; the composer and session keep `/generate-image` unchanged.
+- **MCP servers**: Configure in `.yapi/mcp.json` — stdio or remote HTTP/SSE servers with OAuth support.
+- **`@server` mentions**: Type `@server` in chat to mention an MCP server; the agent resolves it automatically.
 
 ### 🧠 Subagents
 Run concurrent subagents with configurable limits (`maxConcurrentSubagents`) and background permissions (`allowBackground`). Delegate research, analysis, or writing tasks while you keep working.
 
 ### 🌐 Web search & fetch
-Query Brave, Tavily, Exa, or AnySearch in the configured provider order. Fetch URL content through the same ordered provider queue. Public Exa search and direct HTTP fetch remain terminal fallbacks.
+Query Brave, Tavily, or Exa for web search. Fetch URL content directly. Public Exa fallback available when no API key is configured.
 
 ### 🎨 Image generation
-With `openai-codex` credentials connected, generate images, save them as vault attachments, and insert standard Markdown image embeds into notes.
+With `openai-codex` credentials connected, generate images, save them as vault attachments, and insert `![[...]]` embeds into notes.
 
-### 📂 Session history
+### 📂 Session tree
 Pi-compatible JSONL session persistence. Sessions are linear per tab; fork creates a new session file from a selected entry. All session state is rebuildable from `.yapi/sessions/`.
 
 ### 🎛️ Style Settings support
-With the [Style Settings](https://github.com/obsidian-community/obsidian-style-settings) plugin installed, customize chat typography — message, composer, welcome, and assistant heading font sizes. Open it directly from **Settings → YaPi → Integrations → Style Settings**.
-
-### 🧰 Note Toolbar support
-Add the current editor selection or a custom YaPi command to an installed [Note Toolbar](https://github.com/chrisgurney/obsidian-note-toolbar) selected-text toolbar. YaPi can add commands through the official Obsidian CLI, or guide you through manual setup.
+With the [Style Settings](https://github.com/obsidian-community/obsidian-style-settings) plugin installed, customize chat typography — message, composer, welcome, and assistant heading font sizes.
 
 ### ⚙️ Obsidian CLI integration
-Optional integration with the official Obsidian CLI powers history, tasks, daily notes, Base queries, command execution, JavaScript evaluation, and Note Toolbar command-item setup. The binary path and timeout are configurable in settings; individual command/eval capabilities remain separately gated.
-
-> [!NOTE]
-> Upgrade note: installations that never saved an Obsidian CLI preference now treat the integration as disabled. Re-enable it in YaPi settings to restore CLI-backed history, tasks, daily-note, Base-query, command, and evaluation features.
+Seamless integration with the Obsidian CLI for advanced history and tasks operations. Configurable binary path and timeout in settings.
 
 ---
 
 ## Installation
 
-Install from [Obsidian Community Plugins](https://community.obsidian.md/plugins/yapi).
+YaPi is not published to a plugin directory. Install it manually from the fork
+source (the `obsidian-pivi-cross` repo; the maintainer sets the origin URL — a
+Bitbucket migration is pending):
+
+```bash
+git clone <fork-origin-url> obsidian-pivi-cross
+cd obsidian-pivi-cross
+npm ci
+npm run build        # builds main.js, manifest.json, styles.css
+```
+
+Copy `main.js`, `manifest.json`, and `styles.css` into
+`<vault>/.obsidian/plugins/yapi/`, then enable the **YaPi** plugin in Obsidian
+settings. For development, set `OBSIDIAN_VAULT` in `.env.local` and `npm run build`
+auto-copies into `<vault>/.obsidian/plugins/yapi/`.
+
+> **Switching from `shuuul/obsidian-pivi`?** YaPi uses a new plugin id (`yapi`) and a new
+> vault data directory (`.yapi/`). Move your existing `.pivi/` folder to `.yapi/`
+> once manually — there is no automatic migration.
 
 On first launch with no vault skills installed, YaPi asks before installing [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) into `.yapi/skills/`. You can skip the prompt and install skills later from settings.
 
@@ -147,11 +152,7 @@ On first launch with no vault skills installed, YaPi asks before installing [kep
 
 ## Documentation
 
-- [Developer handbook](docs/README.md) — architecture, technology choices, feature flows, and contribution routes
-- [Input panel and context](docs/04-input-panel-and-context.md) — composer, selectors, context indicators, and prompt construction
-- [Tabs, sessions, and history](docs/05-tabs-sessions-and-history.md) — tab switcher, persistence, restore, and fork
-- [Subagents, streaming, and rendering](docs/06-subagents-streaming-and-rendering.md) — delegated execution, concurrency, events, and persistence
-- [Tools, skills, MCP, and integrations](docs/07-tools-skills-mcp-and-integrations.md) — capability registry, security gates, and Note Toolbar
+- [Tools reference](docs/tools-reference.md) — every tool, one page
 - [AGENTS.md](AGENTS.md) — repo operations and coding standards
 <details>
 <summary><strong>Security & privacy</strong></summary>
@@ -161,14 +162,10 @@ On first launch with no vault skills installed, YaPi asks before installing [kep
 | **API keys** | Required for hosted AI providers. Stored via Obsidian `secretStorage` (Electron `safeStorage`), not in plugin JSON or `.yapi/mcp.json`. |
 | **Network use** | Prompts, vault context, attachments, tool results, and MCP results may be sent to the selected model provider. |
 | **Image generation** | Available only with `openai-codex` credentials. Prompts go to ChatGPT / Codex backend. Images saved as vault attachments. |
-| **MCP** | User-provided servers. Enabled remote HTTP/SSE servers may receive inventory requests during startup/settings refresh. Stdio commands run only after explicit **Connect / refresh tools** or the agent's first search/list/call. |
+| **MCP** | User-provided servers. Remote HTTP/SSE servers receive requests when enabled or mentioned. Stdio servers run local commands you configure. |
 | **Skills** | Listing, installing, or updating remote skills uses `npx skills` / `skills.sh`. Default prompt accesses `kepano/obsidian-skills` only after confirmation. |
-| **External file access** | Disabled by default. Allowed absolute roots come from this device's vault-local overlay or folders attached for the current turn; they are not synced through `.yapi/settings.json` or session JSONL. |
+| **External file access** | Disabled by default. Only reads inside allowed directories you configure. |
 | **Bash access** | Disabled by default. Allowlisted one-line commands only; rejects shell control syntax. |
-| **Obsidian CLI** | Disabled by default. When enabled, YaPi starts the configured official Obsidian CLI for the specific CLI-backed tools listed above. |
-| **Vault index** | File mentions, search, graph, tags, and properties enumerate vault metadata and file paths locally; YaPi does not send an index to its author. |
-| **System environment** | Read only at desktop integration boundaries for configured provider credentials, MCP authentication/stdio variables, the official CLI, and Skills tooling. YaPi does not transmit machine identity to its author. |
-| **Clipboard** | MCP import accepts JSON pasted into an editor and never invokes the clipboard-read API. Writes occur only after explicit copy actions. |
 | **MCP config location** | Vault-local — `.yapi/mcp.json` only. OAuth tokens under `.yapi/mcp-oauth/`. |
 | **Skills location** | Vault-local — `.yapi/skills/`. No cross-vault or global directories. |
 | **File recovery** | Edits use Obsidian APIs, deletes go to trash, `obsidian_history` can list/read/restore file-history snapshots. |
@@ -180,6 +177,7 @@ On first launch with no vault skills installed, YaPi asks before installing [kep
 
 ## Acknowledgments
 
+- [shuuul/obsidian-pivi](https://github.com/shuuul/obsidian-pivi) — YaPi is a fully-rebranded fork of `shuuul/obsidian-pivi`; original authorship credited here.
 - [Pi agent core](https://github.com/earendil-works/pi-mono) — The Pi agent runtime that powers YaPi
 - [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) — Agent Skills for Obsidian
 - [Claudian](https://github.com/YishenTu/claudian) — Code lineage this version is adapted from

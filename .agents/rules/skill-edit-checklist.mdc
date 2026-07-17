@@ -1,0 +1,26 @@
+---
+description: When editing skill files, check the skills README for dependent skills that may also need updates
+globs: skills/**, .agents/skills/**, .fork-skills/skills/**, .cursor/skills/**
+alwaysApply: false
+---
+
+# Skill Edit Checklist
+
+Before and after modifying any skill, read the skills overview `README.md`
+(at `.fork-skills/README.md`) and follow the **Change Impact** table:
+
+| If you change…            | Also review…                                              |
+|---------------------------|-----------------------------------------------------------|
+| install-env               | test-runner (env setup steps)                             |
+| test-runner               | cherry-pick-assistant (Step 3 b1 gate, Step 6 b2 verification) |
+| detect-upstream-base      | cherry-pick-assistant (Step 1 v1 detection), auto-cherry-pick (Step 1) |
+| cherry-pick-assistant          | auto-cherry-pick (Step 4 invocation, Step 5 summary fields) |
+| auto-cherry-pick               | (no downstream dependents)                                |
+
+## Required Steps
+
+1. **Read** `.fork-skills/README.md` to see the full dependency graph.
+2. **Propagate** any interface changes (parameter names, step numbering, output
+   format) to all downstream skills listed in the table above.
+3. **Update the README itself** if you add, remove, or rename a skill, change
+   the dependency graph, or alter shared notation.

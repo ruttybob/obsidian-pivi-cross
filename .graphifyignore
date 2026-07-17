@@ -1,0 +1,28 @@
+# graphify input scoping — strict whitelist (default-deny).
+#
+# Keep ONLY the architecture surface: src/, packages/, docs/, and the three
+# root guides (AGENTS.md, CONTEXT.md, MEMORY.md). Everything else — tests,
+# scratch, tooling (.husky/.fork-skills/scripts/.github), build configs
+# (package.json, manifest.json, esbuild/eslint/jest/tsconfig), README,
+# CHANGELOG, locale JSON, assets — is excluded from the graph.
+#
+# gitignore syntax (last-match-wins). graphify reads this AND .gitignore; this
+# only excludes MORE (a ! here cannot re-include a .gitignore-excluded file).
+# Honored by detect() and the post-commit/post-checkout hook rebuild.
+#
+# Why !/dir AND !/dir/* (not !/dir/): graphify matches with fnmatch, where *
+# crosses "/". So /* excludes every path at every depth; !/dir re-includes the
+# directory entry (satisfying the parent-exclusion rule) and !/dir/* re-includes
+# its full contents. A bare !/dir/ would only match the directory entry itself
+# and leave its contents excluded.
+
+/*
+!/src
+!/src/*
+!/packages
+!/packages/*
+!/docs
+!/docs/*
+!/AGENTS.md
+!/CONTEXT.md
+!/MEMORY.md

@@ -12,7 +12,7 @@
 - `session/` for host-neutral session contracts, open-session state, paths, and metadata; Pi JSONL persistence and compatibility implementations live under `engine/pi/session/`.
 - `mcp/` for workspace-local MCP management and proxy tools.
 - `context/` and `prompt/` for host-neutral XML context formatting, runtime skill filtering, and registered-tool prompt assembly.
-- `skills/` for skill and slash-command metadata helpers; runtime loaders exclude disabled vault skills while inventory loaders include them for settings and install prompts. Remote/default skill orchestration receives `HttpClient` and `ProcessRunner` ports from the host, and first-run confirmation is rendered through an injected host prompt callback rather than core-owned DOM.
+- `skills/` for skill and slash-command metadata helpers; runtime loaders exclude disabled vault skills while inventory loaders include them for settings and install prompts. Remote/default skill orchestration receives `HttpClient` and `ProcessRunner` ports from the host.
 - `runtime/`, `engine/`, and `engine/pi/` for host-neutral chat/runtime contracts, application-facing `ChatPorts`, auxiliary query services, queued-turn helpers, the generic AgentEngine seam, and Pi SDK adapter helpers.
 - Canonical host-capability contracts under `@yapi/yapi-agent-core/ports`.
 
@@ -32,11 +32,11 @@
 - Namespaced tool protocol and canonical presentation/summary helpers under `@yapi/yapi-agent-core/tools`.
 - Session contracts, paths, metadata, and linear open-session management under `@yapi/yapi-agent-core/session`; application ports open complete sessions by `sessionFile`, while concrete Pi JSONL tree compatibility stays under `@yapi/yapi-agent-core/engine/pi/session/*`.
 - Skill helpers, slash-command catalog contracts, and built-in slash-command IDs under `@yapi/yapi-agent-core/skills`.
-- MCP config, OAuth, server management, and proxy tools under `@yapi/yapi-agent-core/mcp`. Automatic prefetch warms enabled remote servers only; stdio servers start on explicit diagnostics or the first proxy search/list/call.
+- MCP config, OAuth, server management, and proxy tools under `@yapi/yapi-agent-core/mcp`.
 - Prompt context formatting, host-neutral mention parsing, and prompt builders under `@yapi/yapi-agent-core/context`, `@yapi/yapi-agent-core/context/mentions`, and `@yapi/yapi-agent-core/prompt`. MCP prompt inventory reflects settings-enabled servers and cached tool names.
 - Runtime/application contracts, including `ChatPorts`, `PiChatService`, and `AuxQueryRunner`, under `@yapi/yapi-agent-core/runtime`.
 - Generic AgentEngine contracts under `@yapi/yapi-agent-core/engine`.
-- Pi SDK adapter helpers and Pi JSONL compatibility implementations under `@yapi/yapi-agent-core/engine/pi` use explicit leaf exports (including `engine/pi/session/*` and `engine/pi/shims/*`); add a matching `package.json` export when introducing a new app/test import path.
+- Pi SDK adapter helpers and Pi JSONL compatibility implementations under `@yapi/yapi-agent-core/engine/pi`.
 
 ## See also
 

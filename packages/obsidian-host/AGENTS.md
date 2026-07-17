@@ -9,7 +9,7 @@
 ## Public entrypoints
 
 - `src/index.ts` re-exports the package surface. Add new intentional host APIs here.
-- `src/obsidianVaultApi.ts` wraps Obsidian `App` vault operations: note reads/writes/edits, file resolution, tree/list, move/trash/folder creation, open-in-leaf, scan-based search, note info, links, backlinks, tag/graph analysis, base-file/view inspection, recent files, attachment metadata, and binary attachment creation with Obsidian markdown links. Base lookup uses direct path/metadata resolution, and unresolved-only graph analysis reads metadata without enumerating files.
+- `src/obsidianVaultApi.ts` wraps Obsidian `App` vault operations: note reads/writes/edits, file resolution, tree/list, move/trash/folder creation, open-in-leaf, scan-based search, note info, links, backlinks, tag/graph analysis, base-file/view inspection, recent files, attachment metadata, and binary attachment creation with Obsidian markdown links.
 - `src/externalFileApi.ts` wraps Node.js `fs` for reading and listing files outside the Obsidian vault by absolute path. It enforces allowed-directory realpath containment and is the host-neutral filesystem adapter consumed by external read/list tools.
 - File-store contracts now live in `@yapi/yapi-agent-core/ports`; this package implements host adapters for those ports.
 - Domain service contracts live with their owning `@yapi/yapi-agent-core` modules; app workspace initialization remains an app-composition contract.
@@ -34,7 +34,7 @@
 
 ## Package map
 
-- `package.json` exports the barrel and explicit leaf subpaths (`authContextHost`, `bootstrap/*`, `cli/*`, `electronCompat`, `externalFileApi`, `nodeFetch`, `obsidianHttpClient`, `openExternalUrl`, `path`, `providerLegacyAuthStore`, `settings/yapiSettingsStorage`, `storage/sharedStorageService`, `systemProcessRunner`). Add new intentional host APIs to `src/index.ts` and the matching export entry.
+- `package.json` exports the barrel and source subpaths.
 - There is no package-local build step; source is consumed by the root build.
 - There is no package-local typecheck script. Verify host changes with the root typecheck and targeted tests for affected tools/runtime/UI.
 

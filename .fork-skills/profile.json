@@ -1,0 +1,177 @@
+{
+  "ecosystem": {
+    "language": "node",
+    "package_manager": "npm",
+    "build_system": "npm",
+    "has_native_extensions": false,
+    "artifact_strategy": "none",
+    "editable_install_cmd": "npm ci",
+    "deps_file": "package.json",
+    "venv_cmd": "",
+    "python_version": null
+  },
+  "testing": {
+    "test_framework": "jest",
+    "test_cmd_pattern": "npm run test -- {path}",
+    "test_dir": "tests",
+    "ci_system": "github_actions",
+    "ci_config_path": ".github/workflows/",
+    "ci_to_local_map": [
+      {
+        "ci_concept": "workflow steps",
+        "local_equivalent": "the same command from the step, run in current env"
+      },
+      {
+        "ci_concept": "CI working dir",
+        "local_equivalent": "<repo_root>/<test_dir>"
+      },
+      {
+        "ci_concept": "matrix shards",
+        "local_equivalent": "run the whole suite locally"
+      }
+    ],
+    "test_count": 217,
+    "has_benchmarks": false,
+    "benchmark_metrics": [],
+    "log_directory": ".cache/test-logs",
+    "env_setup": []
+  },
+  "versioning": {
+    "has_upstream_remote": true,
+    "upstream_remote_name": "upstream",
+    "upstream_url": "https://github.com/shuuul/obsidian-pivi.git",
+    "upstream_repo": "shuuul/obsidian-pivi",
+    "tag_pattern": "[0-9]*",
+    "release_source": "gh release list --repo shuuul/obsidian-pivi",
+    "current_base_tag": "0.9.0"
+  },
+  "fork_shape": {
+    "custom_commit_count": 9,
+    "modified_files_summary": "After re-platforming onto upstream 0.9.0 (React UI migration, ADR-0002) and re-applying the pivi->yapi rebrand, the fork is 9 commits / ~863 files ahead of tag 0.9.0 (20411+/12415-); almost all of it is the mechanical rename (host product only, Pi engine untouched). The non-mechanical divergences are: (a) behavioural UI (header-locked tab bar, theme-aware toolbar icons + brightened brand color, simplified tab-switcher animation); (b) YP brand mark + folder-search icon fix; (c) dropped release-please/GitHub Actions; (d) fork identity/tooling/docs. See scripts/rename-map.json for the structural map and change_categories below for commit mapping.",
+    "modified_files": [
+      ".agents/rules/skill-edit-checklist.mdc",
+      ".agents/skills/auto-cherry-pick",
+      ".agents/skills/cherry-pick-assistant",
+      ".agents/skills/detect-upstream-base",
+      ".agents/skills/install-env",
+      ".agents/skills/test-runner",
+      ".fork-skills/README.md",
+      ".fork-skills/profile.json",
+      ".fork-skills/skills/auto-cherry-pick/SKILL.md",
+      ".fork-skills/skills/cherry-pick-assistant/SKILL.md",
+      ".fork-skills/skills/detect-upstream-base/SKILL.md",
+      ".fork-skills/skills/install-env/SKILL.md",
+      ".fork-skills/skills/test-runner/SKILL.md",
+      ".fork-skills/upstream-status.sh",
+      ".gitignore",
+      ".scratch/rebrand-pivi-to-yapi/PRD.md",
+      "AGENTS.md",
+      "CHANGELOG.md",
+      "CONTEXT.md",
+      "LICENSE",
+      "README.md",
+      "docs/adr/0001-rebrand-pivi-to-yapi-as-soft-fork.md",
+      "docs/agents/domain.md",
+      "docs/agents/issue-tracker.md",
+      "docs/agents/triage-labels.md",
+      "manifest.json",
+      "package.json",
+      "scripts/apply-rename.mjs",
+      "scripts/check-rename.mjs",
+      "scripts/rename-map.json"
+    ],
+    "change_categories": [
+      {
+        "category": "rebrand",
+        "summary": "Full structural rename pivi->yapi (host product only; Pi engine @earendil-works/* untouched). Plugin id, package scopes (@pivi/* -> @yapi/*), PascalCase identifiers, .yapi- CSS namespace, .yapi/ vault data dir + YAPI_* constants, authorship, YP brand mark, tagline. Re-applied to the 0.9.0 React tree via scripts/rename-map.json + apply-rename.mjs (map extended: packages/pivi-react -> packages/yapi-react).",
+        "commits": [
+          "a5836d6",
+          "a0eccfa"
+        ],
+        "rename_map": "scripts/rename-map.json"
+      },
+      {
+        "category": "identity-tooling-docs",
+        "summary": "Fork identity, rebrand tooling, and docs: LICENSE, README, CONTEXT, AGENTS.md (root + package), CHANGELOG, ADRs (0001-rebrand, 0002-adopt-upstream-react-ui-migration), manifest/package identity, deploy path .obsidian/plugins/yapi, fork-maintenance skills + this profile, scripts/{apply-rename,check-rename,rename-map}. check-rename now also scans file paths (857 paths).",
+        "commits": [
+          "a5836d6",
+          "1772ca3"
+        ]
+      },
+      {
+        "category": "release-infrastructure",
+        "summary": "Re-dropped release-please config + GitHub Actions workflows + the tag/release invariant after re-platform. Versioning is manual/local: <yapi-core>-u<upstream> (0.1.0-u0.9.0).",
+        "commits": [
+          "1772ca3"
+        ]
+      },
+      {
+        "category": "build-architecture-reconciliation",
+        "summary": "Reconciled to 0.9.0's evolved architecture: check:architecture boundary model (L0 map, ChatPorts, product-owned React UI), esbuild.config.mjs <-> build/ split, 5-gate green, base tag bumped to 0.9.0.",
+        "commits": [
+          "3b653db",
+          "3e007b7",
+          "bc06757",
+          "f225044"
+        ]
+      },
+      {
+        "category": "behavioural-ui",
+        "summary": "Re-derived on React (Track 2, issues 07-09): header-locked tab bar (removed tabBarPosition setting + all input-mode plumbing), theme-aware toolbar icons + brightened brand color (#0635f9, --yapi-interactive-fg), simplified tab-switcher animation (block-size). Plus YP brand mark ported into React ChatLogo, and folder-search icon replacing the invalid database-search.",
+        "commits": [
+          "0444e50",
+          "413a5ff"
+        ]
+      }
+    ],
+    "recommended_sync_strategy": "cherry-pick",
+    "conflict_hotspots": [
+      "packages/yapi-agent-core/ (renamed from pivi-agent-core; upstream paths differ)",
+      "@yapi/* package scopes vs upstream @pivi/* (package.json, tsconfig.json, jest.config.js, eslint.config.mjs, imports across src/packages/tests)",
+      ".yapi- CSS namespace vs upstream .pivi- (src/styles/**)",
+      ".yapi/ vault data dir + YAPI_* path constants vs upstream .pivi/ + PIVI_* (packages/yapi-agent-core/src/session, packages/obsidian-host/src/settings)",
+      "renamed identifiers: YapiView, YapiSettings, yapiSettingsCodec, yapiSettingsStorage, yapiToolDisplay vs upstream Pivi*/pivi*",
+      "manifest.json (id yapi, author se.kostrov) vs upstream (pivi, shuuul)",
+      "package.json (name yapi, author Yadro, version 0.1.0-u0.7.0)",
+      "esbuild.config.mjs (deploy path .obsidian/plugins/yapi)",
+      "scripts/rename-map.json + apply-rename.mjs + check-rename.mjs (fork-only rebrand tooling)",
+      "LICENSE, README.md, CONTEXT.md, docs/adr/0001-*, CHANGELOG.md (fork identity docs)",
+      ".fork-skills/** (fork maintenance profile + skills)"
+    ]
+  },
+  "pitfalls": {
+    "heavy_deps": [],
+    "silent_breakage_risk_deps": [
+      "obsidian (Obsidian plugin API surface; upstream bumps may break runtime APIs without surfacing as type errors)",
+      "@earendil-works/* pi-agent-core SDK (upstream may change tool/event/session contracts silently)"
+    ],
+    "known_pitfalls": [
+      "Upstream changed tag convention at 0.3.0: old releases v0.1.0..v0.2.4 use a 'v' prefix and annotated tags; releases 0.3.x..0.5.0+ are bare numbers (e.g. 0.5.0) as lightweight/unannotated tags. detect-upstream-base MUST use 'git describe --tags --match \"[0-9]*\"' (--tags for lightweight, [0-9]* to match new releases).",
+      "Version scheme is manual and local: <yapi-core>-u<upstream> (e.g. 0.1.0-u0.9.0). No Git tags, no GitHub Releases, no release-please. The old Obsidian release invariant (tag equals manifest version) NO LONGER applies. The -u<upstream> suffix mirrors profile.versioning.current_base_tag; auto-cherry-pick bumps both on sync.",
+      "Rebrand divergence: upstream uses pivi/Pivi/PIVI and @pivi/* everywhere; this fork uses yapi/Yapi/YAPI and @yapi/*. Raw `git rebase --onto` cannot follow the renames. Cherry-pick upstream commits one at a time and consult scripts/rename-map.json to translate upstream pivi paths/identifiers into fork yapi/Yapi names before applying. The Pi engine layer (engine/pi, @earendil-works/pi-*) is shared and must NOT be renamed.",
+      "main.js bundle is ~2.96MB; watch for size growth after Pi/provider dependency changes via `npm run analyze:bundle`.",
+      "Jest invocation: AGENTS.md mandates running through `npm run test` (scripts/run-jest.js adds --localstorage-file). Use `npm run test -- {path}` for single files. Verified 2026-07-14: the full suite is 217 suites / 1576 tests; run via the wrapper to match the `npm run test:coverage` verification gate.",
+      "Sync strategy is cherry-pick for incremental upstream releases (0.9.x -> 0.10.x), but a structural upstream change (e.g. another UI-framework migration like the 0.7.0->0.9.0 React migration) breaks cherry-pick/rebase because it touches the renamed surface wholesale. In that case re-platform instead (ADR-0002 precedent: re-apply the rebrand via apply-rename.mjs onto the new upstream tag, then re-derive the behavioural customizations). detect-upstream-base finds the base; auto-cherry-pick only suits non-structural deltas."
+    ]
+  },
+  "measurement": {
+    "verification_checks": [
+      "npm run typecheck",
+      "npm run lint",
+      "npm run check:boundaries",
+      "npm run test:coverage",
+      "npm run build"
+    ],
+    "health_definition": "All YaPi quality gates are green after a sync: tsc typecheck, ESLint (+ import-sort + obsidianmd rules), package architecture/boundary check, the full Jest coverage suite, and the production esbuild bundle (main.js + styles.css) all succeed."
+  },
+  "sync": {
+    "strategy": "cherry-pick",
+    "squash": false
+  },
+  "meta": {
+    "project_name": "obsidian-pivi-cross",
+    "generated_at": "2026-07-14T00:00:00+00:00",
+    "generated_at_note": "Hand-maintained. Updated 2026-07-14 after the 0.9.0 re-platform (ADR-0002) and the Track 2 behavioural-UI re-derivation. The fork-maintenance-flow-builder npm package is not installable in this environment, so fields are edited by hand; re-run the builder if it becomes available.",
+    "builder_version": "1.1.0"
+  }
+}
